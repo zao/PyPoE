@@ -1,4 +1,4 @@
-**Development is currently discontinued**
+**With development on [OmegaK2/PyPoE](https://github.com/OmegaK2/PyPoE) being discontinued, this fork mainly exists to keep everything working that is required by [RePoE](https://github.com/brather1ng/RePoE). Still, I'm open to pull requests for other areas as well.**
 
 PyPoE
 ========
