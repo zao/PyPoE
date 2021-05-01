@@ -501,7 +501,7 @@ class SHOP_PACKAGE_PLATFORM(IntEnumOverride):
     PC = 1
     XBOX = 2
     PS = 3
-    
+
     PLAYSTATION = PS
 
 
@@ -708,8 +708,8 @@ class MOD_DOMAIN(IntEnumOverride):
     HEIST_AREA = 22
     HEIST_NPC = 23
     HEIST_TRINKET = 24
-    UNKNOWN4 = 25
-    UNKNOWN5 = 26
+    WATCHSTONE = 25
+    UNKNOWN4 = 26
     UNDEFINED = 27
 
     # legacy names
