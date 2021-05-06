@@ -979,6 +979,7 @@ class TranslationQuantifierHandler(TranslationReprMixin):
         return hash(tuple(self.index_handlers.keys()))
 
     def _warn_uncaptured(self, name: str):
+        raise ValueError(f"Warning uncaptured quantifier {name}")
         warnings.warn(
             'Warning uncaptured quantifier %s' % name, UnknownIdentifierWarning
         )
@@ -1057,9 +1058,11 @@ class TranslationQuantifierHandler(TranslationReprMixin):
                 elif handler.type == TranslationQuantifier.QuantifierTypes.STRING:
                     self.string_handlers[handler.id] = args
             else:
+                raise ValueError(f"Warning uncaptured quantifier {partial}")
+
                 warnings.warn('Uncaptured partial quantifier string "%s"' % (partial, ), UnknownIdentifierWarning)
 
-    def handle(self,
+    def handle(self,    
                values: Union[List[int], List[Tuple[int, int]]],
                is_range: List[bool]) -> Tuple[List[Any], Dict[str, str]]:
         """
@@ -2165,10 +2168,28 @@ TranslationQuantifier(
 )
 
 TranslationQuantifier(
+    id='divide_by_one_hundred_0dp',
+    handler=lambda v: round(v/100, 0),
+    reverse_handler=lambda v: float(v)*100,
+)
+
+TranslationQuantifier(
+    id='divide_by_one_hundred_1dp',
+    handler=lambda v: round(v/100, 1),
+    reverse_handler=lambda v: float(v)*100,
+)
+TranslationQuantifier(
     id='divide_by_one_hundred_2dp',
     handler=lambda v: round(v/100, 2),
     reverse_handler=lambda v: float(v)*100,
 )
+
+TranslationQuantifier(
+    id='divide_by_one_hundred_2dp_if_required',
+    handler=lambda v: round(v/100, 2),
+    reverse_handler=lambda v: float(v)*100,
+)
+
 
 TranslationQuantifier(
     id='divide_by_two_0dp',
@@ -2187,6 +2208,13 @@ TranslationQuantifier(
     handler=lambda v: v//10,
     reverse_handler=lambda v: int(v)*10,
 )
+
+TranslationQuantifier(
+    id='divide_by_ten_1dp',
+    handler=lambda v: round(v//10,1),
+    reverse_handler=lambda v: int(v)*10,
+)
+
 
 TranslationQuantifier(
     id='divide_by_twelve',
@@ -2210,6 +2238,12 @@ TranslationQuantifier(
     id='milliseconds_to_seconds',
     handler=lambda v: v/1000,
     reverse_handler=lambda v: float(v)*1000,
+)
+
+TranslationQuantifier(
+    id='milliseconds_to_seconds_halved',
+    handler=lambda v: v/500,
+    reverse_handler=lambda v: float(v)*500,
 )
 
 TranslationQuantifier(
@@ -2343,6 +2377,10 @@ TranslationQuantifier(
     id='passive_hash',
 )
 
+
+TranslationQuantifier(
+    id='metamorphosis_reward_description',
+)
 
 TranslationQuantifier(
     id='reminderstring',
