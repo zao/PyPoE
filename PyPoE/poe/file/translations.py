@@ -979,11 +979,8 @@ class TranslationQuantifierHandler(TranslationReprMixin):
         return hash(tuple(self.index_handlers.keys()))
 
     def _warn_uncaptured(self, name: str):
-        raise ValueError(f"Warning uncaptured quantifier {name}")
-        warnings.warn(
-            'Warning uncaptured quantifier %s' % name, UnknownIdentifierWarning
-        )
-
+        raise TypeError(f"Uncaptured quantifier {name}, add in PyPoE/poe/translations.py")
+        
     def _whole_float_to_int(self, value: float) -> Union[float, int]:
         if isinstance(value, float) and value.is_integer():
             return int(value)
@@ -1058,9 +1055,7 @@ class TranslationQuantifierHandler(TranslationReprMixin):
                 elif handler.type == TranslationQuantifier.QuantifierTypes.STRING:
                     self.string_handlers[handler.id] = args
             else:
-                raise ValueError(f"Warning uncaptured quantifier {partial}")
-
-                warnings.warn('Uncaptured partial quantifier string "%s"' % (partial, ), UnknownIdentifierWarning)
+                raise TypeError(f"Uncaptured quantifier {partial}, add in PyPoE/poe/translations.py")
 
     def handle(self,    
                values: Union[List[int], List[Tuple[int, int]]],
