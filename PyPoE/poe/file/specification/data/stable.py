@@ -11716,6 +11716,10 @@ specification = Specification({
                 name='Key2',
                 type='ulong',
             ),
+            Field(
+                name='Flag11',
+                type='bool',
+            ),
         ),
     ),
     'ItemCostPerLevel.dat': File(
