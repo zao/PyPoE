@@ -709,7 +709,7 @@ class MOD_DOMAIN(IntEnumOverride):
     HEIST_NPC = 23
     HEIST_TRINKET = 24
     WATCHSTONE = 25
-    UNKNOWN4 = 26
+    VEILED = 26
     UNDEFINED = 27
 
     # legacy names
