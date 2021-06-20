@@ -2071,8 +2071,8 @@ def install_data_dependant_quantifiers(relational_reader):
 
     TranslationQuantifier(
         id='display_indexable_support',
-        handler=lambda v: relational_reader['IndexableSupports.dat'][v]['Name'],
-        reverse_handler=_get_reverse_lookup_from_reader(relational_reader['IndexableSupports.dat'], 'Name'),
+        handler=lambda v: relational_reader['IndexableSupportGems.dat'][v]['Name'],
+        reverse_handler=_get_reverse_lookup_from_reader(relational_reader['IndexableSupportGems.dat'], 'Name'),
     )
 
 
