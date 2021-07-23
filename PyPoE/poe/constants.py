@@ -710,7 +710,9 @@ class MOD_DOMAIN(IntEnumOverride):
     HEIST_TRINKET = 24
     WATCHSTONE = 25
     VEILED = 26
-    UNDEFINED = 27
+    UNKNOWN_3_15_1 = 27
+    UNKNOWN_3_15_2 = 28
+    UNDEFINED = 29
 
     # legacy names
     MASTER = CRAFTED
@@ -784,6 +786,9 @@ class MOD_GENERATION_TYPE(IntEnumOverride):
     BLIGHT = 18
     BLIGHT_TOWER = 19
     MONSTER_AFFLICTION = 20
+    UNKNOWN_3_15_1 = 21
+    UNKNOWN_3_15_2 = 22
+    UNKNOWN_3_15_3 = 23
 
 
 class WORDLISTS(IntEnumOverride):

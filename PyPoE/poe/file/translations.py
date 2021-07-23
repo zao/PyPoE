@@ -154,7 +154,7 @@ regex_translation_string = re.compile(
     re.UNICODE | re.MULTILINE
 )
 
-regex_ids = re.compile(r'.*(?!\s[0-9]+)', re.UNICODE | re.MULTILINE)
+regex_ids = re.compile(r'\S+.*(?!\s[0-9]+)', re.UNICODE | re.MULTILINE)
 regex_id_strings = re.compile(r'([\S]+)', re.UNICODE)
 regex_strings = re.compile(r'(?:"(.+)")|([\S]+)+', re.UNICODE)
 regex_int = re.compile(r'[0-9]+', re.UNICODE)
