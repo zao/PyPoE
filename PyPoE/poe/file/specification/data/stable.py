@@ -11103,6 +11103,14 @@ specification = Specification({
                 name='Key0',
                 type='ulong',
             ),
+            Field(
+                name='Unknown3',
+                type='int',
+            ),
+            Field(
+                name='Unknown4',
+                type='bool',
+            ),
         ),
     ),
     'HideoutRarity.dat': File(
@@ -17241,6 +17249,10 @@ specification = Specification({
             # TODO 3.13
             Field(
                 name='Unknown3',
+                type='int',
+            ),
+            Field(
+                name='Unknown4',
                 type='int',
             ),
         ),
