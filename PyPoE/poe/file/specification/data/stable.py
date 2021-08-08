@@ -211,7 +211,6 @@ specification = Specification({
                 type='int',
                 key='AchievementSetsDisplay.dat',
                 key_id='Id',
-                key_offset=1,
             ),
             Field(
                 name='Unknown1',
@@ -400,8 +399,6 @@ specification = Specification({
                 type='int',
                 description='This links to SkillTotems.dat, but the number mayexceed the number of entries; in that case it is player skill.',
             ),
-            # key = SkillTotems.dat
-            # key_offset = 1
             Field(
                 name='IsManuallyCasted',
                 type='bool',
@@ -3023,7 +3020,7 @@ specification = Specification({
             Field(
                 name='Art',
                 type='ref|string',
-                file_path='True',
+                file_path=True,
             ),
             Field(
                 name='Flag0',
@@ -5634,7 +5631,6 @@ specification = Specification({
             ),
             Field(
                 name='Key0',
-                display='Key - Type?',
                 type='ulong',
             ),
             Field(
@@ -6544,7 +6540,6 @@ specification = Specification({
             Field(
                 name='DelveUpgradeTypeKey',
                 type='int',
-                # key='DelveUpgradeType.dat',
                 enum="DELVE_UPGRADE_TYPE",
             ),
             Field(
@@ -6891,7 +6886,6 @@ specification = Specification({
                 name='Multiplier',
                 type='float',
                 description='Rounded',
-                display_type='{0:.6f}',
             ),
         ),
     ),
@@ -8637,7 +8631,6 @@ specification = Specification({
             Field(
                 name='Id',
                 type='ref|string',
-                display='Id?',
             ),
             Field(
                 name='GMFile',
@@ -8742,12 +8735,10 @@ specification = Specification({
             Field(
                 name='BaseEffectiveness',
                 type='float',
-                display_type='{0:.6f}',
             ),
             Field(
                 name='IncrementalEffectiveness',
                 type='float',
-                display_type='{0:.6f}',
             ),
             Field(
                 name='SupportGemLetter',
@@ -9021,7 +9012,6 @@ specification = Specification({
             Field(
                 name='StatInterpolationTypesKeys',
                 type='ref|list|int',
-                # key = 'StatInterpolationTypes.dat',
                 enum='STAT_INTERPOLATION_TYPES',
             ),
             Field(
@@ -13690,7 +13680,7 @@ specification = Specification({
             Field(
                 name='Id',
                 type='ref|string',
-                unique='True',
+                unique=True,
             ),
             Field(
                 name='Name',
@@ -13912,7 +13902,6 @@ specification = Specification({
                 name='MapSeriesKey',
                 type='int',
                 key='MapSeries.dat',
-                key_offset=1,
             ),
             Field(
                 name='Flag0',
@@ -15578,8 +15567,6 @@ specification = Specification({
             ),
             Field(
                 name='MonsterGroupNamesId',
-                # TODO verify
-                display='MonsterGroupNamesId?',
                 type='int',
             ),
         ),
@@ -16162,7 +16149,7 @@ specification = Specification({
             Field(
                 name='Id',
                 type='ref|string',
-                file_path='True',
+                file_path=True,
             ),
         ),
     ),
@@ -16228,12 +16215,10 @@ specification = Specification({
             Field(
                 name='Armour',
                 type='int',
-                display='Armour?',
             ),
             Field(
                 name='Evasion',
                 type='int',
-                display='Evasion?',
             ),
             Field(
                 name='EnergyShieldFromLife',
@@ -16969,12 +16954,10 @@ specification = Specification({
             Field(
                 name='Unknown0',
                 type='int',
-                display_type='0x{0:X}',
             ),
             Field(
                 name='Unknown1',
                 type='int',
-                display_type='0x{0:X}',
             ),
             Field(
                 name='Unknown2',
@@ -19020,8 +19003,6 @@ specification = Specification({
         fields=(
             Field(
                 name='Unknown0',
-                # TODO
-                display='MonsterPacksKey?',
                 type='long',
             ),
             Field(
@@ -19600,7 +19581,6 @@ specification = Specification({
             Field(
                 name='ChargesShared',
                 type='bool',
-                display='ChargesShared?',
             ),
             Field(
                 name='Player_ShrineBuffsKey',
@@ -19972,8 +19952,7 @@ specification = Specification({
             Field(
                 name='SkillTotemsKey',
                 type='int',
-                key='SkillTotems.dat',
-                key_offset=1,
+                # enum
             ),
             Field(
                 name='TotemSkinId',
@@ -21553,8 +21532,7 @@ specification = Specification({
             Field(
                 name='UITalkCategoriesKey',
                 type='int',
-                key='UITalkCategories.dat',
-                key_offset=1,
+                # enum
             ),
             Field(
                 name='OGGFile',
@@ -21962,7 +21940,6 @@ specification = Specification({
             ),
             Field(
                 name='SpawnChance',
-                display='SpawnChance?',
                 type='int',
             ),
             Field(
