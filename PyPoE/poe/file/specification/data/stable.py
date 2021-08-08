@@ -9075,11 +9075,11 @@ specification = Specification({
                 type='int',
             ),
             Field(
-                name='Unknown49',
+                name='AttackCriticalStrikeChance',
                 type='int',
             ),
             Field(
-                name='Unknown50',
+                name='AttackTime',
                 type='int',
             ),
         ),
