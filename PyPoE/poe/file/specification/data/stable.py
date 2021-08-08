@@ -475,6 +475,10 @@ specification = Specification({
                 name='Flag6',
                 type='bool',
             ),
+            Field(
+                name='Flag7',
+                type='bool',
+            ),
         ),
     ),
     'AddBuffToTargetVarieties.dat': File(
@@ -15321,6 +15325,34 @@ specification = Specification({
             ),
         ),
     ),
+    'MonsterConditionalEffectPacks.dat': File(
+        fields=(
+            Field(
+                name='Id',
+                type='ref|string',
+            ),
+            Field(
+                name='Keys0',
+                type='ref|list|ulong',
+            ),
+            Field(
+                name='Keys1',
+                type='ref|list|ulong',
+            ),
+            Field(
+                name='Keys2',
+                type='ref|list|ulong',
+            ),
+            Field(
+                name='Keys3',
+                type='ref|list|ulong',
+            ),
+            Field(
+                name='Unknown0',
+                type='int',
+            ),
+        ),
+    ),
     'MonsterConditions.dat': File(
         fields=(
             Field(
@@ -16212,11 +16244,6 @@ specification = Specification({
                 type='int',
             ),
             Field(
-                name='TagsKeys',
-                type='ref|list|ulong',
-                key='Tags.dat',
-            ),
-            Field(
                 name='MonsterResistancesKey',
                 type='ulong',
                 key='MonsterResistances.dat',
@@ -16227,6 +16254,10 @@ specification = Specification({
             ),
             Field(
                 name='IsSmallAbyssMonster',
+                type='bool',
+            ),
+            Field(
+                name='Flag0',
                 type='bool',
             ),
         ),
@@ -16288,11 +16319,11 @@ specification = Specification({
             ),
             Field(
                 name='Unknown15',
-                type='int',
+                type='ref|string',
             ),
             Field(
                 name='Unknown16',
-                type='int',
+                type='ref|string',
             ),
             Field(
                 name='ModelSizeMultiplier',
@@ -16422,11 +16453,6 @@ specification = Specification({
                 key='ItemClasses.dat',
             ),
             Field(
-                name='Key1',
-                type='ulong',
-            ),
-            # Stats.dat, Mods.dat make no sense
-            Field(
                 name='Helmet_ItemVisualIdentityKey',
                 type='ulong',
                 key='ItemVisualIdentity.dat',
@@ -16484,11 +16510,11 @@ specification = Specification({
             ),
             Field(
                 name='Flag1',
-                type='byte',
+                type='bool',
             ),
             Field(
                 name='Unknown73',
-                type='int',
+                type='ref|string',
             ),
             Field(
                 name='KillWhileOnslaughtIsActive_AchievementItemsKey',
@@ -16591,12 +16617,10 @@ specification = Specification({
                 name='Unknown103',
                 type='int',
             ),
-            # 3.11
             Field(
                 name='EPKFile',
                 type='ref|string',
             ),
-            # 3.12
             Field(
                 name='Unknown104',
                 type='int',
@@ -16604,13 +16628,12 @@ specification = Specification({
             Field(
                 name='MonsterConditionalEffectPacksKey',
                 type='ulong',
+                key='MonsterConditionalEffectPacks.dat',
             ),
-            # TODO 3.13
             Field(
                 name='Flag6',
                 type='bool',
             ),
-            # TODO 3.14
             Field(
                 name='Flag7',
                 type='bool',
@@ -22222,7 +22245,7 @@ specification = Specification({
             ),
             Field(
                 name='Unknown32',
-                type='int',
+                type='ulong',
             ),
             # TODO: Exile chance?
             Field(
@@ -22594,6 +22617,22 @@ specification = Specification({
             ),
             Field(
                 name='HeistChance',
+                type='int',
+            ),
+            Field(
+                name='RitualChance',
+                type='int',
+            ),
+            Field(
+                name='Unknown110',
+                type='ref|list|int',
+            ),
+            Field(
+                name='UltimatumChance',
+                type='int',
+            ),
+            Field(
+                name='ExpeditionChance',
                 type='int',
             ),
         ),
