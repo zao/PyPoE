@@ -11,12 +11,12 @@ from types import SimpleNamespace
 from PyPoE import DIR
 from PyPoE.poe.file.specification.fields import VirtualField
 from PyPoE.poe.file.specification.generation.column_naming import UnknownColumnNameGenerator
-from PyPoE.poe.file.specification.generation.custom_attributes import custom_attributes
+from PyPoE.poe.file.specification.generation.custom_attributes import custom_attributes, CustomizedField
 from PyPoE.poe.file.specification.generation.virtual_fields import virtual_fields
 
 
 def _get_dat_schema_tables():
-    json_string = _read_latest_dat_schema_release()
+    json_string = _read_dat_schema_local()
     data = json.loads(json_string, object_hook=lambda d: SimpleNamespace(**d))
     return sorted(data.tables, key=lambda table: table.name)
 
@@ -69,28 +69,31 @@ def _convert_columns(table_name: str, columns: list) -> str:
 
 
 def _convert_column(table_name: str, column, name_generator: UnknownColumnNameGenerator) -> str:
-    spec = "            Field(\n"
     column_name = column.name if column.name else name_generator.next_name(column)
-    spec += f"                name='{column_name}',\n"
     column_type = _convert_column_type(column)
+    if table_name in custom_attributes and column_name in custom_attributes[table_name]:
+        custom_attribute = custom_attributes[table_name][column_name]
+    else:
+        custom_attribute = CustomizedField()
+
+    spec = "            Field(\n"
+    spec += f"                name='{column_name}',\n"
     spec += f"                type='{column_type}',\n"
-    if column.unique:
-        spec += f"                unique=True,\n"
     if column.references:
         spec += f"                key='{column.references.table}.dat',\n"
         if hasattr(column.references, 'column'):
             spec += f"                key_id='{column.references.column}',\n"
-    if table_name in custom_attributes and column_name in custom_attributes[table_name]:
-        custom_attribute = custom_attributes[table_name][column_name]
-        if custom_attribute.enum:
-            spec += f"                enum='{custom_attribute.enum}',\n"
-        if custom_attribute.file_path:
-            spec += f"                file_path=True,\n"
-        if custom_attribute.file_ext:
-            spec += f"                file_ext='{custom_attribute.file_ext}',\n"
-        if custom_attribute.description:
-            spec += f"                description='{custom_attribute.description}',\n"
-    if column.description:
+    if column.unique:
+        spec += f"                unique=True,\n"
+    if custom_attribute.enum:
+        spec += f"                enum='{custom_attribute.enum}',\n"
+    if custom_attribute.file_path:
+        spec += f"                file_path=True,\n"
+    if custom_attribute.file_ext:
+        spec += f"                file_ext='{custom_attribute.file_ext}',\n"
+    if custom_attribute.description:
+        spec += f"                description='{custom_attribute.description}',\n"
+    elif column.description:
         spec += f"                description='{column.description}',\n"
     spec += "            ),\n"
     return spec
@@ -103,20 +106,6 @@ def _convert_column_type(column) -> str:
         return 'ref|list|' + _TYPE_MAP[column.type]
     else:
         return _TYPE_MAP[column.type]
-
-
-def _convert_virtual_fields(fields: list[VirtualField]) -> str:
-    spec = '        virtual_fields=(\n'
-    for field in fields:
-        spec += '            VirtualField(\n'
-        spec += f"                name='{field.name}',\n"
-        field_names = "'" + "', '".join(field.fields) + "'"
-        spec += f"                fields=({field_names}),\n"
-        if field.zip:
-            spec += "                zip=True,\n"
-        spec += '            ),\n'
-    spec += '        ),\n'
-    return spec
 
 
 _TYPE_MAP = {
@@ -137,8 +126,22 @@ _TYPE_MAP = {
 }
 
 
+def _convert_virtual_fields(fields: list[VirtualField]) -> str:
+    spec = '        virtual_fields=(\n'
+    for field in fields:
+        spec += '            VirtualField(\n'
+        spec += f"                name='{field.name}',\n"
+        field_names = "'" + "', '".join(field.fields) + "'"
+        spec += f"                fields=({field_names}),\n"
+        if field.zip:
+            spec += "                zip=True,\n"
+        spec += '            ),\n'
+    spec += '        ),\n'
+    return spec
+
+
 def _write_spec(spec: str):
-    path = os.path.join(os.path.dirname(__file__), '..', 'data', 'imported.py')
+    path = os.path.join(os.path.dirname(__file__), '..', 'data', 'stable.py')
     with open(path, 'w', encoding='utf-8') as f:
         f.write(spec)
 

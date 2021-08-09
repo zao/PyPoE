@@ -37,5 +37,7 @@ from PyPoE.poe.file.specification.fields import *
 __all__ = ['specification', ]
 
 specification = Specification({
+    'SkillTotems.dat': File(
+    ),
     # <specification>
 })

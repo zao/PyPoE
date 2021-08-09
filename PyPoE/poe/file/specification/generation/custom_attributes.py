@@ -446,7 +446,7 @@ custom_attributes = {
         'UIImage': CustomizedField(
             file_path=True,
         ),
-        '2DArt': CustomizedField(
+        'Art2D': CustomizedField(
             file_path=True,
         ),
     },
@@ -1129,9 +1129,6 @@ custom_attributes = {
             file_path=True,
             file_ext='.ogg',
         ),
-        'Inflection': CustomizedField(
-            description='the inflection identifier used for i18n in related fields',
-        ),
     },
     'NPCs.dat': {
         'Id': CustomizedField(
@@ -1386,13 +1383,13 @@ custom_attributes = {
         ),
     },
     'WorldPopupIconTypes.dat': {
+        'Unknown0': CustomizedField(
+            file_path=True,
+        ),
         'Unknown1': CustomizedField(
             file_path=True,
         ),
         'Unknown2': CustomizedField(
-            file_path=True,
-        ),
-        'Unknown3': CustomizedField(
             file_path=True,
         ),
     },
