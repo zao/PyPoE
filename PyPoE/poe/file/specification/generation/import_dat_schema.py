@@ -5,6 +5,7 @@ https://github.com/poe-tool-dev/dat-schema.
 
 import json
 import os
+import sys
 import urllib.request
 from types import SimpleNamespace
 
@@ -15,10 +16,14 @@ from PyPoE.poe.file.specification.generation.custom_attributes import custom_att
 from PyPoE.poe.file.specification.generation.virtual_fields import virtual_fields
 
 
-def _get_dat_schema_tables():
-    json_string = _read_dat_schema_local()
-    data = json.loads(json_string, object_hook=lambda d: SimpleNamespace(**d))
-    return sorted(data.tables, key=lambda table: table.name)
+def main():
+    if len(sys.argv) > 1 and sys.argv[1] == 'local':
+        schema_json = _read_dat_schema_local()
+    else:
+        schema_json = _read_latest_dat_schema_release()
+    input_spec = _load_dat_schema_tables(schema_json)
+    output_spec = _convert_tables(input_spec)
+    _write_spec(output_spec)
 
 
 def _read_latest_dat_schema_release() -> str:
@@ -31,6 +36,11 @@ def _read_dat_schema_local() -> str:
     path = os.path.join(DIR, '..', '..', 'dat-schema', 'schema.min.json')
     with open(path, 'r', encoding='utf-8') as f:
         return f.read()
+
+
+def _load_dat_schema_tables(schema_json: str):
+    data = json.loads(schema_json, object_hook=lambda d: SimpleNamespace(**d))
+    return sorted(data.tables, key=lambda table: table.name)
 
 
 def _convert_tables(tables: list) -> str:
@@ -87,6 +97,12 @@ def _convert_column(table_name: str, column, name_generator: UnknownColumnNameGe
         spec += f"                unique=True,\n"
     if custom_attribute.enum:
         spec += f"                enum='{custom_attribute.enum}',\n"
+    if column.file:
+        spec += f"                file_path=True,\n"
+        spec += f"                file_ext='{column.file}',\n"
+    elif column.files:
+        spec += f"                file_path=True,\n"
+        spec += f"                file_ext='{', '.join(column.files)}',\n"
     if custom_attribute.file_path:
         spec += f"                file_path=True,\n"
     if custom_attribute.file_ext:
@@ -147,6 +163,4 @@ def _write_spec(spec: str):
 
 
 if __name__ == "__main__":
-    input_spec = _get_dat_schema_tables()
-    output_spec = _convert_tables(input_spec)
-    _write_spec(output_spec)
+    main()

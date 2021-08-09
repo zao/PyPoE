@@ -2035,6 +2035,7 @@ specification = Specification({
             Field(
                 name='OGGFile',
                 type='ref|string',
+                file_path=True,
                 file_ext='.ogg',
             ),
             Field(
@@ -2356,6 +2357,7 @@ specification = Specification({
                 name='MonsterSpawnerId',
                 type='ref|string',
                 file_path=True,
+                file_ext='.ot, .otc',
             ),
         ),
     ),
@@ -15291,6 +15293,7 @@ specification = Specification({
             Field(
                 name='ArtString_SMFile',
                 type='ref|string',
+                file_path=True,
                 file_ext='.sm',
             ),
         ),
@@ -16805,6 +16808,7 @@ specification = Specification({
             Field(
                 name='BankFile',
                 type='ref|string',
+                file_path=True,
                 file_ext='.bank',
             ),
             Field(

@@ -122,6 +122,7 @@ custom_attributes = {
             file_path=True,
         ),
         'OGGFile': CustomizedField(
+            file_path=True,
             file_ext='.ogg',
         ),
     },
@@ -153,11 +154,6 @@ custom_attributes = {
             file_path=True,
         ),
         'Icon': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'BestiaryEncounters.dat': {
-        'MonsterSpawnerId': CustomizedField(
             file_path=True,
         ),
     },
@@ -1039,6 +1035,7 @@ custom_attributes = {
     },
     'MonsterArmours.dat': {
         'ArtString_SMFile': CustomizedField(
+            file_path=True,
             file_ext='.sm',
         ),
     },
@@ -1097,6 +1094,7 @@ custom_attributes = {
             file_ext='.ogg',
         ),
         'BankFile': CustomizedField(
+            file_path=True,
             file_ext='.bank',
         ),
     },
@@ -1340,10 +1338,6 @@ custom_attributes = {
         ),
     },
     'UniqueChests.dat': {
-        'AOFile': CustomizedField(
-            file_path=True,
-            file_ext='.ao',
-        ),
         'AppearanceChestsKey': CustomizedField(
             description='Uses this chest for it"s visuals',
         ),
