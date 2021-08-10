@@ -340,11 +340,11 @@ specification = Specification({
             ),
             Field(
                 name='ActiveSkillTargetTypes',
-                type='ref|list|uint',
+                type='ref|list|int',
             ),
             Field(
                 name='ActiveSkillTypes',
-                type='ref|list|uint',
+                type='ref|list|int',
             ),
             Field(
                 name='WeaponRestriction_ItemClassesKeys',
@@ -374,7 +374,6 @@ specification = Specification({
             Field(
                 name='SkillTotemId',
                 type='int',
-                description='This links to SkillTotems.dat, but the number mayexceed the number of entries; in that case it is player skill.',
             ),
             Field(
                 name='IsManuallyCasted',
@@ -384,18 +383,15 @@ specification = Specification({
                 name='Input_StatKeys',
                 type='ref|list|ulong',
                 key='Stats.dat',
-                description='Stats that will modify this skill specifically',
             ),
             Field(
                 name='Output_StatKeys',
                 type='ref|list|ulong',
                 key='Stats.dat',
-                description='Stat an input stat will be transformed into',
             ),
             Field(
                 name='MinionActiveSkillTypes',
                 type='ref|list|int',
-                description='ActiveSkillTypes of skills of minions summoned by this skill',
             ),
             Field(
                 name='Flag2',
@@ -2151,7 +2147,6 @@ specification = Specification({
                 name='VendorRecipe_AchievementItemsKeys',
                 type='ref|list|ulong',
                 key='AchievementItems.dat',
-                description='Achievement check when selling this item to vendors',
             ),
             Field(
                 name='RarePurchase_BaseItemTypesKeys',
@@ -2180,7 +2175,6 @@ specification = Specification({
                 name='Equip_AchievementItemsKey',
                 type='ulong',
                 key='AchievementItems.dat',
-                description='Achievement check when equipping this item',
             ),
             Field(
                 name='IsCorrupted',
@@ -3632,7 +3626,6 @@ specification = Specification({
             Field(
                 name='SpawnWeight_Values',
                 type='ref|list|int',
-                description='0 disables',
             ),
             Field(
                 name='Unknown0',
@@ -3759,13 +3752,11 @@ specification = Specification({
                 name='Maximum_StatsKey',
                 type='ulong',
                 key='Stats.dat',
-                description='Stat that holds the maximum number for this buff',
             ),
             Field(
                 name='Current_StatsKey',
                 type='ulong',
                 key='Stats.dat',
-                description='Stat that holds the current number for this buff',
             ),
             Field(
                 name='Flag2',
@@ -4748,19 +4739,16 @@ specification = Specification({
                 name='Corrupt_AchievementItemsKey',
                 type='ulong',
                 key='AchievementItems.dat',
-                description='Achievement item granted on corruption',
             ),
             Field(
                 name='CurrencyUse_AchievementItemsKey',
                 type='ulong',
                 key='AchievementItems.dat',
-                description='Achievement item checked on currency use',
             ),
             Field(
                 name='Encounter_AchievementItemsKeys',
                 type='ref|list|ulong',
                 key='AchievementItems.dat',
-                description='Achievement items granted on encounter',
             ),
             Field(
                 name='Key0',
@@ -6607,7 +6595,6 @@ specification = Specification({
             Field(
                 name='Multiplier',
                 type='float',
-                description='Rounded',
             ),
         ),
     ),
@@ -9033,7 +9020,6 @@ specification = Specification({
             Field(
                 name='CooldownBypassType',
                 type='int',
-                description='Charge type to expend to bypass cooldown (Endurance, Frenzy, Power, none)',
             ),
             Field(
                 name='StatsKeys2',
@@ -11998,10 +11984,9 @@ specification = Specification({
                 file_ext='.ao',
             ),
             Field(
-                name='SoundEffectsKey',
+                name='InventorySoundEffect',
                 type='ulong',
                 key='SoundEffects.dat',
-                description='Inventory sound effect',
             ),
             Field(
                 name='Unknown0',
@@ -19610,7 +19595,6 @@ specification = Specification({
             Field(
                 name='BuffStatValues',
                 type='ref|list|int',
-                description='For use for the related stat in the buff.',
             ),
             Field(
                 name='BuffDefinitionsKey',
@@ -19689,13 +19673,11 @@ specification = Specification({
                 name='SummonMonster_MonsterVarietiesKey',
                 type='ulong',
                 key='MonsterVarieties.dat',
-                description='The aoe ground effects for example',
             ),
             Field(
                 name='SummonPlayer_MonsterVarietiesKey',
                 type='ulong',
                 key='MonsterVarieties.dat',
-                description='The aoe ground effects for example',
             ),
             Field(
                 name='Unknown2',
@@ -21917,7 +21899,6 @@ specification = Specification({
                 name='AppearanceChestsKey',
                 type='ulong',
                 key='Chests.dat',
-                description='Uses this chest for it"s visuals',
             ),
             Field(
                 name='ChestsKey',
