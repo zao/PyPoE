@@ -65,6 +65,7 @@ specification = Specification({
                 name='MetadataFile',
                 type='ref|string',
                 file_path=True,
+                file_ext='.ot, .otc',
             ),
             Field(
                 name='Unknown1',
@@ -1149,7 +1150,6 @@ specification = Specification({
             Field(
                 name='UIImageFile',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='TutorialVideo_BKFile',
@@ -1172,7 +1172,6 @@ specification = Specification({
             Field(
                 name='BackgroundImageFile',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='IsTemporary',
@@ -1185,7 +1184,6 @@ specification = Specification({
             Field(
                 name='ArchetypeImage',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='Flag1',
@@ -1591,7 +1589,6 @@ specification = Specification({
             Field(
                 name='Art',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='Unknown0',
@@ -2005,7 +2002,6 @@ specification = Specification({
             Field(
                 name='BackgroundImage',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='Unknown0',
@@ -2030,7 +2026,6 @@ specification = Specification({
             Field(
                 name='ForegroundImage',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='OGGFile',
@@ -2063,7 +2058,6 @@ specification = Specification({
                 name='Id',
                 type='ref|string',
                 unique=True,
-                file_path=True,
             ),
             Field(
                 name='ItemClassesKey',
@@ -2086,6 +2080,7 @@ specification = Specification({
                 name='InheritsFrom',
                 type='ref|string',
                 file_path=True,
+                file_ext='.ot, .otc',
             ),
             Field(
                 name='DropLevel',
@@ -2284,12 +2279,10 @@ specification = Specification({
             Field(
                 name='IconSmall',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='Icon',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='Boss_MonsterVarietiesKey',
@@ -2375,27 +2368,22 @@ specification = Specification({
             Field(
                 name='Icon',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='IconSmall',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='Illustration',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='PageArt',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='FlavourText',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='Flag0',
@@ -2443,7 +2431,6 @@ specification = Specification({
             Field(
                 name='Icon',
                 type='ref|string',
-                file_path=True,
             ),
         ),
     ),
@@ -2459,7 +2446,7 @@ specification = Specification({
                 type='ref|string',
             ),
             Field(
-                name='Illustraiton',
+                name='Illustration',
                 type='ref|string',
             ),
             Field(
@@ -2469,12 +2456,10 @@ specification = Specification({
             Field(
                 name='Icon',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='IconSmall',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='BestiaryFamiliesKey',
@@ -2758,7 +2743,6 @@ specification = Specification({
             Field(
                 name='Art',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='Unknown0',
@@ -2806,7 +2790,6 @@ specification = Specification({
             Field(
                 name='RankImage',
                 type='ref|string',
-                file_path=True,
             ),
         ),
     ),
@@ -2877,7 +2860,6 @@ specification = Specification({
             Field(
                 name='Art',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='Flag0',
@@ -2975,7 +2957,6 @@ specification = Specification({
             Field(
                 name='ArtFile',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='BetrayalUpgradeSlotsKey',
@@ -3217,7 +3198,6 @@ specification = Specification({
             Field(
                 name='Icon',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='IsGeneric',
@@ -3268,7 +3248,6 @@ specification = Specification({
             Field(
                 name='Icon',
                 type='ref|string',
-                file_path=True,
             ),
         ),
     ),
@@ -3449,7 +3428,6 @@ specification = Specification({
             Field(
                 name='Icon',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='NextUpgradeOptions',
@@ -4115,7 +4093,6 @@ specification = Specification({
             Field(
                 name='ExtraArt',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='Data0',
@@ -4569,7 +4546,6 @@ specification = Specification({
                 name='Id',
                 type='ref|string',
                 unique=True,
-                file_path=True,
             ),
             Field(
                 name='ChestsKeys',
@@ -4681,7 +4657,6 @@ specification = Specification({
                 name='Id',
                 type='ref|string',
                 unique=True,
-                file_path=True,
             ),
             Field(
                 name='Flag0',
@@ -4795,6 +4770,7 @@ specification = Specification({
                 name='InheritsFrom',
                 type='ref|string',
                 file_path=True,
+                file_ext='.ot, .otc',
             ),
             Field(
                 name='Flag6',
@@ -4894,7 +4870,6 @@ specification = Specification({
                 key='BaseItemTypes.dat',
                 key_id='Id',
                 unique=True,
-                file_path=True,
             ),
             Field(
                 name='ReqStr',
@@ -4918,7 +4893,6 @@ specification = Specification({
                 key='BaseItemTypes.dat',
                 key_id='Id',
                 unique=True,
-                file_path=True,
             ),
             Field(
                 name='MaxCharges',
@@ -5596,7 +5570,6 @@ specification = Specification({
             Field(
                 name='UIImage',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='SpawnWeight_Depth',
@@ -5618,6 +5591,7 @@ specification = Specification({
                 name='Art2D',
                 type='ref|string',
                 file_path=True,
+                file_ext='1.dds, 2.dds, 3.dds, 4.dds, 5.dds, 6.dds, 7.dds, 8.dds, 9.dds, 1.dds.header, 2.dds.header, 3.dds.header, 4.dds.header, 5.dds.header, 6.dds.header, 7.dds.header, 8.dds.header, 9.dds.header',
             ),
             Field(
                 name='AchievementItemsKeys',
@@ -5840,7 +5814,6 @@ specification = Specification({
             Field(
                 name='Image',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='AchievementItemsKeys',
@@ -6407,7 +6380,6 @@ specification = Specification({
             Field(
                 name='VirtualFile',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='Data0',
@@ -6723,6 +6695,7 @@ specification = Specification({
                 name='TerrainMetadata',
                 type='ref|string',
                 file_path=True,
+                file_ext='.ot, .otc',
             ),
         ),
     ),
@@ -7347,6 +7320,7 @@ specification = Specification({
                 name='MetadataIDs',
                 type='ref|list|ref|string',
                 file_path=True,
+                file_ext='.ot, .otc',
             ),
             Field(
                 name='ScriptCommand',
@@ -8113,7 +8087,6 @@ specification = Specification({
                 name='Id',
                 type='ref|string',
                 unique=True,
-                file_path=True,
             ),
             Field(
                 name='BaseItemTypesKey',
@@ -8143,6 +8116,14 @@ specification = Specification({
             Field(
                 name='Flag0',
                 type='byte',
+            ),
+            Field(
+                name='Unknown0',
+                type='int',
+            ),
+            Field(
+                name='Unknown1',
+                type='int',
             ),
         ),
     ),
@@ -9410,12 +9391,10 @@ specification = Specification({
             Field(
                 name='FrameImage',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='FrameHighlight',
                 type='ref|string',
-                file_path=True,
             ),
         ),
     ),
@@ -9775,12 +9754,10 @@ specification = Specification({
             Field(
                 name='Button',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='ButtonHighlight',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='HasButton',
@@ -10028,7 +10005,6 @@ specification = Specification({
             Field(
                 name='Art',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='RewardTypeName',
@@ -10424,12 +10400,10 @@ specification = Specification({
             Field(
                 name='RequiredSkillIcon',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='SkillIcon',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='Unknown0',
@@ -10510,7 +10484,6 @@ specification = Specification({
             Field(
                 name='SkillIcon',
                 type='ref|string',
-                file_path=True,
             ),
         ),
     ),
@@ -10608,7 +10581,6 @@ specification = Specification({
             Field(
                 name='PortraitFile',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='HeistNPCStatsKeys',
@@ -10638,7 +10610,6 @@ specification = Specification({
             Field(
                 name='SilhouetteFile',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='Unknown2',
@@ -10665,7 +10636,6 @@ specification = Specification({
             Field(
                 name='ActiveNPCIcon',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='HeistJobsKey',
@@ -10888,7 +10858,6 @@ specification = Specification({
             Field(
                 name='PortraitFile',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='Keys0',
@@ -11077,6 +11046,7 @@ specification = Specification({
                 name='InheritsFrom',
                 type='ref|string',
                 file_path=True,
+                file_ext='.ot, .otc',
             ),
             Field(
                 name='IsCraftingBench',
@@ -11182,7 +11152,6 @@ specification = Specification({
             Field(
                 name='HideoutImage',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='IsEnabled',
@@ -11328,20 +11297,21 @@ specification = Specification({
                 key='IncursionChests.dat',
             ),
             Field(
-                name='Unknown0',
+                name='ChestMarkerMetadata',
                 type='ref|string',
                 file_path=True,
+                file_ext='.ot, .otc',
             ),
             Field(
-                name='Unknown1',
+                name='Unknown0',
                 type='uint',
             ),
             Field(
-                name='Unknown2',
+                name='Unknown1',
                 type='int',
             ),
             Field(
-                name='Unknown3',
+                name='Unknown2',
                 type='int',
             ),
         ),
@@ -11472,7 +11442,6 @@ specification = Specification({
             Field(
                 name='UIIcon',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='FlavourText',
@@ -12427,6 +12396,7 @@ specification = Specification({
                 type='ref|string',
                 unique=True,
                 file_path=True,
+                file_ext='.ot, .otc',
             ),
             Field(
                 name='ChestsKey',
@@ -12478,6 +12448,7 @@ specification = Specification({
                 name='ObjectPath',
                 type='ref|string',
                 file_path=True,
+                file_ext='.ot, .otc',
             ),
         ),
     ),
@@ -12818,17 +12789,14 @@ specification = Specification({
             Field(
                 name='PanelImage',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='HeaderImage',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='Screenshots',
                 type='ref|list|ref|string',
-                file_path=True,
             ),
             Field(
                 name='Description',
@@ -12845,12 +12813,10 @@ specification = Specification({
             Field(
                 name='ItemImages',
                 type='ref|list|ref|string',
-                file_path=True,
             ),
             Field(
                 name='HoverImages',
                 type='ref|list|ref|string',
-                file_path=True,
             ),
             Field(
                 name='TrailerVideoLink',
@@ -12859,7 +12825,6 @@ specification = Specification({
             Field(
                 name='BackgroundImage',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='Flag1',
@@ -13280,7 +13245,6 @@ specification = Specification({
             Field(
                 name='ArtFile',
                 type='ref|string',
-                file_path=True,
             ),
         ),
     ),
@@ -13449,6 +13413,7 @@ specification = Specification({
                 name='InheritsFrom',
                 type='ref|string',
                 file_path=True,
+                file_ext='.ot, .otc',
             ),
             Field(
                 name='Command',
@@ -14156,7 +14121,6 @@ specification = Specification({
             Field(
                 name='UnavailableArt',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='Unknown0',
@@ -14165,7 +14129,6 @@ specification = Specification({
             Field(
                 name='AvailableArt',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='BaseItemTypesKey',
@@ -14337,7 +14300,6 @@ specification = Specification({
             Field(
                 name='Art',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='Name',
@@ -14418,7 +14380,6 @@ specification = Specification({
             Field(
                 name='ButtonImage',
                 type='ref|string',
-                file_path=True,
             ),
         ),
     ),
@@ -14564,7 +14525,6 @@ specification = Specification({
             Field(
                 name='ImageFile',
                 type='ref|string',
-                file_path=True,
             ),
         ),
     ),
@@ -14758,6 +14718,7 @@ specification = Specification({
                 name='EffectVirtualPath',
                 type='ref|string',
                 file_path=True,
+                file_ext='.ot, .otc',
             ),
             Field(
                 name='PreloadGroupsKeys',
@@ -14795,12 +14756,10 @@ specification = Specification({
             Field(
                 name='Image',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='BackgroundImage',
                 type='ref|string',
-                file_path=True,
             ),
         ),
     ),
@@ -16109,6 +16068,7 @@ specification = Specification({
                 name='Id',
                 type='ref|string',
                 file_path=True,
+                file_ext='.ot, .otc',
             ),
         ),
     ),
@@ -16211,7 +16171,6 @@ specification = Specification({
                 name='Id',
                 type='ref|string',
                 unique=True,
-                file_path=True,
             ),
             Field(
                 name='MonsterTypesKey',
@@ -16250,6 +16209,7 @@ specification = Specification({
                 name='BaseMonsterTypeIndex',
                 type='ref|string',
                 file_path=True,
+                file_ext='.ot, .otc',
             ),
             Field(
                 name='ModsKeys',
@@ -16963,22 +16923,18 @@ specification = Specification({
             Field(
                 name='HeaderBaseFile',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='ButtomFile',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='BannerFiles',
                 type='ref|list|ref|string',
-                file_path=True,
             ),
             Field(
                 name='HeaderFiles',
                 type='ref|list|ref|string',
-                file_path=True,
             ),
             Field(
                 name='Unknown0',
@@ -17424,7 +17380,6 @@ specification = Specification({
                 name='Id',
                 type='ref|string',
                 unique=True,
-                file_path=True,
             ),
             Field(
                 name='Name',
@@ -17434,6 +17389,7 @@ specification = Specification({
                 name='Metadata',
                 type='ref|string',
                 file_path=True,
+                file_ext='.ot, .otc',
             ),
             Field(
                 name='Unknown0',
@@ -17478,7 +17434,6 @@ specification = Specification({
             Field(
                 name='PortraitFile',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='Unknown4',
@@ -17616,7 +17571,6 @@ specification = Specification({
             Field(
                 name='Id',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='Unknown0',
@@ -17662,7 +17616,6 @@ specification = Specification({
             Field(
                 name='CoverImage',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='GodName2',
@@ -17671,7 +17624,6 @@ specification = Specification({
             Field(
                 name='SelectionImage',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='Effect1_StatsKeys',
@@ -18090,7 +18042,6 @@ specification = Specification({
             Field(
                 name='Art',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='TotalIndices',
@@ -18268,6 +18219,7 @@ specification = Specification({
                 type='ref|string',
                 unique=True,
                 file_path=True,
+                file_ext='.ot, .otc',
             ),
             Field(
                 name='BaseItemTypesKey',
@@ -18370,6 +18322,7 @@ specification = Specification({
                 type='ref|string',
                 unique=True,
                 file_path=True,
+                file_ext='.ot, .otc',
             ),
             Field(
                 name='AOFiles',
@@ -18409,6 +18362,7 @@ specification = Specification({
                 name='InheritsFrom',
                 type='ref|string',
                 file_path=True,
+                file_ext='.ot, .otc',
             ),
             Field(
                 name='Unknown1',
@@ -19076,6 +19030,7 @@ specification = Specification({
                 name='InheritsFrom',
                 type='ref|string',
                 file_path=True,
+                file_ext='.ot, .otc',
             ),
             Field(
                 name='RecipeId',
@@ -19568,7 +19523,6 @@ specification = Specification({
             Field(
                 name='BackgroundImage',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='Unknown2',
@@ -19805,17 +19759,14 @@ specification = Specification({
             Field(
                 name='Inactive_ArtFile',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='Active_ArtFile',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='Frame_ArtFile',
                 type='ref|string',
-                file_path=True,
             ),
         ),
     ),
@@ -20842,7 +20793,6 @@ specification = Specification({
             Field(
                 name='ArtFile',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='Name',
@@ -21022,7 +20972,6 @@ specification = Specification({
             Field(
                 name='ArtFile',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='AchievementItemsKey',
@@ -22148,7 +22097,6 @@ specification = Specification({
             Field(
                 name='Image',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='Unknown3',
@@ -22792,7 +22740,6 @@ specification = Specification({
                 type='ref|string',
                 key='NPCs.dat',
                 key_id='Id',
-                file_path=True,
             ),
             Field(
                 name='Unknown34',
@@ -22951,17 +22898,14 @@ specification = Specification({
             Field(
                 name='Unknown0',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='Unknown1',
                 type='ref|string',
-                file_path=True,
             ),
             Field(
                 name='Unknown2',
                 type='ref|string',
-                file_path=True,
             ),
         ),
     ),

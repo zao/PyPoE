@@ -2,19 +2,12 @@
 class CustomizedField:
     def __init__(self,
                  enum: str = None,
-                 file_path: bool = False,
                  description: str = None):
         self.enum = enum
-        self.file_path = file_path
         self.description = description
 
 
 custom_attributes = {
-    'AbyssObjects.dat': {
-        'MetadataFile': CustomizedField(
-            file_path=True,
-        ),
-    },
     'ActiveSkills.dat': {
         'SkillTotemId': CustomizedField(
             description='This links to SkillTotems.dat, but the number mayexceed the number of entries; in that case it is player skill.',
@@ -29,42 +22,12 @@ custom_attributes = {
             description='ActiveSkillTypes of skills of minions summoned by this skill',
         ),
     },
-    'Archetypes.dat': {
-        'UIImageFile': CustomizedField(
-            file_path=True,
-        ),
-        'BackgroundImageFile': CustomizedField(
-            file_path=True,
-        ),
-        'ArchetypeImage': CustomizedField(
-            file_path=True,
-        ),
-    },
     'Ascendancy.dat': {
         'CoordinateRect': CustomizedField(
             description='Coordinates in "x1, y1, x2, y2" format',
         ),
     },
-    'AtlasExiles.dat': {
-        'Art': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'AwardDisplay.dat': {
-        'BackgroundImage': CustomizedField(
-            file_path=True,
-        ),
-        'ForegroundImage': CustomizedField(
-            file_path=True,
-        ),
-    },
     'BaseItemTypes.dat': {
-        'Id': CustomizedField(
-            file_path=True,
-        ),
-        'InheritsFrom': CustomizedField(
-            file_path=True,
-        ),
         'ModDomainsKey': CustomizedField(
             enum='MOD_DOMAIN',
         ),
@@ -81,85 +44,14 @@ custom_attributes = {
             description='Achievement check when equipping this item',
         ),
     },
-    'BestiaryCapturableMonsters.dat': {
-        'IconSmall': CustomizedField(
-            file_path=True,
-        ),
-        'Icon': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'BestiaryFamilies.dat': {
-        'Icon': CustomizedField(
-            file_path=True,
-        ),
-        'IconSmall': CustomizedField(
-            file_path=True,
-        ),
-        'Illustration': CustomizedField(
-            file_path=True,
-        ),
-        'PageArt': CustomizedField(
-            file_path=True,
-        ),
-        'FlavourText': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'BestiaryGenus.dat': {
-        'Icon': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'BestiaryGroups.dat': {
-        'Icon': CustomizedField(
-            file_path=True,
-        ),
-        'IconSmall': CustomizedField(
-            file_path=True,
-        ),
-    },
     'BestiaryRecipeComponent.dat': {
         'RarityKey': CustomizedField(
             enum='RARITY',
         ),
     },
-    'BetrayalJobs.dat': {
-        'Art': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'BetrayalRanks.dat': {
-        'RankImage': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'BetrayalTargets.dat': {
-        'Art': CustomizedField(
-            file_path=True,
-        ),
-    },
     'BetrayalUpgrades.dat': {
-        'ArtFile': CustomizedField(
-            file_path=True,
-        ),
         'BetrayalUpgradeSlotsKey': CustomizedField(
             enum='BETRAYAL_UPGRADE_SLOTS',
-        ),
-    },
-    'BlightEncounterTypes.dat': {
-        'Icon': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'BlightRewardTypes.dat': {
-        'Icon': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'BlightTowers.dat': {
-        'Icon': CustomizedField(
-            file_path=True,
         ),
     },
     'Bloodlines.dat': {
@@ -175,11 +67,6 @@ custom_attributes = {
             description='Stat that holds the current number for this buff',
         ),
     },
-    'BuffVisuals.dat': {
-        'ExtraArt': CustomizedField(
-            file_path=True,
-        ),
-    },
     'CharacterAudioEvents.dat': {
         'Goddess_CharacterTextAudioKeys': CustomizedField(
             description='For the Goddess Bound/Scorned/Unleashed unique',
@@ -193,15 +80,7 @@ custom_attributes = {
             description='Attack Speed in milliseconds',
         ),
     },
-    'ChestClusters.dat': {
-        'Id': CustomizedField(
-            file_path=True,
-        ),
-    },
     'Chests.dat': {
-        'Id': CustomizedField(
-            file_path=True,
-        ),
         'Corrupt_AchievementItemsKey': CustomizedField(
             description='Achievement item granted on corruption',
         ),
@@ -211,36 +90,10 @@ custom_attributes = {
         'Encounter_AchievementItemsKeys': CustomizedField(
             description='Achievement items granted on encounter',
         ),
-        'InheritsFrom': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'ComponentAttributeRequirements.dat': {
-        'BaseItemTypesKey': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'ComponentCharges.dat': {
-        'BaseItemTypesKey': CustomizedField(
-            file_path=True,
-        ),
     },
     'CurrencyItems.dat': {
         'FullStack_BaseItemTypesKey': CustomizedField(
             description='Full stack transforms into this item',
-        ),
-    },
-    'DelveBiomes.dat': {
-        'UIImage': CustomizedField(
-            file_path=True,
-        ),
-        'Art2D': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'DelveFeatures.dat': {
-        'Image': CustomizedField(
-            file_path=True,
         ),
     },
     'DelveUpgrades.dat': {
@@ -248,34 +101,14 @@ custom_attributes = {
             enum='DELVE_UPGRADE_TYPE',
         ),
     },
-    'DivinationCardArt.dat': {
-        'VirtualFile': CustomizedField(
-            file_path=True,
-        ),
-    },
     'EffectivenessCostConstants.dat': {
         'Multiplier': CustomizedField(
             description='Rounded',
         ),
     },
-    'ElderMapBossOverride.dat': {
-        'TerrainMetadata': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'ExecuteGEAL.dat': {
-        'MetadataIDs': CustomizedField(
-            file_path=True,
-        ),
-    },
     'Flasks.dat': {
         'RecoveryTime': CustomizedField(
             description='in 1/10 s',
-        ),
-    },
-    'FragmentStashTabLayout.dat': {
-        'Id': CustomizedField(
-            file_path=True,
         ),
     },
     'GrantedEffects.dat': {
@@ -317,84 +150,14 @@ custom_attributes = {
             description='Text without any tags for formatting',
         ),
     },
-    'HarvestCraftTiers.dat': {
-        'FrameImage': CustomizedField(
-            file_path=True,
-        ),
-        'FrameHighlight': CustomizedField(
-            file_path=True,
-        ),
-    },
     'HarvestObjects.dat': {
         'ObjectType': CustomizedField(
             enum='HARVEST_OBJECT_TYPES',
         ),
     },
-    'HarvestStorageLayout.dat': {
-        'Button': CustomizedField(
-            file_path=True,
-        ),
-        'ButtonHighlight': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'HeistChestRewardTypes.dat': {
-        'Art': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'HeistJobs.dat': {
-        'RequiredSkillIcon': CustomizedField(
-            file_path=True,
-        ),
-        'SkillIcon': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'HeistLockType.dat': {
-        'SkillIcon': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'HeistNPCs.dat': {
-        'PortraitFile': CustomizedField(
-            file_path=True,
-        ),
-        'SilhouetteFile': CustomizedField(
-            file_path=True,
-        ),
-        'ActiveNPCIcon': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'HeistRevealingNPCs.dat': {
-        'PortraitFile': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'HideoutDoodads.dat': {
-        'InheritsFrom': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'Hideouts.dat': {
-        'HideoutImage': CustomizedField(
-            file_path=True,
-        ),
-    },
     'ImpactSoundData.dat': {
         'Sound': CustomizedField(
             description='Located in Audio/SoundEffects. Format has SG removed and $(#) replaced with the number',
-        ),
-    },
-    'IncursionChestRewards.dat': {
-        'Unknown0': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'IncursionRooms.dat': {
-        'UIIcon': CustomizedField(
-            file_path=True,
         ),
     },
     'ItemVisualIdentity.dat': {
@@ -405,41 +168,6 @@ custom_attributes = {
     'KillstreakThresholds.dat': {
         'MonsterVarietiesKey': CustomizedField(
             description='Monster that plays the effect, i.e. the "nova" etc.',
-        ),
-    },
-    'LabyrinthIzaroChests.dat': {
-        'Id': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'LabyrinthRewardTypes.dat': {
-        'ObjectPath': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'LeagueInfo.dat': {
-        'PanelImage': CustomizedField(
-            file_path=True,
-        ),
-        'HeaderImage': CustomizedField(
-            file_path=True,
-        ),
-        'Screenshots': CustomizedField(
-            file_path=True,
-        ),
-        'ItemImages': CustomizedField(
-            file_path=True,
-        ),
-        'HoverImages': CustomizedField(
-            file_path=True,
-        ),
-        'BackgroundImage': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'MapDevices.dat': {
-        'InheritsFrom': CustomizedField(
-            file_path=True,
         ),
     },
     'MapFragmentMods.dat': {
@@ -455,42 +183,6 @@ custom_attributes = {
             description='Y starts at top side of image, can be negative',
         ),
     },
-    'MetamorphosisMetaSkillTypes.dat': {
-        'UnavailableArt': CustomizedField(
-            file_path=True,
-        ),
-        'AvailableArt': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'MetamorphosisRewardTypes.dat': {
-        'Art': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'MetamorphosisStashTabLayout.dat': {
-        'ButtonImage': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'MicrotransactionRarityDisplay.dat': {
-        'ImageFile': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'MiscObjects.dat': {
-        'EffectVirtualPath': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'MissionTimerTypes.dat': {
-        'Image': CustomizedField(
-            file_path=True,
-        ),
-        'BackgroundImage': CustomizedField(
-            file_path=True,
-        ),
-    },
     'Mods.dat': {
         'Domain': CustomizedField(
             enum='MOD_DOMAIN',
@@ -499,18 +191,7 @@ custom_attributes = {
             enum='MOD_GENERATION_TYPE',
         ),
     },
-    'MonsterSpawnerGroups.dat': {
-        'Id': CustomizedField(
-            file_path=True,
-        ),
-    },
     'MonsterVarieties.dat': {
-        'Id': CustomizedField(
-            file_path=True,
-        ),
-        'BaseMonsterTypeIndex': CustomizedField(
-            file_path=True,
-        ),
         'ModelSizeMultiplier': CustomizedField(
             description='in percent',
         ),
@@ -527,75 +208,9 @@ custom_attributes = {
             description='in ms',
         ),
     },
-    'MTXSetBonus.dat': {
-        'ArtFile': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'NPCDialogueStyles.dat': {
-        'HeaderBaseFile': CustomizedField(
-            file_path=True,
-        ),
-        'ButtomFile': CustomizedField(
-            file_path=True,
-        ),
-        'BannerFiles': CustomizedField(
-            file_path=True,
-        ),
-        'HeaderFiles': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'NPCs.dat': {
-        'Id': CustomizedField(
-            file_path=True,
-        ),
-        'Metadata': CustomizedField(
-            file_path=True,
-        ),
-        'PortraitFile': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'PackFormation.dat': {
-        'Id': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'PantheonPanelLayout.dat': {
-        'CoverImage': CustomizedField(
-            file_path=True,
-        ),
-        'SelectionImage': CustomizedField(
-            file_path=True,
-        ),
-    },
     'PassiveSkills.dat': {
         'PassiveSkillGraphId': CustomizedField(
             description='Id used by PassiveSkillGraph.psg',
-        ),
-    },
-    'PassiveTreeExpansionJewels.dat': {
-        'Art': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'Pet.dat': {
-        'Id': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'Projectiles.dat': {
-        'Id': CustomizedField(
-            file_path=True,
-        ),
-        'InheritsFrom': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'RecipeUnlockObjects.dat': {
-        'InheritsFrom': CustomizedField(
-            file_path=True,
         ),
     },
     'Scarabs.dat': {
@@ -604,9 +219,6 @@ custom_attributes = {
         ),
     },
     'ShopPaymentPackage.dat': {
-        'BackgroundImage': CustomizedField(
-            file_path=True,
-        ),
         'PhysicalItemPoints': CustomizedField(
             description='Number of points the user gets back if they opt-out of physical items',
         ),
@@ -627,17 +239,6 @@ custom_attributes = {
             description='The aoe ground effects for example',
         ),
     },
-    'SigilDisplay.dat': {
-        'Inactive_ArtFile': CustomizedField(
-            file_path=True,
-        ),
-        'Active_ArtFile': CustomizedField(
-            file_path=True,
-        ),
-        'Frame_ArtFile': CustomizedField(
-            file_path=True,
-        ),
-    },
     'StrDexIntMissionExtraRequirement.dat': {
         'TimeLimit': CustomizedField(
             description='in milliseconds',
@@ -651,24 +252,9 @@ custom_attributes = {
             enum='SHOP_PACKAGE_PLATFORM',
         ),
     },
-    'SynthesisAreas.dat': {
-        'ArtFile': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'SynthesisRewardTypes.dat': {
-        'ArtFile': CustomizedField(
-            file_path=True,
-        ),
-    },
     'UniqueChests.dat': {
         'AppearanceChestsKey': CustomizedField(
             description='Uses this chest for it"s visuals',
-        ),
-    },
-    'UniqueStashTypes.dat': {
-        'Image': CustomizedField(
-            file_path=True,
         ),
     },
     'WeaponTypes.dat': {
@@ -687,20 +273,6 @@ custom_attributes = {
     'WorldAreas.dat': {
         'Strongbox_RarityWeight': CustomizedField(
             description='Normal/Magic/Rare/Unique spawn distribution',
-        ),
-        'FirstEntry_NPCsKey': CustomizedField(
-            file_path=True,
-        ),
-    },
-    'WorldPopupIconTypes.dat': {
-        'Unknown0': CustomizedField(
-            file_path=True,
-        ),
-        'Unknown1': CustomizedField(
-            file_path=True,
-        ),
-        'Unknown2': CustomizedField(
-            file_path=True,
         ),
     },
 }

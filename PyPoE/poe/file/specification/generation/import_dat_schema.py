@@ -103,8 +103,6 @@ def _convert_column(table_name: str, column, name_generator: UnknownColumnNameGe
     elif column.files:
         spec += f"                file_path=True,\n"
         spec += f"                file_ext='{', '.join(column.files)}',\n"
-    if custom_attribute.file_path:
-        spec += f"                file_path=True,\n"
     if custom_attribute.description:
         spec += f"                description='{custom_attribute.description}',\n"
     elif column.description:
