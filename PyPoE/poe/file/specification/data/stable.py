@@ -2213,7 +2213,7 @@ specification = Specification({
                 description='the item which represents this item in the fragment stash tab',
             ),
             Field(
-                name='IsBlessing',
+                name='Flag0',
                 type='bool',
             ),
             Field(
@@ -2230,7 +2230,7 @@ specification = Specification({
                 type='ulong',
             ),
             Field(
-                name='Flag0',
+                name='Flag1',
                 type='bool',
             ),
         ),
