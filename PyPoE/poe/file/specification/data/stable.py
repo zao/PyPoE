@@ -11814,6 +11814,23 @@ specification = Specification({
             ),
         ),
     ),
+    'ItemClassCategories.dat': File(
+        fields=(
+            Field(
+                name='Id',
+                type='ref|string',
+                unique=True,
+            ),
+            Field(
+                name='Text',
+                type='ref|string',
+            ),
+            Field(
+                name='Key0',
+                type='ulong',
+            ),
+        ),
+    ),
     'ItemClasses.dat': File(
         fields=(
             Field(
@@ -11831,7 +11848,8 @@ specification = Specification({
             ),
             Field(
                 name='ItemClassCategory',
-                type='int',
+                type='ulong',
+                key='ItemClassCategories.dat',
             ),
             Field(
                 name='RemovedIfLeavesArea',
@@ -11895,7 +11913,8 @@ specification = Specification({
             ),
             Field(
                 name='ItemStance',
-                type='int',
+                type='ulong',
+                key='ItemStances.dat',
             ),
         ),
     ),
@@ -11996,6 +12015,15 @@ specification = Specification({
             Field(
                 name='Name',
                 type='ref|string',
+            ),
+        ),
+    ),
+    'ItemStances.dat': File(
+        fields=(
+            Field(
+                name='Id',
+                type='ref|string',
+                unique=True,
             ),
         ),
     ),
