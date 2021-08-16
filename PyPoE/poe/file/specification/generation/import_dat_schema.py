@@ -122,16 +122,8 @@ def _convert_column_type(column) -> str:
 _TYPE_MAP = {
     'bool': 'bool',
     'string': 'ref|string',
-    'u64': 'ulong',
-    'u32': 'uint',
-    'u16': 'ushort',
-    'u8': 'ubyte',
-    'i64': 'long',
     'i32': 'int',
-    'i16': 'short',
-    'i8': 'byte',
     'f32': 'float',
-    'f64': 'double',
     'foreignrow': 'ulong',
     'row': 'ref|generic',
 }

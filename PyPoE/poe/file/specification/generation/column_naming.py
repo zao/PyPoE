@@ -7,7 +7,7 @@ class UnknownColumnNameGenerator:
     _unknown_count = 0
 
     def next_name(self, column) -> str:
-        if column.type == 'bool' or column.type == 'i8':
+        if column.type == 'bool':
             name = f'Flag{self._flag_count}'
             self._flag_count += 1
         elif column.array:
