@@ -147,6 +147,22 @@ specification = Specification({
                 name='Message',
                 type='ref|string',
             ),
+            Field(
+                name='Unknown0',
+                type='byte',
+            ),
+            Field(
+                name='Unknown1',
+                type='byte',
+            ),
+            Field(
+                name='Unknown2',
+                type='byte',
+            ),
+            Field(
+                name='Unknown3',
+                type='byte',
+            ),
         ),
     ),
     'AchievementItems.dat': File(
@@ -225,6 +241,22 @@ specification = Specification({
             Field(
                 name='HideoutName',
                 type='ref|string',
+            ),
+            Field(
+                name='Unknown0',
+                type='byte',
+            ),
+            Field(
+                name='Unknown2',
+                type='byte',
+            ),
+            Field(
+                name='Unknown3',
+                type='byte',
+            ),
+            Field(
+                name='Unknown4',
+                type='byte',
             ),
         ),
     ),
@@ -683,6 +715,38 @@ specification = Specification({
                 type='ulong',
                 key='Mods.dat',
             ),
+            Field(
+                name='Unknown0',
+                type='byte',
+            ),
+            Field(
+                name='Unknown1',
+                type='byte',
+            ),
+            Field(
+                name='Unknown2',
+                type='byte',
+            ),
+            Field(
+                name='Unknown3',
+                type='byte',
+            ),
+            Field(
+                name='Unknown4',
+                type='byte',
+            ),
+            Field(
+                name='Unknown5',
+                type='byte',
+            ),
+            Field(
+                name='Unknown6',
+                type='byte',
+            ),
+            Field(
+                name='Unknown7',
+                type='byte',
+            ),
         ),
     ),
     'AfflictionRandomModCategories.dat': File(
@@ -1062,7 +1126,7 @@ specification = Specification({
             Field(
                 name='IntId',
                 type='int',
-                unique=True,
+                # unique=True,
             ),
             Field(
                 name='Flag2',
@@ -1074,11 +1138,15 @@ specification = Specification({
                 key='Animation.dat',
                 key_id='Id',
             ),
+            # Field(
+            #     name='Offhand_AnimationKey',
+            #     type='ref|string',
+            #     key='Animation.dat',
+            #     key_id='Id',
+            # ),
             Field(
-                name='Offhand_AnimationKey',
-                type='ref|string',
-                key='Animation.dat',
-                key_id='Id',
+                name='Unknown0',
+                type='byte',
             ),
         ),
     ),
@@ -1994,6 +2062,202 @@ specification = Specification({
                 name='Unknown2',
                 type='int',
             ),
+            Field(
+                name='Unknown3',
+                type='byte',
+            ),
+            Field(
+                name='Unknown4',
+                type='byte',
+            ),
+            Field(
+                name='Unknown5',
+                type='byte',
+            ),
+            Field(
+                name='Unknown6',
+                type='byte',
+            ),
+            Field(
+                name='Unknown7',
+                type='byte',
+            ),
+            Field(
+                name='Unknown8',
+                type='byte',
+            ),
+            Field(
+                name='Unknown9',
+                type='byte',
+            ),
+            Field(
+                name='Unknown10',
+                type='byte',
+            ),
+            Field(
+                name='Unknown11',
+                type='byte',
+            ),
+            Field(
+                name='Unknown12',
+                type='byte',
+            ),
+            Field(
+                name='Unknown13',
+                type='byte',
+            ),
+            Field(
+                name='Unknown14',
+                type='byte',
+            ),
+            Field(
+                name='Unknown15',
+                type='byte',
+            ),
+            Field(
+                name='Unknown16',
+                type='byte',
+            ),
+            Field(
+                name='Unknown17',
+                type='byte',
+            ),
+            Field(
+                name='Unknown18',
+                type='byte',
+            ),
+            Field(
+                name='Unknown19',
+                type='byte',
+            ),
+            Field(
+                name='Unknown20',
+                type='byte',
+            ),
+            Field(
+                name='Unknown21',
+                type='byte',
+            ),
+            Field(
+                name='Unknown22',
+                type='byte',
+            ),
+            Field(
+                name='Unknown23',
+                type='byte',
+            ),
+            Field(
+                name='Unknown24',
+                type='byte',
+            ),
+            Field(
+                name='Unknown25',
+                type='byte',
+            ),
+            Field(
+                name='Unknown26',
+                type='byte',
+            ),
+            Field(
+                name='Unknown27',
+                type='byte',
+            ),
+            Field(
+                name='Unknown28',
+                type='byte',
+            ),
+            Field(
+                name='Unknown29',
+                type='byte',
+            ),
+            Field(
+                name='Unknown30',
+                type='byte',
+            ),
+            Field(
+                name='Unknown31',
+                type='byte',
+            ),
+            Field(
+                name='Unknown32',
+                type='byte',
+            ),
+            Field(
+                name='Unknown33',
+                type='byte',
+            ),
+            Field(
+                name='Unknown34',
+                type='byte',
+            ),
+            Field(
+                name='Unknown35',
+                type='byte',
+            ),
+            Field(
+                name='Unknown36',
+                type='byte',
+            ),
+            Field(
+                name='Unknown7',
+                type='byte',
+            ),
+            Field(
+                name='Unknown38',
+                type='byte',
+            ),
+            Field(
+                name='Unknown39',
+                type='byte',
+            ),
+            Field(
+                name='Unknown40',
+                type='byte',
+            ),
+            Field(
+                name='Unknown41',
+                type='byte',
+            ),
+            Field(
+                name='Unknown42',
+                type='byte',
+            ),
+            Field(
+                name='Unknown43',
+                type='byte',
+            ),
+            Field(
+                name='Unknown44',
+                type='byte',
+            ),
+            Field(
+                name='Unknown45',
+                type='byte',
+            ),
+            Field(
+                name='Unknown46',
+                type='byte',
+            ),
+            Field(
+                name='Unknown47',
+                type='byte',
+            ),
+            Field(
+                name='Unknown48',
+                type='byte',
+            ),
+            Field(
+                name='Unknown49',
+                type='byte',
+            ),
+            Field(
+                name='Unknown50',
+                type='byte',
+            ),
+            Field(
+                name='Unknown51',
+                type='byte',
+            ),
         ),
     ),
     'AtlasSector.dat': File(
@@ -2277,22 +2541,26 @@ specification = Specification({
         virtual_fields=(
             VirtualField(
                 name='NormalPurchase',
-                fields=('NormalPurchase_BaseItemTypesKeys', 'NormalPurchase_Costs'),
+                fields=('NormalPurchase_BaseItemTypesKeys',
+                        'NormalPurchase_Costs'),
                 zip=True,
             ),
             VirtualField(
                 name='MagicPurchase',
-                fields=('MagicPurchase_BaseItemTypesKeys', 'MagicPurchase_Costs'),
+                fields=('MagicPurchase_BaseItemTypesKeys',
+                        'MagicPurchase_Costs'),
                 zip=True,
             ),
             VirtualField(
                 name='RarePurchase',
-                fields=('RarePurchase_BaseItemTypesKeys', 'RarePurchase_Costs'),
+                fields=('RarePurchase_BaseItemTypesKeys',
+                        'RarePurchase_Costs'),
                 zip=True,
             ),
             VirtualField(
                 name='UniquePurchase',
-                fields=('UniquePurchase_BaseItemTypesKeys', 'UniquePurchase_Costs'),
+                fields=('UniquePurchase_BaseItemTypesKeys',
+                        'UniquePurchase_Costs'),
                 zip=True,
             ),
         ),
@@ -2598,6 +2866,22 @@ specification = Specification({
                 name='BestiaryGenusKey',
                 type='ulong',
                 key='BestiaryGenus.dat',
+            ),
+            Field(
+                name='Unknown0',
+                type='byte',
+            ),
+            Field(
+                name='Unknown1',
+                type='byte',
+            ),
+            Field(
+                name='Unknown2',
+                type='byte',
+            ),
+            Field(
+                name='Unknown3',
+                type='byte',
             ),
         ),
     ),
@@ -5127,22 +5411,17 @@ specification = Specification({
                 type='int',
             ),
             Field(
-                name='ModFamily',
-                type='ref|string',
-            ),
-            Field(
                 name='CraftingItemClassCategoriesKeys',
                 type='ref|list|ulong',
                 key='CraftingItemClassCategories.dat',
             ),
             Field(
-                name='MaximumMapTier',
+                name='Unknown0',
                 type='int',
             ),
             Field(
-                name='CraftingBenchUnlockCategoriesKey',
+                name='UnlockCategory',
                 type='ulong',
-                key='CraftingBenchUnlockCategories.dat',
             ),
             Field(
                 name='UnveilsRequired',
@@ -5153,29 +5432,25 @@ specification = Specification({
                 type='int',
             ),
             Field(
-                name='AffixType',
-                type='ref|string',
-            ),
-            Field(
                 name='Keys0',
                 type='ref|list|ulong',
             ),
             Field(
-                name='Tags',
+                name='TagsKeys',
                 type='ref|list|ulong',
                 key='Tags.dat',
             ),
             Field(
-                name='AchievementItemsKeys',
+                name='Achievements',
                 type='ref|list|ulong',
-                key='AchievementItems.dat',
-            ),
-            Field(
-                name='Unknown0',
-                type='int',
+                key='Achievements.dat',
             ),
             Field(
                 name='Unknown1',
+                type='int',
+            ),
+            Field(
+                name='Unknown2',
                 type='int',
             ),
             Field(
@@ -5184,6 +5459,18 @@ specification = Specification({
             ),
             Field(
                 name='Key0',
+                type='ulong',
+            ),
+            Field(
+                name='Key1',
+                type='ulong',
+            ),
+            Field(
+                name='SortCategory',
+                type='ulong',
+            ),
+            Field(
+                name='Key2',
                 type='ulong',
             ),
         ),
@@ -9323,11 +9610,13 @@ specification = Specification({
         virtual_fields=(
             VirtualField(
                 name='StatValues',
-                fields=('Stat1Value', 'Stat2Value', 'Stat3Value', 'Stat4Value', 'Stat5Value', 'Stat6Value', 'Stat7Value', 'Stat8Value', 'Stat9Value'),
+                fields=('Stat1Value', 'Stat2Value', 'Stat3Value', 'Stat4Value',
+                        'Stat5Value', 'Stat6Value', 'Stat7Value', 'Stat8Value', 'Stat9Value'),
             ),
             VirtualField(
                 name='StatFloats',
-                fields=('Stat1Float', 'Stat2Float', 'Stat3Float', 'Stat4Float', 'Stat5Float', 'Stat6Float', 'Stat7Float', 'Stat8Float'),
+                fields=('Stat1Float', 'Stat2Float', 'Stat3Float', 'Stat4Float',
+                        'Stat5Float', 'Stat6Float', 'Stat7Float', 'Stat8Float'),
             ),
             VirtualField(
                 name='Stats',
@@ -11657,6 +11946,38 @@ specification = Specification({
                 type='ref|generic',
                 key='IncursionRooms.dat',
             ),
+            Field(
+                name='Unknown2',
+                type='byte',
+            ),
+            Field(
+                name='Unknown3',
+                type='byte',
+            ),
+            Field(
+                name='Unknown4',
+                type='byte',
+            ),
+            Field(
+                name='Unknown5',
+                type='byte',
+            ),
+            Field(
+                name='Unknown6',
+                type='byte',
+            ),
+            Field(
+                name='Unknown7',
+                type='byte',
+            ),
+            Field(
+                name='Unknown8',
+                type='byte',
+            ),
+            Field(
+                name='Unknown9',
+                type='byte',
+            ),
         ),
     ),
     'IncursionUniqueUpgradeComponents.dat': File(
@@ -13839,22 +14160,26 @@ specification = Specification({
         virtual_fields=(
             VirtualField(
                 name='NormalPurchase',
-                fields=('NormalPurchase_BaseItemTypesKeys', 'NormalPurchase_Costs'),
+                fields=('NormalPurchase_BaseItemTypesKeys',
+                        'NormalPurchase_Costs'),
                 zip=True,
             ),
             VirtualField(
                 name='MagicPurchase',
-                fields=('MagicPurchase_BaseItemTypesKeys', 'MagicPurchase_Costs'),
+                fields=('MagicPurchase_BaseItemTypesKeys',
+                        'MagicPurchase_Costs'),
                 zip=True,
             ),
             VirtualField(
                 name='RarePurchase',
-                fields=('RarePurchase_BaseItemTypesKeys', 'RarePurchase_Costs'),
+                fields=('RarePurchase_BaseItemTypesKeys',
+                        'RarePurchase_Costs'),
                 zip=True,
             ),
             VirtualField(
                 name='UniquePurchase',
-                fields=('UniquePurchase_BaseItemTypesKeys', 'UniquePurchase_Costs'),
+                fields=('UniquePurchase_BaseItemTypesKeys',
+                        'UniquePurchase_Costs'),
                 zip=True,
             ),
         ),
@@ -15502,7 +15827,8 @@ specification = Specification({
             ),
             VirtualField(
                 name='StatsKeys',
-                fields=('StatsKey1', 'StatsKey2', 'StatsKey3', 'StatsKey4', 'StatsKey5', 'StatsKey6'),
+                fields=('StatsKey1', 'StatsKey2', 'StatsKey3',
+                        'StatsKey4', 'StatsKey5', 'StatsKey6'),
             ),
             VirtualField(
                 name='Stats',
@@ -15510,7 +15836,8 @@ specification = Specification({
             ),
             VirtualField(
                 name='GenerationWeight',
-                fields=('GenerationWeight_TagsKeys', 'GenerationWeight_Values'),
+                fields=('GenerationWeight_TagsKeys',
+                        'GenerationWeight_Values'),
                 zip=True,
             ),
         ),
@@ -18254,7 +18581,8 @@ specification = Specification({
         virtual_fields=(
             VirtualField(
                 name='StatValues',
-                fields=('Stat1Value', 'Stat2Value', 'Stat3Value', 'Stat4Value', 'Stat5Value'),
+                fields=('Stat1Value', 'Stat2Value', 'Stat3Value',
+                        'Stat4Value', 'Stat5Value'),
             ),
             VirtualField(
                 name='Stats',
