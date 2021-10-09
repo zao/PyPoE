@@ -260,8 +260,8 @@ class IncursionRoomParser(parser.BaseParser):
                     idl_sources.add(src)
 
                 os.system(
-                    'magick "%(src)s" -crop %(w)sx%(h)s+%(x)s+%(y)s '
-                    '"%(dst)s incursion room icon.png"' %
+                    'process-image convert "%(src)s" "%(dst)s incursion room icon.png" '
+                    '%(x)s %(y)s %(w)s %(h)s' %
                     {
                         'src': src,
                         'dst': os.path.join(self._img_path, data['icon']),
