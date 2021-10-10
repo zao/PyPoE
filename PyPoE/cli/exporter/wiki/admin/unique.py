@@ -83,7 +83,7 @@ class UniqueCommandHandler(ExporterHandler):
         copy.add_argument(
             '-en-w-u', '--english-wiki-user',
             dest='en_user',
-            help='Gamepedia user name to use to login into the English wiki (source). Bot access speeds things up.',
+            help='Poewiki user name to use to login into the English wiki (source). Bot access speeds things up.',
             action='store',
             type=str,
             default='',
@@ -92,7 +92,7 @@ class UniqueCommandHandler(ExporterHandler):
         copy.add_argument(
             '-en-w-p', '-en-w-pw', '--english-wiki-password',
             dest='en_password',
-            help='Gamepedia password to use to login into the English wiki (source). Bot access speeds things up.',
+            help='Poewiki password to use to login into the English wiki (source). Bot access speeds things up.',
             action='store',
             type=str,
             default='',

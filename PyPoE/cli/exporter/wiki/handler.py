@@ -57,7 +57,7 @@ from PyPoE.cli.exporter.util import fix_path
 __all__ = ['ExporterHandler', 'ExporterResult', 'WikiHandler']
 
 WIKIS = {
-    'English': 'pathofexile.gamepedia.com',
+    'English': 'www.poewiki.net/w',
     'Russian': 'pathofexile-ru.gamepedia.com',
     'German': 'pathofexile-de.gamepedia.com',
     'French': 'pathofexile-fr.gamepedia.com',
@@ -230,7 +230,7 @@ class WikiHandler:
         )
 
         self.site.login(
-            username=cmdargs.user or input('Enter your gamepedia user name:\n'),
+            username=cmdargs.user or input('Enter your poewiki user name:\n'),
             password=cmdargs.password or input(
                 'Please enter your password for the specified user\n'
                 'WARNING: Password will be visible in console\n'
@@ -486,14 +486,14 @@ class ExporterResult(list):
 def add_parser_arguments(parser):
     parser.add_argument(
         '-w', '--wiki',
-        help='Write to the gamepedia page (requires pywikibot)',
+        help='Write to the poewiki page (requires pywikibot)',
         action='store_true',
     )
 
     parser.add_argument(
         '-w-u', '--wiki-user',
         dest='user',
-        help='Gamepedia user name to use to login into the wiki',
+        help='Poewiki user name to use to login into the wiki',
         action='store',
         type=str,
         default='',
@@ -502,7 +502,7 @@ def add_parser_arguments(parser):
     parser.add_argument(
         '-w-p', '-w-pw', '--wiki-password',
         dest='password',
-        help='Gamepedia password to use to login into the wiki',
+        help='Poewiki password to use to login into the wiki',
         action='store',
         type=str,
         default='',

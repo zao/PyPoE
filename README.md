@@ -1,4 +1,5 @@
-**With development on [OmegaK2/PyPoE](https://github.com/OmegaK2/PyPoE) being discontinued, this fork mainly exists to keep everything working that is required by [RePoE](https://github.com/brather1ng/RePoE). Still, I'm open to pull requests for other areas as well.**
+#####With development on [OmegaK2/PyPoE](https://github.com/OmegaK2/PyPoE) being discontinued, this repository was forked from [RePoE](https://github.com/brather1ng/RePoE) and exists solely to keep the [Community Wiki](https://poewiki.net) updated.
+
 
 PyPoE
 ========
@@ -7,9 +8,8 @@ Collection of Python Tools for [Path of Exile](https://www.pathofexile.com/).
 
 More detailed docs: [http://omegak2.net/poe/PyPoE/](http://omegak2.net/poe/PyPoE/)
 
-The docs are occasionally updated until I get a build bot up - however docs can also be manually built with Sphinx.
+The docs will be updated soon with details on how to update the specification for new leagues.
 
-[![Build Status](https://travis-ci.org/OmegaK2/PyPoE.svg?branch=dev)](https://travis-ci.org/OmegaK2/PyPoE)
 
 Common Problems & Advisory
 --------
@@ -23,13 +23,12 @@ Overview
 --------
 Parts:
 * Library toolkit for programmers (PyPoE/poe)
-* UI based on Qt for browsing the game files
+* UI based on Qt for browsing the game files (currently not working)
 * CLI interface for extracting/exporting data (for the wiki, more TBD)
 
 Resources
 -------
-* IRC Channel: [freenode.net/#PyPoE](http://webchat.freenode.net/?channels=#PyPoE)
-* Discord: No official channel, but I can be contacted in #3rd-party-tool-dev in the /r/PathOfExile Discord
+* Discord: [Project Path of Exile Wiki](https://discord.gg/CE46HADc5T)
 
 Important Notes
 --------
@@ -57,13 +56,15 @@ These instructions are for the current development version of PyPoE.
 
 Usage
 --------
-* UI: ```pypoe_ui```
+* UI: ```pypoe_ui``` (currently not working)
 * CLI: ```pypoe_exporter``` (follow the instructions)
 * API: check the individual files in PyPoE/poe/ or the docs [http://omegak2.net/poe/PyPoE/](http://omegak2.net/poe/PyPoE/)
 
 Credits - People
 --------
 * [Grinding Gear Games](http://www.grindinggear.com/) - they created many of the file formats and [Path of Exile](https://www.pathofexile.com/) obviously, so do not reuse their files anywhere without their permission and support them if you are able to :)
+* [OmegaK2](https://github.com/OmegaK2) - Original developer of PyPoE
+* [brather1ng](https://github.com/brather1ng) - For the updated fork
 * [Chriskang](http://pathofexile.gamepedia.com/User:Chriskang) and the original [VisualGGPK2](http://pathofexile.gamepedia.com/User:Chriskang/VisualGGPK2)
 * [chuanhsing](https://www.reddit.com/u/chuanhsing) ([poedb](http://poedb.tw/us/index.php)) for helping with meaning of certain specification values and retrieving monster stats
 
