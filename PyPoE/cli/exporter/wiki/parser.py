@@ -1543,7 +1543,7 @@ class BaseParser:
         if not parsed_args.convert_images:
             return
 
-        os.system('magick convert "%s" "%s"' % (
+        os.system('process-image convert "%s" "%s"' % (
             out_path, out_path.replace('.dds', '.png'),
         ))
         os.remove(out_path)
