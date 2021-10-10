@@ -1,4 +1,4 @@
-#####With development on [OmegaK2/PyPoE](https://github.com/OmegaK2/PyPoE) being discontinued, this repository was forked from [RePoE](https://github.com/brather1ng/RePoE) and exists solely to keep the [Community Wiki](https://poewiki.net) updated.
+With development on [OmegaK2/PyPoE](https://github.com/OmegaK2/PyPoE) being discontinued, this repository was forked from [RePoE](https://github.com/brather1ng/RePoE) and exists solely to keep the [Community Wiki](https://poewiki.net) updated.
 
 
 PyPoE
