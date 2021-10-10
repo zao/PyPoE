@@ -637,7 +637,15 @@ class ItemsParser(SkillParserShared):
             # Hideout Doodads
             # =================================================================
 
-            'Metadata/Items/Hideout/HideoutLightningCoil': " (hideout doodad)",
+            'Metadata/Items/Hideout/HideoutLightningCoil': ' (hideout decoration)',
+            'Metadata/Items/Hideout/HideoutVollConfession': ' (hideout decoration)',
+            'Metadata/Items/Hideout/HideoutRaptureDevice': ' (hideout decoration)',
+            'Metadata/Items/Hideout/HideoutBeastLoreObject': ' (hideout decoration)',
+            'Metadata/Items/Hideout/HideoutEncampmentLetters': ' (hideout decoration)',
+            'Metadata/Items/Hideout/HideoutPrisonTorturedevice8': ' (hideout decoration)',
+            'Metadata/Items/Hideout/HideoutColossusSword': ' (hideout decoration)',
+            'Metadata/Items/Hideout/HideoutChestVaal': ' (hideout decoration)',
+            'Metadata/Items/Hideout/HideoutIncaPyramid': ' (hideout decoration)',
             # =================================================================
             # Piece
             # =================================================================
@@ -704,18 +712,18 @@ class ItemsParser(SkillParserShared):
             'Metadata/Items/MicrotransactionItemEffects/Microtransaction'
             'IronMaiden': '',
             'Metadata/Items/MicrotransactionItemEffects/Microtransaction'
-            'InfernalAxe': ' (Weapon Skin)',
+            'InfernalAxe': ' (weapon skin)',
             'Metadata/Items/MicrotransactionItemEffects/Microtransaction'
             'ColossusSword': '',
             'Metadata/Items/MicrotransactionItemEffects/Microtransaction'
-            'LegionBoots': ' (microtransaction)',
+            'LegionBoots': ' (boots skin)',
             'Metadata/Items/MicrotransactionItemEffects/Microtransaction'
-            'LegionGloves': ' (microtransaction)',
+            'LegionGloves': ' (gloves skin)',
             'Metadata/Items/MicrotransactionItemEffects/Microtransaction'
-            'ScholarBoots': ' (microtransaction)',
-            'Metadata/Items/Pets/DemonLion': ' (Pet)',
+            'ScholarBoots': ' (boots skin)',
+            'Metadata/Items/Pets/DemonLion': ' (pet)',
             'Metadata/Items/MicrotransactionItemEffects/MicrotransactionHooded'
-            'Cloak': ' (microtransaction)',
+            'Cloak': ' (armour attachment)',
             # =================================================================
             # Quest items
             # =================================================================
