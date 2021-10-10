@@ -41,24 +41,15 @@ Alpha Stage:
 Dev branch:
 * Broken code may be committed occasionally to the dev branch
 
-Quick Setup Guide
+Installation
 --------
-These instructions are for the current development version of PyPoE.
+These instructions are for the current version of PyPoE.
 
-* Install Python 3.7 & git
-* On Windows, make sure Python 3.7 and Python "Scripts" folder are in %PATH%
-* Checkout PyPoE with git
-* Go into the PyPoE folder
-* Minimum install: ```pip3 install -e . ```
-* Full install: ```pip3 install -e .[full]```
-* Download and compile https://github.com/zao/ooz with cmake
-* Place the resulting libooz.dll in the python folder
+* [See instructions](https://github.com/Project-Path-of-Exile-Wiki/PyPoE/wiki/PyPoE-101:-Installation-and-setup)
 
 Usage
 --------
-* UI: ```pypoe_ui``` (currently not working)
-* CLI: ```pypoe_exporter``` (follow the instructions)
-* API: check the individual files in PyPoE/poe/ or the docs [http://omegak2.net/poe/PyPoE/](http://omegak2.net/poe/PyPoE/)
+* [Exporting data for the wiki](https://github.com/Project-Path-of-Exile-Wiki/PyPoE/wiki/PyPoE-101:-Item-exporting)
 
 Credits - People
 --------
