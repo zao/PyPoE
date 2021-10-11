@@ -992,15 +992,17 @@ class RelationalReader(AbstractFileCache):
 
     def __getitem__(self, item):
         """
-        Shortcut that also appends Data/ if missing
+        Shortcut that prepends Data/{language} if missing and transforms plain
+        Data/ prefixes into language-specific prefixes.
 
         The following calls are equivalent:
 
-        * self['DF.dat'] <==> read_file('Data/DF.dat').reader
-        * self['Data/DF.dat'] <==> read_file('Data/DF.dat').reader
+        * self['DF.dat'] <==> read_file('Data/{language}DF.dat').reader
+        * self['Data/DF.dat'] <==> read_file('Data/{language}DF.dat').reader
         """
-        if not item.startswith('Data/'):
-            item = 'Data/' + self._language + item
+        if item.startswith('Data/'):
+            item = item[len('Data/'):]
+        item = 'Data/' + self._language + item
 
         return self.get_file(item).reader
 
