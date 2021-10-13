@@ -228,9 +228,19 @@ class ItemParser:
 
     'gem_level' : int
         Current skill gem level
-    'mana_cost' : int
-        Mana cost of the skill gem
+    'cost_amounts' : list[int]
+        Cost of the skill gem
+    'cost_types' : list[ulong]
+        Cost type
     'mana_reserved' : int
+        Mana reservation cost of the skill gem
+    'mana_reservation_flat' : int
+        Mana reservation cost of the skill gem
+    'mana_reservation_percent' : int
+        Mana reservation cost of the skill gem
+    'life_reservation_flat' : int
+        Mana reservation cost of the skill gem
+    'life_reservation_percent' : int
         Mana reservation cost of the skill gem
     'mana_multiplier' : int
         mana multiplier of the skill gem

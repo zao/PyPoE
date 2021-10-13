@@ -2926,6 +2926,22 @@ specification = Specification({
                 name='Unknown0',
                 type='int',
             ),
+            Field(
+                name='Unknown1',
+                type='byte',
+            ),
+            Field(
+                name='Unknown2',
+                type='byte',
+            ),
+            Field(
+                name='Unknown3',
+                type='byte',
+            ),
+            Field(
+                name='Unknown4',
+                type='byte',
+            ),
         ),
     ),
     'BetrayalChoiceActions.dat': File(
@@ -4262,7 +4278,7 @@ specification = Specification({
                 type='int',
             ),
             Field(
-                name='Unknown1',
+                name='AuraRadius',
                 type='int',
             ),
             Field(
@@ -6409,6 +6425,22 @@ specification = Specification({
             Field(
                 name='Unknown5',
                 type='int',
+            ),
+            Field(
+                name='Unknown6',
+                type='byte',
+            ),
+            Field(
+                name='Unknown7',
+                type='byte',
+            ),
+            Field(
+                name='Unknown8',
+                type='byte',
+            ),
+            Field(
+                name='Unknown9',
+                type='byte',
             ),
         ),
     ),
@@ -10895,6 +10927,38 @@ specification = Specification({
                 name='ExperienceGain_StatsKey',
                 type='ulong',
                 key='Stats.dat',
+            ),
+            Field(
+                name='Unknown2',
+                type='byte',
+            ),
+            Field(
+                name='Unknown3',
+                type='byte',
+            ),
+            Field(
+                name='Unknown4',
+                type='byte',
+            ),
+            Field(
+                name='Unknown5',
+                type='byte',
+            ),
+            Field(
+                name='Unknown6',
+                type='byte',
+            ),
+            Field(
+                name='Unknown7',
+                type='byte',
+            ),
+            Field(
+                name='Unknown8',
+                type='byte',
+            ),
+            Field(
+                name='Unknown9',
+                type='byte',
             ),
         ),
     ),
@@ -15791,7 +15855,7 @@ specification = Specification({
                 type='int',
             ),
             Field(
-                name='Key0',
+                name='BuffTemplate',
                 type='ulong',
             ),
         ),

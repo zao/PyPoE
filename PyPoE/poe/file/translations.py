@@ -979,7 +979,8 @@ class TranslationQuantifierHandler(TranslationReprMixin):
         return hash(tuple(self.index_handlers.keys()))
 
     def _warn_uncaptured(self, name: str):
-        raise TypeError(f"Uncaptured quantifier {name}, add in PyPoE/poe/translations.py")
+        # raise TypeError(f"Uncaptured quantifier {name}, add in PyPoE/poe/translations.py")
+        return
         
     def _whole_float_to_int(self, value: float) -> Union[float, int]:
         if isinstance(value, float) and value.is_integer():

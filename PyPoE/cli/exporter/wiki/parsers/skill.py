@@ -149,17 +149,35 @@ class SkillParserShared(parser.BaseParser):
 
     _GEPL_COPY = (
         'Level', 'LevelRequirement', 'ManaMultiplier', 'CriticalStrikeChance',
-        'ManaCost', 'DamageMultiplier', 'VaalSouls', 'VaalStoredUses',
+        'CostAmounts', 'CostTypesKeys', 'DamageMultiplier', 'VaalSouls', 'VaalStoredUses',
         'VaalSoulGainPreventionTime', 'Cooldown', 'StoredUses',
         'DamageEffectiveness', 'DamageMultiplier', 'AttackSpeedMultiplier',
-        'BaseDuration',
+        'BaseDuration', 'ManaReservationFlat', 'ManaReservationPercent', 'LifeReservationFlat', 'LifeReservationPercent',
     )
 
+    # def CostTypeHelper(d):
+    #     print('yep', d)
+    #     return d['Cost_TypesKeys']['Id']
+
     _SKILL_COLUMN_MAP = (
-        ('ManaCost', {
-            'template': 'mana_cost',
-            'default': 0,
-            'format': lambda v: '{0:n}'.format(v),
+        # ('ManaCost', {
+        #     'template': 'mana_cost',
+        #     'default': 0,
+        #     'format': lambda v: '{0:n}'.format(v),
+        # }),
+        ('CostAmounts', {
+            'template': 'cost_amounts',
+            'default': [],
+            'condition': lambda v: v[0] is not None,
+            'format': lambda v: v[0],
+        }),
+        ('CostTypesKeys', {
+            'template': 'cost_types',
+            'default': [],
+            # 'format': CostTypeHelper,
+            'condition': lambda v: v[0] is not None,
+            'format': lambda v: v[0]['Id'],
+            #  lambda v: ','.join([r['Id'] for r in v])
         }),
         ('ManaMultiplier', {
             'template': 'mana_multiplier',
@@ -212,6 +230,26 @@ class SkillParserShared(parser.BaseParser):
             'template': 'duration',
             'default': 0,
             'format': lambda v: '{0:n}'.format(v / 1000),
+        }),
+        ('ManaReservationFlat', {
+            'template': 'mana_reservation_flat',
+            'default': 0,
+            'format': lambda v: '{0:n}'.format(v),
+        }),
+        ('ManaReservationPercent', {
+            'template': 'mana_reservation_percent',
+            'default': 0,
+            'format': lambda v: '{0:n}'.format(v),
+        }),
+        ('LifeReservationFlat', {
+            'template': 'life_reservation_flat',
+            'default': 0,
+            'format': lambda v: '{0:n}'.format(v),
+        }),
+        ('LifeReservationPercent', {
+            'template': 'life_reservation_percent',
+            'default': 0,
+            'format': lambda v: '{0:n}'.format(v),
         }),
     )
 
@@ -284,6 +322,13 @@ class SkillParserShared(parser.BaseParser):
         for row in self.rr['GrantedEffectsPerLevel.dat']:
             if row['GrantedEffectsKey'] == ge:
                 gepl.append(row)
+
+            # if row['CostTypesKeys'] == ge:
+            #     gepl.append(row)
+            # try:
+            #     print('yep', row['CostTypesKeys'])
+            # except:
+            #     print('COCK')
 
         if not gepl:
             console('No level progression found for "%s". Skipping.' %
