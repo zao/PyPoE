@@ -1,17 +1,17 @@
 """
-Wiki gems exporter
+Wiki item exporter
 
 Overview
 ===============================================================================
 
 +----------+------------------------------------------------------------------+
-| Path     | PyPoE/cli/exporter/wiki/parsers/gems.py                          |
+| Path     | PyPoE/cli/exporter/wiki/parsers/item.py                          |
 +----------+------------------------------------------------------------------+
 | Version  | 1.0.0a0                                                          |
 +----------+------------------------------------------------------------------+
 | Revision | $Id$                  |
 +----------+------------------------------------------------------------------+
-| Author   | Omega_K2                                                         |
+| Author   | Omega_K2 /   Project-Path-of-Exile-Wiki                          |
 +----------+------------------------------------------------------------------+
 
 Description
@@ -147,6 +147,35 @@ class WikiCondition(parser.WikiCondition):
         # prophecies
         'prophecy_objective',
         'prophecy_reward',
+
+        # Quest Rewards
+        'quest_reward1_type',
+        'quest_reward1_quest',
+        'quest_reward1_quest_id',
+        'quest_reward1_act',
+        'quest_reward1_class_ids',
+        'quest_reward1_npc',
+
+        'quest_reward2_type',
+        'quest_reward2_quest',
+        'quest_reward2_quest_id',
+        'quest_reward2_act',
+        'quest_reward2_class_ids',
+        'quest_reward2_npc',
+
+        'quest_reward3_type',
+        'quest_reward3_quest',
+        'quest_reward3_quest_id',
+        'quest_reward3_act',
+        'quest_reward3_class_ids',
+        'quest_reward3_npc',
+
+        'quest_reward4_type',
+        'quest_reward4_quest',
+        'quest_reward4_quest_id',
+        'quest_reward4_act',
+        'quest_reward4_class_ids',
+        'quest_reward4_npc',
     )
     COPY_MATCH = re.compile(
         r'^(upgraded_from_set|implicit[0-9]+_(?:text|random_list)).*'
@@ -646,6 +675,42 @@ class ItemsParser(SkillParserShared):
             'Metadata/Items/Hideout/HideoutColossusSword': ' (hideout decoration)',
             'Metadata/Items/Hideout/HideoutChestVaal': ' (hideout decoration)',
             'Metadata/Items/Hideout/HideoutIncaPyramid': ' (hideout decoration)',
+            'Metadata/Items/Hideout/HideoutRitualTotem': ' (hideout decoration)',
+            'Metadata/Items/Hideout/HideoutCharredSkeleton' : " (hideout decoration)",
+            'Metadata/Items/Hideout/HideoutVaalWhispySmoke' : " (hideout decoration)",
+
+            # =================================================================
+            # invitations
+            # =================================================================
+
+            'Metadata/Items/MapFragments/Maven/MavenMapOutsideBottomRight5': " (10 bosses)",
+            'Metadata/Items/MapFragments/Maven/MavenMapOutsideBottomLeft5': " (10 bosses)",
+            'Metadata/Items/MapFragments/Maven/MavenMapOutsideTopLeft5': " (10 bosses)",
+            'Metadata/Items/MapFragments/Maven/MavenMapOutsideTopRight5': " (10 bosses)",
+            'Metadata/Items/MapFragments/Maven/MavenMapInsideBottomRight5': " (10 bosses)",
+            'Metadata/Items/MapFragments/Maven/MavenMapInsideBottomLeft5': " (10 bosses)",
+            'Metadata/Items/MapFragments/Maven/MavenMapInsideTopLeft5': " (10 bosses)",
+            'Metadata/Items/MapFragments/Maven/MavenMapInsideTopRight5': " (10 bosses)",
+
+            #
+            # Royale non-gem items
+            #
+
+            'Metadata/Items/Weapons/OneHandWeapons/Wands/Wand1Royale': " (Royale)",
+            'Metadata/Items/Weapons/TwoHandWeapons/Bows/Bow1': " (Royale)",
+            'Metadata/Items/Rings/RingRoyale1': " (Royale)",
+            'Metadata/Items/Rings/RingRoyale2': " (Royale)",
+            'Metadata/Items/Rings/RingRoyale3': " (Royale)",
+            'Metadata/Items/Rings/RingRoyale4': " (Royale)",
+            'Metadata/Items/Amulets/AmuletRoyale1': " (Royale)",
+            'Metadata/Items/Belts/BeltRoyale1': " (Royale)",
+            'Metadata/Items/Belts/BeltRoyale2': " (Royale)",
+            'Metadata/Items/Belts/BeltRoyale3': " (Royale)",
+            'Metadata/Items/Flasks/FlaskLife1Royale': " (Royale)",
+            'Metadata/Items/Flasks/FlaskLife2Royale': " (Royale)",
+            'Metadata/Items/Flasks/FlaskLife3Royale': " (Royale)",
+
+
             # =================================================================
             # Piece
             # =================================================================
@@ -710,7 +775,7 @@ class ItemsParser(SkillParserShared):
             'Metadata/Items/MicrotransactionCurrency/MysteryBox3x3':
                 ' (3x3)',
             'Metadata/Items/MicrotransactionItemEffects/Microtransaction'
-            'IronMaiden': '',
+            'IronMaiden': ' (helmet skin)',
             'Metadata/Items/MicrotransactionItemEffects/Microtransaction'
             'InfernalAxe': ' (weapon skin)',
             'Metadata/Items/MicrotransactionItemEffects/Microtransaction'
@@ -724,6 +789,7 @@ class ItemsParser(SkillParserShared):
             'Metadata/Items/Pets/DemonLion': ' (pet)',
             'Metadata/Items/MicrotransactionItemEffects/MicrotransactionHooded'
             'Cloak': ' (armour attachment)',
+            'Metadata/Items/MicrotransactionItemEffects/MicrotransactionArcaneCloak': ' (armour attachment)',
             # =================================================================
             # Quest items
             # =================================================================
@@ -735,22 +801,6 @@ class ItemsParser(SkillParserShared):
                 ' (3 of 4)',
             'Metadata/Items/QuestItems/GoldenPages/Page4':
                 ' (4 of 4)',
-            'Metadata/Items/QuestItems/MapUpgrades/MapUpgradeTier8_1':
-                ' (1 of 2)',
-            'Metadata/Items/QuestItems/MapUpgrades/MapUpgradeTier8_2':
-                ' (2 of 2)',
-            'Metadata/Items/QuestItems/MapUpgrades/MapUpgradeTier9_1':
-                ' (1 of 3)',
-            'Metadata/Items/QuestItems/MapUpgrades/MapUpgradeTier9_2':
-                ' (2 of 3)',
-            'Metadata/Items/QuestItems/MapUpgrades/MapUpgradeTier9_3':
-                ' (3 of 3)',
-            'Metadata/Items/QuestItems/MapUpgrades/MapUpgradeTier10_1':
-                ' (1 of 3)',
-            'Metadata/Items/QuestItems/MapUpgrades/MapUpgradeTier10_2':
-                ' (2 of 3)',
-            'Metadata/Items/QuestItems/MapUpgrades/MapUpgradeTier10_3':
-                ' (3 of 3)',
             # =================================================================
             # Misc
             # =================================================================
@@ -1170,6 +1220,7 @@ class ItemsParser(SkillParserShared):
             'Metadata/Items/MicrotransactionItemEffects/Microtransaction'
             'ScholarBoots': ' (Mikrotransaktion)',
             'Metadata/Items/Pets/DemonLion': ' (Haustier)',
+        
             # =================================================================
             # Quest items
             # =================================================================
@@ -1295,6 +1346,167 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Gems/SkillGemWandTeleport',
         'Metadata/Items/Gems/SkillGemNewPhaseRun',
         'Metadata/Items/Gems/SkillGemNewArcticArmour',
+        'Metadata/Items/Gems/SkillGemFlammableShot',
+
+        #
+        # Royal Gems
+        #
+
+        'Metadata/Items/Gems/SkillGemChargedAttackRoyale',
+        'Metadata/Items/Gems/SkillGemCycloneRoyale',
+        'Metadata/Items/Gems/SkillGemDualStrikeRoyale',
+        'Metadata/Items/Gems/SkillGemLacerateRoyale',
+        'Metadata/Items/Gems/SkillGemBladestormRoyale',
+        'Metadata/Items/Gems/SkillGemChainHookRoyale',
+        'Metadata/Items/Gems/SkillGemEarthquakeRoyale',
+        'Metadata/Items/Gems/SkillGemMeleeTotemRoyale',
+        'Metadata/Items/Gems/SkillGemAncestralWarchiefRoyale',
+        'Metadata/Items/Gems/SkillGemGeneralsCryRoyale',
+        'Metadata/Items/Gems/SkillGemLeapSlamRoyale',
+        'Metadata/Items/Gems/SkillGemShieldChargeRoyale',
+        'Metadata/Items/Gems/SkillGemChargedDashRoyale',
+        'Metadata/Items/Gems/SkillGemGlacialHammerRoyale',
+        'Metadata/Items/Gems/SkillGemIceCrashRoyale',
+        'Metadata/Items/Gems/SkillGemMoltenStrikeRoyale',
+        'Metadata/Items/Gems/SkillGemSmiteRoyale',
+        'Metadata/Items/Gems/SkillGemThrownShieldProjectileRoyale',
+        'Metadata/Items/Gems/SkillGemThrownWeaponRoyale',
+        'Metadata/Items/Gems/SkillGemVenomGyreRoyale',
+        'Metadata/Items/Gems/SkillGemWhirlingBladesRoyale',
+        'Metadata/Items/Gems/SkillGemPunctureRoyale',
+        'Metadata/Items/Gems/SkillGemRainOfArrowsRoyale',
+        'Metadata/Items/Gems/SkillGemScourgeArrowRoyale',
+        'Metadata/Items/Gems/SkillGemToxicRainRoyale',
+        'Metadata/Items/Gems/SkillGemBlinkArrowRoyale',
+        'Metadata/Items/Gems/SkillGemEnsnaringArrowRoyale',
+        'Metadata/Items/Gems/SkillGemBlastRainRoyale',
+        'Metadata/Items/Gems/SkillGemElementalHitRoyale',
+        'Metadata/Items/Gems/SkillGemBladeBlastRoyale',
+        'Metadata/Items/Gems/SkillGemBladeVortexRoyale',
+        'Metadata/Items/Gems/SkillGemBladefallRoyale',
+        'Metadata/Items/Gems/SkillGemBloodreapRoyale',
+        'Metadata/Items/Gems/SkillGemVoidSphereRoyale',
+        'Metadata/Items/Gems/SkillGemDivineTempestRoyale',
+        'Metadata/Items/Gems/SkillGemFirestormRoyale',
+        'Metadata/Items/Gems/SkillGemFrostBoltRoyale',
+        'Metadata/Items/Gems/SkillGemIceNovaRoyale',
+        'Metadata/Items/Gems/SkillGemLightningTendrilsRoyale',
+        'Metadata/Items/Gems/SkillGemSanctifyRoyale',
+        'Metadata/Items/Gems/SkillGemMagmaOrbRoyale',
+        'Metadata/Items/Gems/SkillGemStormCallRoyale',
+        'Metadata/Items/Gems/SkillGemCorpseEruptionRoyale',
+        'Metadata/Items/Gems/SkillGemFrostBombRoyale',
+        'Metadata/Items/Gems/SkillGemHydrosphereRoyale',
+        'Metadata/Items/Gems/SkillGemPurgeRoyale',
+        'Metadata/Items/Gems/SkillGemBlightRoyale',
+        'Metadata/Items/Gems/SkillGemEssenceDrainRoyale',
+        'Metadata/Items/Gems/SkillGemArcticBreathRoyale',
+        'Metadata/Items/Gems/SkillGemFrostBoltNovaRoyale',
+        'Metadata/Items/Gems/SkillGemFlameTotemRoyale',
+        'Metadata/Items/Gems/SkillGemArtilleryBallistaRoyale',
+        'Metadata/Items/Gems/SkillGemSiegeBallistaRoyale',
+        'Metadata/Items/Gems/SkillGemFireTrapRoyale',
+        'Metadata/Items/Gems/SkillGemIceTrapRoyale',
+        'Metadata/Items/Gems/SkillGemLightningTrapRoyale',
+        'Metadata/Items/Gems/SkillGemIceSiphonTrapRoyale',
+        'Metadata/Items/Gems/SkillGemFlamethrowerTrapRoyale',
+        'Metadata/Items/Gems/SkillGemLightningTowerTrapRoyale',
+        'Metadata/Items/Gems/SkillGemPrecisionRoyale',
+        'Metadata/Items/Gems/SkillGemVitalityRoyale',
+        'Metadata/Items/Gems/SkillGemClarityRoyale',
+        'Metadata/Items/Gems/SkillGemBloodAndSandRoyale',
+        'Metadata/Items/Gems/SkillGemDashRoyale',
+        'Metadata/Items/Gems/SkillGemDesecrateRoyale',
+        'Metadata/Items/Gems/SkillGemPhaseRunRoyale',
+        'Metadata/Items/Gems/SkillGemPoachersMarkRoyale',
+        'Metadata/Items/Gems/SkillGemCriticalWeaknessRoyale',
+        'Metadata/Items/Gems/SkillGemWarlordsMarkRoyale',
+        'Metadata/Items/Gems/SkillGemElementalWeaknessRoyale',
+        'Metadata/Items/Gems/SkillGemNewVulnerabilityRoyale',
+        'Metadata/Items/Gems/SkillGemVulnerabilityRoyale',
+        'Metadata/Items/Gems/SkillGemEnduringCryRoyale',
+        'Metadata/Items/Gems/SkillGemRejuvenationTotemRoyale',
+        'Metadata/Items/Gems/SkillGemLightningWarpRoyale',
+        'Metadata/Items/Gems/SkillGemFlameDashRoyale',
+        'Metadata/Items/Gems/SkillGemFrostblinkRoyale',
+        'Metadata/Items/Gems/SkillGemSmokeMineRoyale',
+        'Metadata/Items/Gems/SkillGemSearingBondRoyale',
+        'Metadata/Items/Gems/SkillGemShockwaveTotemRoyale',
+        'Metadata/Items/Gems/SkillGemBurningArrowRoyale',
+        'Metadata/Items/Gems/SkillGemPoisonArrowRoyale',
+        'Metadata/Items/Gems/SkillGemShrapnelShotRoyale',
+        'Metadata/Items/Gems/SkillGemSummonSkeletonsRoyale',
+        'Metadata/Items/Gems/SkillGemSummonRagingSpiritRoyale',
+        'Metadata/Items/Gems/SkillGemDetonateDeadRoyale',
+        'Metadata/Items/Gems/SkillGemEtherealKnivesRoyale',
+        'Metadata/Items/Gems/SkillGemBoneLanceRoyale',
+        'Metadata/Items/Gems/SkillGemBallLightningRoyale',
+        'Metadata/Items/Gems/SkillGemBlazingSalvoRoyale',
+        'Metadata/Items/Gems/SkillGemColdSnapRoyale',
+        'Metadata/Items/Gems/SkillGemDarkPactRoyale',
+        'Metadata/Items/Gems/SkillGemFireballRoyale',
+        'Metadata/Items/Gems/SkillGemGlacialCascadeRoyale',
+        'Metadata/Items/Gems/SkillGemFrostBladesRoyale',
+        'Metadata/Items/Gems/SkillGemShatteringSteelRoyale',
+        'Metadata/Items/Gems/SkillGemWildStrikeRoyale',
+        'Metadata/Items/Gems/SkillGemCleaveRoyale',
+        'Metadata/Items/Gems/SkillGemDominatingBlowRoyale',
+        'Metadata/Items/Gems/SkillGemInfernalBlowRoyale',
+        'Metadata/Items/Gems/SkillGemSunderRoyale',
+        'Metadata/Items/Gems/SkillGemLightningArrowRoyale',
+        'Metadata/Items/Gems/SkillGemExplosiveArrowRoyale',
+        'Metadata/Items/Gems/SkillGemViperStrikeRoyale',
+        'Metadata/Items/Gems/SkillGemSweepRoyale',
+        'Metadata/Items/Gems/SkillGemIncinerateRoyale',
+        'Metadata/Items/Gems/SkillGemShockNovaRoyale',
+        'Metadata/Items/Gems/SkillGemIceShotRoyale',
+        'Metadata/Items/Gems/SkillGemFreezingPulseRoyale',
+        'Metadata/Items/Gems/SkillGemGroundSlamRoyale',
+        'Metadata/Items/Gems/SkillGemBearTrapRoyale',
+        'Metadata/Items/Gems/SkillGemHeavyStrikeRoyale',
+        'Metadata/Items/Gems/SkillGemCobraLashRoyale',
+        'Metadata/Items/Gems/SkillGemIceSpearRoyale',
+        'Metadata/Items/Gems/SupportGemMultistrikeRoyale',
+        'Metadata/Items/Gems/SupportGemSpellCascadeRoyale',
+        'Metadata/Items/Gems/SupportGemHandcastAnticipationRoyale',
+        'Metadata/Items/Gems/SupportGemMultiTotemRoyale',
+        'Metadata/Items/Gems/SupportGemAddedColdDamageRoyale',
+        'Metadata/Items/Gems/SupportGemAddedLightningDamageRoyale',
+        'Metadata/Items/Gems/SupportGemRageRoyale',
+        'Metadata/Items/Gems/SupportGemFasterAttackRoyale',
+        'Metadata/Items/Gems/SupportGemFasterCastRoyale',
+        'Metadata/Items/Gems/SupportGemRangedAttackTotemRoyale',
+        'Metadata/Items/Gems/SupportGemSpellTotemRoyale',
+        'Metadata/Items/Gems/SupportGemTrapRoyale',
+        'Metadata/Items/Gems/SupportGemTrapCooldownRoyale',
+        'Metadata/Items/Gems/SupportGemLesserMultipleProjectilesRoyale',
+        'Metadata/Items/Gems/SupportGemParallelProjectilesRoyale',
+        'Metadata/Items/Gems/SupportGemIncreasedAreaOfEffectRoyale',
+        'Metadata/Items/Gems/SupportGemBlindRoyale',
+        'Metadata/Items/Gems/SupportGemLifetapRoyale',
+        'Metadata/Items/Gems/SupportGemIncreasedDurationRoyale',
+        'Metadata/Items/Gems/SupportGemReducedDurationRoyale',
+        'Metadata/Items/Gems/SupportGemCastWhileChannellingRoyale',
+        'Metadata/Items/Gems/SupportGemImpendingDoomRoyale',
+        'Metadata/Items/Gems/SupportGemSpiritStrikeRoyale',
+        'Metadata/Items/Gems/SupportGemArrowNovaRoyale',
+        'Metadata/Items/Gems/SupportGemBlasphemyRoyale',
+        'Metadata/Items/Gems/SupportGemCastOnDeathRoyale',
+        'Metadata/Items/Gems/SupportGemFistOfWarRoyale',
+        'Metadata/Items/Gems/SupportGemFortifyRoyale',
+        'Metadata/Items/Gems/SupportGemSecondWindRoyale',
+        'Metadata/Items/Gems/SupportGemMulticastRoyale',
+        'Metadata/Items/Gems/SupportGemSummonGhostOnKillRoyale',
+        'Metadata/Items/Gems/SupportGemFasterProjectilesRoyale',
+        'Metadata/Items/Gems/SupportGemPointBlankRoyale',
+        'Metadata/Items/Gems/SupportGemChanceToBleedRoyale',
+        'Metadata/Items/Gems/SupportGemKnockbackRoyale',
+        'Metadata/Items/Gems/SupportGemMaimRoyale',
+        'Metadata/Items/Gems/SupportGemStunRoyale',
+        'Metadata/Items/Gems/SupportGemConcentratedEffectRoyale',
+        'Metadata/Items/Gems/SupportGemIncreasedCriticalStrikesRoyale',
+        'Metadata/Items/Gems/SupportGemMeleeSplashRoyale',
+
 
         #
         # Support Skill Gems
@@ -1339,6 +1551,12 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionDemonhandClaw',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionDivineShield',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionEldritchWings',
+
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionGreenLichHelmet',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionGreenLichBodyArmour',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionGreenLichGloves',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionGreenLichBoots',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionGreenLichCloak',
 
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencent1Frame',
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencent2Frame',
@@ -1531,6 +1749,9 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Hideout/HideoutTotemPole19Test',
         'Metadata/Items/Hideout/HideoutTotemPole20Test',
         'Metadata/Items/Hideout/HideoutTotemPole21Test',
+        'Metadata/Items/Hideout/HideoutTotemPole22Test',
+        'Metadata/Items/Hideout/HideoutTotemPole23Test',
+        'Metadata/Items/Hideout/HideoutTotemPole24Test',
 
         #
         # Stackable currency
@@ -1576,6 +1797,9 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Heist/HeistEquipmentWeaponTest',
         'Metadata/Items/Heist/HeistEquipmentUtilityTest',
         'Metadata/Items/Heist/HeistEquipmentRewardTest',
+        'Metadata/Items/Weapons/OneHandWeapons/Daggers/EtherealBlade1',
+        'Metadata/Items/ItemEffects/SekhemasBanner',
+        'Metadata/Items/Armours/BodyArmours/BodyStrTemp',
     }
 
     _attribute_map = OrderedDict((
