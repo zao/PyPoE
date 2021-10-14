@@ -112,8 +112,6 @@ class WikiCondition(parser.WikiCondition):
         'radius_secondary_description',
         'radius_tertiary',
         'radius_tertiary_description',
-        'has_percentage_mana_cost',
-        'has_reservation_mana_cost',
         #
         # all items
         #
@@ -126,11 +124,11 @@ class WikiCondition(parser.WikiCondition):
 
         # Drop restrictions
         'drop_enabled',
-        'drop_leagues',
+        'acquisition_tags',
         'drop_areas',
         'drop_text',
         'drop_monsters',
-        'upgraded_from_disabled',
+        'disable_automatic_recipes',
         'is_drop_restricted',
         'influences',
 
@@ -178,7 +176,7 @@ class WikiCondition(parser.WikiCondition):
         'quest_reward4_npc',
     )
     COPY_MATCH = re.compile(
-        r'^(upgraded_from_set|implicit[0-9]+_(?:text|random_list)).*'
+        r'^(recipe|implicit[0-9]+_(?:text|random_list)).*'
         , re.UNICODE)
 
     NAME = 'Base item'
@@ -197,7 +195,7 @@ class MapItemWikiCondition(WikiCondition):
 class UniqueMapItemWikiCondition(MapItemWikiCondition):
     NAME = 'Item'
     COPY_MATCH = re.compile(
-        r'^(upgraded_from_set|(ex|im)plicit[0-9]+_(?:text|random_list)).*'
+        r'^(recipe|(ex|im)plicit[0-9]+_(?:text|random_list)).*'
         , re.UNICODE)
 
 
