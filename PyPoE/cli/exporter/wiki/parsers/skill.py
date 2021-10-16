@@ -636,23 +636,25 @@ class SkillParserShared(parser.BaseParser):
         # Add the attack damage stat from the game data
         if ae:
             field_stats = (
-                (
-                    ('DamageMultiplier', ),
-                    ('active_skill_attack_damage_final_permyriad', ),
-                ),
+                # (
+                #     ('DamageMultiplier', ),
+                #     ('active_skill_attack_damage_final_permyriad', ),
+                #     0,
+                # ),
                 (
                     ('BaseDuration', ),
                     ('base_skill_effect_duration', ),
-                )
+                    0,
+                ),
             )
             added = []
-            for value_keys, tags in field_stats:
+            for value_keys, tags, default in field_stats:
                 values = [
                     (level_data[0][key], level_data[max_level][key])
                     for key in value_keys
                 ]
                 # Account for default (0 = 100%)
-                if values[0] != 0 or values[1] != 0:
+                if values[0] != default:
                     added.extend(tf.get_translation(
                         tags=tags,
                         values=values,
