@@ -1457,7 +1457,6 @@ class ItemsParser(SkillParserShared):
         # Active Skill Gems
         #
         'Metadata/Items/Gems/SkillGemBackstab',
-        'Metadata/Items/Gems/SkillGemBladeTrap',
         'Metadata/Items/Gems/SkillGemBlitz',
         'Metadata/Items/Gems/SkillGemBloodWhirl',
         'Metadata/Items/Gems/SkillGemBoneArmour',
