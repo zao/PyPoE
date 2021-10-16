@@ -605,7 +605,6 @@ class ItemsParser(SkillParserShared):
 
             # =================================================================
             # Skill Gems
-            # Royale
             # =================================================================
             'Metadata/Items/Gems/SkillGemChargedAttack': '',
             'Metadata/Items/Gems/SkillGemCyclone': '',
@@ -721,6 +720,11 @@ class ItemsParser(SkillParserShared):
             'Metadata/Items/Gems/SkillGemHeavyStrike': '',
             'Metadata/Items/Gems/SkillGemCobraLash': '',
             'Metadata/Items/Gems/SkillGemIceSpear': '',
+            'Metadata/Items/Gems/SkillGemArcaneCloak': '',
+
+            # =================================================================
+            # Support Gems
+            # =================================================================
             'Metadata/Items/Gems/SupportGemMultistrike': '',
             'Metadata/Items/Gems/SupportGemSpellCascade': '',
             'Metadata/Items/Gems/SupportGemHandcastAnticipation': '',
