@@ -2931,10 +2931,7 @@ class ItemsParser(SkillParserShared):
         return base_item_type['Name']
 
     def _conflict_divination_card(self, infobox, base_item_type, rr, language):
-        return '%s (%s)' % (
-            base_item_type['Name'],
-            base_item_type['ItemClassesKey']['Name'].lower()
-        )
+        return base_item_type['Name']
 
     def _conflict_labyrinth_map_item(self, infobox, base_item_type, rr,
                                      language):
