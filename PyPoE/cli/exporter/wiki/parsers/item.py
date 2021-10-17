@@ -1955,6 +1955,11 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Hideout/HideoutTotemPole23Test',
         'Metadata/Items/Hideout/HideoutTotemPole24Test',
 
+        'Metadata/Items/Hideout/HideoutTeleport',
+        'Metadata/Items/Hideout/HideoutTelepad',
+        'Metadata/Items/Hideout/HideoutTeleportProxy',
+        'Metadata/Items/Hideout/HideoutTeleportOwnerOnly',
+
         #
         # Stackable currency
         #
