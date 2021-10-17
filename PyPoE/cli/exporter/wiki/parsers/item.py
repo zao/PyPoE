@@ -1681,6 +1681,7 @@ class ItemsParser(SkillParserShared):
         #
         # MTX
         #
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionRemoveCosmetic',
         'Metadata/Items/MicrotransactionSkillEffects/MicrotransactionSpectralThrowEbony',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionFirstBlood',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionFirstBloodWeaponEffect',
@@ -1796,13 +1797,35 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentBadge10_6',
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentBadge10_7',
 
-        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionTencentInfernalWeapon',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionPetUpgradeScroll',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionPetConvertToNormalScroll',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionPetConvertToSpecialScroll',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionPetConvertAndUpgradeScroll',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionDaughterUpgradeScroll',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionGoddessSetUpgradeScroll',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScroll',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS6',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS7',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS8',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS10',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS11',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS12',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS13',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS15',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS16',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionSalvageFragmentSmall',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionSalvageFragment',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionSalvageFragmentLarge',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionGarenaPassiveRefund',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionTencentPremiumMessage',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionTencentPremiumRevive',
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionTencentExpandInventory0to1',
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionTencentExpandInventory1to2',
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionTencentExpandInventory2to3',
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionTencentExpandInventory3to4',
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionTencentExpandInventory4to5',
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionTencentExpandInventory5to6',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionTencentInfernalWeapon',
 
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentGradingFrame1_1',
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentGradingFrame1_2',
@@ -1882,6 +1905,22 @@ class ItemsParser(SkillParserShared):
 
         'Metadata/Items/MicrotransactionCurrency/TradeMarketTab',
         'Metadata/Items/MicrotransactionCurrency/TradeMarketBuyoutTab',
+
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxLightChaos',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxChiyou',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxGoddess',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxJingwei',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxFreyaPouch',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxFreyaBox',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxHasinaPouch',
+
+        'Metadata/Items/MicrotransactionCurrency/ProxyArcticAurora10',
+        'Metadata/Items/MicrotransactionCurrency/ProxyFireworksDarkSoulercoaster15',
+        'Metadata/Items/MicrotransactionCurrency/ProxyGarenaPassiveRefundPack10',
+        'Metadata/Items/MicrotransactionCurrency/ProxyGarenaPassiveRefundPack50',
+        'Metadata/Items/MicrotransactionCurrency/ProxySkinTransferPack5',
+        'Metadata/Items/MicrotransactionCurrency/ProxySkinTransferPack10',
+        'Metadata/Items/MicrotransactionCurrency/ProxySkinTransferPack50',
 
         #
         # Hideout Doodads
