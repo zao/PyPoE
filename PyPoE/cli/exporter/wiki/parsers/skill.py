@@ -239,7 +239,7 @@ class SkillParserShared(parser.BaseParser):
         ('ManaReservationPercent', {
             'template': 'mana_reservation_percent',
             'default': 0,
-            'format': lambda v: '{0:n}'.format(v),
+            'format': lambda v: '{0:n}'.format(v/100),
         }),
         ('LifeReservationFlat', {
             'template': 'life_reservation_flat',
@@ -249,7 +249,7 @@ class SkillParserShared(parser.BaseParser):
         ('LifeReservationPercent', {
             'template': 'life_reservation_percent',
             'default': 0,
-            'format': lambda v: '{0:n}'.format(v),
+            'format': lambda v: '{0:n}'.format(v/100),
         }),
     )
 
