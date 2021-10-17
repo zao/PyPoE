@@ -143,6 +143,7 @@ class GenericLuaParser(BaseParser):
         for k, copy_data in keys:
 
             value = row[k]
+            # print(k)
             if value is not None and value != "":
                 if 'value' in copy_data:
                     value = copy_data['value'](value)
@@ -1360,10 +1361,31 @@ class MonsterParser(GenericLuaParser):
 
 
 class CraftingBenchParser(GenericLuaParser):
+
+    # 3.15
+    # This is a hack and should be properly parsed, but it works for now.
+    # TODO: bring CraftingBenchSortCategory.dat in and parse the affixes from it
+
+    def SortCategoryHelper(d):
+        affix_types = [
+            'CannotBeGenerated',
+            'Prefix',
+            'Suffix',
+            'Other',
+            'Enchant',
+            'Undiscovered',
+            'Veiled'
+        ]
+        # print('yep', sort[d])
+        return affix_types[d]
+
     _DATA = (
         ('HideoutNPCsKey', {
             'key': 'npc',
-            'value': lambda v: v['NPCMasterKey']['Id'],
+            # 3.15
+            # This should be accessed by keys not values
+            # TODO: fix this.
+            'value': lambda v: v[0][4][0],
         }),
         ('Order', {
             'key': 'ordinal',
@@ -1411,27 +1433,30 @@ class CraftingBenchParser(GenericLuaParser):
         ('Tier', {
             'key': 'rank',
         }),
-        ('ModFamily', {
-            'key': 'mod_group',
-        }),
+        # ('ModFamily', {
+        #     'key': 'mod_group',
+        #     'default': '',
+        # }),
         ('CraftingItemClassCategoriesKeys', {
             'key': 'crafting_item_class_categories',
             'value': lambda v: [k['Text'] for k in v],
         }),
-        ('CraftingBenchUnlockCategoriesKey', {
-            'key': 'crafting_bench_unlock_category',
-            'value': lambda v: v['UnlockType'],
-        }),
-        ('CraftingBenchUnlockCategoriesKey', {
-            'key': 'crafting_bench_unlock_category_description',
-            'value': lambda v: v['ObtainingDescription'],
-        }),
+        # ('CraftingBenchUnlockCategoriesKeys', {
+        #     'key': 'crafting_bench_unlock_category',
+        #     'value': lambda v: v['UnlockType'],
+        # }),
+        # ('CraftingBenchUnlockCategoriesKeys', {
+        #     'key': 'crafting_bench_unlock_category_description',
+        #     'value': lambda v: v['ObtainingDescription'],
+        # }),
         ('UnveilsRequired', {
             'key': 'unveils_required',
             'default': 0,
         }),
-        ('AffixType', {
+        ('SortCategory', {
             'key': 'affix_type',
+            'value': SortCategoryHelper,
+            # lambda v: v['SortCategoryKey']['Id'],
         }),
     )
 

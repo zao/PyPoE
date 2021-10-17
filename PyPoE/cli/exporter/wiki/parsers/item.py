@@ -563,6 +563,9 @@ class ItemsParser(SkillParserShared):
         'Delirium': '3.10.0',
         'Harvest': '3.11.0',
         'Heist': '3.12.0',
+        'Ritual': '3.13.0',
+        'Ultimatum': '3.14.0',
+        'Expedition': '3.15.0'
     }
 
     _IGNORE_DROP_LEVEL_CLASSES = (
@@ -1509,7 +1512,7 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Gems/SkillGemFlammableShot',
 
         #
-        # Royal Gems
+        # Royale Gems
         #
 
         'Metadata/Items/Gems/SkillGemChargedAttackRoyale',
@@ -2458,6 +2461,31 @@ class ItemsParser(SkillParserShared):
                 infobox
             )'''
 
+    # 3.15
+    # This is a hack and should be done better.   
+    # TODO: properly parse map series
+
+    def MapSeriesHelper(d):
+        map_series = [
+            'Original',
+            'The Awakening',
+            'Atlas of Worlds',
+            'War for the Atlas',
+            'Betrayal',
+            'Synthesis',
+            'Legion',
+            'Blight',
+            'Metamorph',
+            'Delirium',
+            'Harvest',
+            'Heist',
+            'Ritual',
+            'Ultimatum',
+            'Expedition'
+        ]
+        # print('yep', map_series[d])
+        return map_series[d]
+
     _type_map = _type_factory(
         data_file='Maps.dat',
         data_mapping=(
@@ -2488,7 +2516,7 @@ class ItemsParser(SkillParserShared):
             }),
             ('MapSeriesKey', {
                 'template': 'map_series',
-                'format': lambda v: v['Name'],
+                'format': MapSeriesHelper
             })
         ),
         row_index=True,
@@ -3485,8 +3513,13 @@ class ItemsParser(SkillParserShared):
 
             if atlas_node:
                 if latest:
-                    infobox['atlas_x'] = atlas_node['X']
-                    infobox['atlas_y'] = atlas_node['Y']
+
+                    # 3.15
+                    # It ~~looks~~ like this doesnt affect the export, but it was throwing an error.
+                    # TODO: look into this.
+
+                    # infobox['atlas_x'] = atlas_node['X']
+                    # infobox['atlas_y'] = atlas_node['Y']
                     infobox['atlas_region_id'] = atlas_node['AtlasRegionsKey'][
                         'Id']
 
