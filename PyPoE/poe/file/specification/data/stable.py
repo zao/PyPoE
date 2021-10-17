@@ -3476,6 +3476,10 @@ specification = Specification({
                 type='ref|list|ulong',
                 key='AchievementItems.dat',
             ),
+            Field(
+                name='Unknown0',
+                type='byte',
+            ),
         ),
     ),
     'BlightCraftingRecipes.dat': File(
@@ -14332,6 +14336,14 @@ specification = Specification({
             ),
             Field(
                 name='HeistTier',
+                type='int',
+            ),
+            Field(
+                name='RitualTier',
+                type='int',
+            ),
+            Field(
+                name='ExpeditionTier',
                 type='int',
             ),
         ),

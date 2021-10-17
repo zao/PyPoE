@@ -2072,7 +2072,11 @@ def install_data_dependant_quantifiers(relational_reader):
 
     TranslationQuantifier(
         id='display_indexable_support',
-        handler=lambda v: relational_reader['IndexableSupportGems.dat'][v]['Name'],
+
+        # 3.15
+        # TODO: In a hurry to update before 3.16 we completely disregarded translations. We need to review this file and update it accordingly
+
+        # handler=lambda v: relational_reader['IndexableSupportGems.dat'][v]['Name'],
         reverse_handler=_get_reverse_lookup_from_reader(relational_reader['IndexableSupportGems.dat'], 'Name'),
     )
 

@@ -237,9 +237,12 @@ class ModParser(BaseParser):
 
                 data['name'] = root.handle_tags({'if': handler, 'elif': handler})
 
-            if mod['BuffDefinitionsKey']:
-                data['granted_buff_id'] = mod['BuffDefinitionsKey']['Id']
-                data['granted_buff_value'] = mod['BuffValue']
+            # TODO: need to look into this before completely removing it.
+
+            # print('yep', mod)
+            # if mod['BuffDefinitionsKey']:
+            #     data['granted_buff_id'] = mod['BuffDefinitionsKey']['Id']
+            #     data['granted_buff_value'] = mod['BuffValue']
             # todo ID for GEPL
             if mod['GrantedEffectsPerLevelKeys']:
                 data['granted_skill'] = ', '.join(
@@ -280,19 +283,29 @@ class ModParser(BaseParser):
                 data['generation_weight%s_tag' % j] = tag['Id']
                 data['generation_weight%s_value' % j] = \
                     mod['GenerationWeight_Values'][i]
-
-            tags = ', '.join(
-                [t['Id'] for t in mod['ModTypeKey']['TagsKeys']] +
-                [t['Id'] for t in mod['TagsKeys']]
-            )
+            
+            # 3.15
+        
+            tags = []
+            for i, tag in enumerate(mod['ImplicitTagsKeys']):
+                j = i + 1
+                # data['tag%s_tag' % j] = tag['Id']
+                # data['tag%s_value' % j] = mod['ImplicitTagsKeys'][i]
+                # print(tag['Id'])
+                tags.append(
+                    tag['Id']
+                )
+            # tags = ','.join(tags)
             if tags:
-                data['tags'] = tags
+                data['tags'] = ', '.join(tags)
 
             if mod['ModTypeKey']:
                 sell_price = defaultdict(int)
-                for msp in mod['ModTypeKey']['ModSellPriceTypesKeys']:
+            for msp in mod['ModTypeKey']['ModSellPriceTypesKeys']:
+                if mod['ModTypeKey']['Name'] != 'SellPriceIsWisdomFragment':
                     for i, (item_id, amount) in enumerate(
                             MOD_SELL_PRICES[msp['Id']].items(), start=1):
+                        # print(mod['ModTypeKey']['Name'])
                         data['sell_price%s_name' % i] = self.rr[
                             'BaseItemTypes.dat'].index['Id'][item_id]['Name']
                         data['sell_price%s_amount' % i] = amount
