@@ -1405,6 +1405,7 @@ specification = Specification({
                 name='BaseItemTypesKey',
                 type='ulong',
                 key='BaseItemTypes.dat',
+                unique=True,
             ),
             Field(
                 name='Armour',
