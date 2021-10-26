@@ -75,7 +75,10 @@ def get_content_path():
 
 
 def fix_path(path: str) -> str:
+    #First, replace any double quotes with HTML-encoded quotes
+    path = path.replace('\"','&quot;')
     if re.match('[a-zA-Z]:.*', path):
-        return path[:2] + re.sub(r':', '_', path[2:])
+        path = path[:2] + re.sub(r':', '_', path[2:])
+        return path
     else:
         return path

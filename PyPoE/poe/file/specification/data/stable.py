@@ -14109,6 +14109,14 @@ specification = Specification({
                 name='Flag3',
                 type='bool',
             ),
+            Field(
+                name='Flag4',
+                type='bool',
+            ),
+            Field(
+                name='Flag5',
+                type='bool',
+            ),
         ),
     ),
     'MapInhabitants.dat': File(
