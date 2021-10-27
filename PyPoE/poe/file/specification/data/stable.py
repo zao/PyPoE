@@ -205,6 +205,10 @@ specification = Specification({
                 name='Flag2',
                 type='bool',
             ),
+            Field(
+                name='Flag3',
+                type='bool',
+            ),
         ),
     ),
     'AchievementSetRewards.dat': File(
@@ -2418,24 +2422,6 @@ specification = Specification({
                 key='SoundEffects.dat',
             ),
             Field(
-                name='NormalPurchase_BaseItemTypesKeys',
-                type='ref|list|ref|generic',
-                key='BaseItemTypes.dat',
-            ),
-            Field(
-                name='NormalPurchase_Costs',
-                type='ref|list|int',
-            ),
-            Field(
-                name='MagicPurchase_BaseItemTypesKeys',
-                type='ref|list|ref|generic',
-                key='BaseItemTypes.dat',
-            ),
-            Field(
-                name='MagicPurchase_Costs',
-                type='ref|list|int',
-            ),
-            Field(
                 name='TagsKeys',
                 type='ref|list|ulong',
                 key='Tags.dat',
@@ -2455,7 +2441,7 @@ specification = Specification({
                 key='ItemVisualIdentity.dat',
             ),
             Field(
-                name='Unknown0',
+                name='Hash',
                 type='int',
                 unique=True,
             ),
@@ -2463,24 +2449,6 @@ specification = Specification({
                 name='VendorRecipe_AchievementItemsKeys',
                 type='ref|list|ulong',
                 key='AchievementItems.dat',
-            ),
-            Field(
-                name='RarePurchase_BaseItemTypesKeys',
-                type='ref|list|ref|generic',
-                key='BaseItemTypes.dat',
-            ),
-            Field(
-                name='RarePurchase_Costs',
-                type='ref|list|int',
-            ),
-            Field(
-                name='UniquePurchase_BaseItemTypesKeys',
-                type='ref|list|ref|generic',
-                key='BaseItemTypes.dat',
-            ),
-            Field(
-                name='UniquePurchase_Costs',
-                type='ref|list|int',
             ),
             Field(
                 name='Inflection',
@@ -5221,6 +5189,10 @@ specification = Specification({
                 type='ref|string',
             ),
             Field(
+                name='XBoxText2',
+                type='ref|string',
+            ),
+            Field(
                 name='Unknown0',
                 type='int',
             ),
@@ -5344,6 +5316,10 @@ specification = Specification({
             Field(
                 name='FormatText',
                 type='ref|string',
+            ),
+            Field(
+                name='Unknown0', #Might be a rate divisor. The per-minute costs are 60 while normal costs are 1
+                type='int',
             ),
         ),
     ),
@@ -12311,6 +12287,14 @@ specification = Specification({
                 name='ItemStance',
                 type='ulong',
                 key='ItemStances.dat',
+            ),
+            Field(
+                name="CanScourge",
+                type='bool',
+            ),
+            Field(
+                name="Flag1",
+                type='bool',
             ),
         ),
     ),
