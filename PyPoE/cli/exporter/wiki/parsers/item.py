@@ -779,6 +779,11 @@ class ItemsParser(SkillParserShared):
             # One Hand Axes
             # =================================================================
 
+            # =================================================================
+            # Helmets
+            # =================================================================
+            'Metadata/Items/Armours/Helmets/HelmetStrInt4': '', #Crusader Helmet
+
             'Metadata/Items/Weapons/OneHandWeapons/OneHandAxes/OneHandAxe22':
                 '',
             # =================================================================
@@ -794,12 +799,14 @@ class ItemsParser(SkillParserShared):
                 ' (Fire and Cold Resistance)',
             'Metadata/Items/Armours/Boots/BootsAtlas3':
                 ' (Fire and Lightning Resistance)',
+            'Metadata/Items/Armours/Boots/BootsStrInt8': '', #Crusader Boots
             # =================================================================
             # Gloves
             # =================================================================
 
             # Legion Gloves
             'Metadata/Items/Armours/Gloves/GlovesStrInt7': '',
+            'Metadata/Items/Armours/Gloves/GlovesStrInt8': '', #Crusader Gloves
             # =================================================================
             # Quivers
             # =================================================================
@@ -961,6 +968,10 @@ class ItemsParser(SkillParserShared):
             'Metadata/Items/MicrotransactionItemEffects/MicrotransactionHooded'
             'Cloak': ' (armour attachment)',
             'Metadata/Items/MicrotransactionItemEffects/MicrotransactionArcaneCloak': ' (armour attachment)',
+            'Metadata/Items/MicrotransactionItemEffects/MicrotransactionCrusaderHelmet': ' (helmet skin)',
+            'Metadata/Items/MicrotransactionItemEffects/MicrotransactionCrusaderBoots': ' (boots skin)',
+            'Metadata/Items/MicrotransactionItemEffects/MicrotransactionCrusaderGloves': ' (gloves skin)',
+            'Metadata/Items/MicrotransactionCurrency/StashTab': ' (consumable item)',
             # =================================================================
             # Quest items
             # =================================================================
