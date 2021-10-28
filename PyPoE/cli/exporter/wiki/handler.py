@@ -295,7 +295,9 @@ class ExporterHandler(BaseHandler):
 
                     if pargs.write:
                         out_path = os.path.join(out_dir, fix_path(
-                            item['out_file']))
+                            # 3.15
+                            # Added to escape quotes in "The Kiss Good Night"
+                            item['out_file'].replace('"', "'", 2)))
                         console('Writing data to "%s"...' % out_path)
                         with open(out_path, 'w', encoding='utf-8') as f:
                             f.write(text)

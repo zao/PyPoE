@@ -46,6 +46,16 @@ API for common and every day use.
 
 Most of the time you'll just want to import the :class:`TranslationFile` or
 :class:`TranslationFileCache` classes and work with the instantiated
+:meth:`TranslationFile.get_translation` andDocumentation
+===============================================================================
+
+Public API
+-------------------------------------------------------------------------------
+
+API for common and every day use.
+
+Most of the time you'll just want to import the :class:`TranslationFile` or
+:class:`TranslationFileCache` classes and work with the instantiated
 :meth:`TranslationFile.get_translation` and
 :meth:`TranslationFile.reverse_translation` methods.
 
@@ -147,7 +157,7 @@ regex_translation_string = re.compile(
     r'^'
     r'[\s]*'
     r'(?P<minmax>(?:[0-9\-\|#!]+[ \t]+)+)'
-    r'"(?P<description>.*)"'
+    r'"(?P<description>.*\s*)"'
     r'(?P<quantifier>(?:[ \t]*[\w%]+)*)'
     r'[ \t]*[\r\n]*'
     r'$',
@@ -403,7 +413,7 @@ class TranslationLanguage(TranslationReprMixin):
     def format_string(self,
                       values: Union[List[int], List[Tuple[int, int]]],
                       use_placeholder: Union[bool, Callable[[int], Any]] =
-                          False,
+                      False,
                       only_values: bool = False) -> Tuple[Union[str, List[int]], List[int], List[int], Dict[str, str]]:
         """
         Formats the string according with the given values and
@@ -497,7 +507,7 @@ class TranslationString(TranslationReprMixin):
 
     __slots__ = ['parent', 'quantifier', 'range', 'strings', 'tags',
                  'tags_types']
-    
+
     _REPR_EXTRA_ATTRIBUTES = OrderedDict((
         ('string', None),
     ))
@@ -612,7 +622,7 @@ class TranslationString(TranslationReprMixin):
                       values: Union[List[int], List[Tuple[int, int]]],
                       is_range: List[bool],
                       use_placeholder: Union[bool, Callable[[int], Any]] =
-                          False,
+                      False,
                       only_values: bool = False) -> Tuple[Union[str, List[int]], List[int], List[int], Dict[str, str]]:
         """
         Formats the string for the given values.
@@ -876,7 +886,7 @@ class TranslationRange(TranslationReprMixin):
     def __hash__(self) -> int:
         return hash((self.min, self.max))
 
-    def in_range(self, value:int ) -> int:
+    def in_range(self, value: int) -> int:
         """
         Checks whether the value is in range and returns the rating/accuracy
         of the check performed.
@@ -919,9 +929,9 @@ class TranslationRange(TranslationReprMixin):
                 return -10000
         elif self.min is not None and self.max is not None:
             if f_and(f_comp(self.min, value), f_comp(value, self.max)):
-                 return 3
+                return 3
             else:
-                 return -10000
+                return -10000
 
         return -100
 
@@ -979,14 +989,13 @@ class TranslationQuantifierHandler(TranslationReprMixin):
         return hash(tuple(self.index_handlers.keys()))
 
     def _warn_uncaptured(self, name: str):
-        # raise TypeError(f"Uncaptured quantifier {name}, add in PyPoE/poe/translations.py")
-        return
-        
+        raise TypeError(
+            f"Uncaptured quantifier {name}, add in PyPoE/poe/translations.py")
+
     def _whole_float_to_int(self, value: float) -> Union[float, int]:
         if isinstance(value, float) and value.is_integer():
             return int(value)
         return value
-
 
     @classmethod
     def install_quantifier(cls, quantifier: 'TranslationQuantifier'):
@@ -1026,7 +1035,8 @@ class TranslationQuantifierHandler(TranslationReprMixin):
             self._warn_uncaptured(handler_name)
             return None
         if f is None:
-            self._warn_uncaptured(handler_name)
+            # TODO: Show a warning here, not an error.
+            # self._warn_uncaptured(handler_name)
             return None
         return f
 
@@ -1052,13 +1062,15 @@ class TranslationQuantifierHandler(TranslationReprMixin):
                     try:
                         self.index_handlers[handler.id].append(int(args[0]))
                     except ValueError as e:
-                        warnings.warn('Broken quantifier "%s" - Error: %s' % (string, e.args[0]), TranslationWarning)
+                        warnings.warn('Broken quantifier "%s" - Error: %s' %
+                                      (string, e.args[0]), TranslationWarning)
                 elif handler.type == TranslationQuantifier.QuantifierTypes.STRING:
                     self.string_handlers[handler.id] = args
             else:
-                raise TypeError(f"Uncaptured quantifier {partial}, add in PyPoE/poe/translations.py")
+                raise TypeError(
+                    f"Uncaptured quantifier {partial}, add in PyPoE/poe/translations.py")
 
-    def handle(self,    
+    def handle(self,
                values: Union[List[int], List[Tuple[int, int]]],
                is_range: List[bool]) -> Tuple[List[Any], Dict[str, str]]:
         """
@@ -1094,9 +1106,9 @@ class TranslationQuantifierHandler(TranslationReprMixin):
 
         for i, value in enumerate(values):
             if is_range[i]:
-                 values[i] = tuple([self._whole_float_to_int(v) for v in value])
+                values[i] = tuple([self._whole_float_to_int(v) for v in value])
             else:
-                 values[i] = self._whole_float_to_int(value)
+                values[i] = self._whole_float_to_int(value)
 
         strings = OrderedDict()
         for handler_name, args in self.string_handlers.items():
@@ -1404,7 +1416,8 @@ class TranslationFile(AbstractFileReadOnly):
             if not isinstance(parent, TranslationFileCache):
                 raise TypeError('Parent must be a TranslationFileCache.')
             if base_dir is not None:
-                raise ValueError('Set either parent or base_dir, but not both.')
+                raise ValueError(
+                    'Set either parent or base_dir, but not both.')
 
         self._parent: Union['TranslationFileCache', None] = parent
 
@@ -1468,7 +1481,8 @@ class TranslationFile(AbstractFileReadOnly):
                     tl = TranslationLanguage(language, parent=translation)
                     tcount = regex_int.search(data, offset, offset_max)
                     offset = tcount.end()
-                    language_match = regex_lang.search(data, offset, offset_max)
+                    language_match = regex_lang.search(
+                        data, offset, offset_max)
 
                     if language_match is None:
                         offset_next_lang = offset_max
@@ -1478,7 +1492,8 @@ class TranslationFile(AbstractFileReadOnly):
                         language = language_match.group('language')
 
                     for i in range(0, int(tcount.group())):
-                        ts_match = regex_translation_string.search(data, offset, offset_next_lang)
+                        ts_match = regex_translation_string.search(
+                            data, offset, offset_next_lang)
                         if not ts_match:
                             raise ParserError(
                                 'Malformed translation string near line %s @ ids %s: %s' % (
@@ -1511,8 +1526,10 @@ class TranslationFile(AbstractFileReadOnly):
                                                  negated=negated)
                             elif '|' in matchstr:
                                 minmax = matchstr.split('|')
-                                min = int(minmax[0]) if minmax[0] != '#' else None
-                                max = int(minmax[1]) if minmax[1] != '#' else None
+                                min = int(
+                                    minmax[0]) if minmax[0] != '#' else None
+                                max = int(
+                                    minmax[1]) if minmax[1] != '#' else None
                                 TranslationRange(min, max, parent=ts,
                                                  negated=negated)
                             else:
@@ -1520,7 +1537,8 @@ class TranslationFile(AbstractFileReadOnly):
                                                  negated=negated)
                                 warnings.warn(
                                     'Malformed quantifier string "%s" near index %s (parent %s). Assuming # instead.' % (
-                                        matchstr, ts_match.start('minmax'), translation.ids
+                                        matchstr, ts_match.start(
+                                            'minmax'), translation.ids
                                     ), TranslationWarning)
 
                         ts._set_string(ts_match.group('description'))
@@ -1541,8 +1559,10 @@ class TranslationFile(AbstractFileReadOnly):
                 if self._parent:
                     self.merge(self._parent.get_file(match.group('include')))
                 elif self._base_dir:
-                    real_path = os.path.join(self._base_dir, match.group('include'))
-                    self.merge(TranslationFile(real_path, base_dir=self._base_dir))
+                    real_path = os.path.join(
+                        self._base_dir, match.group('include'))
+                    self.merge(TranslationFile(
+                        real_path, base_dir=self._base_dir))
                 else:
                     warnings.warn(
                         'Translation file includes other file, but no base_dir '
@@ -1585,7 +1605,8 @@ class TranslationFile(AbstractFileReadOnly):
                 translation.diff(other)
                 print('')'''
 
-                warnings.warn('Duplicate id "%s"' % translation_id, DuplicateIdentifierWarning)
+                warnings.warn('Duplicate id "%s"' %
+                              translation_id, DuplicateIdentifierWarning)
                 self.translations_hash[translation_id].append(translation)
         else:
             self.translations_hash[translation_id] = [translation, ]
@@ -1730,7 +1751,7 @@ class TranslationFile(AbstractFileReadOnly):
         if partial:
             warnings.warn(
                 'Partial tag match for %s' % ', '.join([
-                   str(p) for p in partial
+                    str(p) for p in partial
                 ]),
                 TranslationWarning
             )
@@ -1742,7 +1763,6 @@ class TranslationFile(AbstractFileReadOnly):
         extra_strings = []
         string_instances = []
         for i, tr in enumerate(trans_found):
-
             tl = tr.get_language(lang)
             ts, short_values, is_range = tl.get_string(trans_found_values[i])
             if ts:
@@ -1845,7 +1865,7 @@ class TranslationFileCache(AbstractFileCache):
     def __init__(self,
                  *args,
                  merge_with_custom_file: Union[None, bool, TranslationFile] =
-                     None,
+                 None,
                  **kwargs):
         """
         Parameters
@@ -2009,6 +2029,7 @@ def set_custom_translation_file(file: Union[str, None] = None):
         file_path=file or CUSTOM_TRANSLATION_FILE
     )
 
+
 custom_translation_file = property(
     fget=get_custom_translation_file,
     fset=set_custom_translation_file,
@@ -2033,11 +2054,11 @@ def install_data_dependant_quantifiers(relational_reader):
                     return row.rowid
         return _get_from_value
 
-
     TranslationQuantifier(
         id='mod_value_to_item_class',
         handler=lambda v: relational_reader['ItemClasses.dat'][v]['Name'],
-        reverse_handler=_get_reverse_lookup_from_reader(relational_reader['ItemClasses.dat'], 'Name'),
+        reverse_handler=_get_reverse_lookup_from_reader(
+            relational_reader['ItemClasses.dat'], 'Name'),
     )
 
     def _tempest_mod_text_reverse(value):
@@ -2045,7 +2066,7 @@ def install_data_dependant_quantifiers(relational_reader):
         for row in relational_reader['Mods.dat']:
             if row['GenerationType'] != MOD_GENERATION_TYPE.TEMPEST:
                 continue
-            if row['Name'] == value: 
+            if row['Name'] == value:
                 results.append(row.rowid)
 
         if len(results) == 1:
@@ -2061,7 +2082,6 @@ def install_data_dependant_quantifiers(relational_reader):
         reverse_handler=_tempest_mod_text_reverse,
     )
 
-
     def _get_reverse_lookup_from_reader(relational_reader, key):
         def _get_from_value(value):
             for row in relational_reader:
@@ -2069,37 +2089,35 @@ def install_data_dependant_quantifiers(relational_reader):
                     return row.rowid
         return _get_from_value
 
-
     TranslationQuantifier(
         id='display_indexable_support',
-
-        # 3.15
-        # TODO: In a hurry to update before 3.16 we completely disregarded translations. We need to review this file and update it accordingly
-
+        # TODO: Review this
         # handler=lambda v: relational_reader['IndexableSupportGems.dat'][v]['Name'],
-        reverse_handler=_get_reverse_lookup_from_reader(relational_reader['IndexableSupportGems.dat'], 'Name'),
+        reverse_handler=_get_reverse_lookup_from_reader(
+            relational_reader['IndexableSupportGems.dat'], 'Name'),
     )
-
 
     TranslationQuantifier(
         id='tree_expansion_jewel_passive',
         handler=lambda v: relational_reader['Data/PassiveTreeExpansionJewelSizes.dat'][v]['Name'],
-        reverse_handler=_get_reverse_lookup_from_reader(relational_reader['Data/PassiveTreeExpansionJewelSizes.dat'], 'Name'),
+        reverse_handler=_get_reverse_lookup_from_reader(
+            relational_reader['Data/PassiveTreeExpansionJewelSizes.dat'], 'Name'),
     )
 
-    
     TranslationQuantifier(
         id='affliction_reward_type',
         handler=lambda v: relational_reader['Data/AfflictionRewardTypeVisuals.dat'][v]['Name'],
-        reverse_handler=_get_reverse_lookup_from_reader(relational_reader['Data/AfflictionRewardTypeVisuals.dat'], 'Name'),
+        reverse_handler=_get_reverse_lookup_from_reader(
+            relational_reader['Data/AfflictionRewardTypeVisuals.dat'], 'Name'),
     )
 
-    # I believe this is currently not right, as the handler actually uses a value located in additionalProperties of the item, and 
+    # I believe this is currently not right, as the handler actually uses a value located in additionalProperties of the item, and
     # not in the mod itself. THe mod itself has min = max = 0.
     TranslationQuantifier(
         id='passive_hash',
         handler=lambda v: relational_reader['Data/PassiveSkills.dat'][v]['PassiveSkillGraphId'],
-        reverse_handler=_get_reverse_lookup_from_reader(relational_reader['Data/PassiveSkills.dat'], 'PassiveSkillGraphId'),
+        reverse_handler=_get_reverse_lookup_from_reader(
+            relational_reader['Data/PassiveSkills.dat'], 'PassiveSkillGraphId'),
     )
 
     TQReminderString(relational_reader=relational_reader)
@@ -2116,6 +2134,7 @@ def install_data_dependant_quantifiers(relational_reader):
 
 # Notes:
 # * It's hardly possible to reverse rounding accurately
+
 
 """
 TranslationQuantifier(
@@ -2211,7 +2230,7 @@ TranslationQuantifier(
 
 TranslationQuantifier(
     id='divide_by_ten_1dp',
-    handler=lambda v: round(v//10,1),
+    handler=lambda v: round(v//10, 1),
     reverse_handler=lambda v: int(v)*10,
 )
 
@@ -2340,6 +2359,30 @@ TranslationQuantifier(
     id='times_twenty',
     handler=lambda v: v*20,
     reverse_handler=lambda v: int(v)//20,
+)
+
+TranslationQuantifier(
+    id='times_one_point_five',
+    handler=lambda v: v*1.5,
+    reverse_handler=lambda v: int(v/1.5),
+)
+
+TranslationQuantifier(
+    id='double',
+    handler=lambda v: v*2,
+    reverse_handler=lambda v: int(v)//2,
+)
+
+TranslationQuantifier(
+    id='negate_and_double',
+    handler=lambda v: -v * 2,
+    reverse_handler=lambda v: int(-v) // 2,
+)
+
+TranslationQuantifier(
+    id='divide_by_four',
+    handler=lambda v: v / 4,
+    reverse_handler=lambda v: v * 4,
 )
 
 TranslationQuantifier(
