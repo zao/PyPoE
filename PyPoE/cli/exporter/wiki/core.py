@@ -52,8 +52,8 @@ __all__ = ['WikiHandler']
 class WikiHandler(BaseHandler):
     def __init__(self, sub_parser):
         # Config Options
-        config.add_option('temp_dir', 'is_directory(exists=True)')
-        config.add_option('out_dir', 'is_directory(exists=True)')
+        config.add_option('temp_dir', 'is_directory(exists=True, make_absolute=True)')
+        config.add_option('out_dir', 'is_directory(exists=True, make_absolute=True)')
         config.register_setup('temp_dir', self._setup)
         config.add_setup_variable('temp_dir', 'hash', 'string(default="")')
         config.add_setup_listener('version', self._ver_dist_changed)

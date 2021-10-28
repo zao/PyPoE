@@ -214,7 +214,7 @@ def is_file(value, *args, exists=True, allow_empty=False, **kwargs):
         return value
 
 
-def is_directory(value, *args, exists=True, allow_empty=False, **kwargs):
+def is_directory(value, *args, exists=True, allow_empty=False, make_absolute=False, **kwargs):
     """
     Checks whether the value is a valid directory path (and optionally whether
     it exists).
@@ -227,6 +227,8 @@ def is_directory(value, *args, exists=True, allow_empty=False, **kwargs):
         whether the directory is required to exist to pass the validation check
     allow_empty : bool
         whether empty strings are allowed
+    make_absolute : bool
+        whether to turn a potentional relative path into an absolute one
 
     Returns
     -------
@@ -244,6 +246,8 @@ def is_directory(value, *args, exists=True, allow_empty=False, **kwargs):
         _exists(value, exists)
         if not os.path.isdir(value):
             raise ValidateError('"%s" is not a directory.' % value)
+        if make_absolute:
+            value = os.path.abspath(value)
         return value
 
 # =============================================================================
