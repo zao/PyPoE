@@ -1734,7 +1734,6 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionRemoveCosmetic',
         'Metadata/Items/MicrotransactionSkillEffects/MicrotransactionSpectralThrowEbony',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionFirstBlood',
-        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionFirstBloodWeaponEffect',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionTitanPlate',
         'Metadata/Items/MicrotransactionSkillEffects/MicrotransactionStatueSummonSkeletons2',
         'Metadata/Items/MicrotransactionSkillEffects/MicrotransactionStatueSummonSkeletons3',
