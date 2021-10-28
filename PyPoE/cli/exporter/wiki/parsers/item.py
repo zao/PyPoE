@@ -611,7 +611,6 @@ class ItemsParser(SkillParserShared):
 
             # =================================================================
             # Skill Gems
-            # Royale
             # =================================================================
             'Metadata/Items/Gems/SkillGemChargedAttack': '',
             'Metadata/Items/Gems/SkillGemCyclone': '',
@@ -727,6 +726,11 @@ class ItemsParser(SkillParserShared):
             'Metadata/Items/Gems/SkillGemHeavyStrike': '',
             'Metadata/Items/Gems/SkillGemCobraLash': '',
             'Metadata/Items/Gems/SkillGemIceSpear': '',
+            'Metadata/Items/Gems/SkillGemArcaneCloak': '',
+
+            # =================================================================
+            # Support Gems
+            # =================================================================
             'Metadata/Items/Gems/SupportGemMultistrike': '',
             'Metadata/Items/Gems/SupportGemSpellCascade': '',
             'Metadata/Items/Gems/SupportGemHandcastAnticipation': '',
@@ -1683,6 +1687,7 @@ class ItemsParser(SkillParserShared):
         #
         # MTX
         #
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionRemoveCosmetic',
         'Metadata/Items/MicrotransactionSkillEffects/MicrotransactionSpectralThrowEbony',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionFirstBlood',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionFirstBloodWeaponEffect',
@@ -1713,6 +1718,59 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionDemonhandClaw',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionDivineShield',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionEldritchWings',
+        'Metadata/Items/MicrotransactionSkillEffects/MicrotransactionCelestialAuraEffect1',
+        'Metadata/Items/MicrotransactionSkillEffects/MicrotransactionCelestialAuraEffect2',
+        'Metadata/Items/MicrotransactionSkillEffects/MicrotransactionCelestialAuraEffect3',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionSoulstealerWings1',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionSoulstealerWings2',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionSoulstealerWings3',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionSoulstealerWings4',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionZenithBackAttachment1',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionZenithBackAttachment2',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionZenithBackAttachment3',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionOrionWings1',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionOrionWings2',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionOrionWings3',
+        'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionImaginationCharacterEffect1',
+        'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionImaginationCharacterEffect2',
+        'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionImaginationCharacterEffect3',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionGlimmerwoodWings1',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionGlimmerwoodWings2',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionGlimmerwoodWings3',
+        'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionCelestialTentaclesCharacterEffect1',
+        'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionCelestialTentaclesCharacterEffect2',
+        'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionCelestialTentaclesCharacterEffect3',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionMarkOfTheWarriorWings',
+
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionOblivionHelmet',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionOblivionBoots',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionOblivionGloves',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionOblivionBodyArmour',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionOblivionWings',
+        'Metadata/Items/MicrotransactionSkillEffects/MicrotransactionOblivionToxicRainEffect',
+        'Metadata/Items/MicrotransactionSkillEffects/MicrotransactionOblivionFlameWallEffect',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionOblivionPortalEffect',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionOblivionBodyArmour1',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionOblivionBodyArmour2',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionOblivionBodyArmour3',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionJingweiHelmet',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionJingweiBoots',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionJingweiGloves',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionJingweiBodyArmour',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionJingweiWings',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionJingweiCloak',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionJingweiWeapon',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionJingweiWeaponEffect',
+        'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionJingweiApparitionEffect',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionJingweiPortalEffect',
+        'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionJingweiCharacterEffect',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionJingweiFootprintsEffect',
+        'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionJingweiPortraitFrame',
+        'Metadata/Items/MicrotransactionSkillEffects/MicrotransactionHasinaWhirlingBladesEffect'
+        'Metadata/Items/MicrotransactionSkillEffects/MicrotransactionHasinaBladeVortexEffect',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionAuspiciousDragonWeaponEffect1',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionAuspiciousDragonWeaponEffect2',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionAuspiciousDragonWeaponEffect3',
 
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionGreenLichHelmet',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionGreenLichBodyArmour',
@@ -1798,13 +1856,35 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentBadge10_6',
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentBadge10_7',
 
-        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionTencentInfernalWeapon',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionPetUpgradeScroll',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionPetConvertToNormalScroll',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionPetConvertToSpecialScroll',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionPetConvertAndUpgradeScroll',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionDaughterUpgradeScroll',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionGoddessSetUpgradeScroll',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScroll',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS6',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS7',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS8',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS10',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS11',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS12',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS13',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS15',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS16',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionSalvageFragmentSmall',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionSalvageFragment',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionSalvageFragmentLarge',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionGarenaPassiveRefund',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionTencentPremiumMessage',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionTencentPremiumRevive',
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionTencentExpandInventory0to1',
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionTencentExpandInventory1to2',
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionTencentExpandInventory2to3',
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionTencentExpandInventory3to4',
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionTencentExpandInventory4to5',
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionTencentExpandInventory5to6',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionTencentInfernalWeapon',
 
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentGradingFrame1_1',
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentGradingFrame1_2',
@@ -1885,6 +1965,22 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/MicrotransactionCurrency/TradeMarketTab',
         'Metadata/Items/MicrotransactionCurrency/TradeMarketBuyoutTab',
 
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxLightChaos',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxChiyou',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxGoddess',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxJingwei',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxFreyaPouch',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxFreyaBox',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxHasinaPouch',
+
+        'Metadata/Items/MicrotransactionCurrency/ProxyArcticAurora10',
+        'Metadata/Items/MicrotransactionCurrency/ProxyFireworksDarkSoulercoaster15',
+        'Metadata/Items/MicrotransactionCurrency/ProxyGarenaPassiveRefundPack10',
+        'Metadata/Items/MicrotransactionCurrency/ProxyGarenaPassiveRefundPack50',
+        'Metadata/Items/MicrotransactionCurrency/ProxySkinTransferPack5',
+        'Metadata/Items/MicrotransactionCurrency/ProxySkinTransferPack10',
+        'Metadata/Items/MicrotransactionCurrency/ProxySkinTransferPack50',
+
         #
         # Hideout Doodads
         #
@@ -1914,6 +2010,21 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Hideout/HideoutTotemPole22Test',
         'Metadata/Items/Hideout/HideoutTotemPole23Test',
         'Metadata/Items/Hideout/HideoutTotemPole24Test',
+
+        'Metadata/Items/Hideout/HideoutTeleport',
+        'Metadata/Items/Hideout/HideoutTelepad',
+        'Metadata/Items/Hideout/HideoutTeleportProxy',
+        'Metadata/Items/Hideout/HideoutTeleportOwnerOnly',
+
+        'Metadata/Items/Hideout/HideoutMiracleMapDevice1',
+        'Metadata/Items/Hideout/HideoutMiracleMapDevice2',
+        'Metadata/Items/Hideout/HideoutMiracleMapDevice3',
+
+        'Metadata/Items/Hideout/HideoutShengjingBuildingSupplies1',
+        'Metadata/Items/Hideout/HideoutShengjingBuildingSupplies2',
+        'Metadata/Items/Hideout/HideoutShengjingBuildingSupplies3',
+        'Metadata/Items/Hideout/HideoutShengjingBuildingSupplies4',
+        'Metadata/Items/Hideout/HideoutShengjingBuildingSupplies5',
 
         #
         # Stackable currency
@@ -1951,6 +2062,25 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/MapFragments/BreachFragmentPhysical',
         'Metadata/Items/MapFragments/BreachFragmentChaos',
         'Metadata/Items/Labyrinth/OfferingToTheGoddess',
+
+        #
+        # Quest items
+        #
+        'Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment1_1',
+        'Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment2_1',
+        'Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment3_1',
+        'Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment4_1',
+        'Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment5_1',
+        'Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment6_1',
+        'Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment7_1',
+        'Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment8_1',
+        'Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment8_2',
+        'Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment9_1',
+        'Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment9_2',
+        'Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment9_3',
+        'Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment10_1',
+        'Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment10_2',
+        'Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment10_3',
 
         #
         # Misc
@@ -2974,10 +3104,7 @@ class ItemsParser(SkillParserShared):
         return base_item_type['Name']
 
     def _conflict_divination_card(self, infobox, base_item_type, rr, language):
-        return '%s (%s)' % (
-            base_item_type['Name'],
-            base_item_type['ItemClassesKey']['Name'].lower()
-        )
+        return base_item_type['Name']
 
     def _conflict_labyrinth_map_item(self, infobox, base_item_type, rr,
                                      language):
