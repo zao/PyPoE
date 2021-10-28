@@ -46,16 +46,6 @@ API for common and every day use.
 
 Most of the time you'll just want to import the :class:`TranslationFile` or
 :class:`TranslationFileCache` classes and work with the instantiated
-:meth:`TranslationFile.get_translation` andDocumentation
-===============================================================================
-
-Public API
--------------------------------------------------------------------------------
-
-API for common and every day use.
-
-Most of the time you'll just want to import the :class:`TranslationFile` or
-:class:`TranslationFileCache` classes and work with the instantiated
 :meth:`TranslationFile.get_translation` and
 :meth:`TranslationFile.reverse_translation` methods.
 
