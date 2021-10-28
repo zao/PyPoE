@@ -1792,7 +1792,6 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionOblivionBodyArmour',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionOblivionWings',
         'Metadata/Items/MicrotransactionSkillEffects/MicrotransactionOblivionToxicRainEffect',
-        'Metadata/Items/MicrotransactionSkillEffects/MicrotransactionOblivionFlameWallEffect',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionOblivionPortalEffect',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionOblivionBodyArmour1',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionOblivionBodyArmour2',
