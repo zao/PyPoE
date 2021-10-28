@@ -137,6 +137,10 @@ class WikiCondition(parser.WikiCondition):
 
         # Item flags
         'is_corrupted',
+        'is_fractured',
+        'is_synthesised',
+        'is_veiled',
+        'is_replica',
         'is_relic',
         'can_not_be_traded_or_modified',
         'suppress_improper_modifiers_category',
