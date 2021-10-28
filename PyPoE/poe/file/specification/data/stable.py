@@ -1476,6 +1476,20 @@ specification = Specification({
                 file_path=True,
                 file_ext='.ogg',
             ),
+            Field(
+                name='PassiveTreeImage',
+                type='ref|string',
+                file_path=True,
+                file_ext='.dds',
+            ),
+            Field(
+                name='Unknown0',
+                type='int',
+            ),
+            Field(
+                name='Unknown1',
+                type='int',
+            ),
         ),
     ),
     'AtlasAwakeningStats.dat': File(
@@ -4233,6 +4247,10 @@ specification = Specification({
                 name='Flag18',
                 type='bool',
             ),
+            Field(
+                name='Key2',
+                type='ulong',
+            ),
         ),
     ),
     'BuffTemplates.dat': File(
@@ -4291,6 +4309,10 @@ specification = Specification({
                 name='StatsKey',
                 type='ref|list|ulong',
                 key='Stats.dat',
+            ),
+            Field(
+                name='Unknown8',
+                type='int',
             ),
         ),
     ),
@@ -4870,19 +4892,15 @@ specification = Specification({
                 key='SkillGems.dat',
             ),
             Field(
+                name='Key0',
+                type='ulong',
+            ),
+            Field(
                 name='Unknown0',
                 type='int',
             ),
             Field(
                 name='Unknown1',
-                type='int',
-            ),
-            Field(
-                name='Unknown2',
-                type='int',
-            ),
-            Field(
-                name='Unknown3',
                 type='int',
             ),
             Field(
@@ -4901,16 +4919,12 @@ specification = Specification({
                 key='BaseItemTypes.dat',
             ),
             Field(
-                name='Unknown4',
-                type='int',
+                name='Gender',
+                type='ref|string',
             ),
             Field(
                 name='TraitDescription',
                 type='ref|string',
-            ),
-            Field(
-                name='Key0',
-                type='ulong',
             ),
             Field(
                 name='Key1',
@@ -4925,12 +4939,30 @@ specification = Specification({
                 type='ulong',
             ),
             Field(
-                name='Unknown5',
+                name='Key4',
+                type='ulong',
+            ),
+            Field(
+                name='Unknown2',
                 type='int',
             ),
             Field(
                 name='Keys1',
                 type='ref|list|ulong',
+            ),
+            Field(
+                name='PassiveTreeImage',
+                type='ref|string',
+                file_path=True,
+                file_ext='.dds',
+            ),
+            Field(
+                name='Unknown3',
+                type='int',
+            ),
+            Field(
+                name='Unknown4',
+                type='int',
             ),
         ),
     ),
@@ -12802,6 +12834,10 @@ specification = Specification({
             ),
             Field(
                 name='Unknown15',
+                type='ref|string',
+            ),
+            Field(
+                name='Unknown16',
                 type='int',
             ),
         ),
@@ -18454,6 +18490,68 @@ specification = Specification({
             ),
         ),
     ),
+    'PassiveSkillMasteryEffects.dat': File(
+        fields=(
+            Field(
+                name='ID',
+                type='ref|string',
+            ),
+            Field(
+                name='hash',
+                type='int',
+            ),
+            Field(
+                name='Stats',
+                type='ref|list|ulong',
+                key='Stats.dat',
+            ),
+            Field(
+                name='Stat1Value',
+                type='int',
+            ),
+            Field(
+                name='Stat2Value',
+                type='int',
+            ),
+            Field(
+                name='Stat3Value',
+                type='int',
+            ),
+        ),
+    ),
+    'PassiveSkillMasteryGroups.dat': File(
+        fields=(
+            Field(
+                name='ID',
+                type='ref|string',
+            ),
+            Field(
+                name='MasteryEffects',
+                type='ref|list|ulong',
+                key='PassiveSkillMasteryEffects.dat',
+            ),
+            Field(
+                name='InactiveIcon',
+                type='ref|string',
+            ),
+            Field(
+                name='ActiveIcon',
+                type='ref|string',
+            ),
+            Field(
+                name='ActiveEffectImage',
+                type='ref|string',
+            ),
+            Field(
+                name='Flag0',
+                type='bool',
+            ),
+            Field(
+                name='Key0',
+                type='ulong',
+            ),
+        ),
+    ),
     'PassiveSkillStatCategories.dat': File(
         fields=(
             Field(
@@ -18627,7 +18725,7 @@ specification = Specification({
                 key='GrantedEffectsPerLevel.dat',
             ),
             Field(
-                name='Flag0',
+                name='IsAnnointmentOnly',
                 type='bool',
             ),
             Field(
@@ -18635,7 +18733,7 @@ specification = Specification({
                 type='int',
             ),
             Field(
-                name='Flag1',
+                name='IsExpansion',
                 type='bool',
             ),
             Field(
@@ -18643,8 +18741,13 @@ specification = Specification({
                 type='bool',
             ),
             Field(
-                name='Unknown1',
+                name='SkillType',
                 type='int',
+            ),
+            Field(
+                name='MasteryGroup',
+                type='ulong',
+                key='PassiveSkillMasteryGroups.dat',
             ),
         ),
         virtual_fields=(
