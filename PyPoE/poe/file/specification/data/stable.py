@@ -2617,8 +2617,8 @@ specification = Specification({
                 key='BestiaryCapturableMonsters.dat',
             ),
             Field(
-                name='RarityKey',
-                type='int',
+                name='BeastRarity',
+                type='ulong',
                 enum='RARITY',
             ),
             Field(
@@ -2667,6 +2667,10 @@ specification = Specification({
             ),
             Field(
                 name='Unknown0',
+                type='int',
+            ),
+            Field(
+                name='RedBeastsRequired',
                 type='int',
             ),
         ),
@@ -3202,6 +3206,10 @@ specification = Specification({
                 name='AchievementItemsKeys',
                 type='ref|list|ulong',
                 key='AchievementItems.dat',
+            ),
+            Field(
+                name='CanUseOnCorrupted',
+                type='bool',
             ),
         ),
     ),
@@ -12256,6 +12264,46 @@ specification = Specification({
             ),
         ),
     ),
+    'ItemCosts.dat': File(
+        fields=(
+            Field(
+                name='Id',
+                type='ref|string',
+            ),
+            Field(
+                name='Cost1Currencies',
+                type='ref|list|ulong',
+            ),
+            Field(
+                name='Cost1Values',
+                type='ref|list|int',
+            ),
+            Field(
+                name='Cost2Currencies',
+                type='ref|list|ulong',
+            ),
+            Field(
+                name='Cost2Values',
+                type='ref|list|int',
+            ),
+            Field(
+                name='Cost3Currencies',
+                type='ref|list|ulong',
+            ),
+            Field(
+                name='Cost3Values',
+                type='ref|list|int',
+            ),
+            Field(
+                name='Cost4Currencies',
+                type='ref|list|ulong',
+            ),
+            Field(
+                name='Cost4Values',
+                type='ref|list|int',
+            ),
+        )
+    ),
     'ItemClasses.dat': File(
         fields=(
             Field(
@@ -14231,62 +14279,13 @@ specification = Specification({
                 unique=True,
             ),
             Field(
-                name='NormalPurchase_BaseItemTypesKeys',
-                type='ref|list|ulong',
-                key='BaseItemTypes.dat',
+                name='Cost',
+                type='ulong',
+                key='ItemCosts.dat',
             ),
             Field(
-                name='NormalPurchase_Costs',
-                type='ref|list|int',
-            ),
-            Field(
-                name='MagicPurchase_BaseItemTypesKeys',
-                type='ref|list|ulong',
-                key='BaseItemTypes.dat',
-            ),
-            Field(
-                name='MagicPurchase_Costs',
-                type='ref|list|int',
-            ),
-            Field(
-                name='RarePurchase_BaseItemTypesKeys',
-                type='ref|list|ulong',
-                key='BaseItemTypes.dat',
-            ),
-            Field(
-                name='RarePurchase_Costs',
-                type='ref|list|int',
-            ),
-            Field(
-                name='UniquePurchase_BaseItemTypesKeys',
-                type='ref|list|ulong',
-                key='BaseItemTypes.dat',
-            ),
-            Field(
-                name='UniquePurchase_Costs',
-                type='ref|list|int',
-            ),
-        ),
-        virtual_fields=(
-            VirtualField(
-                name='NormalPurchase',
-                fields=('NormalPurchase_BaseItemTypesKeys', 'NormalPurchase_Costs'),
-                zip=True,
-            ),
-            VirtualField(
-                name='MagicPurchase',
-                fields=('MagicPurchase_BaseItemTypesKeys', 'MagicPurchase_Costs'),
-                zip=True,
-            ),
-            VirtualField(
-                name='RarePurchase',
-                fields=('RarePurchase_BaseItemTypesKeys', 'RarePurchase_Costs'),
-                zip=True,
-            ),
-            VirtualField(
-                name='UniquePurchase',
-                fields=('UniquePurchase_BaseItemTypesKeys', 'UniquePurchase_Costs'),
-                zip=True,
+                name='Unknown0',
+                type='ulong',
             ),
         ),
     ),
