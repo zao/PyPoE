@@ -218,6 +218,7 @@ class AreaParser(parser.BaseParser):
             'template': 'loading_screen',
             'format': lambda value: value.replace('Art/Textures/Interface/Loadi'
                 'ngImages/', '').replace('.dds', ''),
+            'default': [],
         }),
         ('Connections_WorldAreasKeys', {
             'template': 'connection_ids',
@@ -276,21 +277,21 @@ class AreaParser(parser.BaseParser):
             ]),
         }),
 
-        ('Strongbox_SpawnChance', {
-            'template': 'strongbox_spawn_chance',
-            'condition': lambda area: area['Strongbox_SpawnChance'] > 0,
-        }),
-        ('Strongbox_MaxCount', {
-            'template': 'strongbox_max',
-            'condition': lambda area: area['Strongbox_SpawnChance'] > 0,
-            'default': 0,
-        }),
-        ('Strongbox_RarityWeight', {
-            'template': 'strongbox_rarity_weight',
-            'condition': lambda area: area['Strongbox_SpawnChance'] > 0,
-            'default': '',
-            'format': lambda value: ', '.join([str(v) for v in value]),
-        }),
+        # ('Strongbox_SpawnChance', {
+        #     'template': 'strongbox_spawn_chance',
+        #     'condition': lambda area: area['Strongbox_SpawnChance'] > 0,
+        # }),
+        # ('Strongbox_MaxCount', {
+        #     'template': 'strongbox_max',
+        #     'condition': lambda area: area['Strongbox_SpawnChance'] > 0,
+        #     'default': 0,
+        # }),
+        # ('Strongbox_RarityWeight', {
+        #     'template': 'strongbox_rarity_weight',
+        #     'condition': lambda area: area['Strongbox_SpawnChance'] > 0,
+        #     'default': '',
+        #     'format': lambda value: ', '.join([str(v) for v in value]),
+        # }),
         # bools
         ('IsMapArea', {
             'template': 'is_map_area',
@@ -449,12 +450,12 @@ class AreaParser(parser.BaseParser):
                     area)
                 if map:
                     map = map[0]
-                    if map['MapSeriesKey']['Id'] == 'MapWorlds':
+                    if str(map['MapSeriesKey'])[0] == 'MapWorlds':
                         data['main_page'] = map['BaseItemTypesKey']['Name']
                     else:
                         data['main_page'] = '%s (%s)' % (
                             map['BaseItemTypesKey']['Name'],
-                            map['MapSeriesKey']['Name']
+                            str(map['MapSeriesKey'])[0]
                         )
                 elif data.get('tags') and 'map' in data['tags']:
                     map_version = None
@@ -480,10 +481,11 @@ class AreaParser(parser.BaseParser):
                             tier = re.sub('^.*Harbinger', '', area['Id'])
                             if tier:
                                 if map_version is None:
-                                    data['main_page'] = '%s (%s)' % (
-                                        area['Name'],
-                                        lang[tier],
-                                    )
+                                    # data['main_page'] = '%s (%s)' % (
+                                    #     area['Name'],
+                                    #     lang[tier],
+                                    # )
+                                    continue
                                 else:
                                     data['main_page'] = '%s (%s) (%s)' % (
                                         area['Name'],

@@ -2037,11 +2037,47 @@ specification = Specification({
             ),
             Field(
                 name='Unknown1',
+                type='ulong',
+            ),
+            Field(
+                name='CitadelX',
+                type='int',
+            ),
+            Field(
+                name='CitadelY',
                 type='int',
             ),
             Field(
                 name='Unknown2',
-                type='int',
+                type='ulong'
+            ),
+            Field(
+                name='CitadelName',
+                type='ref|string'
+            ),
+            Field(
+                name='Unknown3',
+                type='int'
+            ),
+            Field(
+                name='BK2File',
+                type='ref|string'
+            ),
+            Field(
+                name='Unknown4',
+                type='int'
+            ),
+            Field(
+                name='Unknown5',
+                type='ulong'
+            ),
+            Field(
+                name='Unknown6',
+                type='ulong'
+            ),
+            Field(
+                name='Unknown7',
+                type='ulong'
             ),
         ),
     ),
@@ -14295,6 +14331,18 @@ specification = Specification({
                 file_path=True,
                 file_ext='.dds',
             ),
+            Field(
+                name='Delirious_DDSFile',
+                type='ref|string',
+                file_path=True,
+                file_ext='.dds',
+            ),
+            Field(
+                name='UberBlight_DDSFile',
+                type='ref|string',
+                file_path=True,
+                file_ext='.dds',
+            ),
         ),
     ),
     'MapSeriesTiers.dat': File(
@@ -22901,6 +22949,10 @@ specification = Specification({
             Field(
                 name='Name',
                 type='ref|string',
+            ),
+            Field(
+                name='IsDropDisabled',
+                type='bool',
             ),
         ),
     ),

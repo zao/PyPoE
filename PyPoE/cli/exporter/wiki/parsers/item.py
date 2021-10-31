@@ -565,7 +565,8 @@ class ItemsParser(SkillParserShared):
         'Heist': '3.12.0',
         'Ritual': '3.13.0',
         'Ultimatum': '3.14.0',
-        'Expedition': '3.15.0'
+        'Expedition': '3.15.0',
+        'Scourge': '3.16.0'
     }
 
     _IGNORE_DROP_LEVEL_CLASSES = (
@@ -2438,7 +2439,8 @@ class ItemsParser(SkillParserShared):
             'Heist',
             'Ritual',
             'Ultimatum',
-            'Expedition'
+            'Expedition',
+            'Scourge'
         ]
         # print('yep', map_series[d])
         return map_series[d]
