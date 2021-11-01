@@ -572,7 +572,8 @@ class ItemsParser(SkillParserShared):
         'Heist': '3.12.0',
         'Ritual': '3.13.0',
         'Ultimatum': '3.14.0',
-        'Expedition': '3.15.0'
+        'Expedition': '3.15.0',
+        'Scourge': '3.16.0'
     }
 
     _IGNORE_DROP_LEVEL_CLASSES = (
@@ -2962,7 +2963,8 @@ class ItemsParser(SkillParserShared):
             'Heist',
             'Ritual',
             'Ultimatum',
-            'Expedition'
+            'Expedition',
+            'Scourge'
         ]
         # print('yep', map_series[d])
         return map_series[d]
@@ -3534,12 +3536,12 @@ class ItemsParser(SkillParserShared):
         for rarity in RARITY:
             if rarity.id >= 5:
                 break
-            for i, (item, cost) in enumerate(
-                    source[rarity.name_upper + 'Purchase'],
-                    start=1):
-                prefix = 'purchase_cost_%s%s' % (rarity.name_lower, i)
-                infobox[prefix + '_name'] = item['Name']
-                infobox[prefix + '_amount'] = cost
+            # for i, (item, cost) in enumerate(
+            #         source[rarity.name_upper + 'Purchase'],
+            #         start=1):
+            #     prefix = 'purchase_cost_%s%s' % (rarity.name_lower, i)
+            #     infobox[prefix + '_name'] = item['Name']
+            #     infobox[prefix + '_amount'] = cost
 
     def by_rowid(self, parsed_args):
         return self._export(

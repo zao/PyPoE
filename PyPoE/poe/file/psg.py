@@ -245,7 +245,7 @@ class PSGFile(AbstractFileReadOnly):
         self.groups = []
 
         if isinstance(passive_skills_dat_file, DatFile):
-            #TODO check whether is read and raise exception
+            # TODO: check whether is read and raise exception
             self._passive_skills = passive_skills_dat_file.reader
         elif isinstance(passive_skills_dat_file, RelationalReader):
             self._passive_skills = passive_skills_dat_file.get_file(
