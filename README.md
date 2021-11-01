@@ -51,6 +51,10 @@ Usage
 --------
 * [Exporting data for the wiki](https://github.com/Project-Path-of-Exile-Wiki/PyPoE/wiki/PyPoE-101:-Item-exporting)
 
+Contributing
+--------
+* [Contribution guide](CONTRIBUTING.md)
+
 Credits - People
 --------
 * [Grinding Gear Games](http://www.grindinggear.com/) - they created many of the file formats and [Path of Exile](https://www.pathofexile.com/) obviously, so do not reuse their files anywhere without their permission and support them if you are able to :)
