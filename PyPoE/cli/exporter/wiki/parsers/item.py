@@ -2705,7 +2705,7 @@ class ItemsParser(SkillParserShared):
         return True
 
     _type_armour = _type_factory(
-        data_file='ComponentArmour.dat',
+        data_file='ArmourTypes.dat',
         data_mapping=(
             ('Armour', {
                 'template': 'armour',
@@ -2723,8 +2723,12 @@ class ItemsParser(SkillParserShared):
                 'template': 'movement_speed',
                 'condition': lambda v: v != 0,
             }),
+            ('Ward', {
+                'template': 'ward',
+                'condition': lambda v: v != 0,
+            }),
         ),
-        row_index=False,
+        row_index=True,
     )
 
     _type_shield = _type_factory(
