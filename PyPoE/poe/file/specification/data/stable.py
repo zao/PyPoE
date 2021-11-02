@@ -10779,6 +10779,14 @@ specification = Specification({
                 type='ulong',
                 key='Stats.dat',
             ),
+            Field(
+                name='ConsoleBlueprintLegend',
+                type='ref|string',
+            ),
+            Field(
+                name='Description',
+                type='ref|string',
+            ),
         ),
     ),
     'HeistJobsExperiencePerLevel.dat': File(

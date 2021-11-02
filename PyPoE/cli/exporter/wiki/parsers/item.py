@@ -3013,7 +3013,8 @@ class ItemsParser(SkillParserShared):
     _conflict_resolver_map = {
         'Active Skill Gem': _conflict_active_skill_gems,
         'QuestItem': _conflict_quest_items,
-        'HideoutDoodad': _conflict_hideout_doodad,
+        #TODO: Make a new doodad resolver that doesn't rely on 'HideoutNPCsKey'
+        #'HideoutDoodad': _conflict_hideout_doodad,
         'Map': _conflict_maps,
         'MapFragment': _conflict_map_fragments,
         'DivinationCard': _conflict_divination_card,
