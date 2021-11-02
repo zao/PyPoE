@@ -147,6 +147,22 @@ specification = Specification({
                 name='Message',
                 type='ref|string',
             ),
+            Field(
+                name='Unknown0',
+                type='byte',
+            ),
+            Field(
+                name='Unknown1',
+                type='byte',
+            ),
+            Field(
+                name='Unknown2',
+                type='byte',
+            ),
+            Field(
+                name='Unknown3',
+                type='byte',
+            ),
         ),
     ),
     'AchievementItems.dat': File(
@@ -229,6 +245,22 @@ specification = Specification({
             Field(
                 name='HideoutName',
                 type='ref|string',
+            ),
+            Field(
+                name='Unknown0',
+                type='byte',
+            ),
+            Field(
+                name='Unknown2',
+                type='byte',
+            ),
+            Field(
+                name='Unknown3',
+                type='byte',
+            ),
+            Field(
+                name='Unknown4',
+                type='byte',
             ),
         ),
     ),
@@ -19266,7 +19298,7 @@ specification = Specification({
             ),
             Field(
                 name='Stuck_AOFile',
-                type='ref|string',
+                type='ref|list|ref|string',
                 file_path=True,
                 file_ext='.ao',
             ),
@@ -19325,15 +19357,15 @@ specification = Specification({
                 type='ref|list|ulong',
             ),
             Field(
-                name='Key3',
-                type='ulong',
-            ),
-            Field(
                 name='Flag5',
                 type='bool',
             ),
             Field(
                 name='Unknown12',
+                type='int',
+            ),
+            Field(
+                name='Unknown13',
                 type='int',
             ),
         ),

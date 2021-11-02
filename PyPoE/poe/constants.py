@@ -605,23 +605,27 @@ class MAP_FRAGMENT_FAMILIES(IntEnumOverride):
     """
     Representation of map fragment families (MapFragmentFamilies.dat)
     """
-    BESTIARY = 0
+    BESTIARY_AND_SULPHITE = 0 #Maybe just master-related?
     BREACH = 1
-    CARTOGRAPHY = 2
-    RELIQUARY = 3
-    SHAPER = 4
-    ELDER = 5
-    DIVINATION = 6
-    TORMENT = 7
-    AMBUSH = 8
-    HARBINGER = 9
-    PERANDUS = 10
-    LEGION = 11
-    METAMORPH = 12
-    REGULAR = 13
-    RITUAL = 14
-    EXPEDITION = 15
-    SCOURGE = 16
+    CARTOGRAPHY_SCARAB = 2
+    RELIQUARY_SCARAB = 3
+    SHAPER_SCARAB = 4
+    ELDER_SCARAB = 5
+    DIVINATION_SCARAB = 6
+    TORMENT_SCARAB = 7
+    AMBUSH_SCARAB = 8
+    HARBINGER_SCARAB = 9
+    EXPEDITION_SCARAB = 10
+    LEGION_SCARAB = 11
+    METAMORPH_SCARAB = 12
+    BLIGHT_SCARAB = 13
+    ABYSS_SCARAB = 14
+    KARUI = 15
+    MARAKETH = 16
+    ETERNAL = 17
+    TEMPLAR = 18
+    VAAL = 19
+    REGULAR = 20
 
     DEFAULT = REGULAR
     STANDARD = REGULAR
