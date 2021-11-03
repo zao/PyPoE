@@ -270,8 +270,12 @@ class PSGFile(AbstractFileReadOnly):
         version = struct.unpack_from('<B', data, offset=offset)[0]
         offset += 1
 
-        unknown_length = struct.unpack_from('<B', data, offset=offset)[0]
+        unknown_length = 8 
+        #We used to be able to fetch the count of throwaway unknown data from the start of the .psg, but it doesn't work
+        #as of 3.16. Manually, I looked for where there's a 32 bit unsigned int equal to 7, and ignored everything before it.
+        #unknown_length = struct.unpack_from('<B', data, offset=offset)[0]
         offset += 1
+
 
         unknown = struct.unpack_from(
             '<' + 'B'*unknown_length, data, offset=offset
@@ -279,6 +283,10 @@ class PSGFile(AbstractFileReadOnly):
         offset += 1*unknown_length
 
         root_length = struct.unpack_from('<I', data, offset=offset)[0]
+        if(root_length > 1000):
+            raise ValueError(
+                'root_length is unrealistically large at {}.\nStopping to prevent allocating too much memory'.format(root_length)
+            ) 
         offset += 4
 
         self.root_passives = list(struct.unpack_from(

@@ -4047,7 +4047,7 @@ specification = Specification({
                 key='BuffDefinitions.dat',
             ),
             Field(
-                name='Data0',
+                name='Buff_StatValues',
                 type='ref|list|int',
             ),
             Field(
@@ -18777,7 +18777,7 @@ specification = Specification({
                 file_ext='.dds',
             ),
             Field(
-                name='Stats',
+                name='StatsKeys',
                 type='ref|list|ulong',
                 key='Stats.dat',
             ),
@@ -18808,7 +18808,7 @@ specification = Specification({
                 type='ref|string',
             ),
             Field(
-                name='Characters',
+                name='CharactersKeys',
                 type='ref|list|ulong',
                 key='Characters.dat',
             ),
@@ -18829,7 +18829,7 @@ specification = Specification({
                 type='bool',
             ),
             Field(
-                name='AchievementItem',
+                name='AchievementItemsKey',
                 type='ulong',
                 key='AchievementItems.dat',
             ),
@@ -18847,7 +18847,7 @@ specification = Specification({
                 type='bool',
             ),
             Field(
-                name='ReminderStrings',
+                name='Reminder_ClientStringsKeys',
                 type='ref|list|ulong',
                 key='ClientStrings.dat',
             ),
@@ -18868,12 +18868,12 @@ specification = Specification({
                 type='int',
             ),
             Field(
-                name='PassiveSkillBuffs',
+                name='PassiveSkillBuffsKeys',
                 type='ref|list|ulong',
                 key='BuffTemplates.dat',
             ),
             Field(
-                name='GrantedEffectsPerLevel',
+                name='GrantedEffectsPerLevelKey',
                 type='ulong',
                 key='GrantedEffectsPerLevel.dat',
             ),
@@ -18909,8 +18909,8 @@ specification = Specification({
                 fields=('Stat1Value', 'Stat2Value', 'Stat3Value', 'Stat4Value', 'Stat5Value'),
             ),
             VirtualField(
-                name='StatsZip',
-                fields=('Stats', 'StatValues'),
+                name='Stats',
+                fields=('StatsKeys', 'StatValues'),
                 zip=True,
             ),
         ),
