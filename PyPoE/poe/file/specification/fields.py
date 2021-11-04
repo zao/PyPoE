@@ -448,8 +448,7 @@ class File:
                     pass
 
             for item in delete_zip:
-                if item in self.columns_zip.keys(): #This may just be hiding errors.
-                    del self.columns_zip[item]
+                del self.columns_zip[item]
 
     def __getitem__(self, item):
         return getattr(self, item)

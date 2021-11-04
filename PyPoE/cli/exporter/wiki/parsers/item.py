@@ -766,12 +766,26 @@ class ItemsParser(SkillParserShared):
             'Metadata/Items/Gems/SupportGemConcentratedEffect': '',
             'Metadata/Items/Gems/SupportGemIncreasedCriticalStrikes': '',
             'Metadata/Items/Gems/SupportGemMeleeSplash': '',
+            'Metadata/Items/Gems/SkillGemEnergyBlade': '',
             # =================================================================
             # One Hand Axes
             # =================================================================
 
             'Metadata/Items/Weapons/OneHandWeapons/OneHandAxes/OneHandAxe22':
                 '',
+
+            # =================================================================
+            # One Hand Swords
+            # =================================================================
+            'Metadata/Items/Weapons/OneHandWeapons/OneHandSwords/StormBladeOneHand':
+                ' (One Handed Sword)',
+
+            # =================================================================
+            # Two Hand Swords
+            # =================================================================
+            'Metadata/Items/Weapons/TwoHandWeapons/TwoHandSwords/StormBladeTwoHand':
+                ' (Two Handed Sword)',
+            
             # =================================================================
             # Boots
             # =================================================================
