@@ -3802,7 +3802,7 @@ class ItemsParser(SkillParserShared):
 
     def _print_item_rowid(self, parsed_args, base_item_type):
         #Don't print anything if not running in the rowid mode.
-        if (parsed_args.start is None) or (parsed_args.end is None):
+        if (not 'start' in vars(parsed_args).keys()) or (not 'end' in vars(parsed_args).keys()):
             return
 
         export_row_count = parsed_args.end - parsed_args.start
