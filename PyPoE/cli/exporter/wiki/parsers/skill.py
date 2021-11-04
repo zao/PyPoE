@@ -84,7 +84,7 @@ class SkillHandler(ExporterHandler):
         # by row ID
         s_rid = skill_sub.add_parser(
             'by_row',
-            help='Extract areas by rowid.'
+            help='Extract skills by rowid.'
         )
         self.add_default_parsers(
             parser=s_rid,
@@ -303,7 +303,7 @@ class SkillParserShared(parser.BaseParser):
             self._skill_stat_filters.read(self.file_system.get_file(
                 'Metadata/StatDescriptions/skillpopup_stat_filters.txt'
             ))
-            #TODO remove once fixed
+            # TODO: remove once fixed
             #self._skill_stat_filters.skills['spirit_offering'] = SkillEntry(skill_id='spirit_offering', translation_file_path='Metadata/StatDescriptions/offering_skill_stat_descriptions.txt', stats=[])
 
         return self._skill_stat_filters
@@ -742,7 +742,7 @@ class SkillParser(SkillParserShared):
             if not parsed_args.allow_skill_gems and skill in \
                     self.rr['SkillGems.dat'].index['GrantedEffectsKey']:
                 console(
-                    'Skipping skill gem skill "%s"' % skill['Id'],
+                    'Skipping skill gem skill "{}" at row {}'.format(skill['Id'], skill.rowid),
                     msg=Msg.warning)
                 continue
             data = OrderedDict()
@@ -751,7 +751,7 @@ class SkillParser(SkillParserShared):
                 self._skill(ge=skill, infobox=data, parsed_args=parsed_args)
             except Exception as e:
                 console(
-                    'Error when parsing skill "%s":' % skill['Id'],
+                    'Error when parsing skill "{}" at {}:'.format(skill['Id'], skill.rowid),
                     msg=Msg.error)
                 console(traceback.format_exc(), msg=Msg.error)
 
@@ -759,7 +759,6 @@ class SkillParser(SkillParserShared):
                 data=data,
                 cmdargs=parsed_args,
             )
-
             r.add_result(
                 text=cond,
                 out_file='skill_%s.txt' % data['skill_id'],
