@@ -293,7 +293,7 @@ class PassiveSkillParser(parser.BaseParser):
             #atlas_start_node doesn't have an icon path
             else:
                 data['icon'] = ''
-                warnings.warn('Icon path file not found for {}: {}'.format(passive['Id'], passive['Name']))
+                warnings.warn(f"Icon path file not found for {passive['Id']}: {passive['Name']}")
 
             data['icon'] = data['icon'].replace('.dds', '')
 

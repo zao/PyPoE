@@ -3323,7 +3323,7 @@ class ItemsParser(SkillParserShared):
 
     def _print_item_rowid(self, parsed_args, base_item_type):
         #Don't print anything if not running in the rowid mode.
-        if (not 'start' in vars(parsed_args).keys()) or (not 'end' in vars(parsed_args).keys()):
+        if not set(['start', 'end']).issubset(vars(parsed_args).keys()):
             return
 
         export_row_count = parsed_args.end - parsed_args.start
@@ -3335,7 +3335,7 @@ class ItemsParser(SkillParserShared):
         
         item_offset = base_item_type.rowid - parsed_args.start
         if (item_offset == 0) or item_offset % print_granularity == 0:
-            console('Processing item with rowid {}: {}'.format(base_item_type.rowid, base_item_type['Name']))
+            console(f"Processing item with rowid {base_item_type.rowid}: {base_item_type['Name']}")
         return
 
     def _format_map_name(self, base_item_type, map_series, language=None):
