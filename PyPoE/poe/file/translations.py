@@ -1052,8 +1052,7 @@ class TranslationQuantifierHandler(TranslationReprMixin):
                     try:
                         self.index_handlers[handler.id].append(int(args[0]))
                     except ValueError as e:
-                        warnings.warn('Broken quantifier "%s" - Error: %s' %
-                                      (string, e.args[0]), TranslationWarning)
+                        warnings.warn(f'Broken quantifier "{string}" - Error: {e.args[0]}', TranslationWarning)
                 elif handler.type == TranslationQuantifier.QuantifierTypes.STRING:
                     self.string_handlers[handler.id] = args
             else:
@@ -1595,8 +1594,7 @@ class TranslationFile(AbstractFileReadOnly):
                 translation.diff(other)
                 print('')'''
 
-                warnings.warn('Duplicate id "%s"' %
-                              translation_id, DuplicateIdentifierWarning)
+                warnings.warn(f'Duplicate id "{translation_id}"', DuplicateIdentifierWarning)
                 self.translations_hash[translation_id].append(translation)
         else:
             self.translations_hash[translation_id] = [translation, ]

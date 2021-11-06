@@ -285,7 +285,7 @@ class PSGFile(AbstractFileReadOnly):
         root_length = struct.unpack_from('<I', data, offset=offset)[0]
         if(root_length > 1000):
             raise ValueError(
-                'root_length is unrealistically large at {}.\nStopping to prevent allocating too much memory'.format(root_length)
+                f'root_length is unrealistically large at {root_length}.\nStopping to prevent allocating too much memory'
             ) 
         offset += 4
 

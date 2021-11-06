@@ -2812,10 +2812,11 @@ class ItemsParser(SkillParserShared):
         row_index=True,
     )
 
+    _cls_map = dict()
     '''
     This defines the expected data elements for an item class.
     '''
-    _cls_map = {
+    _cls_map = {  
         # Jewellery
         'Amulet': (_type_amulet, ),
         # Armour types
