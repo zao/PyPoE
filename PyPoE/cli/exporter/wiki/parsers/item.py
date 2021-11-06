@@ -3232,8 +3232,6 @@ class ItemsParser(SkillParserShared):
             cls_id = base_item_type['ItemClassesKey']['Id']
             m_id = base_item_type['Id']
 
-            self._print_item_rowid(parsed_args, base_item_type)
-
             infobox = OrderedDict()
             self._process_base_item_type(base_item_type, infobox)
             self._process_purchase_costs(base_item_type, infobox)
@@ -3320,23 +3318,6 @@ class ItemsParser(SkillParserShared):
                 )
 
         return r
-
-    def _print_item_rowid(self, parsed_args, base_item_type):
-        #Don't print anything if not running in the rowid mode.
-        if not set(['start', 'end']).issubset(vars(parsed_args).keys()):
-            return
-
-        export_row_count = parsed_args.end - parsed_args.start
-        #If we're printing less than 100 rows, print every rowid
-        if export_row_count <= 100:
-            print_granularity = 1
-        else:
-            print_granularity = export_row_count//100
-        
-        item_offset = base_item_type.rowid - parsed_args.start
-        if (item_offset == 0) or item_offset % print_granularity == 0:
-            console(f"Processing item with rowid {base_item_type.rowid}: {base_item_type['Name']}")
-        return
 
     def _format_map_name(self, base_item_type, map_series, language=None):
         if language is None:
