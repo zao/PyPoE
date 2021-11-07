@@ -1359,24 +1359,6 @@ class MonsterParser(GenericLuaParser):
 
 
 class CraftingBenchParser(GenericLuaParser):
-
-    # 3.15
-    # This is a hack and should be properly parsed, but it works for now.
-    # TODO: bring CraftingBenchSortCategory.dat in and parse the affixes from it
-
-    def SortCategoryHelper(d):
-        affix_types = [
-            'CannotBeGenerated',
-            'Prefix',
-            'Suffix',
-            'Other',
-            'Enchant',
-            'Undiscovered',
-            'Veiled'
-        ]
-        # print('yep', sort[d])
-        return affix_types[d]
-
     _DATA = (
         ('HideoutNPCsKey', {
             'key': 'npc',
@@ -1388,7 +1370,7 @@ class CraftingBenchParser(GenericLuaParser):
         ('Order', {
             'key': 'ordinal',
         }),
-        ('ModsKey', {
+        ('AddMod', {
             'key': 'mod_id',
             'value': lambda v: v['Id'],
         }),
@@ -1399,12 +1381,12 @@ class CraftingBenchParser(GenericLuaParser):
         ('Name', {
             'key': 'name',
         }),
-        ('ItemClassesKeys', {
+        ('ItemClasses', {
             'key': 'item_classes',
             'value': lambda v: [k['Name'] for k in v],
             'default': [],
         }),
-        ('ItemClassesKeys', {
+        ('ItemClasses', {
             'key': 'item_classes_ids',
             'value': lambda v: [k['Id'] for k in v],
             'default': [],
@@ -1435,7 +1417,7 @@ class CraftingBenchParser(GenericLuaParser):
         #     'key': 'mod_group',
         #     'default': '',
         # }),
-        ('CraftingItemClassCategoriesKeys', {
+        ('CraftingItemClassCategories', {
             'key': 'crafting_item_class_categories',
             'value': lambda v: [k['Text'] for k in v],
         }),
@@ -1453,8 +1435,7 @@ class CraftingBenchParser(GenericLuaParser):
         }),
         ('SortCategory', {
             'key': 'affix_type',
-            'value': SortCategoryHelper,
-            # lambda v: v['SortCategoryKey']['Id'],
+            'value': lambda v: v['Id'],
         }),
     )
 
@@ -1470,7 +1451,7 @@ class CraftingBenchParser(GenericLuaParser):
                 row, self._DATA, data['crafting_bench_options'])
             data['crafting_bench_options'][-1]['id'] = row.rowid
 
-            for i, base_item in enumerate(row['Cost_BaseItemTypesKeys']):
+            for i, base_item in enumerate(row['Cost_BaseItemTypes']):
                 data['crafting_bench_options_costs'].append(OrderedDict((
                     ('option_id', row.rowid),
                     ('name', base_item['Name']),
