@@ -2392,25 +2392,6 @@ class ItemsParser(SkillParserShared):
         function=_currency_extra,
     )
 
-    _master_hideout_doodad_map = (
-        # ('HideoutNPCsKey', {
-        #     'template': 'master',
-        #     'format': lambda v: v['Hideout_NPCsKey']['Name'],
-        #     'condition': lambda v: v is not None,
-        # }),
-        # ('MasterLevel', {
-        #     'template': 'master_level_requirement',
-        # }),
-        # ('FavourCost', {
-        #     'template': 'master_favour_cost',
-        # }),
-    )
-
-    def _apply_master_map(self, infobox, base_item_type, hideout):
-        if not hideout['IsNonMasterDoodad']:
-            _apply_column_map(infobox, self._master_hideout_doodad_map,
-                                   hideout)
-
     _type_hideout_doodad = _type_factory(
         data_file='HideoutDoodads.dat',
         data_mapping=(
@@ -2418,26 +2399,12 @@ class ItemsParser(SkillParserShared):
                 'template': 'is_master_doodad',
                 'format': lambda v: not v,
             }),
-            # ('HideoutNPCsKey', {
-            #     'template': 'master',
-            #     'format': lambda v: v['Hideout_NPCsKey']['Name'],
-            #     'condition': lambda v: v,
-            # }),
-            # ('FavourCost', {
-            #     'template': 'master_favour_cost',
-            #     #'condition': lambda v: v,
-            # }),
-            # ('MasterLevel', {
-            #     'template': 'master_level_requirement',
-            #     #'condition': lambda v: v,
-            # }),
             ('Variation_AOFiles', {
                 'template': 'variation_count',
                 'format': lambda v: len(v),
             }),
         ),
         row_index=True,
-        function=_apply_master_map,
     )
 
     def _maps_extra(self, infobox, base_item_type, maps):
