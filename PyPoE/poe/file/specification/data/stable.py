@@ -14400,6 +14400,18 @@ specification = Specification({
                 name='HeistTier',
                 type='int',
             ),
+            Field(
+                name='RitualTier',
+                type='int',
+            ),
+            Field(
+                name='ExpeditionTier',
+                type='int',
+            ),
+            Field(
+                name='HellscapeTier', #AKA Scourge
+                type='int',
+            ),
         ),
     ),
     'MapStatConditions.dat': File(
