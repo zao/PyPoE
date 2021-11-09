@@ -4015,7 +4015,7 @@ specification = Specification({
                 key='BuffDefinitions.dat',
             ),
             Field(
-                name='Data0',
+                name='Buff_StatValues',
                 type='ref|list|int',
             ),
             Field(
@@ -5096,7 +5096,7 @@ specification = Specification({
                 type='ref|string',
             ),
             Field(
-                name='Unknown0',
+                name='Unknown0', #Might be a rate divisor. The per-minute costs are 60 while normal costs are 1
                 type='int',
             ),
         ),
@@ -5260,6 +5260,23 @@ specification = Specification({
                 name='AddModOrEnchantment',
                 fields=('AddMod','AddEnchantment'),
             )
+        ),
+    ),
+    'CraftingBenchSortCategories.dat': File(
+        fields=(
+            Field(
+                name='Id',
+                type='ref|string',
+                unique=True,
+            ),
+            Field(
+                name='Key0',
+                type='ulong',
+            ),
+            Field(
+                name='IsVisible',
+                type='bool',
+            ),
         ),
     ),
     'CraftingBenchSortCategories.dat': File(
@@ -10751,6 +10768,14 @@ specification = Specification({
                 type='ulong',
                 key='Stats.dat',
             ),
+            Field(
+                name='ConsoleBlueprintLegend',
+                type='ref|string',
+            ),
+            Field(
+                name='Description',
+                type='ref|string',
+            ),
         ),
     ),
     'HeistJobsExperiencePerLevel.dat': File(
@@ -11615,19 +11640,31 @@ specification = Specification({
             ),
         ),
     ),
-    'HideoutDoodads.dat': File(
+    'HellscapeAOReplacements.dat': File(
         fields=(
             Field(
-                name='BaseItemTypesKey',
-                type='ulong',
-                key='BaseItemTypes.dat',
-                unique=True,
+                name='Unknown0',
+                type='ref|string',
             ),
             Field(
-                name='Variation_AOFiles',
-                type='ref|list|ref|string',
-                file_path=True,
-                file_ext='.ao',
+                name='HASH32',
+                type='int',
+            ),
+            Field(
+                name='Unknown1',
+                type='ref|string',
+            ),
+        ),
+    ),
+    'HellscapeAreaPacks.dat': File(
+        fields=(
+            Field(
+                name='Key0',
+                type='ulong',
+            ),
+            Field(
+                name='Keys0',
+                type='ref|list|ulong',
             ),
             Field(
                 name='IsNonMasterDoodad',
@@ -14398,18 +14435,6 @@ specification = Specification({
             ),
             Field(
                 name='HeistTier',
-                type='int',
-            ),
-            Field(
-                name='RitualTier',
-                type='int',
-            ),
-            Field(
-                name='ExpeditionTier',
-                type='int',
-            ),
-            Field(
-                name='HellscapeTier', #AKA Scourge
                 type='int',
             ),
         ),
@@ -19282,7 +19307,7 @@ specification = Specification({
             ),
             Field(
                 name='Stuck_AOFile',
-                type='ref|string',
+                type='ref|list|ref|string',
                 file_path=True,
                 file_ext='.ao',
             ),
@@ -19341,15 +19366,15 @@ specification = Specification({
                 type='ref|list|ulong',
             ),
             Field(
-                name='Key3',
-                type='ulong',
-            ),
-            Field(
                 name='Flag5',
                 type='bool',
             ),
             Field(
                 name='Unknown12',
+                type='int',
+            ),
+            Field(
+                name='Unknown13',
                 type='int',
             ),
         ),

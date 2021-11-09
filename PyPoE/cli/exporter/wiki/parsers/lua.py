@@ -507,7 +507,8 @@ class BestiaryParser(GenericLuaParser):
                 row, self._COPY_KEYS_BESTIARY_COMPONENTS, components
             )
             if row['BeastRarity'] != RARITY.ANY:
-                components[-1]['rarity'] = self.rr['ClientStrings.dat'].index['Id']['ItemDisplayString' + row['BeastRarity'].name_upper]['Text']
+                display_string = 'ItemDisplayString' + row['BeastRarity'].name_upper
+                components[-1]['rarity'] = self.rr['ClientStrings.dat'].index['Id'][display_string]['Text']
 
         recipe_components = []
         for recipe_id, data in recipe_components_temp.items():
