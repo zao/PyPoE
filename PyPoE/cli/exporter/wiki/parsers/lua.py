@@ -1359,6 +1359,27 @@ class MonsterParser(GenericLuaParser):
 
 
 class CraftingBenchParser(GenericLuaParser):
+    def RecipeLocationGenerator(val):
+        text_descriptions = []
+        areas = []
+        for key in val:
+            if len(key['UnlockDescription']) > 0:
+                text_descriptions.append(key['UnlockDescription'])
+            # Default to the text description instead of the more ambiguous zone name.
+            # This defaulting is useful for disambiguating the different Aspirant's Trial zones
+            if len(key['UnlockArea']['Name']) > 0 and len(text_descriptions) == 0:
+                areas.append(key['UnlockArea']['Name'])
+        return ' • '.join(text_descriptions + areas)
+        
+    def DetermineModifier(val):
+        # AddMod value
+        if(not val[0] is None and len(val[0]) > 0):
+            return val[0]['Id']
+        # AddEnchantment value
+        elif (not val[1] is None and len(val[1]) > 0):
+            return val[1]['Id']
+        return None
+
     _DATA = (
         ('HideoutNPCsKey', {
             'key': 'npc',
@@ -1370,9 +1391,9 @@ class CraftingBenchParser(GenericLuaParser):
         ('Order', {
             'key': 'ordinal',
         }),
-        ('AddMod', {
+        ('AddModOrEnchantment', {
             'key': 'mod_id',
-            'value': lambda v: v['Id'],
+            'value': DetermineModifier,
         }),
         ('RequiredLevel', {
             'key': 'required_level',
@@ -1407,7 +1428,7 @@ class CraftingBenchParser(GenericLuaParser):
         }),
         ('RecipeIds', {
             'key': 'recipe_unlock_location',
-            'value': lambda v: '<br>'.join([k['UnlockDescription'] for k in v]),
+            'value': RecipeLocationGenerator,
             'default': '',
         }),
         ('Tier', {

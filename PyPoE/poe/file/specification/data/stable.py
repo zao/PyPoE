@@ -5256,6 +5256,10 @@ specification = Specification({
                 fields=('Cost_BaseItemTypes', 'Cost_Values'),
                 zip=True,
             ),
+            VirtualField(
+                name='AddModOrEnchantment',
+                fields=('AddMod','AddEnchantment'),
+            )
         ),
     ),
     'CraftingBenchSortCategories.dat': File(
@@ -19886,8 +19890,9 @@ specification = Specification({
                 type='int',
             ),
             Field(
-                name='Key0',
+                name='UnlockArea',
                 type='ulong',
+                key='WorldAreas.dat',
             ),
         ),
     ),
