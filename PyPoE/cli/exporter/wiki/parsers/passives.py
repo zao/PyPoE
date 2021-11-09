@@ -39,6 +39,7 @@ Internal API
 # Python
 import re
 import os.path
+import warnings
 from functools import partialmethod
 from collections import OrderedDict
 
@@ -289,6 +290,10 @@ class PassiveSkillParser(parser.BaseParser):
                         data['icon'] = '%s (%s)' % (icon[-1], icon[-2])
                 else:
                     data['icon'] = icon[-1]
+            #atlas_start_node doesn't have an icon path
+            else:
+                data['icon'] = ''
+                warnings.warn(f"Icon path file not found for {passive['Id']}: {passive['Name']}")
 
             data['icon'] = data['icon'].replace('.dds', '')
 

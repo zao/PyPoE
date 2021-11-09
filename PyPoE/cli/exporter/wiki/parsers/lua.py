@@ -1438,7 +1438,7 @@ class CraftingBenchParser(GenericLuaParser):
         #     'default': '',
         # }),
         ('CraftingItemClassCategoriesKeys', {
-            'key': 'crafting_item_class_categories',
+            'key': 'item_class_categories',
             'value': lambda v: [k['Text'] for k in v],
         }),
         # ('CraftingBenchUnlockCategoriesKeys', {
