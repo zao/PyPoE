@@ -56,6 +56,7 @@ from PyPoE.cli.exporter.wiki.parsers.skill import SkillParserShared
 
 
 def _apply_column_map(infobox, column_map, list_object):
+    
     for k, data in column_map:
         value = list_object[k]
         if data.get('condition') and not data['condition'](value):
@@ -572,7 +573,8 @@ class ItemsParser(SkillParserShared):
         'Heist': '3.12.0',
         'Ritual': '3.13.0',
         'Ultimatum': '3.14.0',
-        'Expedition': '3.15.0'
+        'Expedition': '3.15.0',
+        'Scourge': '3.16.0'
     }
 
     _IGNORE_DROP_LEVEL_CLASSES = (
@@ -775,6 +777,7 @@ class ItemsParser(SkillParserShared):
             'Metadata/Items/Gems/SupportGemConcentratedEffect': '',
             'Metadata/Items/Gems/SupportGemIncreasedCriticalStrikes': '',
             'Metadata/Items/Gems/SupportGemMeleeSplash': '',
+            'Metadata/Items/Gems/SkillGemEnergyBlade': '',
             # =================================================================
             # One Hand Axes
             # =================================================================
@@ -786,6 +789,19 @@ class ItemsParser(SkillParserShared):
 
             'Metadata/Items/Weapons/OneHandWeapons/OneHandAxes/OneHandAxe22':
                 '',
+
+            # =================================================================
+            # One Hand Swords
+            # =================================================================
+            'Metadata/Items/Weapons/OneHandWeapons/OneHandSwords/StormBladeOneHand':
+                ' (One Handed Sword)',
+
+            # =================================================================
+            # Two Hand Swords
+            # =================================================================
+            'Metadata/Items/Weapons/TwoHandWeapons/TwoHandSwords/StormBladeTwoHand':
+                ' (Two Handed Sword)',
+            
             # =================================================================
             # Boots
             # =================================================================
@@ -2707,24 +2723,40 @@ class ItemsParser(SkillParserShared):
     _type_armour = _type_factory(
         data_file='ArmourTypes.dat',
         data_mapping=(
-            ('Armour', {
-                'template': 'armour',
+            ('ArmourMin', {
+                'template': 'armour_min',
                 'condition': lambda v: v > 0,
             }),
-            ('Evasion', {
-                'template': 'evasion',
+            ('ArmourMax', {
+                'template': 'armour_max',
                 'condition': lambda v: v > 0,
             }),
-            ('EnergyShield', {
-                'template': 'energy_shield',
+            ('EvasionMin', {
+                'template': 'evasion_min',
+                'condition': lambda v: v > 0,
+            }),
+            ('EvasionMin', {
+                'template': 'evasion_max',
+                'condition': lambda v: v > 0,
+            }),
+            ('EnergyShieldMin', {
+                'template': 'energy_shield_min',
+                'condition': lambda v: v > 0,
+            }),
+            ('EnergyShieldMax', {
+                'template': 'energy_shield_max',
                 'condition': lambda v: v > 0,
             }),
             ('IncreasedMovementSpeed', {
                 'template': 'movement_speed',
                 'condition': lambda v: v != 0,
             }),
-            ('Ward', {
-                'template': 'ward',
+            ('WardMin', {
+                'template': 'ward_min',
+                'condition': lambda v: v != 0,
+            }),
+            ('WardMax', {
+                'template': 'ward_max',
                 'condition': lambda v: v != 0,
             }),
         ),
@@ -2880,25 +2912,6 @@ class ItemsParser(SkillParserShared):
         ),
     )
 
-    _master_hideout_doodad_map = (
-        ('HideoutNPCsKey', {
-            'template': 'master',
-            'format': lambda v: v['Hideout_NPCsKey']['Name'],
-            'condition': lambda v: v is not None,
-        }),
-        ('MasterLevel', {
-            'template': 'master_level_requirement',
-        }),
-        ('FavourCost', {
-            'template': 'master_favour_cost',
-        }),
-    )
-
-    def _apply_master_map(self, infobox, base_item_type, hideout):
-        if not hideout['IsNonMasterDoodad']:
-            _apply_column_map(infobox, self._master_hideout_doodad_map,
-                                   hideout)
-
     _type_hideout_doodad = _type_factory(
         data_file='HideoutDoodads.dat',
         data_mapping=(
@@ -2906,26 +2919,12 @@ class ItemsParser(SkillParserShared):
                 'template': 'is_master_doodad',
                 'format': lambda v: not v,
             }),
-            ('HideoutNPCsKey', {
-                'template': 'master',
-                'format': lambda v: v['Hideout_NPCsKey']['Name'],
-                'condition': lambda v: v,
-            }),
-            ('FavourCost', {
-                'template': 'master_favour_cost',
-                #'condition': lambda v: v,
-            }),
-            ('MasterLevel', {
-                'template': 'master_level_requirement',
-                #'condition': lambda v: v,
-            }),
             ('Variation_AOFiles', {
                 'template': 'variation_count',
                 'format': lambda v: len(v),
             }),
         ),
         row_index=True,
-        function=_apply_master_map,
     )
 
     def _maps_extra(self, infobox, base_item_type, maps):
@@ -2962,7 +2961,8 @@ class ItemsParser(SkillParserShared):
             'Heist',
             'Ritual',
             'Ultimatum',
-            'Expedition'
+            'Expedition',
+            'Scourge'
         ]
         # print('yep', map_series[d])
         return map_series[d]
@@ -3299,10 +3299,15 @@ class ItemsParser(SkillParserShared):
         row_index=True,
     )
 
-    _cls_map = {
+    _cls_map = dict()
+    '''
+    This defines the expected data elements for an item class.
+    '''
+    _cls_map = {  
         # Jewellery
         'Amulet': (_type_amulet, ),
         # Armour types
+        'Armour': (_type_level, _type_attribute, _type_armour, ),
         'Gloves': (_type_level, _type_attribute, _type_armour, ),
         'Boots': (_type_level, _type_attribute, _type_armour, ),
         'Body Armour': (_type_level, _type_attribute, _type_armour, ),
@@ -3507,7 +3512,8 @@ class ItemsParser(SkillParserShared):
     _conflict_resolver_map = {
         'Active Skill Gem': _conflict_active_skill_gems,
         'QuestItem': _conflict_quest_items,
-        'HideoutDoodad': _conflict_hideout_doodad,
+        #TODO: Make a new doodad resolver that doesn't rely on 'HideoutNPCsKey'
+        #'HideoutDoodad': _conflict_hideout_doodad,
         'Map': _conflict_maps,
         'MapFragment': _conflict_map_fragments,
         'DivinationCard': _conflict_divination_card,
@@ -3534,12 +3540,12 @@ class ItemsParser(SkillParserShared):
         for rarity in RARITY:
             if rarity.id >= 5:
                 break
-            for i, (item, cost) in enumerate(
-                    source[rarity.name_upper + 'Purchase'],
-                    start=1):
-                prefix = 'purchase_cost_%s%s' % (rarity.name_lower, i)
-                infobox[prefix + '_name'] = item['Name']
-                infobox[prefix + '_amount'] = cost
+            # for i, (item, cost) in enumerate(
+            #         source[rarity.name_upper + 'Purchase'],
+            #         start=1):
+            #     prefix = 'purchase_cost_%s%s' % (rarity.name_lower, i)
+            #     infobox[prefix + '_name'] = item['Name']
+            #     infobox[prefix + '_amount'] = cost
 
     def by_rowid(self, parsed_args):
         return self._export(

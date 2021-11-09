@@ -506,10 +506,9 @@ class BestiaryParser(GenericLuaParser):
             self._copy_from_keys(
                 row, self._COPY_KEYS_BESTIARY_COMPONENTS, components
             )
-            if row['RarityKey'] != RARITY.ANY:
-                components[-1]['rarity'] = self.rr['ClientStrings.dat'].index[
-                    'Id']['ItemDisplayString' + row['RarityKey'].name_upper][
-                    'Text']
+            if row['BeastRarity'] != RARITY.ANY:
+                display_string = 'ItemDisplayString' + row['BeastRarity'].name_upper
+                components[-1]['rarity'] = self.rr['ClientStrings.dat'].index['Id'][display_string]['Text']
 
         recipe_components = []
         for recipe_id, data in recipe_components_temp.items():
@@ -1361,23 +1360,26 @@ class MonsterParser(GenericLuaParser):
 
 
 class CraftingBenchParser(GenericLuaParser):
-
-    # 3.15
-    # This is a hack and should be properly parsed, but it works for now.
-    # TODO: bring CraftingBenchSortCategory.dat in and parse the affixes from it
-
-    def SortCategoryHelper(d):
-        affix_types = [
-            'CannotBeGenerated',
-            'Prefix',
-            'Suffix',
-            'Other',
-            'Enchant',
-            'Undiscovered',
-            'Veiled'
-        ]
-        # print('yep', sort[d])
-        return affix_types[d]
+    def RecipeLocationGenerator(val):
+        text_descriptions = []
+        areas = []
+        for key in val:
+            if len(key['UnlockDescription']) > 0:
+                text_descriptions.append(key['UnlockDescription'])
+            # Default to the text description instead of the more ambiguous zone name.
+            # This defaulting is useful for disambiguating the different Aspirant's Trial zones
+            if len(key['UnlockArea']['Name']) > 0 and len(text_descriptions) == 0:
+                areas.append(key['UnlockArea']['Name'])
+        return ' • '.join(text_descriptions + areas)
+        
+    def DetermineModifier(val):
+        # AddMod value
+        if(not val[0] is None and len(val[0]) > 0):
+            return val[0]['Id']
+        # AddEnchantment value
+        elif (not val[1] is None and len(val[1]) > 0):
+            return val[1]['Id']
+        return None
 
     _DATA = (
         ('HideoutNPCsKey', {
@@ -1390,9 +1392,9 @@ class CraftingBenchParser(GenericLuaParser):
         ('Order', {
             'key': 'ordinal',
         }),
-        ('ModsKey', {
+        ('AddModOrEnchantment', {
             'key': 'mod_id',
-            'value': lambda v: v['Id'],
+            'value': DetermineModifier,
         }),
         ('RequiredLevel', {
             'key': 'required_level',
@@ -1401,12 +1403,12 @@ class CraftingBenchParser(GenericLuaParser):
         ('Name', {
             'key': 'name',
         }),
-        ('ItemClassesKeys', {
+        ('ItemClasses', {
             'key': 'item_classes',
             'value': lambda v: [k['Name'] for k in v],
             'default': [],
         }),
-        ('ItemClassesKeys', {
+        ('ItemClasses', {
             'key': 'item_classes_ids',
             'value': lambda v: [k['Id'] for k in v],
             'default': [],
@@ -1427,7 +1429,7 @@ class CraftingBenchParser(GenericLuaParser):
         }),
         ('RecipeIds', {
             'key': 'recipe_unlock_location',
-            'value': lambda v: '<br>'.join([k['UnlockDescription'] for k in v]),
+            'value': RecipeLocationGenerator,
             'default': '',
         }),
         ('Tier', {
@@ -1455,8 +1457,7 @@ class CraftingBenchParser(GenericLuaParser):
         }),
         ('SortCategory', {
             'key': 'affix_type',
-            'value': SortCategoryHelper,
-            # lambda v: v['SortCategoryKey']['Id'],
+            'value': lambda v: v['Id'],
         }),
     )
 
@@ -1472,7 +1473,7 @@ class CraftingBenchParser(GenericLuaParser):
                 row, self._DATA, data['crafting_bench_options'])
             data['crafting_bench_options'][-1]['id'] = row.rowid
 
-            for i, base_item in enumerate(row['Cost_BaseItemTypesKeys']):
+            for i, base_item in enumerate(row['Cost_BaseItemTypes']):
                 data['crafting_bench_options_costs'].append(OrderedDict((
                     ('option_id', row.rowid),
                     ('name', base_item['Name']),

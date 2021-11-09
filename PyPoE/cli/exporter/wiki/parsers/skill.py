@@ -267,7 +267,7 @@ class SkillParserShared(parser.BaseParser):
         'Fireball': 'Fireball',
         'IceShot': 'IceArrow',
         'IceSpear': 'IceSpear',
-        'Incinerate': 'Flamethrower1',
+        # 'Incinerate': 'Flamethrower1',
         'LightningArrow': 'LightningArrow',
         'LightningTrap': 'LightningTrap',
         'MoltenStrike': 'FireMortar',
