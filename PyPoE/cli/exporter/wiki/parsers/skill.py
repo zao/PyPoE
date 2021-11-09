@@ -84,7 +84,7 @@ class SkillHandler(ExporterHandler):
         # by row ID
         s_rid = skill_sub.add_parser(
             'by_row',
-            help='Extract areas by rowid.'
+            help='Extract skills by rowid.'
         )
         self.add_default_parsers(
             parser=s_rid,
@@ -303,7 +303,7 @@ class SkillParserShared(parser.BaseParser):
             self._skill_stat_filters.read(self.file_system.get_file(
                 'Metadata/StatDescriptions/skillpopup_stat_filters.txt'
             ))
-            #TODO: remove once fixed
+            # TODO: remove once fixed
             #self._skill_stat_filters.skills['spirit_offering'] = SkillEntry(skill_id='spirit_offering', translation_file_path='Metadata/StatDescriptions/offering_skill_stat_descriptions.txt', stats=[])
 
         return self._skill_stat_filters
@@ -543,10 +543,10 @@ class SkillParserShared(parser.BaseParser):
                         values.append(
                             row['StatsValuesPermille'][index] / 1000
                         )
-                lines.append(ts.format_string(
+                lines.extend(ts.format_string(
                     values=values,
                     is_range=[False, ] * len(values),
-                )[0])
+                )[0].split('\n'))
 
             infobox[prefix + 'stat_text'] = '<br>'.join(lines)
 
@@ -759,7 +759,6 @@ class SkillParser(SkillParserShared):
                 data=data,
                 cmdargs=parsed_args,
             )
-            
             r.add_result(
                 text=cond,
                 out_file='skill_%s.txt' % data['skill_id'],
