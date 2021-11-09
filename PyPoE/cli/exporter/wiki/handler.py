@@ -58,10 +58,10 @@ __all__ = ['ExporterHandler', 'ExporterResult', 'WikiHandler']
 
 WIKIS = {
     'English': 'www.poewiki.net/w',
-    'Russian': 'pathofexile-ru.gamepedia.com',
-    'German': 'pathofexile-de.gamepedia.com',
-    'French': 'pathofexile-fr.gamepedia.com',
-    'Spanish': 'pathofexile-es.gamepedia.com',
+    'Russian': 'pathofexile.fandom.com/ru',
+    'German': 'pathofexile.fandom.com/de',
+    'French': 'pathofexile.fandom.com/fr',
+    'Spanish': 'pathofexile.fandom.com/es',
 }
 
 # =============================================================================

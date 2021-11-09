@@ -742,7 +742,7 @@ class SkillParser(SkillParserShared):
             if not parsed_args.allow_skill_gems and skill in \
                     self.rr['SkillGems.dat'].index['GrantedEffectsKey']:
                 console(
-                    'Skipping skill gem skill "%s"' % skill['Id'],
+                    f"Skipping skill gem skill \"{skill['Id']}\" at row {skill.rowid}",
                     msg=Msg.warning)
                 continue
             data = OrderedDict()
@@ -751,7 +751,7 @@ class SkillParser(SkillParserShared):
                 self._skill(ge=skill, infobox=data, parsed_args=parsed_args)
             except Exception as e:
                 console(
-                    'Error when parsing skill "%s":' % skill['Id'],
+                    f"Error when parsing skill \"{skill['Id']}\" at {skill.rowid}:",
                     msg=Msg.error)
                 console(traceback.format_exc(), msg=Msg.error)
 
