@@ -9,7 +9,7 @@ Overview
 +----------+------------------------------------------------------------------+
 | Version  | 1.0.0a0                                                          |
 +----------+------------------------------------------------------------------+
-| Revision | $Id: af090821647e54000379e968170987d5e98bab1c $                  |
+| Revision | $Id$                  |
 +----------+------------------------------------------------------------------+
 | Author   | Omega_K2                                                         |
 +----------+------------------------------------------------------------------+
@@ -1439,7 +1439,7 @@ class CraftingBenchParser(GenericLuaParser):
         #     'key': 'mod_group',
         #     'default': '',
         # }),
-        ('CraftingItemClassCategoriesKeys', {
+        ('CraftingItemClassCategories', {
             'key': 'item_class_categories',
             'value': lambda v: [k['Text'] for k in v],
         }),
