@@ -3810,8 +3810,10 @@ class ItemsParser(SkillParserShared):
         #Don't print anything if not running in the rowid mode.
         if not set(['start', 'end']).issubset(vars(parsed_args).keys()):
             return
-
-        export_row_count = parsed_args.end - parsed_args.start
+        try:
+            export_row_count = parsed_args.end - parsed_args.start
+        except TypeError:
+            export_row_count = parsed_args.start
         #If we're printing less than 100 rows, print every rowid
         if export_row_count <= 100:
             print_granularity = 1
