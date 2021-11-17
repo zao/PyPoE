@@ -38,11 +38,13 @@ Classes
 # =============================================================================
 
 # Python
+import json
 import os
 from typing import Union
 
 # 3rd-party
 import brotli
+import requests
 
 # self
 from PyPoE.poe.file.shared import FILE_SYSTEM_TYPES, AbstractFileSystemNode
@@ -59,6 +61,58 @@ __all__ = ['FileSystem']
 # =============================================================================
 # Classes
 # =============================================================================
+
+
+class InyaRemote:
+    remote_name: str
+    remote_build: str
+
+    def _match_servers(self, kind):
+        servers = dict(map(lambda x: (x['name'], x), self.servers['servers'][kind]))
+        for server in servers.values():
+            if 'required_tags' not in server:
+                server['tag_rank'] = 0
+            else:
+                unmatched = set(server['required_tags']) - self.tags
+                if len(unmatched) > 0:
+                    server['tag_rank'] = None
+                else:
+                    server['tag_rank'] = len(server['required_tags'])
+
+        return list(map(lambda x: x[1],
+                    sorted(filter(lambda x: x[1]['tag_rank'] is not None, servers.items()),
+                           key=lambda x: x[1]['tag_rank'],
+                           reverse=True)))
+
+    def __init__(self, remote_path):
+        parts = remote_path.split(':')
+        self.remote_name = parts[1]
+        self.remote_build = parts[2]
+
+        self.tags = set(['zao-lan'])
+        self.servers = requests.get('https://zao.se/poe-meta/catalog.json').json()
+
+        self.data_server = self._match_servers('data')[0]['url']
+        self.index_server = self._match_servers('index')[0]['url']
+        self.meta_server = self._match_servers('meta')[0]['url']
+
+        build_url = f'{self.meta_server}/build/{self.remote_build}.json'
+        build = requests.get(build_url).json()
+        data_manifest = build['manifests']['238961']
+        index_url = f'{self.index_server}/index/{data_manifest}.json'
+        self.index = requests.get(index_url).json()
+        self.paths = {x["path"]: x for x in self.index['files']}
+
+    def get_file(self, path):
+        if path not in self.paths:
+            raise FileNotFoundError()
+        rec = self.paths[path]
+        try:
+            hash = rec["hash"]
+            data_url = f'{self.data_server}/data/{hash[:3]}/{hash}.bin'
+            return requests.get(data_url).content
+        except requests.exceptions.RequestException:
+            raise FileNotFoundError()
 
 
 class FileSystemNode(AbstractFileSystemNode):
@@ -120,6 +174,10 @@ class FileSystem:
         self.root_path: str = root_path
         self.ggpk: Union[GGPKFile, None] = None
 
+        if root_path.startswith('remote:'):
+            self.remote = InyaRemote(self.root_path)
+            return
+
         ggpk_path = os.path.join(root_path, 'Content.ggpk')
         if os.path.exists(os.path.join(root_path, 'Content.ggpk')):
             self.ggpk = GGPKFile()
@@ -149,6 +207,9 @@ class FileSystem:
         -------
             The unbuffered binary file data in bytes
         """
+        if self.remote:
+            return self.remote.get_file(path)
+
         if self.index:
             try:
                 fr = self.index.get_file_record(path)
