@@ -214,7 +214,7 @@ def is_file(value, *args, exists=True, allow_empty=False, **kwargs):
         return value
 
 
-def is_directory(value, *args, exists=True, allow_empty=False, make_absolute=False, **kwargs):
+def is_directory(value, *args, exists=True, allow_empty=False, make_absolute=False, allow_remote=False, **kwargs):
     """
     Checks whether the value is a valid directory path (and optionally whether
     it exists).
@@ -229,6 +229,8 @@ def is_directory(value, *args, exists=True, allow_empty=False, make_absolute=Fal
         whether empty strings are allowed
     make_absolute : bool
         whether to turn a potentional relative path into an absolute one
+    allow_remote : bool
+        whether to allow remote URL-like targets
 
     Returns
     -------
@@ -240,6 +242,8 @@ def is_directory(value, *args, exists=True, allow_empty=False, make_absolute=Fal
     ValidateError
         if the the value can't be validated
     """
+    if allow_remote and value.startswith('remote:') and value.count(':') == 2:
+        return value
     if allow_empty and value == '':
         return ''
     else:
