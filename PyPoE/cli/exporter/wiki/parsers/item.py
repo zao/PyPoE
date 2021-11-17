@@ -79,7 +79,7 @@ def _type_factory(data_file, data_mapping, row_index=True, function=None,
                 ]
         except KeyError:
             warnings.warn(
-                'Missing %s info for "%s"' % (data_file, base_item_type['Name'])
+                f"Missing {data_file} info for \"{base_item_type['Name']}\" at {base_item_type.rowid}"
             )
             return fail_condition
 
@@ -3730,8 +3730,8 @@ class ItemsParser(SkillParserShared):
                     if not f(self, infobox, base_item_type):
                         fail = True
                         console(
-                            'Required extra info for item "%s" with class id '
-                            '"%s" not found. Skipping.' % (name, cls_id),
+                            f'Required extra info for item "{name}" with class id '
+                            f'"{cls_id}" not found. Skipping.',
                             msg=Msg.error)
                         break
                 if fail:
