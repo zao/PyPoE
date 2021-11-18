@@ -872,6 +872,9 @@ class ItemsParser(SkillParserShared):
             'Metadata/Items/Hideout/HideoutRitualTotem': ' (hideout decoration)',
             'Metadata/Items/Hideout/HideoutCharredSkeleton' : " (hideout decoration)",
             'Metadata/Items/Hideout/HideoutVaalWhispySmoke' : " (hideout decoration)",
+            'Metadata/Items/Hideout/HideoutLionStatueKneeling': '',
+            'Metadata/Items/Hideout/HideoutChurchRuins': ' (hideout decoration)',
+            'Metadata/Items/Hideout/HideoutIncaLetter': ' (hideout decoration)',
 
             # =================================================================
             # invitations
@@ -2416,6 +2419,8 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Hideout/HideoutShengjingBuildingSupplies3',
         'Metadata/Items/Hideout/HideoutShengjingBuildingSupplies4',
         'Metadata/Items/Hideout/HideoutShengjingBuildingSupplies5',
+
+        'Metadata/Items/Hideout/HideoutLionStatueKneeling2',
 
         #
         # Stackable currency
