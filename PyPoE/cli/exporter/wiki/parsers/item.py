@@ -877,14 +877,61 @@ class ItemsParser(SkillParserShared):
             # invitations
             # =================================================================
 
-            'Metadata/Items/MapFragments/Maven/MavenMapOutsideBottomRight5': " (10 bosses)",
-            'Metadata/Items/MapFragments/Maven/MavenMapOutsideBottomLeft5': " (10 bosses)",
-            'Metadata/Items/MapFragments/Maven/MavenMapOutsideTopLeft5': " (10 bosses)",
-            'Metadata/Items/MapFragments/Maven/MavenMapOutsideTopRight5': " (10 bosses)",
-            'Metadata/Items/MapFragments/Maven/MavenMapInsideBottomRight5': " (10 bosses)",
-            'Metadata/Items/MapFragments/Maven/MavenMapInsideBottomLeft5': " (10 bosses)",
-            'Metadata/Items/MapFragments/Maven/MavenMapInsideTopLeft5': " (10 bosses)",
-            'Metadata/Items/MapFragments/Maven/MavenMapInsideTopRight5': " (10 bosses)",
+            # Haewark Hamlet
+            'Metadata/Items/MapFragments/Maven/MavenMapOutsideTopLeft1': ' (quest item 1 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapOutsideTopLeft2': ' (quest item 2 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapOutsideTopLeft3': ' (quest item 3 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapOutsideTopLeft4': ' (quest item 4 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapOutsideTopLeft5': '',
+
+            # Lira Arthain
+            'Metadata/Items/MapFragments/Maven/MavenMapOutsideBottomRight1': ' (quest item 1 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapOutsideBottomRight2': ' (quest item 2 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapOutsideBottomRight3': ' (quest item 3 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapOutsideBottomRight4': ' (quest item 4 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapOutsideBottomRight5': '',
+
+            # Valdo's Rest
+            'Metadata/Items/MapFragments/Maven/MavenMapInsideBottomRight1': ' (quest item 1 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapInsideBottomRight2': ' (quest item 2 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapInsideBottomRight3': ' (quest item 3 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapInsideBottomRight4': ' (quest item 4 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapInsideBottomRight5': '',
+
+            # Glennach Cairns
+            'Metadata/Items/MapFragments/Maven/MavenMapInsideBottomLeft1': ' (quest item 1 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapInsideBottomLeft2': ' (quest item 2 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapInsideBottomLeft3': ' (quest item 3 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapInsideBottomLeft4': ' (quest item 4 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapInsideBottomLeft5': '',
+
+            # New Vastir
+            'Metadata/Items/MapFragments/Maven/MavenMapOutsideBottomLeft1': ' (quest item 1 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapOutsideBottomLeft2': ' (quest item 2 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapOutsideBottomLeft3': ' (quest item 3 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapOutsideBottomLeft4': ' (quest item 4 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapOutsideBottomLeft5': '',
+
+            # Lex Ejoris
+            'Metadata/Items/MapFragments/Maven/MavenMapOutsideTopRight1': ' (quest item 1 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapOutsideTopRight2': ' (quest item 2 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapOutsideTopRight3': ' (quest item 3 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapOutsideTopRight4': ' (quest item 4 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapOutsideTopRight5': '',
+
+            # Tirn's End
+            'Metadata/Items/MapFragments/Maven/MavenMapInsideTopLeft1': ' (quest item 1 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapInsideTopLeft2': ' (quest item 2 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapInsideTopLeft3': ' (quest item 3 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapInsideTopLeft4': ' (quest item 4 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapInsideTopLeft5': '',
+
+            # Lex Proxima
+            'Metadata/Items/MapFragments/Maven/MavenMapInsideTopRight1': ' (quest item 1 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapInsideTopRight2': ' (quest item 2 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapInsideTopRight3': ' (quest item 3 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapInsideTopRight4': ' (quest item 4 of 4)',
+            'Metadata/Items/MapFragments/Maven/MavenMapInsideTopRight5': '',
 
             #
             # Royale non-gem items
