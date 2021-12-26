@@ -1916,6 +1916,8 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Pets/TwilightPegasusPet',
         'Metadata/Items/Pets/AuspiciousDragonPet',
         'Metadata/Items/Pets/BuccaneerPet',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionScourgeFootprintsEffect',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionNullifierHood',
 
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionOblivionBodyArmour1',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionOblivionBodyArmour2',
@@ -2378,6 +2380,7 @@ class ItemsParser(SkillParserShared):
 
         'Metadata/Items/MicrotransactionCurrency/TradeMarketTab',
         'Metadata/Items/MicrotransactionCurrency/TradeMarketBuyoutTab',
+        'Metadata/Items/MicrotransactionCurrency/TradeMarketBuyoutTabTemporary',
 
         'Metadata/Items/MicrotransactionCurrency/MysteryBoxLightChaos',
         'Metadata/Items/MicrotransactionCurrency/MysteryBoxChiyou',
@@ -2386,6 +2389,7 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/MicrotransactionCurrency/MysteryBoxFreyaPouch',
         'Metadata/Items/MicrotransactionCurrency/MysteryBoxFreyaBox',
         'Metadata/Items/MicrotransactionCurrency/MysteryBoxHasinaPouch',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxSkadiPetBowl',
 
         'Metadata/Items/MicrotransactionCurrency/ProxyArcticAurora10',
         'Metadata/Items/MicrotransactionCurrency/ProxyFireworksDarkSoulercoaster15',
