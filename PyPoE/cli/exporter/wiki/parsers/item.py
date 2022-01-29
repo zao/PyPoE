@@ -2187,6 +2187,7 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentBadge20_5',
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentBadge20_6',
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentBadge20_7',
+        'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencent4YearPortraitFrame',
 
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionPetUpgradeScroll',
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionPetConvertToNormalScroll',
