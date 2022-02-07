@@ -6214,11 +6214,11 @@ specification = Specification({
                 type='int',
             ),
             Field(
-                name='MoreMonsterLife',
+                name='MoreMonsterDamage',
                 type='int',
             ),
             Field(
-                name='MoreMonsterDamage',
+                name='MoreMonsterLife',
                 type='int',
             ),
             Field(
@@ -6247,6 +6247,10 @@ specification = Specification({
             ),
             Field(
                 name='Unknown5',
+                type='int',
+            ),
+            Field( 
+                name='EndlessDelveMonsterLevel', #This is pobably endless delve mosnter level scaling.
                 type='int',
             ),
         ),
