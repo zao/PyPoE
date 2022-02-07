@@ -127,6 +127,7 @@ class WikiCondition(parser.WikiCondition):
         'alternate_art_inventory_icons',
 
         # Drop restrictions
+        'is_in_game',
         'drop_enabled',
         'acquisition_tags',
         'drop_areas',
