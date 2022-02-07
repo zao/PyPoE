@@ -270,11 +270,13 @@ class MasteryEffectParser(parser.BaseParser):
 
 class MasteryGroupParser(parser.BaseParser):
     _MASTERY_FILE_NAME = 'PassiveSkillMasteryGroups.dat'
+    _PASSIVES_FILE_NAME = 'PassiveSkills.dat'
     _files = [
         _MASTERY_FILE_NAME,
+        _PASSIVES_FILE_NAME,
     ]
 
-    _passive_column_index_filter = partialmethod(
+    _mastery_column_index_filter = partialmethod(
         parser.BaseParser._column_index_filter,
         dat_file_name=_MASTERY_FILE_NAME,
         error_msg='Several masteries have not been found:\n%s',
@@ -314,7 +316,7 @@ class MasteryGroupParser(parser.BaseParser):
         )
 
     def by_id(self, parsed_args):
-        return self.export(parsed_args, self._passive_column_index_filter(
+        return self.export(parsed_args, self._mastery_column_index_filter(
             column_id='Id', arg_list=parsed_args.id
         ))
 
@@ -330,8 +332,10 @@ class MasteryGroupParser(parser.BaseParser):
             )
             return r
 
-        console('Accessing additional data...')
+        console('Determining Mastery Group Names')
+        name_map = self.get_mastery_name_map()
 
+        console('Accessing additional data...')
         # Read the .dat file
         self.rr[self._MASTERY_FILE_NAME]
         
@@ -358,6 +362,8 @@ class MasteryGroupParser(parser.BaseParser):
                     value = fmt(value)
                 data[copy_data['template']] = value
 
+            data['name'] = name_map[data['id']]
+
             # Parse and clean up icon path
             icon_field = 'InactiveIcon'
             if mastery_grp[icon_field]:
@@ -374,7 +380,7 @@ class MasteryGroupParser(parser.BaseParser):
                     pass
             else:
                 data['icon'] = ''
-                warnings.warn(f"Icon path file not found for {mastery_grp['Id']}: {mastery_grp['Name']}")
+                warnings.warn(f"Icon path file not found for {mastery_grp['Id']}: {data['name']}")
 
             data['icon'] = data['icon'].replace('.dds', '')
 
@@ -398,10 +404,10 @@ class MasteryGroupParser(parser.BaseParser):
 
             r.add_result(
                 text=cond,
-                out_file='mastery_group_%s.txt' % data['id'],
+                out_file=f"mastery_group_{data['name']}.txt",
                 wiki_page=[
                     {
-                        'page': self._format_wiki_title(data['id']) + " Mastery",
+                        'page': self._format_wiki_title(data['name']),
                         'condition': cond,
                     },
                 ],
@@ -409,6 +415,16 @@ class MasteryGroupParser(parser.BaseParser):
             )
 
         return r
+
+    def get_mastery_name_map(self):
+        name_map = {}
+        passives = self.rr[self._PASSIVES_FILE_NAME]
+        # Find the passive skills that let you allocate masteries, and match the mastery groups
+        # they're linked to to the name of the passive skills
+        for passive in passives:
+            if passive['MasteryGroup'] is not None:
+                name_map[passive['MasteryGroup']['Id']] = passive['Name']
+        return name_map
 
 # =============================================================================
 # Functions
