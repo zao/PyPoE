@@ -14376,6 +14376,10 @@ specification = Specification({
                 name='HellscapeTier', #AKA Scourge
                 type='int',
             ),
+            Field(
+                name='ArchnemesisTier',
+                type='int',
+            ),
         ),
     ),
     'MapStatConditions.dat': File(
