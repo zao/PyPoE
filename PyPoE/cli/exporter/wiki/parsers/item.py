@@ -3906,6 +3906,10 @@ class ItemsParser(SkillParserShared):
                     self.rr['MapPurchaseCosts.dat'].index['Tier'][tier],
                     infobox
                 )
+            
+            # Skip maps that aren't in the rotation this map series.
+            if tier == 0:
+                continue
 
             '''if maps['UpgradedFrom_MapsKey']:
                 infobox['upgeaded_from_set1_group1_page'] = '%s (%s)' % (
