@@ -11620,8 +11620,9 @@ specification = Specification({
                 type='bool',
             ),
             Field(
-                name='Keys0',
+                name='Tags',
                 type='ref|list|ulong',
+                #key='HideoutDoodadTags.dat',
             ),
             Field(
                 name='Flag1',
@@ -11630,6 +11631,11 @@ specification = Specification({
             Field(
                 name='Key0',
                 type='ulong',
+            ),
+            Field(
+                name='Category',
+                type='ulong',
+                #key='HideoutDoodadCategory.dat',
             ),
         ),
     ),
