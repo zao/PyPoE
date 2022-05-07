@@ -69,6 +69,10 @@ results that contain extra information and utility methods.
 
 .. autofunction:: set_custom_translation_file
 
+.. autofunction:: get_hardcoded_translation_file
+
+.. autofunction:: set_hardcoded_translation_file
+
 .. autofunction:: install_data_dependant_quantifiers
 
 Internal API
@@ -138,10 +142,14 @@ __all__ = [
     'get_custom_translation_file',
     'set_custom_translation_file',
     'custom_translation_file',
+    'get_hardcoded_translation_file',
+    'set_hardcoded_translation_file',
+    'hardcoded_translation_file',
     'install_data_dependant_quantifiers',
 ]
 
 CUSTOM_TRANSLATION_FILE = os.path.join(DATA_DIR, 'custom_descriptions.txt')
+HARDCODED_TRANSLATION_FILE = os.path.join(DATA_DIR, 'hardcoded_descriptions.txt')
 
 regex_translation_string = re.compile(
     r'^'
@@ -172,6 +180,7 @@ regex_tokens = re.compile(
 )
 
 _custom_translation_file = None
+_hardcoded_translation_file = None
 
 # =============================================================================
 # Warnings
@@ -2024,6 +2033,45 @@ custom_translation_file = property(
 )
 
 
+def get_hardcoded_translation_file() -> TranslationFile:
+    """
+    Returns the currently loaded hardcoded translation file.
+
+    Loads the default file if none is loaded.
+
+    Returns
+    -------
+    TranslationFile
+        the currently loaded hardcoded translation file
+    """
+    global _hardcoded_translation_file
+    if _hardcoded_translation_file is None:
+        set_hardcoded_translation_file()
+    return _hardcoded_translation_file
+
+
+def set_hardcoded_translation_file(file: Union[str, None] = None):
+    """
+    Sets the hardcoded translation file.
+
+    Parameters
+    ----------
+    file : str
+        Path where the hardcoded translation file is located. If None,
+        the default file will be loaded
+    """
+    global _hardcoded_translation_file
+    _hardcoded_translation_file = TranslationFile(
+        file_path=file or HARDCODED_TRANSLATION_FILE
+    )
+
+
+hardcoded_translation_file = property(
+    fget=get_hardcoded_translation_file,
+    fset=set_hardcoded_translation_file,
+)
+
+
 def install_data_dependant_quantifiers(relational_reader):
     """
     Install data dependant quantifiers into this class.
@@ -2218,7 +2266,7 @@ TranslationQuantifier(
 
 TranslationQuantifier(
     id='divide_by_ten_1dp',
-    handler=lambda v: round(v//10, 1),
+    handler=lambda v: round(v/10, 1),
     reverse_handler=lambda v: int(v)*10,
 )
 
@@ -2371,6 +2419,30 @@ TranslationQuantifier(
     id='divide_by_four',
     handler=lambda v: v / 4,
     reverse_handler=lambda v: v * 4,
+)
+
+TranslationQuantifier(
+    id='divide_by_ten_1dp_if_required',
+    handler=lambda v: round(v/10, 1),
+    reverse_handler=lambda v: v*10,
+)
+
+TranslationQuantifier(
+    id='divide_by_fifty',
+    handler=lambda v: v/50,
+    reverse_handler=lambda v: v*50,
+)
+
+TranslationQuantifier(
+    id='multiply_by_ten',
+    handler=lambda v: v*10,
+    reverse_handler=lambda v: v/10,
+)
+
+TranslationQuantifier(
+    id='divide_by_one_thousand',
+    handler=lambda v: v/1000,
+    reverse_handler=lambda v: v*1000,
 )
 
 TranslationQuantifier(

@@ -720,9 +720,10 @@ class MOD_DOMAIN(IntEnumOverride):
     HEIST_TRINKET = 24
     WATCHSTONE = 25
     VEILED = 26
-    UNKNOWN_3_15_1 = 27
-    UNKNOWN_3_15_2 = 28
-    UNDEFINED = 29
+    EXPEDITION_RELIC = 27
+    UNVEILED = 28
+    PRIMORDIAL_ALTAR = 29
+    UNCRAFTABLE_OR_SOMETHING = 30 # Used in BaseItemTypes.dat, not Mods.dat.
 
     # legacy names
     MASTER = CRAFTED
@@ -802,6 +803,10 @@ class MOD_GENERATION_TYPE(IntEnumOverride):
     SCOURGE_BENEFIT = 24
     SCOURGE_DETRIMENT = 25
     SCOURGE_GIMMICK = 26
+    # 27 is unused.
+    ARCHNEMESIS = 28
+    SEARING_EXARCH_IMPLICIT = 29
+    EATER_OF_WORLDS_IMPLICIT = 30
 
 
 class WORDLISTS(IntEnumOverride):
