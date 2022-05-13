@@ -9617,15 +9617,6 @@ specification = Specification({
                 type='ref|string',
             ),
             Field(
-                name='Unknown0',
-                type='int',
-            ),
-            Field(
-                name='HarvestObjectsKey',
-                type='ulong',
-                key='HarvestObjects.dat',
-            ),
-            Field(
                 name='HarvestCraftTiersKey',
                 type='ulong',
                 key='HarvestCraftTiers.dat',
@@ -9660,6 +9651,20 @@ specification = Specification({
                 name='PlainText',
                 type='ref|string',
                 description='Text without any tags for formatting',
+            ),
+            Field(
+                name='DDSFile',
+                type='ref|string',
+                file_path=True,
+                file_ext='.dds',
+            ),
+            Field(
+                name='Flag1',
+                type='bool',
+            ),
+            Field(
+                name='Flag2',
+                type='bool',
             ),
         ),
     ),
@@ -10883,10 +10888,6 @@ specification = Specification({
                 type='ref|string',
             ),
             Field(
-                name='Unknown1',
-                type='int',
-            ),
-            Field(
                 name='SilhouetteFile',
                 type='ref|string',
             ),
@@ -10931,6 +10932,10 @@ specification = Specification({
                 type='ref|string',
                 file_path=True,
                 file_ext='.ao',
+            ),
+            Field(
+                name='Unknown4',
+                type='ulong',
             ),
         ),
     ),
@@ -23641,6 +23646,10 @@ specification = Specification({
             Field(
                 name='Unknown51',
                 type='ref|list|ulong',
+            ),
+            Field(
+                name='Unknown52',
+                type='ulong',
             ),
         ),
     ),
