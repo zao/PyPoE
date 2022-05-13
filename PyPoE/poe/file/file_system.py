@@ -38,13 +38,19 @@ Classes
 # =============================================================================
 
 # Python
+import hashlib
+import io
 import json
+import logging
 import os
 from typing import Union
 
 # 3rd-party
+import blake3
 import brotli
+import ndjson
 import requests
+import zstandard
 
 # self
 from PyPoE.poe.file.shared import FILE_SYSTEM_TYPES, AbstractFileSystemNode
@@ -99,20 +105,46 @@ class InyaRemote:
         build_url = f'{self.meta_server}/build/{self.remote_build}.json'
         build = requests.get(build_url).json()
         data_manifest = build['manifests']['238961']
-        index_url = f'{self.index_server}/index/{data_manifest}.json'
-        self.index = requests.get(index_url).json()
-        self.paths = {x["path"]: x for x in self.index['files']}
+        index_info_url = f'{self.index_server}/index/{data_manifest}-info.json.zst'
+
+        header = json.loads(zstandard.decompress(requests.get(index_info_url).content).decode(encoding='utf-8'))
+        if (index_version := header["index_version"]) != 1:
+            raise RuntimeError(f'Unsupported index version {index_version}, expected 1')
+
+        index_url = f'{self.index_server}/index/{data_manifest}.ndjson.zst'
+
+        zs = zstandard.ZstdDecompressor()
+        reader = ndjson.reader(io.TextIOWrapper(zs.stream_reader(requests.get(index_url).content), encoding='utf-8'))
+
+        self.index = []
+        self.paths = {}
+        self.path_hashes = {}
+        self.hashes = {}
+        for entry in reader:
+            entry["path_hash"] = int(entry["path_hash"])
+            self.index.append(entry)
+            self.paths[entry["path"]] = entry
+            self.path_hashes[entry["path_hash"]] = entry
+            self.hashes[entry["hash"]] = entry
 
     def get_file(self, path):
         if path not in self.paths:
-            raise FileNotFoundError()
+            raise FileNotFoundError
         rec = self.paths[path]
         try:
             hash = rec["hash"]
-            data_url = f'{self.data_server}/data/{hash[:3]}/{hash}.bin'
-            return requests.get(data_url).content
-        except requests.exceptions.RequestException:
-            raise FileNotFoundError()
+            data_url = f'{self.data_server}/data/{hash[:3]}/{hash}.bin.zst'
+            resp = requests.get(data_url)
+            resp.raise_for_status()
+            data = zstandard.decompress(resp.content)
+            data_hash = blake3.blake3(data).hexdigest()
+            if hash != data_hash:
+                raise FileNotFoundError
+            size = rec["size"]
+            # print(f'{path=} {size=} {hash=}')
+            return data
+        except requests.exceptions.RequestException as exc:
+            raise FileNotFoundError from exc
 
 
 class FileSystemNode(AbstractFileSystemNode):
@@ -172,6 +204,7 @@ class FileSystem:
         self.directory: Union[FileSystemNode, None] = None
 
         self.root_path: str = root_path
+        self.remote: Union[InyaRemote, None] = None
         self.ggpk: Union[GGPKFile, None] = None
 
         if root_path.startswith('remote:'):
@@ -208,7 +241,10 @@ class FileSystem:
             The unbuffered binary file data in bytes
         """
         if self.remote:
-            return self.remote.get_file(path)
+            try:
+                return self.remote.get_file(path)
+            except FileNotFoundError:
+                raise FileNotFoundError('Specified file can not be found in the remote index')
 
         if self.index:
             try:
