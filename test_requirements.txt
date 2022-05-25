@@ -11,5 +11,5 @@ pymysql
 PyOpenGL
 pytest-cov
 python-coveralls
-cffi
+pyooz
 fnvhash
