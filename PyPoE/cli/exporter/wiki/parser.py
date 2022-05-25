@@ -59,6 +59,9 @@ import os
 from collections import OrderedDict
 from functools import partial
 
+# 3rd-party
+from dds import decode_dds
+
 # self
 from PyPoE.cli.core import console, Msg
 from PyPoE.cli.exporter import config
@@ -1535,20 +1538,16 @@ class BaseParser:
 
     def _write_dds(self, data, out_path, parsed_args):
         out_path = fix_path(out_path)
-        with open(out_path, 'wb') as f:
-            f.write(self.file_system.extract_dds(data))
+        if parsed_args.convert_images:
+            out_img = decode_dds(data)
+            out_img.save(out_path.replace('.dds', '.png'))
 
-            console('Wrote "%s"' % out_path)
+            console('Converted "%s" to png' % out_path)
+        else:
+            with open(out_path, 'wb') as f:
+                f.write(self.file_system.extract_dds(data))
 
-        if not parsed_args.convert_images:
-            return
-
-        os.system('process-image convert "%s" "%s"' % (
-            out_path, out_path.replace('.dds', '.png'),
-        ))
-        os.remove(out_path)
-
-        console('Converted "%s" to png' % out_path)
+                console('Wrote "%s"' % out_path)
 
     def _image_init(self, parsed_args):
         if parsed_args.store_images:

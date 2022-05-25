@@ -38,6 +38,10 @@ import warnings
 import os
 from collections import OrderedDict, defaultdict
 from functools import partialmethod
+from pathlib import Path
+
+# 3rd-party
+from PIL import Image, ImageOps
 
 # Self
 from PyPoE.poe.constants import RARITY
@@ -101,6 +105,14 @@ def _simple_conflict_factory(data):
             return base_item_type['Name'] + appendix
 
     return _conflict_handler
+
+def _colorize_rgba(img, black, white, mid=None, blackpoint=0, whitepoint=255, midpoint=127):
+    img_a = img.getchannel('A')
+    img_gray = ImageOps.grayscale(img)
+    
+    ret = ImageOps.colorize(img_gray, black, white, mid, blackpoint, whitepoint, midpoint)
+    ret.putalpha(img_a)
+    return ret
 
 # =============================================================================
 # Classes
@@ -561,6 +573,12 @@ class ItemsParser(SkillParserShared):
     _MAP_COLORS = {
         'mid tier': '255,210,100',
         'high tier': '240,30,10',
+    }
+
+    # Midpoint values are the luminosities of _MAP_COLORS entries
+    _MAP_COLOR_MIDPOINTS = {
+        'mid tier': 211,
+        'high tier': 91,
     }
 
     _MAP_RELEASE_VERSION = {
@@ -3951,11 +3969,15 @@ class ItemsParser(SkillParserShared):
             if 'Unique' not in atlas_node['WorldAreasKey']['Id']:
                 ico = ico.replace('.dds', '.png')
                 for name, color in self._MAP_COLORS.items():
-                    #-tint
-                    os.system(
-                        '''magick convert "%s" -fill rgb(%s) -tint 100 "%s"''' % (
-                            ico, color, ico.replace('.png', ' %s.png' % name)
-                        ))
+                    ico_path = Path(ico)
+                    out_path = ico_path.with_suffix(f'.{name}.png')
+                    
+                    # Tint with tier color, this historically differs from the colorization
+                    # used for composing map glyphs onto on the itemized map base.
+                    img = Image.open(ico_path)
+                    midpoint = self._MAP_COLOR_MIDPOINTS[name]
+                    img = _colorize_rgba(img, 'black', 'white', mid=f'rgb({color})', midpoint=midpoint)
+                    img.save(out_path)
 
         return r
 
@@ -4013,6 +4035,7 @@ class ItemsParser(SkillParserShared):
             )
 
             base_ico = base_ico.replace('.dds', '.png')
+            base_img = Image.open(base_ico)
 
         #
         self.rr['MapSeriesTiers.dat'].build_index('MapsKey')
@@ -4157,22 +4180,30 @@ class ItemsParser(SkillParserShared):
                 )
 
                 ico = ico.replace('.dds', '.png')
+                img = Image.open(ico)
+                img.save(ico)
 
-                color = None
-                if 5 < tier <= 10:
-                    color = self._MAP_COLORS['mid tier']
-                elif 10 < tier <= 15:
-                    color = self._MAP_COLORS['high tier']
-                if color:
-                    os.system(
-                        '''magick convert "%s" -fill rgb(%s) -colorize 100 "%s"''' % (
-                        ico, color, ico
-                    ))
+                # Recolor the map icon if appropriate and layer the map icon with the base icon.
+                if base_item_type['Id'] not in MAPS_TO_SKIP_COLORING:
+                    color = None
+                    if 5 < starting_tier <= 10:
+                        color = self._MAP_COLORS['mid tier']
+                    if 10 < starting_tier:
+                        color = self._MAP_COLORS['high tier']
 
-                os.system(
-                    'magick composite -gravity center "%s" "%s" "%s"' % (
-                    ico, base_ico, ico
-                ))
+                    # This isn't quite how the game actually makes these map icons, so it isn't ideal, but it works.
+                    if color:
+                        img = _colorize_rgba(img, 'black', f'rgb({color})')
+                        img.save(ico)
+
+                if base_item_type['Id'] not in MAPS_TO_SKIP_COMPOSITING:
+                    canvas = Image.new(base_img.mode, base_img.size, (0, 0, 0, 0))
+                    paste_origin = (
+                        (base_img.size[0] - img.size[0]) // 2,
+                        (base_img.size[1] - img.size[1]) // 2
+                    )
+                    canvas.paste(img, paste_origin)
+                    Image.alpha_composite(base_img, canvas).save(ico)
 
         return r
 
