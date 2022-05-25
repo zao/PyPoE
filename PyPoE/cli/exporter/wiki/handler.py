@@ -505,8 +505,7 @@ class ExporterHandler(BaseHandler):
 
         parser.add_argument(
             '-im-c', '--convert-images',
-            help='Convert extracted images to png using ImageMagick '
-                 '(requires "magick" command to be executeable)',
+            help='Convert extracted images to png.',
             action='store_true',
             dest='convert_images',
         )
