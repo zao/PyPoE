@@ -185,9 +185,6 @@ class Bundle(AbstractFileReadOnly):
         """
         Decompresses this bundle's contents.
 
-        This requires either the oozdll to be available or the ooz commandline
-        tool.
-
         Parameters
         ----------
         start

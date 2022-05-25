@@ -14,7 +14,6 @@ The docs will be updated soon with details on how to update the specification fo
 Common Problems & Advisory
 --------
 * Install **Python 3.7** for maximum compatibility:
-* To support bundle decompression check out https://github.com/zao/ooz, compile it and place libooz.dll in the python directory
 * **UI will be reworked for bundle support and is not functional at the moment**
 * On Windows 10 machines there seems to a be bug in the Python installation that prevents arguments being passed to the command line interface; you can identify this issue if you get a "help" listing if you supplied more then 1 argument. See [this on stack overflow](https://stackoverflow.com/questions/2640971/windows-is-not-passing-command-line-arguments-to-python-programs-executed-from-t) for possible solutions
 
@@ -76,3 +75,5 @@ Credits - Libraries
 * mwclient ([pypi](https://pypi.org/project/mwclient/))
 * mwclientparserfromhell ([pypi](https://pypi.org/project/mwparserfromhell/))
 * rapidfuzz ([pypi](https://pypi.org/project/rapidfuzz/))
+* pydds ([pypi](https://pypi.org/project/pydds/))
+* pyooz ([pypi](https://pypi.org/project/pyooz/))
