@@ -462,13 +462,15 @@ class SkillParserShared(parser.BaseParser):
                     static['columns'].remove(key)
                     dynamic['columns'].add(key)
             for key in list(static['stats']):
-                if key not in last['stats']:
-                    continue
-                if key not in data['stats']:
+                in_last = key in last['stats']
+                in_data = key in data['stats']
+                if not in_last and not in_data:
                     continue
 
-                if last['stats'][key]['values'] != data['stats'][key][
-                        'values']:
+                # Consider a stat dynamic if it changes presence
+                # or value between levels.
+                if in_last != in_data or (last['stats'][key]['values'] !=
+                        data['stats'][key]['values']):
                     del static['stats'][key]
                     dynamic['stats'][key] = None
             last = data
