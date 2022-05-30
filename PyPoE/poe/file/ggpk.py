@@ -205,10 +205,9 @@ class GGPKRecord(BaseRecord):
 
     @doc(doc=BaseRecord.read)
     def read(self, ggpkfile):
-        # Should be 2, TODO?
-        records = struct.unpack('<i', ggpkfile.read(4))[0]
+        self._container.version = struct.unpack('<i', ggpkfile.read(4))[0]
         self.offsets = []
-        for i in range(0, records):
+        for i in range(2):
             self.offsets.append(struct.unpack('<q', ggpkfile.read(8))[0])
 
     @doc(doc=BaseRecord.write)
@@ -272,10 +271,11 @@ class DirectoryRecord(MixinRecord, BaseRecord):
         self._name_length = struct.unpack('<i', ggpkfile.read(4))[0]
         self.entries_length = struct.unpack('<i', ggpkfile.read(4))[0]  
         self.hash = int.from_bytes(ggpkfile.read(32), 'big')
-        # UTF-16 2-byte width
-        self._name = ggpkfile.read(2 * (self._name_length - 1)).decode('UTF-16_LE')
+        # UTF-16/32 characters
+        wchar_width = self._container.wchar_width
+        self._name = ggpkfile.read(wchar_width * (self._name_length - 1)).decode(self._container.wchar_encoding)
         # Null Termination
-        ggpkfile.seek(2, os.SEEK_CUR)
+        ggpkfile.seek(wchar_width, os.SEEK_CUR)
         self.entries = []
         for i in range(0, self.entries_length):
             self.entries.append(DirectoryRecordEntry(
@@ -382,13 +382,14 @@ class FileRecord(MixinRecord, BaseRecord):
     def read(self, ggpkfile):
         self._name_length = struct.unpack('<i', ggpkfile.read(4))[0]
         self.hash = int.from_bytes(ggpkfile.read(32), 'big')
-        # UTF-16 2-byte width
-        self._name = ggpkfile.read(2 * (self._name_length - 1)).decode('UTF-16')
+        # UTF-16/32 characters
+        wchar_width = self._container.wchar_width
+        self._name = ggpkfile.read(wchar_width * (self._name_length - 1)).decode(self._container.wchar_encoding)
         # Null Termination
-        ggpkfile.seek(2, os.SEEK_CUR)
+        ggpkfile.seek(wchar_width, os.SEEK_CUR)
         self.data_start = ggpkfile.tell()
         # Length 4B - Tag 4B - STRLen 4B - Hash 32B + STR ?B  
-        self.data_length = self.length - 44 - self._name_length * 2
+        self.data_length = self.length - 44 - self._name_length * wchar_width
         
         ggpkfile.seek(self.data_length, os.SEEK_CUR)
 
@@ -542,6 +543,18 @@ class GGPKFile(AbstractFileReadOnly, metaclass=InheritedDocStringsMeta):
         return self.directory is not None
 
     is_parsed = property(fget=_is_parsed)
+
+    @property
+    def wchar_encoding(self):
+        if self.version == 4:
+            return 'UTF-32_LE'
+        return 'UTF-16_LE'
+
+    @property
+    def wchar_width(self):
+        if self.version == 4:
+            return 4
+        return 2
 
     #
     # Private
