@@ -147,12 +147,20 @@ class SkillParserShared(parser.BaseParser):
         'GrantedEffectQualityStats.dat',
     ]
 
+    # Fields to copy from GrantedEffectsPerLevel.dat
     _GEPL_COPY = (
-        'Level', 'LevelRequirement', 'ManaMultiplier', 'CriticalStrikeChance',
-        'CostAmounts', 'CostTypesKeys', 'DamageMultiplier', 'VaalSouls', 'VaalStoredUses',
-        'VaalSoulGainPreventionTime', 'Cooldown', 'StoredUses',
-        'DamageEffectiveness', 'DamageMultiplier', 'AttackSpeedMultiplier',
-        'BaseDuration', 'ManaReservationFlat', 'ManaReservationPercent', 'LifeReservationFlat', 'LifeReservationPercent',
+        'Level', 'PlayerLevelReq', 'CostMultiplier',
+        'CostAmounts', 'CostTypes', 'VaalSouls', 'VaalStoredUses',
+        'SoulGainPreventionDuration', 'Cooldown', 'StoredUses', 'AttackSpeedMultiplier',
+        'ManaReservationFlat', 'ManaReservationPercent', 'LifeReservationFlat', 'LifeReservationPercent',
+    )
+
+    # Fields to copy from GrantedEffectStatSetsPerLevel.dat
+    _GESSPL_COPY = (
+        'CriticalStrikeChance',
+        'DamageMultiplier',
+        'DamageEffectiveness', 'DamageMultiplier',
+        'BaseDuration',
     )
 
     # def CostTypeHelper(d):
@@ -314,32 +322,33 @@ class SkillParserShared(parser.BaseParser):
             infobox[prefix + 'id'] = val[0]
             infobox[prefix + 'value'] = val[1]
 
-    def _skill(self, ge, infobox, parsed_args, max_level=None, msg_name=None):
+    def _skill(self, gra_eff, infobox, parsed_args, max_level=None, msg_name=None):
         if msg_name is None:
-            msg_name = ge['Id']
+            msg_name = gra_eff['Id']
 
-        gepl = []
+        stat_set = gra_eff['StatSet']
+
+        gra_eff_per_lvl = []
         for row in self.rr['GrantedEffectsPerLevel.dat']:
-            if row['GrantedEffectsKey'] == ge:
-                gepl.append(row)
+            if row['GrantedEffect'] == gra_eff:
+                gra_eff_per_lvl.append(row)
 
-            # if row['CostTypesKeys'] == ge:
-            #     gepl.append(row)
-            # try:
-            #     print('yep', row['CostTypesKeys'])
-            # except:
-            #     print('COCK')
+        gra_eff_stats_pl = []
+        for row in self.rr['GrantedEffectStatSetsPerLevel.dat']:
+            if row['StatSet'] == stat_set:
+                gra_eff_stats_pl.append(row)
 
-        if not gepl:
+        if (not gra_eff_per_lvl) and (not gra_eff_stats_pl):
             console('No level progression found for "%s". Skipping.' %
                     msg_name, msg=Msg.error)
             return False
 
-        gepl.sort(key=lambda x: x['Level'])
+        gra_eff_per_lvl.sort(key=lambda x: x['Level'])
+        gra_eff_stats_pl.sort(key=lambda x: x['GemLevel'])
         if max_level is None:
-            max_level = len(gepl)-1
+            max_level = len(gra_eff_per_lvl)-1
 
-        ae = ge['ActiveSkillsKey']
+        ae = gra_eff['ActiveSkill']
         if ae:
             try:
                 tf = self.tc[self.skill_stat_filter.skills[
@@ -366,13 +375,12 @@ class SkillParserShared(parser.BaseParser):
             'stats': OrderedDict(),
         }
 
-        for i, row in enumerate(gepl):
+        for i, row in enumerate(gra_eff_stats_pl):
             data = defaultdict()
 
-            stats = [r['Id'] for stat_index, r in enumerate(row['StatsKeys'])
-                     if stat_index < len(row['StatValues'])] + \
-                    [r['Id'] for r in row['StatsKeys2']]
-            values = row['StatValues'] + ([1, ] * len(row['StatsKeys2']))
+            stats = [r['Id'] for stat_index, r in enumerate(row['FloatStats']) if stat_index < len(row['FloatStatsValues'])] + \
+                    [r['Id'] for r in row['AdditionalStats']]
+            values = row['FloatStatsValues'] + row['AdditionalStatsValues']
 
             # Remove 0 (unused) stats
             # This will remove all +0 gem level entries.
@@ -495,19 +503,19 @@ class SkillParserShared(parser.BaseParser):
 
         # From Projectile.dat if available
         # TODO - remap
-        key = self._SKILL_ID_TO_PROJECTILE_MAP.get(ge['Id'])
+        key = self._SKILL_ID_TO_PROJECTILE_MAP.get(gra_eff['Id'])
         if key:
             infobox['projectile_speed'] = self.rr['Projectiles.dat'].index[
                 'Id']['Metadata/Projectiles/' + key]['ProjectileSpeed']
 
         # From GrantedEffects.dat
 
-        infobox['skill_id'] = ge['Id']
-        if ge['SupportGemLetter']:
-            infobox['support_gem_letter'] = ge['SupportGemLetter']
+        infobox['skill_id'] = gra_eff['Id']
+        if gra_eff['SupportGemLetter']:
+            infobox['support_gem_letter'] = gra_eff['SupportGemLetter']
 
-        if not ge['IsSupport']:
-            infobox['cast_time'] = ge['CastTime'] / 1000
+        if not gra_eff['IsSupport']:
+            infobox['cast_time'] = gra_eff['CastTime'] / 1000
 
         # GrantedEffectsPerLevel.dat
         infobox['required_level'] = level_data[0]['LevelRequirement']
@@ -518,7 +526,7 @@ class SkillParserShared(parser.BaseParser):
         #
         geq = []
         for row in self.rr['GrantedEffectQualityStats.dat']:
-            if row['GrantedEffectsKey'] == ge:
+            if row['GrantedEffectsKey'] == gra_eff:
                 print(row['StatsKeys'][0]["Id"])
                 geq.append(row)
 
@@ -576,15 +584,15 @@ class SkillParserShared(parser.BaseParser):
                 continue
 
             default = column_data.get('default')
-            if default is not None and gepl[0][column] == \
+            if default is not None and gra_eff_per_lvl[0][column] == \
                     column_data['default']:
                 continue
 
             df = column_data.get('skip_active')
-            if df is not None and not ge['IsSupport']:
+            if df is not None and not gra_eff['IsSupport']:
                 continue
             infobox['static_' + column_data['template']] = \
-                column_data['format'](gepl[0][column])
+                column_data['format'](gra_eff_per_lvl[0][column])
 
         # Normal stats
         # TODO: Loop properly - some stats not available at level 0
@@ -758,7 +766,7 @@ class SkillParser(SkillParserShared):
             data = OrderedDict()
 
             try:
-                self._skill(ge=skill, infobox=data, parsed_args=parsed_args)
+                self._skill(gra_eff=skill, infobox=data, parsed_args=parsed_args)
             except Exception as e:
                 console(
                     f"Error when parsing skill \"{skill['Id']}\" at {skill.rowid}:",

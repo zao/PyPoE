@@ -9,7 +9,7 @@ Overview
 +----------+------------------------------------------------------------------+
 | Version  | 1.0.0a0                                                          |
 +----------+------------------------------------------------------------------+
-| Revision | $Id$                  |
+| Revision | $Id: a415e27f276ae72d16622220e2813664ab25893f $                  |
 +----------+------------------------------------------------------------------+
 | Author   | Omega_K2 /   Project-Path-of-Exile-Wiki                          |
 +----------+------------------------------------------------------------------+
@@ -2493,7 +2493,7 @@ class ItemsParser(SkillParserShared):
         ge = skill_gem['GrantedEffectsKey']
 
         primary = OrderedDict()
-        self._skill(ge=ge, infobox=primary, parsed_args=self._parsed_args,
+        self._skill(gra_eff=ge, infobox=primary, parsed_args=self._parsed_args,
                     msg_name=base_item_type['Name'], max_level=max_level)
 
         # Some skills have a secondary skill effect.
@@ -2518,7 +2518,7 @@ class ItemsParser(SkillParserShared):
         if second:
             secondary = OrderedDict()
             self._skill(
-                ge=skill_gem['GrantedEffectsKey2'],
+                gra_eff=skill_gem['GrantedEffectsKey2'],
                 infobox=secondary,
                 parsed_args=self._parsed_args,
                 msg_name=base_item_type['Name'],

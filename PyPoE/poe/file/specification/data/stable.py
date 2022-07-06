@@ -1107,11 +1107,6 @@ specification = Specification({
                 type='bool',
             ),
             Field(
-                name='IntId',
-                type='int',
-                unique=True,
-            ),
-            Field(
                 name='Flag2',
                 type='bool',
             ),
@@ -1126,6 +1121,14 @@ specification = Specification({
                 type='ref|string',
                 key='Animation.dat',
                 key_id='Id',
+            ),
+            Field(
+                name='Flag3',
+                type='bool',
+            ),
+            Field(
+                name='Key0',
+                type='ulong',
             ),
         ),
     ),
@@ -9105,6 +9108,112 @@ specification = Specification({
             ),
         ),
     ),
+    'GrantedEffectStatSets.dat': File(
+        fields=(
+            Field(
+                name='Id',
+                type='ref|string',
+                unique=True,
+            ),
+            Field(
+                name='ImplicitStats',
+                type='ref|list|ulong',
+                key='Stats.dat',
+            ),
+            Field(
+                name='ConstantStats',
+                type='ref|list|ulong',
+                key='Stats.dat',
+            ),
+            Field(
+                name='ConstantStatsValues',
+                type='ref|list|int',
+            ),
+            Field(
+                name='BaseEffectiveness',
+                type='float',
+            ),
+            Field(
+                name='IncrementalEffectiveness',
+                type='float',
+            ),
+        ),
+    ),
+    'GrantedEffectStatSetsPerLevel.dat': File(
+        fields=(
+            Field(
+                name='StatSet',
+                type='ulong',
+                key='GrantedEffectStatSets.dat',
+            ),
+            Field(
+                name='GemLevel',
+                type='int',
+            ),
+            Field(
+                name='PlayerLevelReq',
+                type='int',
+            ),
+            Field(
+                name='SpellCritChance',
+                type='int',
+            ),
+            Field(
+                name='AttackCritChance',
+                type='int',
+            ),
+            Field(
+                name='BaseMultiplier',
+                type='int',
+            ),
+            Field(
+                name='DamageEffectiveness',
+                type='int',
+            ),
+            Field(
+                name='AdditionalFlags',
+                type='ref|list|ulong',
+                key='Stats.dat',
+            ),
+            Field(
+                name='FloatStats',
+                type='ref|list|ulong',
+                key='Stats.dat',
+            ),
+            Field(
+                name='InterpolationBases',
+                type='ref|list|ulong',
+                key='Stats.dat',
+            ),
+            Field(
+                name='AdditionalStats',
+                type='ref|list|ulong',
+                key='Stats.dat',
+            ),
+            Field(
+                name='StatInterpolations',
+                type='ref|list|int',
+                enum='STAT_INTERPOLATION_TYPES',
+            ),
+            Field(
+                name='FloatStatsValues',
+                type='ref|list|float',
+            ),
+            Field(
+                name='BaseResolvedValues',
+                type='ref|list|int',
+            ),
+            Field(
+                name='AdditionalStatsValues',
+                type='ref|list|int',
+            ),
+            Field(
+                name='GrantedEffects',
+                type='ref|list|ulong',
+                key='GrantedEffects.dat',
+            ),
+        ),
+    ),
     'GrantedEffects.dat': File(
         fields=(
             Field(
@@ -9123,19 +9232,11 @@ specification = Specification({
                 description='This support gem only supports active skills with at least one of these types',
             ),
             Field(
-                name='BaseEffectiveness',
-                type='float',
-            ),
-            Field(
-                name='IncrementalEffectiveness',
-                type='float',
-            ),
-            Field(
                 name='SupportGemLetter',
                 type='ref|string',
             ),
             Field(
-                name='Unknown0',
+                name='Attribute',
                 type='int',
             ),
             Field(
@@ -9156,7 +9257,7 @@ specification = Specification({
                 description='This support gem only supports active skills that come from gem items',
             ),
             Field(
-                name='Unknown1',
+                name='Unknown0',
                 type='int',
             ),
             Field(
@@ -9164,11 +9265,11 @@ specification = Specification({
                 type='ref|list|int',
             ),
             Field(
-                name='Flag0',
+                name='CannotBeSupported',
                 type='bool',
             ),
             Field(
-                name='Unknown2',
+                name='Unknown1',
                 type='int',
             ),
             Field(
@@ -9176,25 +9277,27 @@ specification = Specification({
                 type='int',
             ),
             Field(
-                name='ActiveSkillsKey',
+                name='ActiveSkill',
                 type='ulong',
                 key='ActiveSkills.dat',
             ),
             Field(
-                name='Flag1',
+                name='IgnoreMinionTypes',
                 type='bool',
             ),
             Field(
-                name='Flag2',
+                name='Flag0',
                 type='bool',
             ),
             Field(
-                name='Data1',
-                type='ref|list|int',
+                name='AddedMinionActiveSkillTypes',
+                type='ref|list|ulong',
+                key='ActiveSkillType.dat',
             ),
             Field(
-                name='Key0',
+                name='Animation',
                 type='ulong',
+                key='Animation.dat',
             ),
             Field(
                 name='MultiPartAchievement',
@@ -9202,18 +9305,22 @@ specification = Specification({
                 key='MultiPartAchievements.dat',
             ),
             Field(
-                name='Flag3',
+                name='Flag1',
                 type='bool',
             ),
             Field(
-                name='ItemClasses',
+                name='SupportWeaponRestrictions',
                 type='ref|list|ulong',
                 key='ItemClasses.dat',
             ),
             Field(
-                name='GrantedEffectsKey',
+                name='RegularVariant',
                 type='ref|generic',
                 key='GrantedEffects.dat',
+            ),
+            Field(
+                name='Unknown2',
+                type='int',
             ),
             Field(
                 name='Unknown3',
@@ -9224,19 +9331,24 @@ specification = Specification({
                 type='int',
             ),
             Field(
-                name='Unknown5',
-                type='int',
+                name='Flag2',
+                type='bool',
             ),
             Field(
-                name='Flag4',
-                type='bool',
+                name='StatSet',
+                type='ulong',
+                key='GrantedEffectStatSets.dat',
+            ),
+            Field(
+                name='Keys0',
+                type='ref|list|ulong',
             ),
         ),
     ),
     'GrantedEffectsPerLevel.dat': File(
         fields=(
             Field(
-                name='GrantedEffectsKey',
+                name='GrantedEffect',
                 type='ulong',
                 key='GrantedEffects.dat',
             ),
@@ -9245,111 +9357,12 @@ specification = Specification({
                 type='int',
             ),
             Field(
-                name='StatsKeys',
-                type='ref|list|ulong',
-                key='Stats.dat',
-            ),
-            Field(
-                name='Stat1Float',
-                type='float',
-            ),
-            Field(
-                name='Stat2Float',
-                type='float',
-            ),
-            Field(
-                name='Stat3Float',
-                type='float',
-            ),
-            Field(
-                name='Stat4Float',
-                type='float',
-            ),
-            Field(
-                name='Stat5Float',
-                type='float',
-            ),
-            Field(
-                name='Stat6Float',
-                type='float',
-            ),
-            Field(
-                name='Stat7Float',
-                type='float',
-            ),
-            Field(
-                name='Stat8Float',
-                type='float',
-            ),
-            Field(
-                name='Stat9Float',
-                type='float',
-            ),
-            Field(
-                name='EffectivenessCostConstantsKeys',
-                type='ref|list|ulong',
-                key='EffectivenessCostConstants.dat',
-            ),
-            Field(
-                name='Stat1Value',
+                name='PlayerLevelReq',
                 type='int',
             ),
             Field(
-                name='Stat2Value',
+                name='CostMultiplier',
                 type='int',
-            ),
-            Field(
-                name='Stat3Value',
-                type='int',
-            ),
-            Field(
-                name='Stat4Value',
-                type='int',
-            ),
-            Field(
-                name='Stat5Value',
-                type='int',
-            ),
-            Field(
-                name='Stat6Value',
-                type='int',
-            ),
-            Field(
-                name='Stat7Value',
-                type='int',
-            ),
-            Field(
-                name='Stat8Value',
-                type='int',
-            ),
-            Field(
-                name='Stat9Value',
-                type='int',
-            ),
-            Field(
-                name='LevelRequirement',
-                type='int',
-            ),
-            Field(
-                name='ManaMultiplier',
-                type='int',
-            ),
-            Field(
-                name='LevelRequirement2',
-                type='int',
-            ),
-            Field(
-                name='LevelRequirement3',
-                type='int',
-            ),
-            Field(
-                name='CriticalStrikeChance',
-                type='int',
-            ),
-            Field(
-                name='DamageEffectiveness',
-                type='int',
-                description='Damage effectiveness based on 0 = 100%',
             ),
             Field(
                 name='StoredUses',
@@ -9362,16 +9375,6 @@ specification = Specification({
             Field(
                 name='CooldownBypassType',
                 type='int',
-            ),
-            Field(
-                name='StatsKeys2',
-                type='ref|list|ulong',
-                key='Stats.dat',
-                description='Used with a value of one',
-            ),
-            Field(
-                name='Flag0',
-                type='bool',
             ),
             Field(
                 name='VaalSouls',
@@ -9390,34 +9393,7 @@ specification = Specification({
                 type='int',
             ),
             Field(
-                name='DamageMultiplier',
-                type='int',
-                description='Damage multiplier in 1/10000 for attack skills',
-            ),
-            Field(
-                name='Unknown1',
-                type='int',
-            ),
-            Field(
-                name='ArtVariation',
-                type='int',
-            ),
-            Field(
-                name='StatInterpolationTypesKeys',
-                type='ref|list|int',
-                enum='STAT_INTERPOLATION_TYPES',
-            ),
-            Field(
-                name='Unknown2',
-                type='int',
-            ),
-            Field(
-                name='VaalSoulGainPreventionTime',
-                type='int',
-                description='Time in milliseconds',
-            ),
-            Field(
-                name='BaseDuration',
+                name='SoulGainPreventionDuration',
                 type='int',
             ),
             Field(
@@ -9425,7 +9401,7 @@ specification = Specification({
                 type='int',
             ),
             Field(
-                name='Unknown3',
+                name='Unknown1',
                 type='int',
             ),
             Field(
@@ -9433,7 +9409,7 @@ specification = Specification({
                 type='ref|list|int',
             ),
             Field(
-                name='CostTypesKeys',
+                name='CostTypes',
                 type='ref|list|ulong',
                 key='CostTypes.dat',
             ),
@@ -9454,35 +9430,14 @@ specification = Specification({
                 type='int',
             ),
             Field(
-                name='Unknown4',
-                type='int',
-            ),
-            Field(
-                name='AttackCritChance',
-                type='int',
-            ),
-            Field(
                 name='AttackTime',
                 type='int',
             ),
         ),
         virtual_fields=(
             VirtualField(
-                name='StatValues',
-                fields=('Stat1Value', 'Stat2Value', 'Stat3Value', 'Stat4Value', 'Stat5Value', 'Stat6Value', 'Stat7Value', 'Stat8Value', 'Stat9Value'),
-            ),
-            VirtualField(
-                name='StatFloats',
-                fields=('Stat1Float', 'Stat2Float', 'Stat3Float', 'Stat4Float', 'Stat5Float', 'Stat6Float', 'Stat7Float', 'Stat8Float'),
-            ),
-            VirtualField(
-                name='Stats',
-                fields=('StatsKeys', 'StatValues'),
-                zip=True,
-            ),
-            VirtualField(
                 name='Costs',
-                fields=('CostTypesKeys', 'CostAmounts'),
+                fields=('CostTypes', 'CostAmounts'),
                 zip=True,
             ),
         ),
