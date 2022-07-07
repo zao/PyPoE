@@ -2452,7 +2452,7 @@ class ItemsParser(SkillParserShared):
         else:
             self.rr2 = None
 
-    def _skill_gem(self, infobox, base_item_type):
+    def _skill_gem(self, infobox: OrderedDict, base_item_type):
         try:
             skill_gem = self.rr['SkillGems.dat'].index['BaseItemTypesKey'][
                 base_item_type.rowid]
@@ -2568,7 +2568,7 @@ class ItemsParser(SkillParserShared):
 
             for k, v in list(primary.items()) + list(secondary.items()):
                 # Just override the stuff if needs be.
-                if 'stat' not in k:
+                if 'stat' not in k and k not in infobox.keys():
                     infobox[k] = v
             
             cp_stats_primary('quality_type1')

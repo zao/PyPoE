@@ -9,7 +9,7 @@ Overview
 +----------+------------------------------------------------------------------+
 | Version  | 1.0.0a0                                                          |
 +----------+------------------------------------------------------------------+
-| Revision | $Id$                  |
+| Revision | $Id: cba3bafaeb6214e4efc3628713f0477f7298e56f $                  |
 +----------+------------------------------------------------------------------+
 | Author   | Omega_K2                                                         |
 +----------+------------------------------------------------------------------+
@@ -145,6 +145,8 @@ class SkillParserShared(parser.BaseParser):
         'GrantedEffects.dat',
         'GrantedEffectsPerLevel.dat',
         'GrantedEffectQualityStats.dat',
+        'GrantedEffectStatSetsPerLevel.dat',
+        'GrantedEffectStatSets.dat',
     ]
 
     # Fields to copy from GrantedEffectsPerLevel.dat
@@ -157,10 +159,9 @@ class SkillParserShared(parser.BaseParser):
 
     # Fields to copy from GrantedEffectStatSetsPerLevel.dat
     _GESSPL_COPY = (
-        'CriticalStrikeChance',
-        'DamageMultiplier',
-        'DamageEffectiveness', 'DamageMultiplier',
-        'BaseDuration',
+        'SpellCritChance', 'AttackCritChance',
+        'BaseMultiplier',
+        'DamageEffectiveness',
     )
 
     # def CostTypeHelper(d):
@@ -322,7 +323,7 @@ class SkillParserShared(parser.BaseParser):
             infobox[prefix + 'id'] = val[0]
             infobox[prefix + 'value'] = val[1]
 
-    def _skill(self, gra_eff, infobox, parsed_args, max_level=None, msg_name=None):
+    def _skill(self, gra_eff, infobox: OrderedDict, parsed_args, max_level=None, msg_name=None):
         if msg_name is None:
             msg_name = gra_eff['Id']
 
@@ -348,18 +349,18 @@ class SkillParserShared(parser.BaseParser):
         if max_level is None:
             max_level = len(gra_eff_per_lvl)-1
 
-        ae = gra_eff['ActiveSkill']
-        if ae:
+        act_skill = gra_eff['ActiveSkill']
+        if act_skill:
             try:
                 tf = self.tc[self.skill_stat_filter.skills[
-                    ae['Id']].translation_file_path]
+                    act_skill['Id']].translation_file_path]
             except KeyError as e:
                 warnings.warn('Missing active skill in stat filers: %s' % e.args[0])
                 tf = self.tc['skill_stat_descriptions.txt']
 
-            if parsed_args.store_images and ae['Icon_DDSFile']:
+            if parsed_args.store_images and act_skill['Icon_DDSFile']:
                 self._write_dds(
-                    data=self.file_system.get_file(ae['Icon_DDSFile']),
+                    data=self.file_system.get_file(act_skill['Icon_DDSFile']),
                     out_path=os.path.join(
                         self._img_path,
                         '%s skill icon.dds' % msg_name
@@ -375,12 +376,22 @@ class SkillParserShared(parser.BaseParser):
             'stats': OrderedDict(),
         }
 
-        for i, row in enumerate(gra_eff_stats_pl):
+        for i, lvl_stats in enumerate(gra_eff_stats_pl):
             data = defaultdict()
+            if len(gra_eff_per_lvl) > i:
+                lvl_effects = gra_eff_per_lvl[i]
+            else:
+                lvl_effects = None
+                warnings.warn(f'GrantedEffectsPerLevel is missing level {lvl_stats["GemLevel"]} which GrantedEffectStatSetsPerLevel has.')
+            
+            if lvl_effects is not None and lvl_effects['Level'] != lvl_stats['GemLevel']:
+                lvl_effects = None
+                warnings.warn(f'GrantedEffectsPerLevel is missing level {lvl_stats["GemLevel"]} which GrantedEffectStatSetsPerLevel has.')
+                
 
-            stats = [r['Id'] for stat_index, r in enumerate(row['FloatStats']) if stat_index < len(row['FloatStatsValues'])] + \
-                    [r['Id'] for r in row['AdditionalStats']]
-            values = row['FloatStatsValues'] + row['AdditionalStatsValues']
+            stats = [r['Id'] for stat_index, r in enumerate(lvl_stats['FloatStats']) if stat_index < len(lvl_stats['FloatStatsValues'])] + \
+                    [r['Id'] for r in lvl_stats['AdditionalStats']]
+            values = lvl_stats['FloatStatsValues'] + lvl_stats['AdditionalStatsValues']
 
             # Remove 0 (unused) stats
             # This will remove all +0 gem level entries.
@@ -449,15 +460,19 @@ class SkillParserShared(parser.BaseParser):
                     'values_parsed': [value, ],
                 }
 
-            for column in self._GEPL_COPY:
-                data[column] = row[column]
+            if lvl_effects is not None:
+                for column in self._GEPL_COPY:
+                    data[column] = lvl_effects[column]
+            
+            for column in self._GESSPL_COPY:
+                data[column] = lvl_stats[column]
 
             level_data.append(data)
 
         # Find static & dynamic stats..
 
         static = {
-            'columns': set(self._GEPL_COPY),
+            'columns': set(self._GEPL_COPY + self._GESSPL_COPY),
             'stats': OrderedDict(stat_key_order['stats']),
         }
         dynamic = {
@@ -493,12 +508,12 @@ class SkillParserShared(parser.BaseParser):
         #
 
         # From ActiveSkills.dat
-        if ae:
-            infobox['gem_description'] = ae['Description']
-            infobox['active_skill_name'] = ae['DisplayedName']
-            if ae['WeaponRestriction_ItemClassesKeys']:
+        if act_skill:
+            infobox['gem_description'] = act_skill['Description']
+            infobox['active_skill_name'] = act_skill['DisplayedName']
+            if act_skill['WeaponRestriction_ItemClassesKeys']:
                 infobox['item_class_id_restriction'] = ', '.join([
-                    c['Id'] for c in ae['WeaponRestriction_ItemClassesKeys']
+                    c['Id'] for c in act_skill['WeaponRestriction_ItemClassesKeys']
                 ])
 
         # From Projectile.dat if available
@@ -518,7 +533,7 @@ class SkillParserShared(parser.BaseParser):
             infobox['cast_time'] = gra_eff['CastTime'] / 1000
 
         # GrantedEffectsPerLevel.dat
-        infobox['required_level'] = level_data[0]['LevelRequirement']
+        infobox['required_level'] = level_data[0]['PlayerLevelReq']
 
 
         #
@@ -584,15 +599,16 @@ class SkillParserShared(parser.BaseParser):
                 continue
 
             default = column_data.get('default')
-            if default is not None and gra_eff_per_lvl[0][column] == \
-                    column_data['default']:
+            if default is not None and gra_eff_per_lvl[0][column] == column_data['default']:
                 continue
 
             df = column_data.get('skip_active')
             if df is not None and not gra_eff['IsSupport']:
                 continue
-            infobox['static_' + column_data['template']] = \
-                column_data['format'](gra_eff_per_lvl[0][column])
+            try:
+                infobox['static_' + column_data['template']] = column_data['format'](gra_eff_per_lvl[0][column])
+            except KeyError:
+                infobox['static_' + column_data['template']] = column_data['format'](gra_eff_stats_pl[0][column])
 
         # Normal stats
         # TODO: Loop properly - some stats not available at level 0
@@ -652,18 +668,23 @@ class SkillParserShared(parser.BaseParser):
         self._write_stats(infobox, zip(stats, values), 'static_')
 
         # Add the attack damage stat from the game data
-        if ae:
+        if act_skill:
             field_stats = (
+                (
+                    ('DamageEffectiveness', ),
+                    ('active_skill_attack_damage_final_permyriad', ),
+                    0,
+                ),
                 # (
                 #     ('DamageMultiplier', ),
                 #     ('active_skill_attack_damage_final_permyriad', ),
                 #     0,
                 # ),
-                (
-                    ('BaseDuration', ),
-                    ('base_skill_effect_duration', ),
-                    0,
-                ),
+                #(
+                #    ('BaseDuration', ),
+                #    ('base_skill_effect_duration', ),
+                #    0,
+                #),
             )
             added = []
             for value_keys, tags, default in field_stats:
@@ -695,7 +716,7 @@ class SkillParserShared(parser.BaseParser):
 
             prefix += '_'
 
-            infobox[prefix + 'level_requirement'] = row['LevelRequirement']
+            infobox[prefix + 'level_requirement'] = row['PlayerLevelReq']
 
             # Column handling
             for column, column_data in self._SKILL_COLUMN_MAP:
