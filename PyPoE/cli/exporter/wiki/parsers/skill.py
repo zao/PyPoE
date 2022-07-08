@@ -33,6 +33,7 @@ See PyPoE/LICENSE
 
 # Python
 import os
+from typing import Union
 import warnings
 import traceback
 from collections import OrderedDict, defaultdict
@@ -43,6 +44,7 @@ from PyPoE.cli.exporter import config
 from PyPoE.cli.exporter.wiki.handler import ExporterHandler, ExporterResult
 from PyPoE.cli.exporter.wiki import parser
 from PyPoE.poe.file.stat_filters import StatFilterFile
+from PyPoE.poe.file.translations import TranslationFile
 
 # =============================================================================
 # Globals
@@ -225,9 +227,9 @@ class SkillParserShared(parser.BaseParser):
         }),
         ('DamageEffectiveness', {
             'template': 'damage_effectiveness',
-            'format': lambda v: '{0:n}'.format(v+100),
+            'format': lambda v: '{0:n}'.format(v/100+100),
         }),
-        ('DamageMultiplier', {
+        ('BaseMultiplier', {
             'template': 'damage_multiplier',
             'format': lambda v: '{0:n}'.format(v/100+100),
         }),
@@ -323,6 +325,66 @@ class SkillParserShared(parser.BaseParser):
             infobox[prefix + 'id'] = val[0]
             infobox[prefix + 'value'] = val[1]
 
+    def _translate_stats(self, stats, values: Union[list[int], list[tuple[int, int]]], trans_file: TranslationFile, data: defaultdict) -> OrderedDict:
+        stats_output = OrderedDict()
+
+        trans_rslt = trans_file.get_translation(
+            tags=stats,
+            values=values,
+            full_result=True,
+            lang=config.get_option('language'),
+        )
+        data['_tr'] = trans_rslt
+
+        data['stats'] = {}
+
+        for j, stats in enumerate(trans_rslt.found_ids):
+            values = list(trans_rslt.values[j])
+            stats = list(stats)
+            values_parsed = list(trans_rslt.values_parsed[j])
+            # Skip zero stats again, since some translations might
+            # provide them
+            while True:
+                try:
+                    index = values.index(0)
+                except ValueError:
+                    break
+
+                try:
+                    del values[index]
+                except IndexError:
+                    pass
+
+                try:
+                    del values_parsed[index]
+                except IndexError:
+                    pass
+
+                try:
+                    del stats[index]
+                except IndexError:
+                    pass
+            if trans_rslt.values[j] == 0:
+                continue
+            k = '__'.join(stats)
+            stats_output[k] = None
+            data['stats']['__'.join(stats)] = {
+                'line': trans_rslt.found_lines[j],
+                'stats': stats,
+                'values': values,
+                'values_parsed': values_parsed,
+            }
+        for stat, value in trans_rslt.missing:
+            warnings.warn(f'Missing translation for {stat}')
+            stats_output[stat] = None
+            data['stats'][stat] = {
+                'line': '',
+                'stats': [stat, ],
+                'values': [value, ],
+                'values_parsed': [value, ],
+            }
+        return stats_output
+
     def _skill(self, gra_eff, infobox: OrderedDict, parsed_args, max_level=None, msg_name=None):
         if msg_name is None:
             msg_name = gra_eff['Id']
@@ -376,6 +438,7 @@ class SkillParserShared(parser.BaseParser):
             'stats': OrderedDict(),
         }
 
+        # Copy per-level stats into level_data
         for i, lvl_stats in enumerate(gra_eff_stats_pl):
             data = defaultdict()
             if len(gra_eff_per_lvl) > i:
@@ -404,61 +467,10 @@ class SkillParserShared(parser.BaseParser):
                     del stats[index]
                     del values[index]
 
-            tr = tf.get_translation(
-                tags=stats,
-                values=values,
-                full_result=True,
-                lang=config.get_option('language'),
-            )
-            data['_tr'] = tr
-
-            data['stats'] = {}
-
-            for j, stats in enumerate(tr.found_ids):
-                values = list(tr.values[j])
-                stats = list(stats)
-                values_parsed = list(tr.values_parsed[j])
-                # Skip zero stats again, since some translations might
-                # provide them
-                while True:
-                    try:
-                        index = values.index(0)
-                    except ValueError:
-                        break
-
-                    try:
-                        del values[index]
-                    except IndexError:
-                        pass
-
-                    try:
-                        del values_parsed[index]
-                    except IndexError:
-                        pass
-
-                    try:
-                        del stats[index]
-                    except IndexError:
-                        pass
-                if tr.values[j] == 0:
-                    continue
-                k = '__'.join(stats)
-                stat_key_order['stats'][k] = None
-                data['stats']['__'.join(stats)] = {
-                    'line': tr.found_lines[j],
-                    'stats': stats,
-                    'values': values,
-                    'values_parsed': values_parsed,
-                }
-            for stat, value in tr.missing:
-                warnings.warn('Missing translation for %s' % stat)
-                stat_key_order['stats'][stat] = None
-                data['stats'][stat] = {
-                    'line': '',
-                    'stats': [stat, ],
-                    'values': [value, ],
-                    'values_parsed': [value, ],
-                }
+            translated_stats = self._translate_stats(stats, values, tf, data)
+            for tr_stat in translated_stats.keys():
+                stat_key_order['stats'][tr_stat] = translated_stats[tr_stat]
+            
 
             if lvl_effects is not None:
                 for column in self._GEPL_COPY:
@@ -472,7 +484,9 @@ class SkillParserShared(parser.BaseParser):
         # Find static & dynamic stats..
 
         static = {
+            # columns are standard attributes that every skill has
             'columns': set(self._GEPL_COPY + self._GESSPL_COPY),
+            # stats are specific to this skill
             'stats': OrderedDict(stat_key_order['stats']),
         }
         dynamic = {
@@ -502,6 +516,28 @@ class SkillParserShared(parser.BaseParser):
                     del static['stats'][key]
                     dynamic['stats'][key] = None
             last = data
+
+        # GrantedEffectStatSets.dat
+        impl_stats = [untr_stat['Id'] for untr_stat in stat_set['ImplicitStats']]
+        const_stats = [untr_stat['Id'] for untr_stat in stat_set['ConstantStats']]
+        const_stat_vals = stat_set['ConstantStatsValues']
+
+        impl_data = defaultdict()
+        const_data = defaultdict()
+        impl_tr_stats = self._translate_stats(impl_stats, [1 for i in range(len(impl_stats))], tf, impl_data)
+        const_tr_stats = self._translate_stats(const_stats, const_stat_vals, tf, const_data)
+
+        # Later code that generates the infobox expects static stats to be in static, and to have values in level 0 of the gem.
+        # It also expects them to be in the master list in stat_key_order
+        for tr_stat in impl_tr_stats.keys():
+            static['stats'][tr_stat] = impl_tr_stats[tr_stat]
+            stat_key_order['stats'][tr_stat] = impl_tr_stats[tr_stat]
+            level_data[0]['stats'][tr_stat] = impl_data['stats'][tr_stat]
+        for tr_stat in const_tr_stats.keys():
+            static['stats'][tr_stat] = const_tr_stats[tr_stat]
+            stat_key_order['stats'][tr_stat] = const_tr_stats[tr_stat]
+            level_data[0]['stats'][tr_stat] = const_data['stats'][tr_stat]
+        
 
         #
         # Output handling for gem infobox
@@ -539,15 +575,15 @@ class SkillParserShared(parser.BaseParser):
         #
         # Quality stats
         #
-        geq = []
+        qual_stats = []
         for row in self.rr['GrantedEffectQualityStats.dat']:
             if row['GrantedEffectsKey'] == gra_eff:
                 print(row['StatsKeys'][0]["Id"])
-                geq.append(row)
+                qual_stats.append(row)
 
-        geq.sort(key=lambda row: row['SetId'])
+        qual_stats.sort(key=lambda row: row['SetId'])
 
-        for row in geq:
+        for row in qual_stats:
             prefix = 'quality_type%s_' % \
                      (row['SetId'] + 1)
             infobox[prefix + 'weight'] = row['Weight']
@@ -675,11 +711,11 @@ class SkillParserShared(parser.BaseParser):
                     ('active_skill_attack_damage_final_permyriad', ),
                     0,
                 ),
-                # (
-                #     ('DamageMultiplier', ),
-                #     ('active_skill_attack_damage_final_permyriad', ),
-                #     0,
-                # ),
+                (
+                    ('BaseMultiplier', ),
+                    ('active_skill_attack_damage_final_permyriad', ),
+                    0,
+                ),
                 #(
                 #    ('BaseDuration', ),
                 #    ('base_skill_effect_duration', ),
