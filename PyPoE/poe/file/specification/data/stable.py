@@ -19407,11 +19407,11 @@ specification = Specification({
             ),
             Field(
                 name='Unknown12',
-                type='int',
+                type='ref|list|int',
             ),
             Field(
-                name='Unknown13',
-                type='int',
+                name='String0',
+                type='ref|string',
             ),
         ),
     ),

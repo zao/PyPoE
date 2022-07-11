@@ -9,7 +9,7 @@ Overview
 +----------+------------------------------------------------------------------+
 | Version  | 1.0.0a0                                                          |
 +----------+------------------------------------------------------------------+
-| Revision | $Id: cba3bafaeb6214e4efc3628713f0477f7298e56f $                  |
+| Revision | $Id$                  |
 +----------+------------------------------------------------------------------+
 | Author   | Omega_K2                                                         |
 +----------+------------------------------------------------------------------+
@@ -182,7 +182,7 @@ class SkillParserShared(parser.BaseParser):
             'condition': lambda v: v[0] is not None,
             'format': lambda v: v[0],
         }),
-        ('CostTypesKeys', {
+        ('CostTypes', {
             'template': 'cost_types',
             'default': [],
             # 'format': CostTypeHelper,
@@ -220,7 +220,12 @@ class SkillParserShared(parser.BaseParser):
             'default': 0,
             'format': lambda v: '{0:n}'.format(v/1000),
         }),
-        ('CriticalStrikeChance', {
+        ('SpellCritChance', {
+            'template': 'critical_strike_chance',
+            'default': 0,
+            'format': lambda v: '{0:n}'.format(v/100),
+        }),
+        ('AttackCritChance', {
             'template': 'critical_strike_chance',
             'default': 0,
             'format': lambda v: '{0:n}'.format(v/100),
@@ -452,9 +457,9 @@ class SkillParserShared(parser.BaseParser):
                 warnings.warn(f'GrantedEffectsPerLevel is missing level {lvl_stats["GemLevel"]} which GrantedEffectStatSetsPerLevel has.')
                 
 
-            stats = [r['Id'] for stat_index, r in enumerate(lvl_stats['FloatStats']) if stat_index < len(lvl_stats['FloatStatsValues'])] + \
+            stats = [r['Id'] for stat_index, r in enumerate(lvl_stats['FloatStats']) if stat_index < len(lvl_stats['BaseResolvedValues'])] + \
                     [r['Id'] for r in lvl_stats['AdditionalStats']]
-            values = lvl_stats['FloatStatsValues'] + lvl_stats['AdditionalStatsValues']
+            values = lvl_stats['BaseResolvedValues'] + lvl_stats['AdditionalStatsValues']
 
             # Remove 0 (unused) stats
             # This will remove all +0 gem level entries.
@@ -518,26 +523,32 @@ class SkillParserShared(parser.BaseParser):
             last = data
 
         # GrantedEffectStatSets.dat
-        impl_stats = [untr_stat['Id'] for untr_stat in stat_set['ImplicitStats']]
         const_stats = [untr_stat['Id'] for untr_stat in stat_set['ConstantStats']]
+        impl_stats = [untr_stat['Id'] for untr_stat in stat_set['ImplicitStats']]
         const_stat_vals = stat_set['ConstantStatsValues']
 
-        impl_data = defaultdict()
         const_data = defaultdict()
-        impl_tr_stats = self._translate_stats(impl_stats, [1 for i in range(len(impl_stats))], tf, impl_data)
+        impl_data = defaultdict()
         const_tr_stats = self._translate_stats(const_stats, const_stat_vals, tf, const_data)
+        impl_tr_stats = self._translate_stats(impl_stats, [1 for i in range(len(impl_stats))], tf, impl_data)
 
         # Later code that generates the infobox expects static stats to be in static, and to have values in level 0 of the gem.
         # It also expects them to be in the master list in stat_key_order
-        for tr_stat in impl_tr_stats.keys():
-            static['stats'][tr_stat] = impl_tr_stats[tr_stat]
-            stat_key_order['stats'][tr_stat] = impl_tr_stats[tr_stat]
-            level_data[0]['stats'][tr_stat] = impl_data['stats'][tr_stat]
         for tr_stat in const_tr_stats.keys():
             static['stats'][tr_stat] = const_tr_stats[tr_stat]
-            stat_key_order['stats'][tr_stat] = const_tr_stats[tr_stat]
             level_data[0]['stats'][tr_stat] = const_data['stats'][tr_stat]
+            stat_key_order['stats'][tr_stat] = const_tr_stats[tr_stat]
+
+        for tr_stat in impl_tr_stats.keys():
+            static['stats'][tr_stat] = impl_tr_stats[tr_stat]
+            level_data[0]['stats'][tr_stat] = impl_data['stats'][tr_stat]
+            stat_key_order['stats'][tr_stat] = impl_tr_stats[tr_stat]
         
+        last_lvl_stats = gra_eff_stats_pl[-1]
+        last_lvl_stat_keys = [r['Id'] for r in last_lvl_stats['AdditionalStats']]
+        for stat_key in last_lvl_stat_keys:
+            if stat_key in stat_key_order['stats'].keys():
+                stat_key_order['stats'].move_to_end(stat_key)
 
         #
         # Output handling for gem infobox
@@ -635,7 +646,14 @@ class SkillParserShared(parser.BaseParser):
                 continue
 
             default = column_data.get('default')
-            if default is not None and gra_eff_per_lvl[0][column] == column_data['default']:
+            should_continue = False
+            try:
+                if default is not None and gra_eff_per_lvl[0][column] == column_data['default']:
+                    should_continue = True
+            except KeyError:
+                if default is not None and gra_eff_stats_pl[0][column] == column_data['default']:
+                    should_continue = True
+            if should_continue:
                 continue
 
             df = column_data.get('skip_active')
@@ -706,11 +724,11 @@ class SkillParserShared(parser.BaseParser):
         # Add the attack damage stat from the game data
         if act_skill:
             field_stats = (
-                (
-                    ('DamageEffectiveness', ),
-                    ('active_skill_attack_damage_final_permyriad', ),
-                    0,
-                ),
+                # (
+                #     ('DamageEffectiveness', ),
+                #     ('active_skill_attack_damage_final_permyriad', ),
+                #     0,
+                # ),
                 (
                     ('BaseMultiplier', ),
                     ('active_skill_attack_damage_final_permyriad', ),
