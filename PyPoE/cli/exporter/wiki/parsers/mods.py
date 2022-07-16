@@ -9,7 +9,7 @@ Overview
 +----------+------------------------------------------------------------------+
 | Version  | 1.0.0a0                                                          |
 +----------+------------------------------------------------------------------+
-| Revision | $Id$                  |
+| Revision | $Id: 2cfc306a89be24591fd58da16f36c1e645e1aa10 $                  |
 +----------+------------------------------------------------------------------+
 | Author   | Omega_K2                                                         |
 +----------+------------------------------------------------------------------+
@@ -246,7 +246,7 @@ class ModParser(BaseParser):
             # todo ID for GEPL
             if mod['GrantedEffectsPerLevelKeys']:
                 data['granted_skill'] = ', '.join(
-                    [k['GrantedEffectsKey']['Id'] for k in
+                    [k['GrantedEffect']['Id'] for k in
                      mod['GrantedEffectsPerLevelKeys']])
             data['mod_type'] = mod['ModTypeKey']['Name']
 
