@@ -246,7 +246,7 @@ class ModParser(BaseParser):
             # todo ID for GEPL
             if mod['GrantedEffectsPerLevelKeys']:
                 data['granted_skill'] = ', '.join(
-                    [k['GrantedEffectsKey']['Id'] for k in
+                    [k['GrantedEffect']['Id'] for k in
                      mod['GrantedEffectsPerLevelKeys']])
             data['mod_type'] = mod['ModTypeKey']['Name']
 

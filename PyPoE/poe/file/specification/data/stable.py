@@ -1911,6 +1911,10 @@ specification = Specification({
                 name='Flag1',
                 type='bool',
             ),
+            Field(
+                name='NotOnAtlas',
+                type='bool',
+            ),
         ),
     ),
     'AtlasNodeDefinition.dat': File(
@@ -14428,6 +14432,10 @@ specification = Specification({
                 name='ArchnemesisTier',
                 type='int',
             ),
+            Field(
+                name='SentinelTier',
+                type='int',
+            ),
         ),
     ),
     'MapStatConditions.dat': File(
@@ -16721,6 +16729,18 @@ specification = Specification({
             ),
             Field(
                 name='Flag1',
+                type='bool',
+            ),
+            Field(
+                name='Keys0',
+                type='ref|list|ulong',
+            ),
+            Field(
+                name='Flag2',
+                type='bool',
+            ),
+            Field(
+                name='Flag3',
                 type='bool',
             ),
         ),
