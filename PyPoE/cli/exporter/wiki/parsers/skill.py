@@ -501,7 +501,6 @@ class SkillParserShared(parser.BaseParser):
 
         # Grab the data from the first row of per-level gem data.
         last = level_data[0]
-        print(static)
 
         for data in level_data[1:]:
             for key in list(static['columns']):
@@ -537,6 +536,7 @@ class SkillParserShared(parser.BaseParser):
         for tr_stat in const_tr_stats.keys():
             static['stats'][tr_stat] = const_tr_stats[tr_stat]
             level_data[0]['stats'][tr_stat] = const_data['stats'][tr_stat]
+        for tr_stat in reversed(const_tr_stats.keys()):
             stat_key_order['stats'][tr_stat] = const_tr_stats[tr_stat]
 
         for tr_stat in impl_tr_stats.keys():
@@ -549,6 +549,17 @@ class SkillParserShared(parser.BaseParser):
         for stat_key in last_lvl_stat_keys:
             if stat_key in stat_key_order['stats'].keys():
                 stat_key_order['stats'].move_to_end(stat_key)
+
+        skipped_first = False
+        stat_keys = [stat_key for stat_key in stat_key_order['stats'].keys()]
+        for stat_key in stat_keys:
+            if (stat_key not in const_tr_stats.keys()) and (stat_key not in impl_tr_stats.keys()) and (stat_key not in last_lvl_stat_keys):
+                if not skipped_first:
+                    skipped_first = True
+                    continue
+                stat_key_order['stats'].move_to_end(stat_key)
+        
+        # TODO: Actually construct stat_key_order from its components in an odered, sane way.
 
         #
         # Output handling for gem infobox
@@ -589,7 +600,6 @@ class SkillParserShared(parser.BaseParser):
         qual_stats = []
         for row in self.rr['GrantedEffectQualityStats.dat']:
             if row['GrantedEffectsKey'] == gra_eff:
-                print(row['StatsKeys'][0]["Id"])
                 qual_stats.append(row)
 
         qual_stats.sort(key=lambda row: row['SetId'])
@@ -729,11 +739,11 @@ class SkillParserShared(parser.BaseParser):
                 #     ('active_skill_attack_damage_final_permyriad', ),
                 #     0,
                 # ),
-                (
-                    ('BaseMultiplier', ),
-                    ('active_skill_attack_damage_final_permyriad', ),
-                    0,
-                ),
+                # (
+                #     ('BaseMultiplier', ),
+                #     ('active_skill_attack_damage_final_permyriad', ),
+                #     0,
+                # ),
                 #(
                 #    ('BaseDuration', ),
                 #    ('base_skill_effect_duration', ),

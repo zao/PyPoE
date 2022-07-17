@@ -30,7 +30,9 @@ See PyPoE/LICENSE
 # =============================================================================
 
 # Python
+from difflib import unified_diff
 import os
+import sys
 import time
 import re
 from collections.abc import Iterable
@@ -192,7 +194,11 @@ class WikiHandler:
                 return
 
             if self.cmdargs.dry_run:
-                console(text)
+                #console(text)
+                wiki_lines = page.text().splitlines(keepends=True)
+                new_lines = text.splitlines(keepends=True)
+                u_diff = unified_diff(wiki_lines, new_lines, "Wiki", "Export")
+                sys.stdout.writelines(u_diff)
             else:
                 response = page.save(
                     text=text,

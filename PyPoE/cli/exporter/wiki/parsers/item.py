@@ -2555,11 +2555,11 @@ class ItemsParser(SkillParserShared):
                 i = 1
                 while True:
                     try:
-                        print(f'{prefix}_stat{i}')
+                        # print(f'{prefix}_stat{i}')
                         sid, sv = get_stat(i, prefix, primary)
-                        print(sid, sv)
+                        # print(sid, sv)
                         stext = primary[f'{prefix}_stat_text']
-                        print(stext)
+                        # print(stext)
                     except KeyError:
                         break
                     set_stat(i, prefix, sid, sv)
