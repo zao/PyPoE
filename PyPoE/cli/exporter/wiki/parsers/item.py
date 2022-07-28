@@ -398,6 +398,7 @@ class ItemsParser(SkillParserShared):
         'Expedition': '3.15.0',
         'Hellscape': '3.16.0', # AKA Scourge
         'Archnemesis': '3.17.0',
+        'Sentinel': '3.18.0',
     }
 
     _IGNORE_DROP_LEVEL_CLASSES = (
