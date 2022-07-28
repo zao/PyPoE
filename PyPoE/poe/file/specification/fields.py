@@ -409,8 +409,8 @@ class File:
         else:
             starting_fields_length = len(fields)
             fields = OrderedDict(((field.name, field) for field in fields))
-        if starting_fields_length != len(fields):
-            raise(ValueError("Field names must be unique within each file definition."))
+        assert starting_fields_length == len(fields), "Field names must be unique within each file definition."
+        
         self.fields = fields
         if virtual_fields is None:
             virtual_fields = OrderedDict()
