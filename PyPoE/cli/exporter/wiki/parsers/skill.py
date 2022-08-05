@@ -546,9 +546,9 @@ class SkillParserShared(parser.BaseParser):
         
         last_lvl_stats = gra_eff_stats_pl[-1]
         last_lvl_stat_keys = [r['Id'] for r in last_lvl_stats['AdditionalStats']]
-        for stat_key in last_lvl_stat_keys:
-            if stat_key in stat_key_order['stats'].keys():
-                stat_key_order['stats'].move_to_end(stat_key)
+        # for stat_key in last_lvl_stat_keys:
+        #     if stat_key in stat_key_order['stats'].keys():
+        #         stat_key_order['stats'].move_to_end(stat_key)
 
         skipped_first = False
         stat_keys = [stat_key for stat_key in stat_key_order['stats'].keys()]
@@ -560,6 +560,9 @@ class SkillParserShared(parser.BaseParser):
                 stat_key_order['stats'].move_to_end(stat_key)
         
         # TODO: Actually construct stat_key_order from its components in an odered, sane way.
+        stat_key_order_2 = {
+            'stats': OrderedDict(),
+        }
 
         #
         # Output handling for gem infobox
