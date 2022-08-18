@@ -330,7 +330,7 @@ class SkillParserShared(parser.BaseParser):
             infobox[prefix + 'id'] = val[0]
             infobox[prefix + 'value'] = val[1]
 
-    def _translate_stats(self, stats, values: Union[list[int], list[tuple[int, int]]], trans_file: TranslationFile, data: defaultdict) -> OrderedDict:
+    def _translate_stats(self, stats, values: Union[list[int], list[tuple[int, int]]], trans_file: TranslationFile, data: defaultdict, stat_order: defaultdict) -> OrderedDict:
         stats_output = OrderedDict()
 
         trans_rslt = trans_file.get_translation(
@@ -379,6 +379,7 @@ class SkillParserShared(parser.BaseParser):
                 'values': values,
                 'values_parsed': values_parsed,
             }
+            stat_order[k] = trans_rslt.tf_indices[j]
         for stat, value in trans_rslt.missing:
             warnings.warn(f'Missing translation for {stat}')
             stats_output[stat] = None
@@ -388,6 +389,7 @@ class SkillParserShared(parser.BaseParser):
                 'values': [value, ],
                 'values_parsed': [value, ],
             }
+            stat_order[stat] = -1
         return stats_output
 
     def _skill(self, gra_eff, infobox: OrderedDict, parsed_args, max_level=None, msg_name=None):
@@ -443,6 +445,7 @@ class SkillParserShared(parser.BaseParser):
             'stats': OrderedDict(),
         }
 
+        stat_order = defaultdict()
         # Copy per-level stats into level_data
         for i, lvl_stats in enumerate(gra_eff_stats_pl):
             data = defaultdict()
@@ -472,7 +475,7 @@ class SkillParserShared(parser.BaseParser):
                     del stats[index]
                     del values[index]
 
-            translated_stats = self._translate_stats(stats, values, tf, data)
+            translated_stats = self._translate_stats(stats, values, tf, data, stat_order)
             for tr_stat in translated_stats.keys():
                 stat_key_order['stats'][tr_stat] = translated_stats[tr_stat]
             
@@ -527,9 +530,11 @@ class SkillParserShared(parser.BaseParser):
         const_stat_vals = stat_set['ConstantStatsValues']
 
         const_data = defaultdict()
+        const_order = defaultdict()
         impl_data = defaultdict()
-        const_tr_stats = self._translate_stats(const_stats, const_stat_vals, tf, const_data)
-        impl_tr_stats = self._translate_stats(impl_stats, [1 for i in range(len(impl_stats))], tf, impl_data)
+        impl_order = defaultdict()
+        const_tr_stats = self._translate_stats(const_stats, const_stat_vals, tf, const_data, stat_order)
+        impl_tr_stats = self._translate_stats(impl_stats, [1 for i in range(len(impl_stats))], tf, impl_data, stat_order)
 
         # Later code that generates the infobox expects static stats to be in static, and to have values in level 0 of the gem.
         # It also expects them to be in the master list in stat_key_order
@@ -550,6 +555,7 @@ class SkillParserShared(parser.BaseParser):
         #     if stat_key in stat_key_order['stats'].keys():
         #         stat_key_order['stats'].move_to_end(stat_key)
 
+
         skipped_first = False
         stat_keys = [stat_key for stat_key in stat_key_order['stats'].keys()]
         for stat_key in stat_keys:
@@ -559,6 +565,7 @@ class SkillParserShared(parser.BaseParser):
                     continue
                 stat_key_order['stats'].move_to_end(stat_key)
         
+        stat_key_order['stats'] = OrderedDict(sorted(stat_key_order['stats'].items(), key=lambda item: stat_order[item[0]]))
         # TODO: Actually construct stat_key_order from its components in an odered, sane way.
         stat_key_order_2 = {
             'stats': OrderedDict(),

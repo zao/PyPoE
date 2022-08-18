@@ -234,18 +234,21 @@ class Translation(TranslationReprMixin):
         List of ids associated with this translation
     identifier
         Identifier if present else None
+    tf_index
+        Index within the translation file
     """
 
-    __slots__ = ['languages', 'ids', 'identifier']
+    __slots__ = ['languages', 'ids', 'identifier', 'tf_index']
 
     _REPR_EXTRA_ATTRIBUTES = OrderedDict((
         ('ids', None),
     ))
 
-    def __init__(self, identifier: Union[str, None] = None):
+    def __init__(self, identifier: Union[str, None] = None, tf_index: Union[int, None] = None):
         self.languages: List[TranslationLanguage] = []
         self.ids: List[str] = []
         self.identifier: Union[str, None] = identifier
+        self.tf_index: Union[int, None] = tf_index
 
     def __eq__(self, other: Any) -> bool:
         if not isinstance(other, Translation):
@@ -255,6 +258,9 @@ class Translation(TranslationReprMixin):
             return False
 
         if self.languages != other.languages:
+            return False
+        
+        if self.identifier != other.identifier:
             return False
 
         return True
@@ -1226,7 +1232,7 @@ class TranslationResult(TranslationReprMixin):
     found
         List of found :class:`Translation` instances (in order)
     found_lines
-        List of related translated strings (in order)L
+        List of related translated strings (in order)
     lines
         List of translated strings (minus missing ones)
     missing_ids
@@ -1248,6 +1254,9 @@ class TranslationResult(TranslationReprMixin):
     extra_strings
         List of dictionary containing extra strings returned.
         The key is the quantifier id used and the value is the string returned.
+    string_instances
+    tf_indices
+        The index of the translation that was used from the translation file
     """
     __slots__ = [
         'found',
@@ -1262,7 +1271,8 @@ class TranslationResult(TranslationReprMixin):
         'source_ids',
         'source_values',
         'extra_strings',
-        'string_instances'
+        'string_instances',
+        'tf_indices',
     ]
 
     def __init__(self,
@@ -1279,6 +1289,7 @@ class TranslationResult(TranslationReprMixin):
                  source_values,
                  extra_strings,
                  string_instances,
+                 tf_indices,
                  ):
         self.found: List[Translation] = found
         self.found_lines: List[str] = found_lines
@@ -1294,6 +1305,7 @@ class TranslationResult(TranslationReprMixin):
             source_values
         self.extra_strings: List[Dict[str, str]] = extra_strings
         self.string_instances: List[TranslationString] = string_instances
+        self.tf_indices: List[Union[int, None]] = tf_indices
 
     def _get_found_ids(self) -> List[List[str]]:
         """
@@ -1427,6 +1439,7 @@ class TranslationFile(AbstractFileReadOnly):
                 self.merge(TranslationFile(path))
 
     def _read(self, buffer, *args, **kwargs):
+        translation_index = 0
         self.translations = []
         data = buffer.read().decode('utf-16')
 
@@ -1438,7 +1451,7 @@ class TranslationFile(AbstractFileReadOnly):
             match_next = regex_tokens.search(data, offset)
             offset_max = match_next.start() if match_next else len(data)
             if match.group('description'):
-                translation = Translation(identifier=match.group('identifier'))
+                translation = Translation(identifier=match.group('identifier'), tf_index=translation_index)
 
                 # Parse the IDs for the translations
                 id_count = regex_int.search(data, offset, offset_max)
@@ -1550,17 +1563,21 @@ class TranslationFile(AbstractFileReadOnly):
                 self.translations.append(translation)
                 for translation_id in translation.ids:
                     self._add_translation_hashed(translation_id, translation)
+                translation_index += 1
 
             elif match.group('no_description'):
                 pass
             elif match.group('include'):
                 if self._parent:
-                    self.merge(self._parent.get_file(match.group('include')))
+                    other_tf = self._parent.get_file(match.group('include'))
+                    self.merge(other_tf)
+                    translation_index += len(other_tf.translations)
                 elif self._base_dir:
                     real_path = os.path.join(
                         self._base_dir, match.group('include'))
-                    self.merge(TranslationFile(
-                        real_path, base_dir=self._base_dir))
+                    other_tf = TranslationFile(real_path, base_dir=self._base_dir)
+                    self.merge(other_tf)
+                    translation_index += len(other_tf.translations)
                 else:
                     warnings.warn(
                         'Translation file includes other file, but no base_dir '
@@ -1642,9 +1659,11 @@ class TranslationFile(AbstractFileReadOnly):
 
         if not isinstance(other, TranslationFile):
             TypeError('Wrong type: %s' % type(other))
+        translation_count = len(self.translations)
         self.translations += other.translations
         for trans_id in other.translations_hash:
             for trans in other.translations_hash[trans_id]:
+                trans.tf_index += translation_count
                 self._add_translation_hashed(trans_id, trans)
 
         #self.translations_hash.update(other.translations_hash)
@@ -1703,7 +1722,7 @@ class TranslationFile(AbstractFileReadOnly):
         if isinstance(tags, str):
             tags = [tags, ]
 
-        trans_found = []
+        trans_found: List[Translation] = []
         trans_missing = []
         trans_missing_values = []
         trans_found_values = []
@@ -1759,6 +1778,7 @@ class TranslationFile(AbstractFileReadOnly):
         values_parsed = []
         extra_strings = []
         string_instances = []
+        tf_indices: List[int] = []
         for i, tr in enumerate(trans_found):
             tl = tr.get_language(lang)
             ts, short_values, is_range = tl.get_string(trans_found_values[i])
@@ -1773,6 +1793,7 @@ class TranslationFile(AbstractFileReadOnly):
                 if full_result:
                     unused.append(result[1])
                     extra_strings.append(result[3])
+                tf_indices.append(tr.tf_index)
 
             else:
                 trans_found_lines.append('')
@@ -1793,6 +1814,7 @@ class TranslationFile(AbstractFileReadOnly):
                 source_values=values,
                 extra_strings=extra_strings,
                 string_instances=string_instances,
+                tf_indices=tf_indices,
             )
         if only_values:
             return values_parsed
