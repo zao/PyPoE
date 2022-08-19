@@ -1793,11 +1793,11 @@ class TranslationFile(AbstractFileReadOnly):
                 if full_result:
                     unused.append(result[1])
                     extra_strings.append(result[3])
-                tf_indices.append(tr.tf_index)
-
             else:
                 trans_found_lines.append('')
                 values_parsed.append([])
+            
+            tf_indices.append(tr.tf_index)
 
         if full_result:
             return TranslationResult(

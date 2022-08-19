@@ -530,9 +530,7 @@ class SkillParserShared(parser.BaseParser):
         const_stat_vals = stat_set['ConstantStatsValues']
 
         const_data = defaultdict()
-        const_order = defaultdict()
         impl_data = defaultdict()
-        impl_order = defaultdict()
         const_tr_stats = self._translate_stats(const_stats, const_stat_vals, tf, const_data, stat_order)
         impl_tr_stats = self._translate_stats(impl_stats, [1 for i in range(len(impl_stats))], tf, impl_data, stat_order)
 
@@ -541,7 +539,6 @@ class SkillParserShared(parser.BaseParser):
         for tr_stat in const_tr_stats.keys():
             static['stats'][tr_stat] = const_tr_stats[tr_stat]
             level_data[0]['stats'][tr_stat] = const_data['stats'][tr_stat]
-        for tr_stat in reversed(const_tr_stats.keys()):
             stat_key_order['stats'][tr_stat] = const_tr_stats[tr_stat]
 
         for tr_stat in impl_tr_stats.keys():
@@ -549,27 +546,9 @@ class SkillParserShared(parser.BaseParser):
             level_data[0]['stats'][tr_stat] = impl_data['stats'][tr_stat]
             stat_key_order['stats'][tr_stat] = impl_tr_stats[tr_stat]
         
-        last_lvl_stats = gra_eff_stats_pl[-1]
-        last_lvl_stat_keys = [r['Id'] for r in last_lvl_stats['AdditionalStats']]
-        # for stat_key in last_lvl_stat_keys:
-        #     if stat_key in stat_key_order['stats'].keys():
-        #         stat_key_order['stats'].move_to_end(stat_key)
 
 
-        skipped_first = False
-        stat_keys = [stat_key for stat_key in stat_key_order['stats'].keys()]
-        for stat_key in stat_keys:
-            if (stat_key not in const_tr_stats.keys()) and (stat_key not in impl_tr_stats.keys()) and (stat_key not in last_lvl_stat_keys):
-                if not skipped_first:
-                    skipped_first = True
-                    continue
-                stat_key_order['stats'].move_to_end(stat_key)
-        
         stat_key_order['stats'] = OrderedDict(sorted(stat_key_order['stats'].items(), key=lambda item: stat_order[item[0]]))
-        # TODO: Actually construct stat_key_order from its components in an odered, sane way.
-        stat_key_order_2 = {
-            'stats': OrderedDict(),
-        }
 
         #
         # Output handling for gem infobox
