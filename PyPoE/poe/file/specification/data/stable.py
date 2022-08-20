@@ -3153,8 +3153,8 @@ specification = Specification({
                 key='AchievementItems.dat',
             ),
             Field(
-                name='CanUseOnCorrupted',
-                type='bool',
+                name='Unknown0',
+                type='int',
             ),
         ),
     ),
@@ -4630,7 +4630,7 @@ specification = Specification({
             ),
             Field(
                 name='StartWeapon',
-                type='ulong',
+                type='ref|list|ulong',
                 key='BaseItemTypes.dat',
             ),
             Field(
@@ -4678,6 +4678,66 @@ specification = Specification({
             Field(
                 name='Unknown4',
                 type='int',
+            ),
+            Field(
+                name='ClassVideo',
+                type='ref|string',
+                file_path=True,
+                file_ext='.bk2',
+            ),
+            Field(
+                name='TraitString',
+                type='ref|string',
+            ),
+            Field(
+                name='LoginScene',
+                type='ref|string',
+                file_path=True,
+                file_ext='.ao',
+            ),
+            Field(
+                name='Critter',
+                type='ref|string',
+            ),
+            Field(
+                name='TraitEffect',
+                type='ref|string',
+            ),
+            Field(
+                name='AfterImage',
+                type='ref|string',
+            ),
+            Field(
+                name='Key5',
+                type='ulong',
+            ),
+            Field(
+                name='Key6',
+                type='ulong',
+            ),
+            Field(
+                name='Key7',
+                type='ulong',
+            ),
+            Field(
+                name='Key8',
+                type='ulong',
+            ),
+            Field(
+                name='Unknown5',
+                type='float',
+            ),
+            Field(
+                name='Unknown6',
+                type='float',
+            ),
+            Field(
+                name='SkilltreeBackground',
+                type='ref|string',
+            ),
+            Field(
+                name='Key9',
+                type='ulong',
             ),
         ),
     ),
@@ -7399,6 +7459,10 @@ specification = Specification({
             Field(
                 name='IsScreamingEssence',
                 type='bool',
+            ),
+            Field(
+                name='Keys0',
+                type='ref|list|ulong',
             ),
         ),
     ),
@@ -12305,7 +12369,7 @@ specification = Specification({
                 type='ref|string',
             ),
             Field(
-                name='Keys0',
+                name='Key0',
                 type='ulong',
             ),
             Field(
@@ -12338,11 +12402,11 @@ specification = Specification({
                 type='bool',
             ),
             Field(
-                name='Unknown0',
-                type='int',
+                name='Key1',
+                type='ulong',
             ),
             Field(
-                name='Unknown1',
+                name='Unknown0',
                 type='int',
             ),
             Field(
@@ -12401,6 +12465,18 @@ specification = Specification({
             Field(
                 name='Flags',
                 type='ref|list|int',
+            ),
+            Field( # added in 3.19
+                name='Flag3',
+                type='bool',
+            ),
+            Field( # added in 3.19
+                name='Flag4',
+                type='bool',
+            ),
+            Field(
+                name='Key2',
+                type='ulong',
             ),
         ),
     ),
@@ -15712,8 +15788,8 @@ specification = Specification({
                 enum='MOD_GENERATION_TYPE',
             ),
             Field(
-                name='CorrectGroup',
-                type='ref|string',
+                name='Keys0',
+                type='ref|list|ulong',
             ),
             Field(
                 name='Stat1Min',
@@ -15973,16 +16049,15 @@ specification = Specification({
                 key='BuffTemplates.dat',
             ),
             Field(
-                name='ArchnemesisMinionMod',
+                name='Unknown17',
                 type='int',
-                key='Mods.dat',
             ),
             Field(
                 name='Hash32',
                 type='int',
             ),
             Field(
-                name='Keys0',
+                name='Keys1',
                 type='ref|list|ulong',
             ),
         ),
@@ -18706,6 +18781,10 @@ specification = Specification({
                 name='Stat3Value',
                 type='int',
             ),
+            Field(
+                name='Key0',
+                type='ulong'
+            ),
         ),
         virtual_fields=(
             VirtualField(
@@ -18750,6 +18829,10 @@ specification = Specification({
                 name='SoundEffect',
                 type='ulong',
                 key='SoundEffects.dat'
+            ),
+            Field(
+                name='Key0',
+                type='ulong'
             ),
         ),
     ),
@@ -20935,6 +21018,10 @@ specification = Specification({
             Field(
                 name='Flag0',
                 type='bool',
+            ),
+            Field(
+                name='Unknown0',
+                type='int',
             ),
         ),
     ),
