@@ -2344,6 +2344,12 @@ TranslationQuantifier(
 )
 
 TranslationQuantifier(
+    id='multiply_by_four_and_',
+    handler=lambda v: v*4,
+    reverse_handler=lambda v: int(v)//4,
+)
+
+TranslationQuantifier(
     id='negate',
     handler=lambda v: -v,
     reverse_handler=lambda v: -float(v),
