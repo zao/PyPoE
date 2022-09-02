@@ -215,7 +215,7 @@ class SkillParserShared(parser.BaseParser):
             'default': 0,
             'format': lambda v: '{0:n}'.format(v),
         }),
-        ('VaalSoulGainPreventionTime', {
+        ('SoulGainPreventionDuration', {
             'template': 'vaal_soul_gain_prevention_time',
             'default': 0,
             'format': lambda v: '{0:n}'.format(v/1000),
@@ -550,6 +550,16 @@ class SkillParserShared(parser.BaseParser):
 
         stat_key_order['stats'] = OrderedDict(sorted(stat_key_order['stats'].items(), key=lambda item: stat_order[item[0]]))
 
+        # Copy BaseDuration Data to skill_level's 'BaseDuration' node where the infobox is expecting it
+        # Add 'BaseDuration' to the list of dynamic columns.
+        if 'base_skill_effect_duration' in dynamic['stats'].keys():
+            dynamic['columns'].add('BaseDuration')
+            for row in level_data:
+                row['BaseDuration'] = row['stats']['base_skill_effect_duration']['values'][0]
+        elif 'base_skill_effect_duration' in static['stats'].keys():
+            static['columns'].add('BaseDuration')
+            level_data[0]['BaseDuration'] = level_data[0]['stats']['base_skill_effect_duration']['values'][0]
+
         #
         # Output handling for gem infobox
         #
@@ -636,7 +646,7 @@ class SkillParserShared(parser.BaseParser):
             )
 
         #
-        # GrantedEffectsPerLevel.dat
+        # Special Static Stats like Costs or Duration
         #
 
         # Don't add columns that are zero/default
@@ -645,23 +655,20 @@ class SkillParserShared(parser.BaseParser):
                 continue
 
             default = column_data.get('default')
-            should_continue = False
-            try:
-                if default is not None and gra_eff_per_lvl[0][column] == column_data['default']:
-                    should_continue = True
-            except KeyError:
-                if default is not None and gra_eff_stats_pl[0][column] == column_data['default']:
-                    should_continue = True
-            if should_continue:
+            if column in gra_eff_per_lvl[0].keys():
+                raw_value = gra_eff_per_lvl[0][column]
+            elif column in gra_eff_stats_pl[0].keys():
+                raw_value = gra_eff_stats_pl[0][column]
+            else:
+                raw_value = level_data[0][column]
+
+            if default is not None and raw_value == column_data['default']:
                 continue
 
             df = column_data.get('skip_active')
             if df is not None and not gra_eff['IsSupport']:
                 continue
-            try:
-                infobox['static_' + column_data['template']] = column_data['format'](gra_eff_per_lvl[0][column])
-            except KeyError:
-                infobox['static_' + column_data['template']] = column_data['format'](gra_eff_stats_pl[0][column])
+            infobox['static_' + column_data['template']] = column_data['format'](raw_value)
 
         # Normal stats
         # TODO: Loop properly - some stats not available at level 0
@@ -777,8 +784,7 @@ class SkillParserShared(parser.BaseParser):
                     continue
                 # Removed the check of defaults on purpose, makes sense
                 # to add the info since it is dynamically changed
-                infobox[prefix + column_data['template']] = \
-                    column_data['format'](row[column])
+                infobox[prefix + column_data['template']] = column_data['format'](row[column])
 
             # Stat handling
             lines = []

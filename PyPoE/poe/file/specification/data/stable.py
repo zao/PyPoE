@@ -15679,6 +15679,15 @@ specification = Specification({
             ),
         ),
     ),
+    'ModFamily.dat': File(
+        fields=(
+            Field(
+                name='Id',
+                type='ref|string',
+                unique=True,
+            ),
+        ),
+    ),
     'ModSellPriceTypes.dat': File(
         fields=(
             Field(
@@ -15780,8 +15789,9 @@ specification = Specification({
                 enum='MOD_GENERATION_TYPE',
             ),
             Field(
-                name='Keys0',
+                name='ModGroups',
                 type='ref|list|ulong',
+                key='ModFamily.dat'
             ),
             Field(
                 name='Stat1Min',
