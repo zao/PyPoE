@@ -724,7 +724,8 @@ class MOD_DOMAIN(IntEnumOverride):
     UNVEILED = 28
     PRIMORDIAL_ALTAR = 29
     SENTINEL = 30
-    MODS_DISALLOWED = 31 # Used in BaseItemTypes.dat, not Mods.dat.
+    MEMORY = 31
+    MODS_DISALLOWED = 32 # Used in BaseItemTypes.dat, not Mods.dat.
 
     # legacy names
     MASTER = CRAFTED

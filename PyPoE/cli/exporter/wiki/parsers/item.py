@@ -399,6 +399,7 @@ class ItemsParser(SkillParserShared):
         'Hellscape': '3.16.0', # AKA Scourge
         'Archnemesis': '3.17.0',
         'Sentinel': '3.18.0',
+        'Lake': '3.19.0', # AKA Lake of Kalandra
     }
 
     _IGNORE_DROP_LEVEL_CLASSES = (
