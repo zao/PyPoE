@@ -2453,7 +2453,7 @@ class ItemsParser(SkillParserShared):
         else:
             self.rr2 = None
 
-    def _skill_gem(self, infobox, base_item_type):
+    def _skill_gem(self, infobox: OrderedDict, base_item_type):
         try:
             skill_gem = self.rr['SkillGems.dat'].index['BaseItemTypesKey'][
                 base_item_type.rowid]
@@ -2494,7 +2494,7 @@ class ItemsParser(SkillParserShared):
         ge = skill_gem['GrantedEffectsKey']
 
         primary = OrderedDict()
-        self._skill(ge=ge, infobox=primary, parsed_args=self._parsed_args,
+        self._skill(gra_eff=ge, infobox=primary, parsed_args=self._parsed_args,
                     msg_name=base_item_type['Name'], max_level=max_level)
 
         # Some skills have a secondary skill effect.
@@ -2519,23 +2519,12 @@ class ItemsParser(SkillParserShared):
         if second:
             secondary = OrderedDict()
             self._skill(
-                ge=skill_gem['GrantedEffectsKey2'],
+                gra_eff=skill_gem['GrantedEffectsKey2'],
                 infobox=secondary,
                 parsed_args=self._parsed_args,
                 msg_name=base_item_type['Name'],
                 max_level=max_level
             )
-
-            for k, v in list(primary.items()) + list(secondary.items()):
-                # Just override the stuff if needs be.
-                if 'stat' not in k:
-                    infobox[k] = v
-
-            infobox['stat_text'] = '<br>'.join(
-                [x for x in (primary['stat_text'], secondary['stat_text']) if x]
-            )
-
-            # Stat merging...
             def get_stat(i, prefix, data):
                 return (data['%s_stat%s_id' % (prefix, i)],
                         data['%s_stat%s_value' % (prefix, i)])
@@ -2563,6 +2552,36 @@ class ItemsParser(SkillParserShared):
                     set_stat(j + i - 1, prefix, sid, sv)
                     j += 1
 
+            def cp_stats_primary(prefix):
+                i = 1
+                while True:
+                    try:
+                        # print(f'{prefix}_stat{i}')
+                        sid, sv = get_stat(i, prefix, primary)
+                        # print(sid, sv)
+                        stext = primary[f'{prefix}_stat_text']
+                        # print(stext)
+                    except KeyError:
+                        break
+                    set_stat(i, prefix, sid, sv)
+                    infobox[f'{prefix}_stat_text']=stext
+                    i += 1
+
+            for k, v in list(primary.items()) + list(secondary.items()):
+                # Just override the stuff if needs be.
+                if 'stat' not in k and k not in infobox.keys():
+                    infobox[k] = v
+            
+            cp_stats_primary('quality_type1')
+            cp_stats_primary('quality_type2')
+            cp_stats_primary('quality_type3')
+            cp_stats_primary('quality_type4')
+
+            infobox['stat_text'] = '<br>'.join(
+                [x for x in (primary['stat_text'], secondary['stat_text']) if x]
+            )
+
+            # Stat merging...
             cp_stats('static')
             lv = 1
             while True:
