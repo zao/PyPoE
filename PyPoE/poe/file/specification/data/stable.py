@@ -2355,17 +2355,11 @@ specification = Specification({
                 type='int',
             ),
             Field(
-                name='MonsterPacksKey',
-                type='ulong',
-                key='MonsterPacks.dat',
+                name='Unknown0',
+                type='ref|generic',
             ),
             Field(
-                name='MonsterVarietiesKey',
-                type='ulong',
-                key='MonsterVarieties.dat',
-            ),
-            Field(
-                name='MonsterSpawnerId',
+                name='Unknown1',
                 type='ref|string',
                 file_path=True,
                 file_ext='.ot, .otc',
@@ -11736,11 +11730,11 @@ specification = Specification({
             ),
             Field(
                 name='Unknown0',
-                type='int',
+                type='ulong',
             ),
             Field(
                 name='Unknown1',
-                type='int',
+                type='ulong',
             ),
             Field(
                 name='Unknown2',

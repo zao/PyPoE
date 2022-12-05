@@ -1451,10 +1451,10 @@ class CraftingBenchParser(GenericLuaParser):
         ('Tier', {
             'key': 'rank',
         }),
-        ('ModFamily', {
-            'key': 'mod_group',
-            'default': '',
-        }),
+        # ('ModFamily', {
+        #     'key': 'mod_group',
+        #     'default': '',
+        # }),
         ('CraftingItemClassCategories', {
             'key': 'item_class_categories',
             'value': lambda v: [k['Text'] for k in v],
