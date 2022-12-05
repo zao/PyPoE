@@ -9690,36 +9690,36 @@ specification = Specification({
                 key='AchievementItems.dat',
             ),
             Field(
+                name='HASH16',
+                type='int',
+            ),
+            Field(
+                name='Description',
+                type='ref|string',
+            ),
+            Field(
+                name='IsEnchant',
+                type='bool',
+            ),
+            Field(
+                name='LifeforceCostType',
+                type='int',
+            ),
+            Field(
+                name='LifeforceCost',
+                type='int',
+            ),
+            Field(
+                name='SacredBlossomCost',
+                type='int',
+            ),
+            Field(
                 name='Flag0',
                 type='bool',
             ),
             Field(
-                name='Unknown1',
-                type='int',
-            ),
-            Field(
-                name='HarvestCraftOptionIconsKeys',
+                name='Unknown0',
                 type='ref|list|ulong',
-                key='HarvestCraftOptionIcons.dat',
-            ),
-            Field(
-                name='PlainText',
-                type='ref|string',
-                description='Text without any tags for formatting',
-            ),
-            Field(
-                name='DDSFile',
-                type='ref|string',
-                file_path=True,
-                file_ext='.dds',
-            ),
-            Field(
-                name='Flag1',
-                type='bool',
-            ),
-            Field(
-                name='Flag2',
-                type='bool',
             ),
         ),
     ),

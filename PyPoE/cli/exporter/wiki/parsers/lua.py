@@ -818,6 +818,7 @@ class HarvestParser(GenericLuaParser):
     ]
 
     _COPY_KEYS_HARVEST_CRAFT_OPTIONS = (
+        
         ('Id', {
             'key': 'id',
         }),
@@ -828,6 +829,28 @@ class HarvestParser(GenericLuaParser):
             'key': 'tier',
             'value': lambda v: v.rowid,
         }),
+        ('Description', {
+            'key': 'effect'
+        }),
+        ('IsEnchant', {
+            'key': 'is_enchant'
+        }),
+        ('LifeforceCostType', {
+            'key': 'cost_lifeforce_type',
+        }),
+        ('LifeforceCost', {
+            'key': 'cost_lifeforce'
+        }),
+        ('SacredBlossomCost',{
+            'key': 'cost_sacred'
+        }),
+        ('Command', {
+            'key': 'command'
+        }),
+        ('Parameters', {
+            'key': 'parameters',
+            'value': lambda v: v.split()
+        })
     )
 
     def main(self, parsed_args):
