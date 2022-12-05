@@ -3904,7 +3904,7 @@ class ItemsParser(SkillParserShared):
                 for name, color in self._MAP_COLORS.items():
                     #-tint
                     os.system(
-                        '''magick convert "%s" -fill rgb(%s) -tint 100 "%s"''' % (
+                        '''magick convert "%s" -fill "rgb(%s)" -tint 100 "%s"''' % (
                             ico, color, ico.replace('.png', ' %s.png' % name)
                         ))
 
@@ -4135,7 +4135,7 @@ class ItemsParser(SkillParserShared):
                     # This isn't how the game actually makes these map icons, so it isn't ideal, but it works.
                     if color:
                         os.system(
-                            f'magick convert "{ico}" -fill rgb({color}) -colorize 100 "{ico}"'
+                            f'magick convert "{ico}" -fill "rgb({color})" -colorize 100 "{ico}"'
                         )
 
                 if base_item_type['Id'] not in MAPS_TO_SKIP_COMPOSITING:
