@@ -10221,6 +10221,10 @@ specification = Specification({
                 type='ulong',
                 key='ClientStrings.dat',
             ),
+            Field(
+                name='Key0',
+                type='ref|list|ulong',
+            ),
         ),
     ),
     'HeistBalancePerLevel.dat': File(
@@ -11664,18 +11668,6 @@ specification = Specification({
                 type='bool',
             ),
             Field(
-                name='Unknown0',
-                type='int',
-            ),
-            Field(
-                name='Unknown1',
-                type='int',
-            ),
-            Field(
-                name='Unknown2',
-                type='int',
-            ),
-            Field(
                 name='InheritsFrom',
                 type='ref|string',
                 file_path=True,
@@ -11706,6 +11698,18 @@ specification = Specification({
                 name='Category',
                 type='ulong',
                 #key='HideoutDoodadCategory.dat',
+            ),
+            Field(
+                name='Unknown0',
+                type='int'
+            ),
+            Field(
+                name='Flag2',
+                type='bool'
+            ),
+            Field(
+                name='Unknown1',
+                type='ulong'
             ),
         ),
     ),
