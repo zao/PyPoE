@@ -1208,10 +1208,11 @@ class MonsterParser(GenericLuaParser):
                 ('Id', {
                     'key': 'id',
                 }),
-                ('TagsKeys', {
-                    'key': 'tags',
-                    'value': lambda v: ', '.join([r['Id'] for r in v]),
-                }),
+                # Deprecated in 3.19 
+                # ('TagsKeys', {
+                #     'key': 'tags',
+                #     'value': lambda v: ', '.join([r['Id'] for r in v]),
+                # }),
                 ('MonsterResistancesKey', {
                     'key': 'monster_resistance_id',
                     'value': lambda v: v['Id'],
