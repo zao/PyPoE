@@ -10216,8 +10216,9 @@ specification = Specification({
                 key='ClientStrings.dat',
             ),
             Field(
-                name='Key0',
+                name='AchievementItemsKeys3',
                 type='ref|list|ulong',
+                key='AchievementItems.dat',
             ),
         ),
     ),
@@ -11695,15 +11696,15 @@ specification = Specification({
             ),
             Field(
                 name='Unknown0',
-                type='int'
+                type='int',
             ),
             Field(
                 name='Flag2',
-                type='bool'
+                type='bool',
             ),
             Field(
-                name='Unknown1',
-                type='ulong'
+                name='Key1',
+                type='ulong',
             ),
         ),
     ),
@@ -11833,6 +11834,18 @@ specification = Specification({
             ),
             Field(
                 name='Flag1',
+                type='bool',
+            ),
+            Field(
+                name='Flag2',
+                type='bool',
+            ),
+            Field(
+                name='Flag3',
+                type='bool',
+            ),
+            Field(
+                name='Flag4',
                 type='bool',
             ),
         ),
@@ -12122,6 +12135,10 @@ specification = Specification({
                 name='RoomUpgradeFrom_IncursionRoomsKey',
                 type='ref|generic',
                 key='IncursionRooms.dat',
+            ),
+            Field(
+                name='Key0',
+                type='ulong',
             ),
         ),
     ),
@@ -18651,20 +18668,24 @@ specification = Specification({
                 type='ref|list|int',
             ),
             Field(
-                name='QuestState1',
-                type='int',
+                name='QuestFlagsKey1',
+                type='ulong',
+                key='QuestFlags.dat',
             ),
             Field(
-                name='QuestState2',
-                type='int',
+                name='QuestFlagsKey2',
+                type='ulong',
+                key='QuestFlags.dat',
             ),
             Field(
-                name='QuestState3',
-                type='int',
+                name='QuestFlagsKey3',
+                type='ulong',
+                key='QuestFlags.dat',
             ),
             Field(
-                name='QuestState4',
-                type='int',
+                name='QuestFlagsKey4',
+                type='ulong',
+                key='QuestFlags.dat',
             ),
             Field(
                 name='IsDisabled',
@@ -18690,8 +18711,9 @@ specification = Specification({
                 key='BaseItemTypes.dat',
             ),
             Field(
-                name='Unknown0',
-                type='int',
+                name='QuestFlagsKey',
+                type='ulong',
+                key='QuestFlags.dat',
             ),
             Field(
                 name='MonsterVarietiesKey',
