@@ -220,7 +220,7 @@ class ModParser(BaseParser):
 
             for k in (
                 ('Id', 'id'),
-                ('CorrectGroup', 'mod_group'),
+                ('Families', 'mod_group'),
                 ('Domain', 'domain'),
                 ('GenerationType', 'generation_type'),
                 ('Level', 'required_level'),
@@ -244,6 +244,13 @@ class ModParser(BaseParser):
             #     data['granted_buff_id'] = mod['BuffDefinitionsKey']['Id']
             #     data['granted_buff_value'] = mod['BuffValue']
             # todo ID for GEPL
+
+            # 3.19 Update - Lake of Kalandra
+            # Parse Families to mod groups
+ 
+            if mod['Families']:
+                data['mod_group'] = mod['Families'][0][0]
+
             if mod['GrantedEffectsPerLevelKeys']:
                 data['granted_skill'] = ', '.join(
                     [k['GrantedEffect']['Id'] for k in
