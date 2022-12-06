@@ -220,7 +220,7 @@ class ModParser(BaseParser):
 
             for k in (
                 ('Id', 'id'),
-                ('Families', 'mod_group'),
+                ('Families', 'mod_groups'),
                 ('Domain', 'domain'),
                 ('GenerationType', 'generation_type'),
                 ('Level', 'required_level'),
@@ -249,7 +249,8 @@ class ModParser(BaseParser):
             # Parse Families to mod groups
  
             if mod['Families']:
-                data['mod_group'] = mod['Families'][0][0]
+                data['mod_groups'] = ', '.join(
+                    [m['Id'] for m in mod['Families']])
 
             if mod['GrantedEffectsPerLevelKeys']:
                 data['granted_skill'] = ', '.join(
