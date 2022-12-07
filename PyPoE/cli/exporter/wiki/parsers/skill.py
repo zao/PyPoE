@@ -215,7 +215,7 @@ class SkillParserShared(parser.BaseParser):
             'default': 0,
             'format': lambda v: '{0:n}'.format(v),
         }),
-        ('VaalSoulGainPreventionTime', {
+        ('SoulGainPreventionDuration', {
             'template': 'vaal_soul_gain_prevention_time',
             'default': 0,
             'format': lambda v: '{0:n}'.format(v/1000),
@@ -330,7 +330,7 @@ class SkillParserShared(parser.BaseParser):
             infobox[prefix + 'id'] = val[0]
             infobox[prefix + 'value'] = val[1]
 
-    def _translate_stats(self, stats, values: Union[list[int], list[tuple[int, int]]], trans_file: TranslationFile, data: defaultdict) -> OrderedDict:
+    def _translate_stats(self, stats, values: Union[list[int], list[tuple[int, int]]], trans_file: TranslationFile, data: defaultdict, stat_order: defaultdict) -> OrderedDict:
         stats_output = OrderedDict()
 
         trans_rslt = trans_file.get_translation(
@@ -379,6 +379,7 @@ class SkillParserShared(parser.BaseParser):
                 'values': values,
                 'values_parsed': values_parsed,
             }
+            stat_order[k] = trans_rslt.tf_indices[j]
         for stat, value in trans_rslt.missing:
             warnings.warn(f'Missing translation for {stat}')
             stats_output[stat] = None
@@ -388,6 +389,7 @@ class SkillParserShared(parser.BaseParser):
                 'values': [value, ],
                 'values_parsed': [value, ],
             }
+            stat_order[stat] = -1
         return stats_output
 
     def _skill(self, gra_eff, infobox: OrderedDict, parsed_args, max_level=None, msg_name=None):
@@ -443,6 +445,7 @@ class SkillParserShared(parser.BaseParser):
             'stats': OrderedDict(),
         }
 
+        stat_order = defaultdict()
         # Copy per-level stats into level_data
         for i, lvl_stats in enumerate(gra_eff_stats_pl):
             data = defaultdict()
@@ -472,7 +475,7 @@ class SkillParserShared(parser.BaseParser):
                     del stats[index]
                     del values[index]
 
-            translated_stats = self._translate_stats(stats, values, tf, data)
+            translated_stats = self._translate_stats(stats, values, tf, data, stat_order)
             for tr_stat in translated_stats.keys():
                 stat_key_order['stats'][tr_stat] = translated_stats[tr_stat]
             
@@ -528,15 +531,14 @@ class SkillParserShared(parser.BaseParser):
 
         const_data = defaultdict()
         impl_data = defaultdict()
-        const_tr_stats = self._translate_stats(const_stats, const_stat_vals, tf, const_data)
-        impl_tr_stats = self._translate_stats(impl_stats, [1 for i in range(len(impl_stats))], tf, impl_data)
+        const_tr_stats = self._translate_stats(const_stats, const_stat_vals, tf, const_data, stat_order)
+        impl_tr_stats = self._translate_stats(impl_stats, [1 for i in range(len(impl_stats))], tf, impl_data, stat_order)
 
         # Later code that generates the infobox expects static stats to be in static, and to have values in level 0 of the gem.
         # It also expects them to be in the master list in stat_key_order
         for tr_stat in const_tr_stats.keys():
             static['stats'][tr_stat] = const_tr_stats[tr_stat]
             level_data[0]['stats'][tr_stat] = const_data['stats'][tr_stat]
-        for tr_stat in reversed(const_tr_stats.keys()):
             stat_key_order['stats'][tr_stat] = const_tr_stats[tr_stat]
 
         for tr_stat in impl_tr_stats.keys():
@@ -544,25 +546,19 @@ class SkillParserShared(parser.BaseParser):
             level_data[0]['stats'][tr_stat] = impl_data['stats'][tr_stat]
             stat_key_order['stats'][tr_stat] = impl_tr_stats[tr_stat]
         
-        last_lvl_stats = gra_eff_stats_pl[-1]
-        last_lvl_stat_keys = [r['Id'] for r in last_lvl_stats['AdditionalStats']]
-        # for stat_key in last_lvl_stat_keys:
-        #     if stat_key in stat_key_order['stats'].keys():
-        #         stat_key_order['stats'].move_to_end(stat_key)
 
-        skipped_first = False
-        stat_keys = [stat_key for stat_key in stat_key_order['stats'].keys()]
-        for stat_key in stat_keys:
-            if (stat_key not in const_tr_stats.keys()) and (stat_key not in impl_tr_stats.keys()) and (stat_key not in last_lvl_stat_keys):
-                if not skipped_first:
-                    skipped_first = True
-                    continue
-                stat_key_order['stats'].move_to_end(stat_key)
-        
-        # TODO: Actually construct stat_key_order from its components in an odered, sane way.
-        stat_key_order_2 = {
-            'stats': OrderedDict(),
-        }
+
+        stat_key_order['stats'] = OrderedDict(sorted(stat_key_order['stats'].items(), key=lambda item: stat_order[item[0]]))
+
+        # Copy BaseDuration Data to skill_level's 'BaseDuration' node where the infobox is expecting it
+        # Add 'BaseDuration' to the list of dynamic columns.
+        if 'base_skill_effect_duration' in dynamic['stats'].keys():
+            dynamic['columns'].add('BaseDuration')
+            for row in level_data:
+                row['BaseDuration'] = row['stats']['base_skill_effect_duration']['values'][0]
+        elif 'base_skill_effect_duration' in static['stats'].keys():
+            static['columns'].add('BaseDuration')
+            level_data[0]['BaseDuration'] = level_data[0]['stats']['base_skill_effect_duration']['values'][0]
 
         #
         # Output handling for gem infobox
@@ -650,7 +646,7 @@ class SkillParserShared(parser.BaseParser):
             )
 
         #
-        # GrantedEffectsPerLevel.dat
+        # Special Static Stats like Costs or Duration
         #
 
         # Don't add columns that are zero/default
@@ -659,23 +655,20 @@ class SkillParserShared(parser.BaseParser):
                 continue
 
             default = column_data.get('default')
-            should_continue = False
-            try:
-                if default is not None and gra_eff_per_lvl[0][column] == column_data['default']:
-                    should_continue = True
-            except KeyError:
-                if default is not None and gra_eff_stats_pl[0][column] == column_data['default']:
-                    should_continue = True
-            if should_continue:
+            if column in gra_eff_per_lvl[0].keys():
+                raw_value = gra_eff_per_lvl[0][column]
+            elif column in gra_eff_stats_pl[0].keys():
+                raw_value = gra_eff_stats_pl[0][column]
+            else:
+                raw_value = level_data[0][column]
+
+            if default is not None and raw_value == column_data['default']:
                 continue
 
             df = column_data.get('skip_active')
             if df is not None and not gra_eff['IsSupport']:
                 continue
-            try:
-                infobox['static_' + column_data['template']] = column_data['format'](gra_eff_per_lvl[0][column])
-            except KeyError:
-                infobox['static_' + column_data['template']] = column_data['format'](gra_eff_stats_pl[0][column])
+            infobox['static_' + column_data['template']] = column_data['format'](raw_value)
 
         # Normal stats
         # TODO: Loop properly - some stats not available at level 0
@@ -791,8 +784,7 @@ class SkillParserShared(parser.BaseParser):
                     continue
                 # Removed the check of defaults on purpose, makes sense
                 # to add the info since it is dynamically changed
-                infobox[prefix + column_data['template']] = \
-                    column_data['format'](row[column])
+                infobox[prefix + column_data['template']] = column_data['format'](row[column])
 
             # Stat handling
             lines = []

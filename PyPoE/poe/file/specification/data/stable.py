@@ -4623,7 +4623,7 @@ specification = Specification({
                 file_ext='.ogg',
             ),
             Field(
-                name='StartWeapons',
+                name='StartWeapon',
                 type='ref|list|ulong',
                 key='BaseItemTypes.dat',
             ),
@@ -4674,23 +4674,27 @@ specification = Specification({
                 type='int',
             ),
             Field(
-                name='TencentVideo',
+                name='ClassVideo',
+                type='ref|string',
+                file_path=True,
+                file_ext='.bk2',
+            ),
+            Field(
+                name='TraitString',
                 type='ref|string',
             ),
             Field(
-                name='AttrsAsId',
+                name='LoginScene',
+                type='ref|string',
+                file_path=True,
+                file_ext='.ao',
+            ),
+            Field(
+                name='Critter',
                 type='ref|string',
             ),
             Field(
-                name='LoginScreen',
-                type='ref|string',
-            ),
-            Field(
-                name='PlayerCritter',
-                type='ref|string',
-            ),
-            Field(
-                name='PlayerEffect',
+                name='TraitEffect',
                 type='ref|string',
             ),
             Field(
@@ -4698,19 +4702,19 @@ specification = Specification({
                 type='ref|string',
             ),
             Field(
-                name='Keys2',
+                name='Key5',
                 type='ulong',
             ),
             Field(
-                name='Keys3',
+                name='Key6',
                 type='ulong',
             ),
             Field(
-                name='Keys4',
+                name='Key7',
                 type='ulong',
             ),
             Field(
-                name='Keys5',
+                name='Key8',
                 type='ulong',
             ),
             Field(
@@ -4722,11 +4726,11 @@ specification = Specification({
                 type='float',
             ),
             Field(
-                name='SkillTreeBackground',
+                name='SkilltreeBackground',
                 type='ref|string',
             ),
             Field(
-                name='Keys6',
+                name='Key9',
                 type='ulong',
             ),
         ),
@@ -12476,11 +12480,11 @@ specification = Specification({
                 name='Flags',
                 type='ref|list|int',
             ),
-            Field(
+            Field( # added in 3.19
                 name='Flag3',
                 type='bool',
             ),
-            Field(
+            Field( # added in 3.19
                 name='Flag4',
                 type='bool',
             ),
@@ -12488,7 +12492,7 @@ specification = Specification({
                 name='EquipAchievements',
                 type='ulong',
                 key='AchievementItems.dat',
-            )
+            ),
         ),
     ),
     'ItemCostPerLevel.dat': File(
@@ -15702,6 +15706,15 @@ specification = Specification({
             ),
         ),
     ),
+    'ModFamily.dat': File(
+        fields=(
+            Field(
+                name='Id',
+                type='ref|string',
+                unique=True,
+            ),
+        ),
+    ),
     'ModSellPriceTypes.dat': File(
         fields=(
             Field(
@@ -16065,8 +16078,9 @@ specification = Specification({
                 key='BuffTemplates.dat',
             ),
             Field(
-                name='Unknown17',
-                type='int',
+                name='ArchnemesisMinionMod',
+                type='ref|generic',
+                key='Mods.dat',
             ),
             Field(
                 name='Hash32',
