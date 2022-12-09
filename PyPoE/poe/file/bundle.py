@@ -90,18 +90,21 @@ __all__ = [
     'Bundle', 'Index'
 ]
 
+ooz = None
 if cffi:
     ffi = cffi.FFI()
     ffi.cdef("""int Ooz_Decompress(uint8_t const* src_buf, int src_len, 
             uint8_t* dst, size_t dst_size, int, int, int, uint8_t*, size_t, 
             void*, void*, void*, size_t, int);""")
-    try:
-        ooz = ffi.dlopen(r'libooz.dll')
-    except OSError:
+    shlib_candidates = [r'libooz.dll', r'liblibooz.so', r'liblibooz.dylib']
+    for cand in shlib_candidates:
+        try:
+            ooz = ffi.dlopen(cand)
+            break
+        except OSError:
+            pass
+    if not ooz:
         cffi = None
-        ooz = None
-else:
-    ooz = None
 
 # =============================================================================
 # Classes
@@ -261,7 +264,7 @@ class Bundle(AbstractFileReadOnly):
                         f.write(struct.pack('<Q', size))
                         f.write(self.data[i])
 
-                    os.system('ooz -d %(fn)s.in %(fn)s.out' % {'fn': fn})
+                    os.system('ooz -q -d %(fn)s.in %(fn)s.out' % {'fn': fn})
 
                     with open('%s.out' % fn, 'rb') as f:
                         self.data[i] = f.read()

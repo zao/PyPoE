@@ -130,6 +130,7 @@ class WikiCondition(parser.WikiCondition):
         'frame_type',
 
         # Drop restrictions
+        'is_in_game',
         'drop_enabled',
         'acquisition_tags',
         'drop_areas',
@@ -398,6 +399,8 @@ class ItemsParser(SkillParserShared):
         'Expedition': '3.15.0',
         'Hellscape': '3.16.0', # AKA Scourge
         'Archnemesis': '3.17.0',
+        'Sentinel': '3.18.0',
+        'Lake': '3.19.0', # AKA Lake of Kalandra
     }
 
     _IGNORE_DROP_LEVEL_CLASSES = (
@@ -1718,7 +1721,6 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionStalkerWingsUpgrade3',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionDragonHunterHelmetAttachment',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionBlueDragonPortalEffect',
-        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionWildShield',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionCrusaderPortalEffect',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionAltDeicideHelmet',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionAltDeicideBoots',
@@ -1729,20 +1731,10 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionAltDunShield',
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionDarkDeicidePortraitFrame',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionKitavaWings',
-        'Metadata/Items/MicrotransactionSkillEffects/MicrotransactionProjectWitherEffect',
-        'Metadata/Items/MicrotransactionSkillEffects/MicrotransactionProjectBlightEffect',
-        'Metadata/Items/MicrotransactionSkillEffects/MicrotransactionProjectContagionEffect',
-        'Metadata/Items/MicrotransactionSkillEffects/MicrotransactionProjectBaneEffect',
-        'Metadata/Items/MicrotransactionSkillEffects/MicrotransactionScientistWitherEffect',
-        'Metadata/Items/MicrotransactionSkillEffects/MicrotransactionScientistBlightEffect',
-        'Metadata/Items/MicrotransactionSkillEffects/MicrotransactionScientistContagionEffect',
-        'Metadata/Items/MicrotransactionSkillEffects/MicrotransactionScientistBaneEffect',
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionBenevolenceCharacterEffect',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionEternalSyndicatePortalEffect',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionHighPriestWeapon',
-        'Metadata/Items/MicrotransactionSkillEffects/MicrotransactionSummonRagingEyeballs',
         'Metadata/Items/MicrotransactionSkillEffects/MicrotransactionSurvivorsGoggles',
-        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionOblivionWeaponEffect',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionChieftainHelmet',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionChieftainBoots',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionChieftainGloves',
@@ -1771,30 +1763,19 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionSunriseNecrolordCloak',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionSunriseNecrolordWings',
         'Metadata/Items/MicrotransactionSkillEffects/MicrotransactionMyrmidonHydrosphereEffect',
-        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionArcticCrystalPortalEffect',
-        'Metadata/Items/MicrotransactionSkillEffects/MicrotransactionVoidSparkEffect',
-        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionDirebladeWeapon',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionDragonSwordPortalEffect',
-        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionZenithPortalEffect',
-        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionSunprismWings',
         'Metadata/Items/Pets/AmberCatPet',
         'Metadata/Items/Pets/LargeInfernalBasilisk',
         'Metadata/Items/Pets/Merveil',
         'Metadata/Items/Pets/FootballPet',
-        'Metadata/Items/Pets/DemonicArcticReindeerPet',
         'Metadata/Items/Pets/ElderDarkseerPet',
         'Metadata/Items/Pets/SurvivorsHoundPet',
         'Metadata/Items/Pets/TwilightPegasusPet',
         'Metadata/Items/Pets/AuspiciousDragonPet',
         'Metadata/Items/Pets/BuccaneerPet',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionScourgeFootprintsEffect',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionNullifierHood',
 
-        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionOblivionHelmet',
-        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionOblivionBoots',
-        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionOblivionGloves',
-        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionOblivionBodyArmour',
-        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionOblivionWings',
-        'Metadata/Items/MicrotransactionSkillEffects/MicrotransactionOblivionToxicRainEffect',
-        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionOblivionPortalEffect',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionOblivionBodyArmour1',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionOblivionBodyArmour2',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionOblivionBodyArmour3',
@@ -2063,6 +2044,7 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentBadge20_5',
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentBadge20_6',
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentBadge20_7',
+        'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencent4YearPortraitFrame',
 
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionPetUpgradeScroll',
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionPetConvertToNormalScroll',
@@ -2256,6 +2238,7 @@ class ItemsParser(SkillParserShared):
 
         'Metadata/Items/MicrotransactionCurrency/TradeMarketTab',
         'Metadata/Items/MicrotransactionCurrency/TradeMarketBuyoutTab',
+        'Metadata/Items/MicrotransactionCurrency/TradeMarketBuyoutTabTemporary',
 
         'Metadata/Items/MicrotransactionCurrency/MysteryBoxLightChaos',
         'Metadata/Items/MicrotransactionCurrency/MysteryBoxChiyou',
@@ -2264,6 +2247,7 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/MicrotransactionCurrency/MysteryBoxFreyaPouch',
         'Metadata/Items/MicrotransactionCurrency/MysteryBoxFreyaBox',
         'Metadata/Items/MicrotransactionCurrency/MysteryBoxHasinaPouch',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxSkadiPetBowl',
 
         'Metadata/Items/MicrotransactionCurrency/ProxyArcticAurora10',
         'Metadata/Items/MicrotransactionCurrency/ProxyFireworksDarkSoulercoaster15',
@@ -2452,7 +2436,7 @@ class ItemsParser(SkillParserShared):
         else:
             self.rr2 = None
 
-    def _skill_gem(self, infobox, base_item_type):
+    def _skill_gem(self, infobox: OrderedDict, base_item_type):
         try:
             skill_gem = self.rr['SkillGems.dat'].index['BaseItemTypesKey'][
                 base_item_type.rowid]
@@ -2493,7 +2477,7 @@ class ItemsParser(SkillParserShared):
         ge = skill_gem['GrantedEffectsKey']
 
         primary = OrderedDict()
-        self._skill(ge=ge, infobox=primary, parsed_args=self._parsed_args,
+        self._skill(gra_eff=ge, infobox=primary, parsed_args=self._parsed_args,
                     msg_name=base_item_type['Name'], max_level=max_level)
 
         # Some skills have a secondary skill effect.
@@ -2518,23 +2502,12 @@ class ItemsParser(SkillParserShared):
         if second:
             secondary = OrderedDict()
             self._skill(
-                ge=skill_gem['GrantedEffectsKey2'],
+                gra_eff=skill_gem['GrantedEffectsKey2'],
                 infobox=secondary,
                 parsed_args=self._parsed_args,
                 msg_name=base_item_type['Name'],
                 max_level=max_level
             )
-
-            for k, v in list(primary.items()) + list(secondary.items()):
-                # Just override the stuff if needs be.
-                if 'stat' not in k:
-                    infobox[k] = v
-
-            infobox['stat_text'] = '<br>'.join(
-                [x for x in (primary['stat_text'], secondary['stat_text']) if x]
-            )
-
-            # Stat merging...
             def get_stat(i, prefix, data):
                 return (data['%s_stat%s_id' % (prefix, i)],
                         data['%s_stat%s_value' % (prefix, i)])
@@ -2562,6 +2535,36 @@ class ItemsParser(SkillParserShared):
                     set_stat(j + i - 1, prefix, sid, sv)
                     j += 1
 
+            def cp_stats_primary(prefix):
+                i = 1
+                while True:
+                    try:
+                        # print(f'{prefix}_stat{i}')
+                        sid, sv = get_stat(i, prefix, primary)
+                        # print(sid, sv)
+                        stext = primary[f'{prefix}_stat_text']
+                        # print(stext)
+                    except KeyError:
+                        break
+                    set_stat(i, prefix, sid, sv)
+                    infobox[f'{prefix}_stat_text']=stext
+                    i += 1
+
+            for k, v in list(primary.items()) + list(secondary.items()):
+                # Just override the stuff if needs be.
+                if 'stat' not in k and k not in infobox.keys():
+                    infobox[k] = v
+            
+            cp_stats_primary('quality_type1')
+            cp_stats_primary('quality_type2')
+            cp_stats_primary('quality_type3')
+            cp_stats_primary('quality_type4')
+
+            infobox['stat_text'] = '<br>'.join(
+                [x for x in (primary['stat_text'], secondary['stat_text']) if x]
+            )
+
+            # Stat merging...
             cp_stats('static')
             lv = 1
             while True:
@@ -3685,8 +3688,8 @@ class ItemsParser(SkillParserShared):
                     if not f(self, infobox, base_item_type):
                         fail = True
                         console(
-                            'Required extra info for item "%s" with class id '
-                            '"%s" not found. Skipping.' % (name, cls_id),
+                            f'Required extra info for item "{name}" with class id '
+                            f'"{cls_id}" not found. Skipping.',
                             msg=Msg.error)
                         break
                 if fail:
@@ -3765,6 +3768,7 @@ class ItemsParser(SkillParserShared):
         #Don't print anything if not running in the rowid mode.
         if not set(['start', 'end']).issubset(vars(parsed_args).keys()):
             return
+
         try:
             export_row_count = parsed_args.end - parsed_args.start
         except TypeError:
@@ -3773,9 +3777,11 @@ class ItemsParser(SkillParserShared):
         if export_row_count <= 100:
             print_granularity = 1
         else:
-            print_granularity = export_row_count//100
+            start = 0
+            print_granularity = 500
+
         
-        item_offset = base_item_type.rowid - parsed_args.start
+        item_offset = base_item_type.rowid - start
         if (item_offset == 0) or item_offset % print_granularity == 0:
             console(f"Processing item with rowid {base_item_type.rowid}: {base_item_type['Name']}")
         return
@@ -3883,7 +3889,7 @@ class ItemsParser(SkillParserShared):
                 for name, color in self._MAP_COLORS.items():
                     #-tint
                     os.system(
-                        '''magick convert "%s" -fill rgb(%s) -tint 100 "%s"''' % (
+                        '''magick convert "%s" -fill "rgb(%s)" -tint 100 "%s"''' % (
                             ico, color, ico.replace('.png', ' %s.png' % name)
                         ))
 
@@ -4114,7 +4120,7 @@ class ItemsParser(SkillParserShared):
                     # This isn't how the game actually makes these map icons, so it isn't ideal, but it works.
                     if color:
                         os.system(
-                            f'magick convert "{ico}" -fill rgb({color}) -colorize 100 "{ico}"'
+                            f'magick convert "{ico}" -fill "rgb({color})" -colorize 100 "{ico}"'
                         )
 
                 if base_item_type['Id'] not in MAPS_TO_SKIP_COMPOSITING:
