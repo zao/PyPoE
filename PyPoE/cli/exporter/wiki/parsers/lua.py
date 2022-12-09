@@ -506,8 +506,8 @@ class BestiaryParser(GenericLuaParser):
             self._copy_from_keys(
                 row, self._COPY_KEYS_BESTIARY_COMPONENTS, components
             )
-            if row['BeastRarity'] != RARITY.ANY:
-                display_string = 'ItemDisplayString' + row['BeastRarity'].name_upper
+            if row['BeastRarity'] != RARITY.ANY and row['BeastRarity'] is not None:
+                display_string = 'ItemDisplayString' + row['BeastRarity'].name_lower.title()
                 components[-1]['rarity'] = self.rr['ClientStrings.dat'].index['Id'][display_string]['Text']
 
         recipe_components = []
@@ -749,6 +749,9 @@ class DelveParser(GenericLuaParser):
                 delve_upgrade_stats[-1]['value'] = value
 
         for row in self.rr['DelveCraftingModifiers.dat']:
+            # Ignore all the weird RandomFossileOutcome items.
+            if('RandomFossilOutcome' in row['BaseItemTypesKey']['Id']):
+                continue
             self._copy_from_keys(row, self._COPY_KEYS_DELVE_CRAFTING_MODIFIERS,
                                  fossils)
 
@@ -784,7 +787,24 @@ class DelveParser(GenericLuaParser):
 class HarvestTagHandler(TagHandler):
     tag_handlers = {
         'white': partial(TagHandler._basic_handler, tid='white'),
-
+        'craftingred': partial(TagHandler._basic_handler, tid='red'),
+        'craftingblue': partial(TagHandler._basic_handler, tid='blue'),
+        'craftinggreen': partial(TagHandler._basic_handler, tid='green'),
+        'craftingcaster': partial(TagHandler._basic_handler, tid='purple'),
+        'craftingphysical': partial(TagHandler._basic_handler, tid='tan'),
+        'craftingfire': partial(TagHandler._basic_handler, tid='orange'),
+        'craftinglightning': partial(TagHandler._basic_handler, tid='yellow'),
+        'craftingcold': partial(TagHandler._basic_handler, tid='blue'),
+        'craftingchaos': partial(TagHandler._basic_handler, tid='purple'),
+        'unique': partial(TagHandler._basic_handler, tid='orange'),
+        'magic': partial(TagHandler._basic_handler, tid='blue'),
+        'rare': partial(TagHandler._basic_handler, tid='yellow'),
+        'craftingspeed': partial(TagHandler._basic_handler, tid='green'),
+        'craftingattack': partial(TagHandler._basic_handler, tid='white'),
+        'craftinglife': partial(TagHandler._basic_handler, tid='red'),
+        'craftingcrit': partial(TagHandler._basic_handler, tid='blue'),
+        'craftingdefences': partial(TagHandler._basic_handler, tid='white'),
+        'enchanted': partial(TagHandler._basic_handler, tid='white'),
 
         'fuchsia': partial(TagHandler._basic_handler, tid='magenta'),
         'yellow': partial(TagHandler._basic_handler, tid='yellow'),
@@ -798,20 +818,39 @@ class HarvestParser(GenericLuaParser):
     ]
 
     _COPY_KEYS_HARVEST_CRAFT_OPTIONS = (
+        
         ('Id', {
             'key': 'id',
         }),
         ('Text', {
             'key': 'text',
         }),
-        ('HarvestObjectsKey', {
-            'key': 'harvest_object',
-            'value': lambda v: v['BaseItemTypesKey']['Id']
-        }),
         ('HarvestCraftTiersKey', {
             'key': 'tier',
             'value': lambda v: v.rowid,
         }),
+        ('Description', {
+            'key': 'effect'
+        }),
+        ('IsEnchant', {
+            'key': 'is_enchant'
+        }),
+        ('LifeforceCostType', {
+            'key': 'cost_lifeforce_type',
+        }),
+        ('LifeforceCost', {
+            'key': 'cost_lifeforce'
+        }),
+        ('SacredBlossomCost',{
+            'key': 'cost_sacred'
+        }),
+        ('Command', {
+            'key': 'command'
+        }),
+        ('Parameters', {
+            'key': 'parameters',
+            'value': lambda v: v.split()
+        })
     )
 
     def main(self, parsed_args):
@@ -1169,10 +1208,11 @@ class MonsterParser(GenericLuaParser):
                 ('Id', {
                     'key': 'id',
                 }),
-                ('TagsKeys', {
-                    'key': 'tags',
-                    'value': lambda v: ', '.join([r['Id'] for r in v]),
-                }),
+                # Deprecated in 3.19 
+                # ('TagsKeys', {
+                #     'key': 'tags',
+                #     'value': lambda v: ', '.join([r['Id'] for r in v]),
+                # }),
                 ('MonsterResistancesKey', {
                     'key': 'monster_resistance_id',
                     'value': lambda v: v['Id'],
@@ -1387,7 +1427,7 @@ class CraftingBenchParser(GenericLuaParser):
             # 3.15
             # This should be accessed by keys not values
             # TODO: fix this.
-            'value': lambda v: v[0][4][0],
+            'value': lambda v: v['Hideout_NPCsKey']['NPCMasterKey']['Id'] if v['Hideout_NPCsKey']['NPCMasterKey'] else None,
         }),
         ('Order', {
             'key': 'ordinal',
@@ -1439,7 +1479,7 @@ class CraftingBenchParser(GenericLuaParser):
         #     'key': 'mod_group',
         #     'default': '',
         # }),
-        ('CraftingItemClassCategoriesKeys', {
+        ('CraftingItemClassCategories', {
             'key': 'item_class_categories',
             'value': lambda v: [k['Text'] for k in v],
         }),

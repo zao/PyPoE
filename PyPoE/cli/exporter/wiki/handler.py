@@ -30,7 +30,9 @@ See PyPoE/LICENSE
 # =============================================================================
 
 # Python
+from difflib import unified_diff
 import os
+import sys
 import time
 import re
 from collections.abc import Iterable
@@ -192,7 +194,13 @@ class WikiHandler:
                 return
 
             if self.cmdargs.dry_run:
-                console(text)
+                if self.cmdargs.wiki_diff:
+                    wiki_lines = page.text().splitlines(keepends=True)
+                    new_lines = text.splitlines(keepends=True)
+                    u_diff = unified_diff(wiki_lines, new_lines, "Wiki", "Export")
+                    sys.stdout.writelines(u_diff)
+                else:
+                    console(text)
             else:
                 response = page.save(
                     text=text,
@@ -216,6 +224,7 @@ class WikiHandler:
 
     def handle(self, *a, mwclient, result, cmdargs, parser):
         # First row is handled separately to prompt the user for his password
+
         url = WIKIS.get(config.get_option('language'))
         if url is None:
             console(
@@ -347,24 +356,29 @@ class ExporterHandler(BaseHandler):
 
         """
         # By id
-        a_id = sub_parser.add_parser(
-            'id',
-            help='Extract via a list of internal ids.'
-        )
-        self.add_default_parsers(
-            parser=a_id,
-            cls=cls,
-            func=cls.by_id,
-            *args,
-            **kwargs
-        )
-        a_id.add_argument(
-            'id',
-            help='Internal id. Can be specified multiple times.',
-            nargs='+',
-        )
+        self.add_id_subparser_filters(sub_parser, cls, *args, **kwargs)
 
         # by name
+        self.add_name_subparser_filters(sub_parser, cls, *args, **kwargs)
+
+        # by row ID
+        self.add_rowid_subparser_filters(sub_parser, cls, *args, **kwargs)
+    
+    def add_name_subparser_filters(self, sub_parser, cls, *args, **kwargs):
+        """
+        Adds default sub parsers for id, name and rowid.
+
+        Parameters
+        ----------
+        sub_parser
+        cls: object
+            Expected to have the methods:
+            by_name  - handling for name based searching
+
+        Returns
+        -------
+
+        """
         a_name = sub_parser.add_parser(
             'name',
             help='Extract via a list of names.'
@@ -383,7 +397,21 @@ class ExporterHandler(BaseHandler):
             nargs='+',
         )
 
-        # by row ID
+    def add_rowid_subparser_filters(self, sub_parser, cls, *args, **kwargs):
+        """
+        Adds default sub parsers for id, name and rowid.
+
+        Parameters
+        ----------
+        sub_parser
+        cls: object
+            Expected to have the methods:
+            by_rowid - handling for rowid based searching
+
+        Returns
+        -------
+
+        """
         a_rid = sub_parser.add_parser(
             'rowid',
             help='Extract via rowid in the primary dat file.'
@@ -408,6 +436,39 @@ class ExporterHandler(BaseHandler):
             help='Ending index',
             type=int,
         )
+        
+    def add_id_subparser_filters(self, sub_parser, cls, *args, **kwargs):
+        """
+        Adds default sub parsers for id, name and rowid.
+
+        Parameters
+        ----------
+        sub_parser
+        cls: object
+            Expected to have the methods:
+            by_id    - handling for id based searching
+
+        Returns
+        -------
+
+        """
+        a_id = sub_parser.add_parser(
+            'id',
+            help='Extract via a list of internal ids.'
+        )
+        self.add_default_parsers(
+            parser=a_id,
+            cls=cls,
+            func=cls.by_id,
+            *args,
+            **kwargs
+        )
+        a_id.add_argument(
+            'id',
+            help='Internal id. Can be specified multiple times.',
+            nargs='+',
+        )
+
 
     def add_default_parsers(self, parser, cls, func=None, handler=None,
                             wiki=True, wiki_handler=None):
@@ -514,6 +575,13 @@ def add_parser_arguments(parser):
         '-w-dr', '--wiki-dry-run',
         dest='dry_run',
         help='Don\'t actually save the wiki page and print it instead',
+        action='store_true',
+    )
+
+    parser.add_argument(
+        '-w-d', '--wiki-diff',
+        dest='wiki_diff',
+        help='For use with --wiki-dry-run. Instead of printing the new page, print a diff against the existing page.',
         action='store_true',
     )
 

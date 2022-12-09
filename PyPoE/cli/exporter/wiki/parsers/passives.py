@@ -230,6 +230,13 @@ class PassiveSkillParser(parser.BaseParser):
 
         passives = self._apply_filter(parsed_args, passives)
 
+        console(f'Found {len(passives)} passives. Removing Royale passives...')
+        passives = [
+            passive for passive in passives
+            if not passive['Id'].startswith('royale')
+        ]
+        console(f'{len(passives)} passives left for processing.')
+
         if not passives:
             console(
                 'No passives found for the specified parameters. Quitting.',
@@ -263,7 +270,12 @@ class PassiveSkillParser(parser.BaseParser):
 
         for passive in passives:
             data = OrderedDict()
+            # Print out the row number every 100 rows, and every 1/100th of completion, with a minimum increment of 1
+            print_increment = max(len(passives)//100, 1)
+            if (passive.rowid % 100 == 0) or (passive.rowid % print_increment == 0):
+                console(f"Processing passive {passive['Id']} at {passive.rowid}")
 
+            # Copy over simple fields from the .dat
             for row_key, copy_data in self._COPY_KEYS.items():
                 value = passive[row_key]
 
@@ -279,7 +291,12 @@ class PassiveSkillParser(parser.BaseParser):
                 if fmt:
                     value = fmt(value)
                 data[copy_data['template']] = value
+            
+            # Flag if it's an atlas skill
+            if passive['Id'].startswith('atlas'):
+                data['is_atlas_passive'] = True
 
+            # Handle icon paths
             if passive['Icon_DDSFile']:
                 icon = passive['Icon_DDSFile'].split('/')
                 if passive['Icon_DDSFile'].startswith(
@@ -290,13 +307,14 @@ class PassiveSkillParser(parser.BaseParser):
                         data['icon'] = '%s (%s)' % (icon[-1], icon[-2])
                 else:
                     data['icon'] = icon[-1]
-            #atlas_start_node doesn't have an icon path
+            # atlas_start_node doesn't have an icon path
             else:
                 data['icon'] = ''
                 warnings.warn(f"Icon path file not found for {passive['Id']}: {passive['Name']}")
 
             data['icon'] = data['icon'].replace('.dds', '')
 
+            # Handle Stats
             stat_ids = []
             values = []
 
@@ -314,7 +332,7 @@ class PassiveSkillParser(parser.BaseParser):
 
             data['stat_text'] = '<br>'.join(self._get_stats(
                 stat_ids, values,
-                translation_file='passive_skill_stat_descriptions.txt'
+                translation_file=get_translation_file(passive['Id'])
             ))
 
             # For now this is being added to the stat text
@@ -348,7 +366,7 @@ class PassiveSkillParser(parser.BaseParser):
                         psg_id]['Id'] for psg_id in node.connections])
 
             # extract icons if specified
-            if parsed_args.store_images:
+            if parsed_args.store_images and data['icon'] != '':
                 fn = data['icon'] + ' passive skill icon'
                 dds = os.path.join(self._img_path, fn + '.dds')
                 png = os.path.join(self._img_path, fn + '.png')
@@ -381,3 +399,16 @@ class PassiveSkillParser(parser.BaseParser):
 # =============================================================================
 # Functions
 # =============================================================================
+
+def get_translation_file(passive_id: str):
+    '''
+    Determines which translation file should be used based on the passive skill ID.
+
+    Parameters
+    ----------
+    passive_id: the Id of the passive skill
+    '''
+    if passive_id.startswith('atlas'):
+        return 'atlas_stat_descriptions.txt'
+    else:
+        return 'passive_skill_stat_descriptions.txt'

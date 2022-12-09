@@ -403,10 +403,14 @@ class File:
             OrderedDict containing the field name as key and a
             :class:`VirtualField` instance as value
         """
+        starting_fields_length = 0
         if fields is None:
             fields = OrderedDict()
         else:
+            starting_fields_length = len(fields)
             fields = OrderedDict(((field.name, field) for field in fields))
+        assert starting_fields_length == len(fields), "Field names must be unique within each file definition."
+        
         self.fields = fields
         if virtual_fields is None:
             virtual_fields = OrderedDict()
