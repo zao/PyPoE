@@ -190,8 +190,8 @@ class SkillParserShared(parser.BaseParser):
             'format': lambda v: v[0]['Id'],
             #  lambda v: ','.join([r['Id'] for r in v])
         }),
-        ('ManaMultiplier', {
-            'template': 'mana_multiplier',
+        ('CostMultiplier', {
+            'template': 'cost_multiplier',
             'format': lambda v: '{0:n}'.format(v),
             'skip_active': True,
         }),
