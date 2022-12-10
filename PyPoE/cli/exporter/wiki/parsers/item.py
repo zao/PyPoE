@@ -712,6 +712,11 @@ class ItemsParser(SkillParserShared):
             'Metadata/Items/Rings/Ring12': " (ruby and topaz)",
             'Metadata/Items/Rings/Ring13': " (sapphire and topaz)",
             'Metadata/Items/Rings/Ring14': " (ruby and sapphire)",
+
+            'Metadata/Items/Rings/RingK5a': ' (fire and cold)',
+            'Metadata/Items/Rings/RingK5b': ' (fire and lightning)',
+            'Metadata/Items/Rings/RingK5c': ' (cold and lightning)',
+
             # =================================================================
             # Amulets
             # =================================================================
