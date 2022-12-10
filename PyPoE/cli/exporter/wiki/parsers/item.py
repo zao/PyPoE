@@ -3133,16 +3133,16 @@ class ItemsParser(SkillParserShared):
         row_index=True
     )
 
-    _type_incubator = _type_factory(
-        data_file='Incubators.dat',
-        data_mapping=(
-            ('Description', {
-                'template': 'incubator_effect',
-                'format': lambda v: v,
-            }),
-        ),
-        row_index=True
-    )
+    # _type_incubator = _type_factory(
+    #     data_file='Incubators.dat',
+    #     data_mapping=(
+    #         ('Description', {
+    #             'template': 'incubator_effect',
+    #             'format': lambda v: v,
+    #         }),
+    #     ),
+    #     row_index=True
+    # )
 
     def _harvest_seed_extra(self, infobox, base_item_type, harvest_object):
 
@@ -3321,7 +3321,7 @@ class ItemsParser(SkillParserShared):
         'HideoutDoodad': (_type_currency, _type_hideout_doodad),
         'Microtransaction': (_type_currency, _type_microtransaction),
         'DivinationCard': (_type_currency, ),
-        'IncubatorStackable': (_type_currency, _type_incubator),
+        'IncubatorStackable': (_type_currency, ),
         'HarvestSeed': (_type_currency, _type_harvest_seed),
         'HarvestPlantBooster': (_type_currency, _type_harvest_plant_booster),
         # Labyrinth stuff
