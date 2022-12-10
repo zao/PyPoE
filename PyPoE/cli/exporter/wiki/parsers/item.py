@@ -709,13 +709,18 @@ class ItemsParser(SkillParserShared):
             # Rings
             # =================================================================
 
+            # Two-Stone Ring
             'Metadata/Items/Rings/Ring12': " (ruby and topaz)",
             'Metadata/Items/Rings/Ring13': " (sapphire and topaz)",
             'Metadata/Items/Rings/Ring14': " (ruby and sapphire)",
 
+            # Shadowed Ring
             'Metadata/Items/Rings/RingK5a': ' (fire and cold)',
             'Metadata/Items/Rings/RingK5b': ' (fire and lightning)',
             'Metadata/Items/Rings/RingK5c': ' (cold and lightning)',
+
+            # Ring (Kalandra's Touch base type)
+            'Metadata/Items/Rings/MirrorRing': ' (base type)',
 
             # =================================================================
             # Amulets
