@@ -118,9 +118,8 @@ class WikiCondition(parser.WikiCondition):
         'radius_secondary_description',
         'radius_tertiary',
         'radius_tertiary_description',
-        #
+
         # all items
-        #
         'name_list',
         'quality',
 
@@ -128,20 +127,19 @@ class WikiCondition(parser.WikiCondition):
         'inventory_icon',
         'alternate_art_inventory_icons',
         'frame_type',
+        'influences',
 
         # Drop restrictions
-        'is_in_game',
         'drop_enabled',
         'acquisition_tags',
         'drop_areas',
         'drop_text',
         'drop_monsters',
-        'disable_automatic_recipes',
         'is_drop_restricted',
-        'influences',
 
         # Item flags
         'is_corrupted',
+        'is_mirrored',
         'is_fractured',
         'is_synthesised',
         'is_searing_exarch_item',
@@ -150,13 +148,16 @@ class WikiCondition(parser.WikiCondition):
         'is_replica',
         'is_relic',
         'can_not_be_traded_or_modified',
-        'suppress_improper_modifiers_category',
         'is_sellable',
         'is_in_game',
+        'is_unmodifiable',
+        'is_account_bound',
 
-        # Old MTX Categorizations
+        'suppress_improper_modifiers_category',
+        'disable_automatic_recipes',
+
+        # MTX Categorization (No longer exposed in BaseItemTypes.dat)
         'cosmetic_type',
-        'cosmetic_theme',
 
         # Version information
         'release_version',
@@ -194,6 +195,14 @@ class WikiCondition(parser.WikiCondition):
         'quest_reward4_act',
         'quest_reward4_class_ids',
         'quest_reward4_npc',
+
+        # Sentinels
+        'sentinel_duration',
+        'sentinel_empowers',
+        'sentinel_empowerment',
+        'sentinel_monster',
+        'sentinel_monster_level',
+        'sentinel_charge',
     )
     COPY_MATCH = re.compile(
         r'^(recipe|implicit[0-9]+_(?:text|random_list)).*'
