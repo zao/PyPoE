@@ -509,6 +509,7 @@ class DatReader(ReprMixin):
         POINTER_LIST = 3
         POINTER = 4
         POINTER_SELF = 5
+        POINTER_OUT = 6
 
     def __init__(self, file_name, *args, use_dat_value=True, specification=None,
                  auto_build_index=False, x64=False):
@@ -705,7 +706,14 @@ class DatReader(ReprMixin):
             else:
                 size = 4
                 cast = 'I'
-            if caststr.startswith('ref|generic'):
+            if caststr.startswith('ref|out'):
+                cast_type = self.CastTypes.POINTER_OUT
+                # Double the extracted size and duplicate the cast letter to extract two bit-dependent
+                # values for size and pointer. The pointer is always zero and will be discarded when
+                # reading.
+                size *= 2
+                cast *= 2 
+            elif caststr.startswith('ref|generic') or caststr.startswith('ref|self'):
                 cast_type = self.CastTypes.POINTER_SELF
             else:
                 cast_type = self.CastTypes.POINTER
@@ -713,7 +721,7 @@ class DatReader(ReprMixin):
         return remainder, (cast_type, size, cast)
 
     def _cast_from_spec(self, specification, casts, parent=None, offset=None, data=None, queue_data=None):
-        if casts[0][0] in (self.CastTypes.VALUE, self.CastTypes.POINTER_SELF):
+        if casts[0][0] in (self.CastTypes.VALUE, self.CastTypes.POINTER_SELF, self.CastTypes.POINTER_OUT):
             ivalue = data[0] if data else struct.unpack('<' + casts[0][2], self._file_raw[offset:offset+casts[0][1]])[0]
 
             if ivalue in (-0x1010102, 0xFEFEFEFE, -0x101010101010102, 0xFEFEFEFEFEFEFEFE, 0xFFFFFFFF):
@@ -788,7 +796,7 @@ class DatReader(ReprMixin):
         row_unpacked = struct.unpack(self.cast_row, data_raw)
         i = 0
         for spec, casts in self.cast_spec:
-            if casts[0][0] == 3:
+            if casts[0][0] in [3, 6]:
                 cell_data = row_unpacked[i:i+2]
                 i += 1
             else:
