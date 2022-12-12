@@ -140,7 +140,7 @@ class MasteryCommandHandler(ExporterHandler):
 
 
 class MasteryEffectParser(parser.BaseParser):
-    _MASTERY_FILE_NAME = 'PassiveSkillMasteryEffects.dat'
+    _MASTERY_FILE_NAME = 'PassiveSkillMasteryEffects.dat64'
     _files = [
         _MASTERY_FILE_NAME,
     ]
@@ -153,7 +153,7 @@ class MasteryEffectParser(parser.BaseParser):
 
     _MAX_STAT_ID = 3 # How many stats each mastery effect can have.
 
-    # Here we list out fields from the .dat file, and translate them to template parameters.
+    # Here we list out fields from the .dat64 file, and translate them to template parameters.
     # More complicated handling can be done in the body of export.
     _COPY_KEYS = OrderedDict((
         ('Id', {
@@ -203,7 +203,7 @@ class MasteryEffectParser(parser.BaseParser):
 
         console('Accessing additional data...')
 
-        # Read from the .dat file
+        # Read from the .dat64 file
         self.rr[self._MASTERY_FILE_NAME]
 
         console(f'Found {len(masteries)}, parsing...')
@@ -269,8 +269,8 @@ class MasteryEffectParser(parser.BaseParser):
 
 
 class MasteryGroupParser(parser.BaseParser):
-    _MASTERY_FILE_NAME = 'PassiveSkillMasteryGroups.dat'
-    _PASSIVES_FILE_NAME = 'PassiveSkills.dat'
+    _MASTERY_FILE_NAME = 'PassiveSkillMasteryGroups.dat64'
+    _PASSIVES_FILE_NAME = 'PassiveSkills.dat64'
     _files = [
         _MASTERY_FILE_NAME,
         _PASSIVES_FILE_NAME,
@@ -336,7 +336,7 @@ class MasteryGroupParser(parser.BaseParser):
         name_map = self.get_mastery_name_map()
 
         console('Accessing additional data...')
-        # Read the .dat file
+        # Read the .dat64 file
         self.rr[self._MASTERY_FILE_NAME]
         
         self._image_init(parsed_args)

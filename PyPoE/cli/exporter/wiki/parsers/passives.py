@@ -117,12 +117,12 @@ class PassiveSkillCommandHandler(ExporterHandler):
 
 class PassiveSkillParser(parser.BaseParser):
     _files = [
-        'PassiveSkills.dat',
+        'PassiveSkills.dat64',
     ]
 
     _passive_column_index_filter = partialmethod(
         parser.BaseParser._column_index_filter,
-        dat_file_name='PassiveSkills.dat',
+        dat_file_name='PassiveSkills.dat64',
         error_msg='Several passives have not been found:\n%s',
     )
 
@@ -212,7 +212,7 @@ class PassiveSkillParser(parser.BaseParser):
     def by_rowid(self, parsed_args):
         return self.export(
             parsed_args,
-            self.rr['PassiveSkills.dat'][parsed_args.start:parsed_args.end],
+            self.rr['PassiveSkills.dat64'][parsed_args.start:parsed_args.end],
         )
 
     def by_id(self, parsed_args):
@@ -262,7 +262,7 @@ class PassiveSkillParser(parser.BaseParser):
             for other_psg_id in node.connections:
                 node_index[other_psg_id].connections.append(psg_id)
 
-        self.rr['PassiveSkills.dat'].build_index('PassiveSkillGraphId')
+        self.rr['PassiveSkills.dat64'].build_index('PassiveSkillGraphId')
 
         self._image_init(parsed_args)
 
@@ -275,7 +275,7 @@ class PassiveSkillParser(parser.BaseParser):
             if (passive.rowid % 100 == 0) or (passive.rowid % print_increment == 0):
                 console(f"Processing passive {passive['Id']} at {passive.rowid}")
 
-            # Copy over simple fields from the .dat
+            # Copy over simple fields from the .dat64
             for row_key, copy_data in self._COPY_KEYS.items():
                 value = passive[row_key]
 
@@ -362,7 +362,7 @@ class PassiveSkillParser(parser.BaseParser):
             node = node_index.get(passive['PassiveSkillGraphId'])
             if node and node.connections:
                 data['connections'] = ','.join([
-                    self.rr['PassiveSkills.dat'].index['PassiveSkillGraphId'][
+                    self.rr['PassiveSkills.dat64'].index['PassiveSkillGraphId'][
                         psg_id]['Id'] for psg_id in node.connections])
 
             # extract icons if specified

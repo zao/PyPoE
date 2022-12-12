@@ -156,12 +156,12 @@ class MonsterCommandHandler(ExporterHandler):
 
 class MonsterParser(parser.BaseParser):
     _files = [
-        'MonsterVarieties.dat',
+        'MonsterVarieties.dat64',
     ]
 
     _area_column_index_filter = partialmethod(
         parser.BaseParser._column_index_filter,
-        dat_file_name='MonsterVarieties.dat',
+        dat_file_name='MonsterVarieties.dat64',
         error_msg='Several monsters have not been found:\n%s',
     )
 
@@ -238,7 +238,7 @@ class MonsterParser(parser.BaseParser):
     def by_rowid(self, parsed_args):
         return self.export(
             parsed_args,
-            self.rr['MonsterVarieties.dat'][parsed_args.start:parsed_args.end],
+            self.rr['MonsterVarieties.dat64'][parsed_args.start:parsed_args.end],
         )
 
     def by_id(self, parsed_args):
@@ -255,7 +255,7 @@ class MonsterParser(parser.BaseParser):
         re_id = re.compile(parsed_args.re_id) if parsed_args.re_id else None
 
         out = []
-        for row in self.rr['MonsterVarieties.dat']:
+        for row in self.rr['MonsterVarieties.dat64']:
             if re_id:
                 if not re_id.match(row['Id']):
                     continue

@@ -100,12 +100,12 @@ class IncursionCommandHandler(ExporterHandler):
 
 class IncursionRoomParser(parser.BaseParser):
     _files = [
-        'IncursionRooms.dat',
+        'IncursionRooms.dat64',
     ]
 
     _incursion_column_index_filter = partialmethod(
         parser.BaseParser._column_index_filter,
-        dat_file_name='IncursionRooms.dat',
+        dat_file_name='IncursionRooms.dat64',
         error_msg='Several incursion rooms have not been found:\n%s',
     )
 
@@ -161,7 +161,7 @@ class IncursionRoomParser(parser.BaseParser):
     def by_rowid(self, parsed_args):
         return self.export(
             parsed_args,
-            self.rr['IncursionRooms.dat'][parsed_args.start:parsed_args.end],
+            self.rr['IncursionRooms.dat64'][parsed_args.start:parsed_args.end],
         )
 
     def by_id(self, parsed_args):

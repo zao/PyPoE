@@ -1854,12 +1854,8 @@ specification = Specification({
                 key='FlavourText.dat',
             ),
             Field(
-                name='Unknown0',
-                type='int',
-            ),
-            Field(
-                name='Unknown1',
-                type='int',
+                name='AtlasNodeKeys',
+                type='ref|list|ref|self',
             ),
             Field(
                 name='Tier0',
@@ -1886,19 +1882,19 @@ specification = Specification({
                 type='float',
             ),
             Field(
+                name='Y0',
+                type='float',
+            ),
+            Field(
+                name='Unknown1',
+                type='int',
+            ),
+            Field(
                 name='X1',
                 type='float',
             ),
             Field(
-                name='X2',
-                type='float',
-            ),
-            Field(
-                name='X3',
-                type='float',
-            ),
-            Field(
-                name='X4',
+                name='Y1',
                 type='float',
             ),
             Field(
@@ -2180,7 +2176,7 @@ specification = Specification({
                 type='int',
             ),
             Field(
-                name='SoundEffectsKey',
+                name='SoundEffectsKeys',
                 type='ref|out',
                 key='SoundEffects.dat',
             ),
@@ -2199,7 +2195,7 @@ specification = Specification({
             #     type='bool',
             # ),
             Field(
-                name='Unknown0',
+                name='SiteVisibility',
                 type='int',
             ),
             Field(
@@ -2208,7 +2204,7 @@ specification = Specification({
                 key='ItemVisualIdentity.dat',
             ),
             Field(
-                name='HASH',
+                name='HASH32',
                 type='int',
                 unique=True,
             ),
@@ -2228,7 +2224,7 @@ specification = Specification({
                 key='AchievementItems.dat',
             ),
             Field(
-                name='IsUnmodifiable',
+                name='IsCorrupted',
                 type='bool',
             ),
             Field(
@@ -2355,8 +2351,12 @@ specification = Specification({
                 type='int',
             ),
             Field(
+                name='MonsterPacks',
+                type='ref|out',
+            ),
+            Field(
                 name='Unknown0',
-                type='ref|self',
+                type='int',
             ),
             Field(
                 name='Unknown1',
@@ -18378,19 +18378,11 @@ specification = Specification({
             ),
             Field(
                 name='Unknown3',
-                type='int',
+                type='ref|list|ref|out',
             ),
             Field(
                 name='Unknown4',
-                type='int',
-            ),
-            Field(
-                name='Unknown5',
-                type='int',
-            ),
-            Field(
-                name='Unknown6',
-                type='int',
+                type='ref|out',
             ),
         ),
     ),
