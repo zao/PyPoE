@@ -118,9 +118,8 @@ class WikiCondition(parser.WikiCondition):
         'radius_secondary_description',
         'radius_tertiary',
         'radius_tertiary_description',
-        #
+
         # all items
-        #
         'name_list',
         'quality',
 
@@ -128,20 +127,19 @@ class WikiCondition(parser.WikiCondition):
         'inventory_icon',
         'alternate_art_inventory_icons',
         'frame_type',
+        'influences',
 
         # Drop restrictions
-        'is_in_game',
         'drop_enabled',
         'acquisition_tags',
         'drop_areas',
         'drop_text',
         'drop_monsters',
-        'disable_automatic_recipes',
         'is_drop_restricted',
-        'influences',
 
         # Item flags
         'is_corrupted',
+        'is_mirrored',
         'is_fractured',
         'is_synthesised',
         'is_searing_exarch_item',
@@ -150,13 +148,16 @@ class WikiCondition(parser.WikiCondition):
         'is_replica',
         'is_relic',
         'can_not_be_traded_or_modified',
-        'suppress_improper_modifiers_category',
         'is_sellable',
         'is_in_game',
+        'is_unmodifiable',
+        'is_account_bound',
 
-        # Old MTX Categorizations
+        'suppress_improper_modifiers_category',
+        'disable_automatic_recipes',
+
+        # MTX Categorization (No longer exposed in BaseItemTypes.dat)
         'cosmetic_type',
-        'cosmetic_theme',
 
         # Version information
         'release_version',
@@ -194,6 +195,14 @@ class WikiCondition(parser.WikiCondition):
         'quest_reward4_act',
         'quest_reward4_class_ids',
         'quest_reward4_npc',
+
+        # Sentinels
+        'sentinel_duration',
+        'sentinel_empowers',
+        'sentinel_empowerment',
+        'sentinel_monster',
+        'sentinel_monster_level',
+        'sentinel_charge',
     )
     COPY_MATCH = re.compile(
         r'^(recipe|implicit[0-9]+_(?:text|random_list)).*'
@@ -709,9 +718,19 @@ class ItemsParser(SkillParserShared):
             # Rings
             # =================================================================
 
+            # Two-Stone Ring
             'Metadata/Items/Rings/Ring12': " (ruby and topaz)",
             'Metadata/Items/Rings/Ring13': " (sapphire and topaz)",
             'Metadata/Items/Rings/Ring14': " (ruby and sapphire)",
+
+            # Shadowed Ring
+            'Metadata/Items/Rings/RingK5a': ' (fire and cold)',
+            'Metadata/Items/Rings/RingK5b': ' (fire and lightning)',
+            'Metadata/Items/Rings/RingK5c': ' (cold and lightning)',
+
+            # Ring (Kalandra's Touch base type)
+            'Metadata/Items/Rings/MirrorRing': ' (base type)',
+
             # =================================================================
             # Amulets
             # =================================================================
@@ -3114,16 +3133,16 @@ class ItemsParser(SkillParserShared):
         row_index=True
     )
 
-    _type_incubator = _type_factory(
-        data_file='Incubators.dat',
-        data_mapping=(
-            ('Description', {
-                'template': 'incubator_effect',
-                'format': lambda v: v,
-            }),
-        ),
-        row_index=True
-    )
+    # _type_incubator = _type_factory(
+    #     data_file='Incubators.dat',
+    #     data_mapping=(
+    #         ('Description', {
+    #             'template': 'incubator_effect',
+    #             'format': lambda v: v,
+    #         }),
+    #     ),
+    #     row_index=True
+    # )
 
     def _harvest_seed_extra(self, infobox, base_item_type, harvest_object):
 
@@ -3302,7 +3321,7 @@ class ItemsParser(SkillParserShared):
         'HideoutDoodad': (_type_currency, _type_hideout_doodad),
         'Microtransaction': (_type_currency, _type_microtransaction),
         'DivinationCard': (_type_currency, ),
-        'IncubatorStackable': (_type_currency, _type_incubator),
+        'IncubatorStackable': (_type_currency, ),
         'HarvestSeed': (_type_currency, _type_harvest_seed),
         'HarvestPlantBooster': (_type_currency, _type_harvest_plant_booster),
         # Labyrinth stuff
