@@ -726,6 +726,7 @@ class MOD_DOMAIN(IntEnumOverride):
     SENTINEL = 30
     MEMORY_LINES = 31
     MODS_DISALLOWED = 32 # Used in BaseItemTypes.dat, not Mods.dat.
+    SANCTUM_RELIC = 33
 
     # legacy names
     MASTER = CRAFTED

@@ -4241,6 +4241,10 @@ specification = Specification({
                 type='ref|out',
                 key='MiscAnimated.dat',
             ),
+            Field(
+                name='Unknown0',
+                type='ref|out',
+            ),
         ),
     ),
     'CharacterAudioEvents.dat': File(
@@ -15498,6 +15502,10 @@ specification = Specification({
                 name='Unknown1',
                 type='int',
             ),
+            Field(
+                name='Hash32',
+                type='int',
+            ),
         ),
     ),
     'MiscBeams.dat': File(
@@ -19085,8 +19093,44 @@ specification = Specification({
                 #key='AtlasInfluenceSets.dat', FIXME: Define spec
             ),
             Field(
-                name='Key0', #Used by the atlas keystones. Values from 380-392
+                name='SoundEffect', #Used by the atlas keystones. Values from 380-392
                 type='ref|out',
+            ),
+            Field(
+                name='Unknown1',
+                type='ref|string',
+            ),
+            Field(
+                name='Unknown2',
+                type='int',
+            ),
+            Field(
+                name='Unknown3',
+                type='int',
+            ),
+            Field(
+                name='Unknown4',
+                type='int',
+            ),
+            Field(
+                name='Unknown5',
+                type='int',
+            ),
+            Field(
+                name='Unknown6',
+                type='int',
+            ),
+            Field(
+                name='Unknown7',
+                type='bool',
+            ),
+            Field(
+                name='Key0',
+                type='ref|list|ref|out',
+            ),
+            Field(
+                name='Unknown8',
+                type='int',
             ),
         ),
         virtual_fields=(
@@ -20880,11 +20924,27 @@ specification = Specification({
                 type='ref|string',
             ),
             Field(
-                name='Flag0',
+                name='IsSupport',
                 type='bool',
             ),
             Field(
                 name='Flag1',
+                type='bool',
+            ),
+            Field(
+                name='Flag2',
+                type='bool',
+            ),
+            Field(
+                name='Flag3',
+                type='bool',
+            ),
+            Field(
+                name='Flag4',
+                type='bool',
+            ),
+            Field(
+                name='Flag5',
                 type='bool',
             ),
             Field(
@@ -20896,6 +20956,18 @@ specification = Specification({
                 name='RegularVariant',
                 type='ref|self',
                 key='SkillGems.dat',
+            ),
+            Field(
+                name='GrantedEffectHardMode',
+                type='ref|out',
+            ),
+            Field(
+                name='Unknown1',
+                type='ref|out',
+            ),
+            Field(
+                name='Unknown2',
+                type='int',
             ),
         ),
     ),
