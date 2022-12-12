@@ -87,13 +87,13 @@ class WarbandsParser(BaseParser):
 
     # Load files in advance
     _files = [
-        'MonsterPacks.dat',
-        'MonsterVarieties.dat',
-        'WarbandsGraph.dat',
-        'WarbandsMapGraph.dat',
-        'WarbandsPackNumbers.dat',
-        'WarbandsPackMonsters.dat',
-        'WorldAreas.dat',
+        'MonsterPacks.dat64',
+        'MonsterVarieties.dat64',
+        'WarbandsGraph.dat64',
+        'WarbandsMapGraph.dat64',
+        'WarbandsPackNumbers.dat64',
+        'WarbandsPackMonsters.dat64',
+        'WorldAreas.dat64',
     ]
 
     # Load translations in advance
@@ -102,7 +102,7 @@ class WarbandsParser(BaseParser):
 
     def warbands(self, parsed_args):
         out = []
-        for warband in self.rr['WarbandsPackMonsters.dat']:
+        for warband in self.rr['WarbandsPackMonsters.dat64']:
             out.append(warband['Id'])
             out.append('\n\n')
 
@@ -128,10 +128,10 @@ class WarbandsParser(BaseParser):
 
     def graph(self, parsed_args, **kwargs):
         if parsed_args.type == 'map':
-            dat_file = self.rr['WarbandsMapGraph.dat']
+            dat_file = self.rr['WarbandsMapGraph.dat64']
             out_file = 'warbands_map_graph.cv'
         elif parsed_args.type == 'normal':
-            dat_file = self.rr['WarbandsGraph.dat']
+            dat_file = self.rr['WarbandsGraph.dat64']
             out_file = 'warbands_graph.cv'
 
         console('Creating Graph...')

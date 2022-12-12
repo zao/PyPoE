@@ -3769,6 +3769,8 @@ class ItemsParser(SkillParserShared):
         if not set(['start', 'end']).issubset(vars(parsed_args).keys()):
             return
 
+        start = parsed_args.start
+        
         try:
             export_row_count = parsed_args.end - parsed_args.start
         except TypeError:

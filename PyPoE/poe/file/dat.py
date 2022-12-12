@@ -1099,6 +1099,11 @@ class RelationalReader(AbstractFileCache):
             return self.files[file_name]
 
         df = self._create_instance(file_name)
+        
+        # Helpful during the 3.20 patch .dat purge and transition to reading .dat64 format.
+        # TODO: Comment this out before committing.
+        
+        # print(df)
 
         self.files[file_name] = df
 
