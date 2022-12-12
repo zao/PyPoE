@@ -54,7 +54,7 @@ def _get_app_dir():
     if osys == 'Windows':
         vars = ['APPDATA']
         subdir = 'PyPoE'
-    elif osys == 'Linux':
+    elif osys in ['Linux', 'Darwin']:
         vars = ['HOME', 'PWD']
         subdir = '.PyPoE'
     else:
