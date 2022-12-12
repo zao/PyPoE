@@ -67,11 +67,7 @@ from typing import List, Union, Dict, Tuple
 
 # 3rd party
 from fnvhash import fnv1a_64
-
-try:
-    import cffi
-except ImportError:
-    cffi = None
+import ooz
 
 # self
 from PyPoE.shared.mixins import ReprMixin
@@ -89,22 +85,6 @@ __all__ = [
 
     'Bundle', 'Index'
 ]
-
-ooz = None
-if cffi:
-    ffi = cffi.FFI()
-    ffi.cdef("""int Ooz_Decompress(uint8_t const* src_buf, int src_len, 
-            uint8_t* dst, size_t dst_size, int, int, int, uint8_t*, size_t, 
-            void*, void*, void*, size_t, int);""")
-    shlib_candidates = [r'libooz.dll', r'liblibooz.so', r'liblibooz.dylib']
-    for cand in shlib_candidates:
-        try:
-            ooz = ffi.dlopen(cand)
-            break
-        except OSError:
-            pass
-    if not ooz:
-        cffi = None
 
 # =============================================================================
 # Classes
@@ -205,9 +185,6 @@ class Bundle(AbstractFileReadOnly):
         """
         Decompresses this bundle's contents.
 
-        This requires either the oozdll to be available or the ooz commandline
-        tool.
-
         Parameters
         ----------
         start
@@ -222,52 +199,14 @@ class Bundle(AbstractFileReadOnly):
             end = self.entry_count
 
         last = self.entry_count - 1
-        if ooz:
-            for i in range(start, end):
-                if i != last:
-                    size = self.chunk_size
-                else:
-                    size = self.size_decompressed % self.chunk_size
+        for i in range(start, end):
+            if i != last:
+                size = self.chunk_size
+            else:
+                size = self.size_decompressed % self.chunk_size
 
-                out = ffi.new('uint8_t[]', size+64)
-                rtrcode = ooz.Ooz_Decompress(
-                    self.data[i],  # src_buff
-                    len(self.data[i]),  # src_len
-                    out,  # dst
-                    size,  # dst_size
-                    0,
-                    0,
-                    0,
-                    ffi.cast('uint8_t *', 0),
-                    0,
-                    ffi.cast('void *', 0),
-                    ffi.cast('void *', 0),
-                    ffi.cast('void *', 0),
-                    0,
-                    0,
-                )
-
-                if rtrcode == 0:
-                    raise ValueError('Decode error - returned 0 bytes')
-
-                self.data[i] = ffi.buffer(out)[:-64]
-        else:
-            with TemporaryDirectory() as tempdir:
-                for i in range(start, end):
-                    fn = os.path.join(tempdir,'chunk%s' % i)
-
-                    with open('%s.in' % fn, 'wb') as f:
-                        if i != last:
-                            size = 262144
-                        else:
-                            size = self.size_decompressed % 262144
-                        f.write(struct.pack('<Q', size))
-                        f.write(self.data[i])
-
-                    os.system('ooz -q -d %(fn)s.in %(fn)s.out' % {'fn': fn})
-
-                    with open('%s.out' % fn, 'rb') as f:
-                        self.data[i] = f.read()
+            out = ooz.decompress(self.data[i], size)
+            self.data[i] = bytes(out)
 
         self.data = b''.join(self.data.values())
 

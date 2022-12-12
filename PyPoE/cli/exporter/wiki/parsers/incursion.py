@@ -42,6 +42,7 @@ from functools import partialmethod
 from collections import OrderedDict
 
 # 3rd-party
+from dds import decode_dds
 
 # self
 from PyPoE.cli.core import console, Msg
@@ -259,18 +260,14 @@ class IncursionRoomParser(parser.BaseParser):
                         f.write(img_data[88:])
                     idl_sources.add(src)
 
-                os.system(
-                    'process-image convert "%(src)s" "%(dst)s incursion room icon.png" '
-                    '%(x)s %(y)s %(w)s %(h)s' %
-                    {
-                        'src': src,
-                        'dst': os.path.join(self._img_path, data['icon']),
-                        'h': idl_record.h,
-                        'w': idl_record.w,
-                        'x': idl_record.x1,
-                        'y': idl_record.y1,
-                    }
-                )
+                with open(src, 'rb') as fh:
+                    src_data = fh.read()
+                    crop = (idl_record.x1, idl_record.y1, idl_record.w, idl_record.h)
+                    dst_img = decode_dds(src_data, crop)
+                    dst_img.save('%(dst)s incursion room icon.png' %
+                        {
+                            'dst': os.path.join(self._img_path, data['icon'])
+                        })
 
             r.add_result(
                 text=cond,
