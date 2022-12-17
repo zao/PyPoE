@@ -5460,17 +5460,25 @@ specification = Specification({
                 type='ref|list|ref|out',
             ),
             Field(
+                name='Unknown1',
+                type='int'
+            ),
+            Field(
+                name='Data1',
+                type='ref|list|int',
+            ),
+            Field(
                 name='Key2',
                 type='ref|out',
             ),
             Field(
-                name='Key3',
-                type='ref|out',
+                name='Flag1',
+                type='bool',
             ),
             Field(
-                name='Unknown1',
-                type='int'
-            )
+                name='Unknown2',
+                type='ref|string',
+            ),
         ),
     ),
     'CurrencyStashTabLayout.dat': File(
@@ -7457,6 +7465,18 @@ specification = Specification({
             Field(
                 name='Keys0',
                 type='ref|list|ref|out',
+            ),
+            Field(
+                name='Unknown2',
+                type='int',
+            ),
+            Field(
+                name='Unknown3',
+                type='int',
+            ),
+            Field(
+                name='Unknown4',
+                type='int',
             ),
         ),
     ),
@@ -10228,6 +10248,11 @@ specification = Specification({
                 type='ref|list|ref|out',
                 key='AchievementItems.dat',
             ),
+            Field(
+                name='ClientStringsKey2',
+                type='ref|out',
+                key='ClientStrings.dat',
+            ),
         ),
     ),
     'HeistBalancePerLevel.dat': File(
@@ -11713,6 +11738,10 @@ specification = Specification({
             Field(
                 name='Key1',
                 type='ref|out',
+            ),
+            Field(
+                name='Flag3',
+                type='bool',
             ),
         ),
     ),
@@ -13298,6 +13327,10 @@ specification = Specification({
                 type='ref|string',
                 file_path=True,
                 file_ext='.ot',
+            ),
+            Field(
+                name='Buff_StatValuesHardmode',
+                type='ref|list|int',
             ),
         ),
     ),
@@ -16865,6 +16898,14 @@ specification = Specification({
                 name='Flag3',
                 type='bool',
             ),
+            Field(
+                name='Flag4',
+                type='bool',
+            ),
+            Field(
+                name='Flag5',
+                type='bool',
+            ),
         ),
     ),
     'MonsterProjectileAttack.dat': File(
@@ -18112,6 +18153,18 @@ specification = Specification({
                 name='HasAreaMissions',
                 type='bool',
             ),
+            Field(
+                name='Key3',
+                type='ref|out',
+            ),
+            Field(
+                name='Key4',
+                type='ref|out',
+            ),
+            Field(
+                name='Key5',
+                type='ref|out',
+            ),
         ),
     ),
     'NPCPortraits.dat': File(
@@ -18461,6 +18514,10 @@ specification = Specification({
                 name='DialogueStyle',
                 type='ref|out',
                 key='NPCDialogueStyles.dat',
+            ),
+            Field(
+                name='Unknown4',
+                type='ref|out',
             ),
             Field(
                 name='Flag0',
@@ -19032,9 +19089,9 @@ specification = Specification({
                 type='bool',
             ),
             Field(
-                name='Reminder_ClientStringsKeys',
+                name='ReminderTextKeys',
                 type='ref|list|ref|out',
-                key='ClientStrings.dat',
+                key='ReminderText.dat',
             ),
             Field(
                 name='SkillPointsGranted',
@@ -20090,6 +20147,23 @@ specification = Specification({
             Field(
                 name='RecipeId',
                 type='int',
+            ),
+        ),
+    ),
+    'ReminderText.dat': File(
+        fields=(
+            Field(
+                name='Id',
+                type='ref|string',
+                unique=True,
+            ),
+            Field(
+                name='Text',
+                type='ref|string',
+            ),
+            Field(
+                name='TextHardmode',
+                type='ref|string'
             ),
         ),
     ),
@@ -23790,10 +23864,6 @@ specification = Specification({
                 key='WorldAreas.dat',
             ),
             Field(
-                name='VaalArea_SpawnChance',
-                type='int',
-            ),
-            Field(
                 name='Flag0',
                 type='bool',
             ),
@@ -23862,10 +23932,6 @@ specification = Specification({
             Field(
                 name='Key1',
                 type='ref|out',
-            ),
-            Field(
-                name='Unknown26',
-                type='int',
             ),
             Field(
                 name='WaypointActivation_AchievementItemsKeys',
@@ -23964,6 +24030,14 @@ specification = Specification({
             Field(
                 name='Unknown53',
                 type='int',
+            ),
+            Field(
+                name='Unknown54',
+                type='ref|out',
+            ),
+            Field(
+                name='Unknown55',
+                type='ref|out',
             ),
         ),
     ),
