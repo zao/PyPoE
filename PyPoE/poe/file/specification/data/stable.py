@@ -14568,6 +14568,10 @@ specification = Specification({
                 name='LakeTier',
                 type='int',
             ),
+            Field(
+                name='SanctumTier',
+                type='int',
+            ),
         ),
     ),
     'MapStatConditions.dat': File(

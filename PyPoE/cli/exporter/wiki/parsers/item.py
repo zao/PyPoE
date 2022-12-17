@@ -428,6 +428,7 @@ class ItemsParser(SkillParserShared):
         'Archnemesis': '3.17.0',
         'Sentinel': '3.18.0',
         'Lake': '3.19.0', # AKA Lake of Kalandra
+        'Sanctum': '3.20.0',  # AKA The Forbidden Sanctum
     }
 
     _IGNORE_DROP_LEVEL_CLASSES = (

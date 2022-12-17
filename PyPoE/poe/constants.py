@@ -725,8 +725,8 @@ class MOD_DOMAIN(IntEnumOverride):
     PRIMORDIAL_ALTAR = 29
     SENTINEL = 30
     MEMORY_LINES = 31
-    MODS_DISALLOWED = 32 # Used in BaseItemTypes.dat, not Mods.dat.
-    SANCTUM_RELIC = 33
+    SANCTUM_RELIC = 32
+    MODS_DISALLOWED = 33 # Used in BaseItemTypes.dat, not Mods.dat.
 
     # legacy names
     MASTER = CRAFTED
