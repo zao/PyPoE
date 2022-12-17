@@ -47,7 +47,7 @@ from PIL import Image, ImageOps
 from PyPoE.poe.constants import RARITY
 from PyPoE.cli.exporter.wiki.parsers.itemconstants import MAPS_IN_SERIES_BUT_NOT_ON_ATLAS, MAPS_TO_SKIP_COLORING, MAPS_TO_SKIP_COMPOSITING
 from PyPoE.poe.file.dat import RelationalReader
-from PyPoE.poe.file.ot import OTFile
+from PyPoE.poe.file.it import ITFile
 from PyPoE.poe.sim.formula import gem_stat_requirement, GemTypes
 from PyPoE.cli.core import console, Msg
 from PyPoE.cli.exporter import config
@@ -3609,10 +3609,10 @@ class ItemsParser(SkillParserShared):
                     m_id not in self._IGNORE_DROP_LEVEL_ITEMS_BY_ID:
                 infobox['drop_level'] = base_item_type['DropLevel']
 
-            base_ot = OTFile(parent_or_file_system=self.file_system)
-            base_ot.read(self.file_system.get_file(base_item_type['InheritsFrom'] + '.ot'))
+            base_ot = ITFile(parent_or_file_system=self.file_system)
+            base_ot.read(self.file_system.get_file(base_item_type['InheritsFrom'] + '.it'))
             try:
-                ot = self.ot[m_id + '.ot']
+                ot = self.it[m_id + '.it']
             except FileNotFoundError:
                 ot = base_ot  # If we couldn't find an ot for the specific item, use the base ot.
             else:

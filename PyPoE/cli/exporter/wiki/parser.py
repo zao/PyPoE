@@ -78,6 +78,7 @@ from PyPoE.poe.file.translations import (
 )
 from PyPoE.poe.file.file_system import FileSystem
 from PyPoE.poe.file.ot import OTFileCache
+from PyPoE.poe.file.it import ITFileCache
 from PyPoE.poe.sim.mods import get_translation_file_from_domain
 
 # =============================================================================
@@ -1488,6 +1489,10 @@ class BaseParser:
             path_or_file_system=self.file_system,
         )
 
+        self.it = ITFileCache(
+            path_or_file_system=self.file_system,
+        )
+
         self.custom = get_custom_translation_file()
         self.hardcoded = get_hardcoded_translation_file()
 
@@ -1796,6 +1801,7 @@ class TagHandler:
         'prophecy': partial(_default_handler, tid='prophecy'),
 
         'corrupted': partial(_link_handler, tid='corrupted'),
+        'fractured': partial(_link_handler, tid='fractured'),
     }
 
 

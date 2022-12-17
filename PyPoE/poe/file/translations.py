@@ -1220,7 +1220,7 @@ class TQReminderString(TranslationQuantifier):
         )
 
     def handle(self, *args):
-        return self.relational_reader['ClientStrings.dat64'].index['Id'][args[0].strip()]['Text']
+        return self.relational_reader['ReminderText.dat64'].index['Id'][args[0].strip()]['Text']
 
 
 class TranslationResult(TranslationReprMixin):
@@ -2471,6 +2471,12 @@ TranslationQuantifier(
     id='divide_by_one_thousand',
     handler=lambda v: v/1000,
     reverse_handler=lambda v: v*1000,
+)
+
+TranslationQuantifier(
+    id='plus_two_hundred',
+    handler=lambda v: v+200,
+    reverse_handler=lambda v: v-200,
 )
 
 TranslationQuantifier(

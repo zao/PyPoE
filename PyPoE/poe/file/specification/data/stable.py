@@ -2155,7 +2155,7 @@ specification = Specification({
                 name='InheritsFrom',
                 type='ref|string',
                 file_path=True,
-                file_ext='.ot, .otc',
+                file_ext='.it, .itc',
             ),
             Field(
                 name='DropLevel',
@@ -11699,7 +11699,7 @@ specification = Specification({
                 name='InheritsFrom',
                 type='ref|string',
                 file_path=True,
-                file_ext='.ot, .otc',
+                file_ext='.it, .itc',
             ),
             Field(
                 name='Flag0',
