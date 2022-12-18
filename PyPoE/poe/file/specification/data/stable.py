@@ -3954,6 +3954,10 @@ specification = Specification({
                 name='Data1',
                 type='ref|list|int',
             ),
+            Field(
+                name='Unknown5',
+                type='ref|string',
+            ),
         ),
     ),
     'BuffTemplates.dat': File(
@@ -9746,8 +9750,20 @@ specification = Specification({
                 type='bool',
             ),
             Field(
-                name='Unknown0',
-                type='ref|list|ref|out',
+                name='HarvestCraftOptionsKeys',
+                type='ref|self'
+            ),
+            Field(
+                name='Unknown1',
+                type='int'
+            ),
+            Field(
+                name='Unknown2',
+                type='int'
+            ),
+            Field(
+                name='Unknown3',
+                type='int'
             ),
         ),
     ),
@@ -16133,6 +16149,14 @@ specification = Specification({
             ),
             Field(
                 name='Keys1',
+                type='ref|list|ref|out',
+            ),
+            Field(
+                name='Unknown17',
+                type='int',
+            ),
+            Field(
+                name='Keys2',
                 type='ref|list|ref|out',
             ),
         ),
