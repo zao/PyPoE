@@ -19740,6 +19740,10 @@ specification = Specification({
                 type='ref|out',
                 key='QuestTrackerGroup.dat',
             ),
+            Field(
+                name='Flag1',
+                type='bool',
+            ),
         ),
     ),
     'QuestAchievements.dat': File(
