@@ -2197,6 +2197,7 @@ specification = Specification({
             Field(
                 name='SiteVisibility',
                 type='int',
+                enum='BASE_ITEM_TYPE_VISIBILITY',
             ),
             Field(
                 name='ItemVisualIdentityKey',
@@ -5288,6 +5289,21 @@ specification = Specification({
                 name='Unknown3',
                 type='int',
             ),
+            Field(
+                name='StatsKey1',
+                type='ref|out',
+                key='Stats.dat',
+            ),
+            Field(
+                name='StatsKey2',
+                type='ref|out',
+                key='Stats.dat',
+            ),
+            Field(
+                name='StatsKey3`',
+                type='ref|out',
+                key='Stats.dat',
+            ),
         ),
         virtual_fields=(
             VirtualField(
@@ -6036,6 +6052,14 @@ specification = Specification({
             Field(
                 name='Flag1',
                 type='bool',
+            ),
+            Field(
+                name='Unknown0',
+                type='ref|list|int',
+            ),
+            Field(
+                name='Unknown1',
+                type='ref|list|int',
             ),
         ),
     ),
@@ -9461,6 +9485,7 @@ specification = Specification({
             Field(
                 name='CooldownBypassType',
                 type='int',
+                enum='COOLDOWN_BYPASS_TYPES',
             ),
             Field(
                 name='VaalSouls',
@@ -19271,17 +19296,8 @@ specification = Specification({
                 type='ref|list|int',
             ),
             Field(
-                name='Art',
-                type='ref|string',
-            ),
-            Field(
                 name='TotalIndices',
                 type='int',
-            ),
-            Field(
-                name='SoundEffectsKey',
-                type='ref|out',
-                key='SoundEffects.dat',
             ),
         ),
     ),
