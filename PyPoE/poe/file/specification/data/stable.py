@@ -2589,7 +2589,7 @@ specification = Specification({
             ),
             Field(
                 name='HintText',
-                type='ref|string',
+                type='ref|out',
             ),
             Field(
                 name='Flag0',
@@ -2609,8 +2609,16 @@ specification = Specification({
                 type='int',
             ),
             Field(
+                name='Unknown1',
+                type='int',
+            ),
+            Field(
                 name='RedBeastsRequired',
                 type='int',
+            ),
+            Field(
+                name='Unknown2',
+                type='ref|out',
             ),
         ),
     ),
@@ -5287,6 +5295,18 @@ specification = Specification({
             Field(
                 name='Unknown3',
                 type='int',
+            ),
+            Field(
+                name='Key2',
+                type='ref|out',
+            ),
+            Field(
+                name='Key3',
+                type='ref|out',
+            ),
+            Field(
+                name='Key4',
+                type='ref|out',
             ),
         ),
         virtual_fields=(
