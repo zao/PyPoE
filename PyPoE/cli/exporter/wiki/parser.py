@@ -78,6 +78,7 @@ from PyPoE.poe.file.translations import (
 )
 from PyPoE.poe.file.file_system import FileSystem
 from PyPoE.poe.file.ot import OTFileCache
+from PyPoE.poe.file.it import ITFileCache
 from PyPoE.poe.sim.mods import get_translation_file_from_domain
 
 # =============================================================================
@@ -1464,6 +1465,7 @@ class BaseParser:
         opt = {
             'use_dat_value': False,
             'auto_build_index': True,
+            'x64': True,
         }
 
         # Load rr and translations which will be undoubtedly be needed for
@@ -1484,6 +1486,10 @@ class BaseParser:
             self.tc[file_name]
 
         self.ot = OTFileCache(
+            path_or_file_system=self.file_system,
+        )
+
+        self.it = ITFileCache(
             path_or_file_system=self.file_system,
         )
 
@@ -1722,15 +1728,15 @@ class TagHandler:
             'real' for linking purposes
         """
         self.rr = rr
-        self.rr['BaseItemTypes.dat'].build_index('Name')
-        self.rr['Words.dat'].build_index('Text')
+        self.rr['BaseItemTypes.dat64'].build_index('Name')
+        self.rr['Words.dat64'].build_index('Text')
 
         self.tag_handlers = {}
         for key, func in self.__class__.tag_handlers.items():
             self.tag_handlers[key] = partial(func, self)
 
     def _check_link(self, string):
-        items = self.rr['BaseItemTypes.dat'].index['Name'][string]
+        items = self.rr['BaseItemTypes.dat64'].index['Name'][string]
         if items:
             if items[0]['ItemClassesKey']['Name'] == 'Maps':
                 string = self._IL_FORMAT % string
@@ -1750,10 +1756,10 @@ class TagHandler:
         return self._C_FORMAT % (tid, '[[%s]]' % hstr)
 
     def _unique_handler(self, hstr, parameter):
-        words = self.rr['Words.dat'].index['Text'][hstr]
+        words = self.rr['Words.dat64'].index['Text'][hstr]
         if words and words[0]['WordlistsKey'] == WORDLISTS.UNIQUE_ITEM:
             # Check whether unique item name clashes with base item name
-            items = self.rr['BaseItemTypes.dat'].index['Name'][hstr]
+            items = self.rr['BaseItemTypes.dat64'].index['Name'][hstr]
             if len(items) > 0:
                 hstr = '[[%s]]' % hstr
             else:
@@ -1795,6 +1801,7 @@ class TagHandler:
         'prophecy': partial(_default_handler, tid='prophecy'),
 
         'corrupted': partial(_link_handler, tid='corrupted'),
+        'fractured': partial(_link_handler, tid='fractured'),
     }
 
 

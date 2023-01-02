@@ -133,8 +133,8 @@ class ModsHandler(ExporterHandler):
 class ModParser(BaseParser):
     # Load files in advance
     _files = [
-        'Mods.dat',
-        'Stats.dat',
+        'Mods.dat64',
+        'Stats.dat64',
     ]
     
     # Load translations in advance
@@ -144,7 +144,7 @@ class ModParser(BaseParser):
 
     _mod_column_index_filter = partialmethod(
         BaseParser._column_index_filter,
-        dat_file_name='Mods.dat',
+        dat_file_name='Mods.dat64',
         error_msg='Several areas have not been found:\n%s',
     )
 
@@ -162,7 +162,7 @@ class ModParser(BaseParser):
     def by_rowid(self, parsed_args):
         return self._export(
             parsed_args,
-            self.rr['Mods.dat'][parsed_args.start:parsed_args.end],
+            self.rr['Mods.dat64'][parsed_args.start:parsed_args.end],
         )
 
     def by_id(self, parsed_args):
@@ -191,7 +191,7 @@ class ModParser(BaseParser):
                 'comp': getattr(MOD_GENERATION_TYPE, args.generation_type),
             })
 
-        for mod in self.rr['Mods.dat']:
+        for mod in self.rr['Mods.dat64']:
             for filter in filters:
                 if mod[filter['column']] != filter['comp']:
                     break
@@ -213,7 +213,7 @@ class ModParser(BaseParser):
             return r
 
         # Needed for localizing sell prices
-        self.rr['BaseItemTypes.dat'].build_index('Id')
+        self.rr['BaseItemTypes.dat64'].build_index('Id')
 
         for mod in mods:
             data = OrderedDict()
@@ -315,7 +315,7 @@ class ModParser(BaseParser):
                             MOD_SELL_PRICES[msp['Id']].items(), start=1):
                         # print(mod['ModTypeKey']['Name'])
                         data['sell_price%s_name' % i] = self.rr[
-                            'BaseItemTypes.dat'].index['Id'][item_id]['Name']
+                            'BaseItemTypes.dat64'].index['Id'][item_id]['Name']
                         data['sell_price%s_amount' % i] = amount
 
                 # Make sure this is always the same order
@@ -344,7 +344,7 @@ class ModParser(BaseParser):
     def tempest(self, parsed_args):
         tf = self.tc['map_stat_descriptions.txt']
         data = []
-        for mod in self.rr['Mods.dat']:
+        for mod in self.rr['Mods.dat64']:
             # Is it a tempest mod?
             if mod['CorrectGroup'] != 'MapEclipse':
                 continue
@@ -379,7 +379,7 @@ class ModParser(BaseParser):
                 pass
             else:
                 # Value is incremented by 1 for some reason
-                tempest = self.rr['ExplodingStormBuffs.dat'][stat_values[index]-1]
+                tempest = self.rr['ExplodingStormBuffs.dat64'][stat_values[index]-1]
 
                 stat_ids.pop(index)
                 stat_values.pop(index)

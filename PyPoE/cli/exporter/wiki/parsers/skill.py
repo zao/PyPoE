@@ -143,15 +143,15 @@ class WikiCondition(parser.WikiCondition):
 class SkillParserShared(parser.BaseParser):
     _files = [
         # pretty much chain loads everything we need
-        'ActiveSkills.dat',
-        'GrantedEffects.dat',
-        'GrantedEffectsPerLevel.dat',
-        'GrantedEffectQualityStats.dat',
-        'GrantedEffectStatSetsPerLevel.dat',
-        'GrantedEffectStatSets.dat',
+        'ActiveSkills.dat64',
+        'GrantedEffects.dat64',
+        'GrantedEffectsPerLevel.dat64',
+        'GrantedEffectQualityStats.dat64',
+        'GrantedEffectStatSetsPerLevel.dat64',
+        'GrantedEffectStatSets.dat64',
     ]
 
-    # Fields to copy from GrantedEffectsPerLevel.dat
+    # Fields to copy from GrantedEffectsPerLevel.dat64
     _GEPL_COPY = (
         'Level', 'PlayerLevelReq', 'CostMultiplier',
         'CostAmounts', 'CostTypes', 'VaalSouls', 'VaalStoredUses',
@@ -159,7 +159,7 @@ class SkillParserShared(parser.BaseParser):
         'ManaReservationFlat', 'ManaReservationPercent', 'LifeReservationFlat', 'LifeReservationPercent',
     )
 
-    # Fields to copy from GrantedEffectStatSetsPerLevel.dat
+    # Fields to copy from GrantedEffectStatSetsPerLevel.dat64
     _GESSPL_COPY = (
         'SpellCritChance', 'AttackCritChance',
         'BaseMultiplier',
@@ -399,12 +399,12 @@ class SkillParserShared(parser.BaseParser):
         stat_set = gra_eff['StatSet']
 
         gra_eff_per_lvl = []
-        for row in self.rr['GrantedEffectsPerLevel.dat']:
+        for row in self.rr['GrantedEffectsPerLevel.dat64']:
             if row['GrantedEffect'] == gra_eff:
                 gra_eff_per_lvl.append(row)
 
         gra_eff_stats_pl = []
-        for row in self.rr['GrantedEffectStatSetsPerLevel.dat']:
+        for row in self.rr['GrantedEffectStatSetsPerLevel.dat64']:
             if row['StatSet'] == stat_set:
                 gra_eff_stats_pl.append(row)
 
@@ -524,7 +524,7 @@ class SkillParserShared(parser.BaseParser):
                     dynamic['stats'][key] = None
             last = data
 
-        # GrantedEffectStatSets.dat
+        # GrantedEffectStatSets.dat64
         const_stats = [untr_stat['Id'] for untr_stat in stat_set['ConstantStats']]
         impl_stats = [untr_stat['Id'] for untr_stat in stat_set['ImplicitStats']]
         const_stat_vals = stat_set['ConstantStatsValues']
@@ -564,7 +564,7 @@ class SkillParserShared(parser.BaseParser):
         # Output handling for gem infobox
         #
 
-        # From ActiveSkills.dat
+        # From ActiveSkills.dat64
         if act_skill:
             infobox['gem_description'] = act_skill['Description']
             infobox['active_skill_name'] = act_skill['DisplayedName']
@@ -573,14 +573,14 @@ class SkillParserShared(parser.BaseParser):
                     c['Id'] for c in act_skill['WeaponRestriction_ItemClassesKeys']
                 ])
 
-        # From Projectile.dat if available
+        # From Projectile.dat64 if available
         # TODO - remap
         key = self._SKILL_ID_TO_PROJECTILE_MAP.get(gra_eff['Id'])
         if key:
-            infobox['projectile_speed'] = self.rr['Projectiles.dat'].index[
+            infobox['projectile_speed'] = self.rr['Projectiles.dat64'].index[
                 'Id']['Metadata/Projectiles/' + key]['ProjectileSpeed']
 
-        # From GrantedEffects.dat
+        # From GrantedEffects.dat64
 
         infobox['skill_id'] = gra_eff['Id']
         if gra_eff['SupportGemLetter']:
@@ -589,7 +589,7 @@ class SkillParserShared(parser.BaseParser):
         if not gra_eff['IsSupport']:
             infobox['cast_time'] = gra_eff['CastTime'] / 1000
 
-        # GrantedEffectsPerLevel.dat
+        # GrantedEffectsPerLevel.dat64
         infobox['required_level'] = level_data[0]['PlayerLevelReq']
 
 
@@ -597,7 +597,7 @@ class SkillParserShared(parser.BaseParser):
         # Quality stats
         #
         qual_stats = []
-        for row in self.rr['GrantedEffectQualityStats.dat']:
+        for row in self.rr['GrantedEffectQualityStats.dat64']:
             if row['GrantedEffectsKey'] == gra_eff:
                 qual_stats.append(row)
 
@@ -819,7 +819,7 @@ class SkillParser(SkillParserShared):
         return self.export(
             parsed_args,
             self._column_index_filter(
-                dat_file_name='GrantedEffects.dat',
+                dat_file_name='GrantedEffects.dat64',
                 column_id='Id',
                 arg_list=parsed_args.skill_id,
             ),
@@ -828,17 +828,17 @@ class SkillParser(SkillParserShared):
     def by_rowid(self, parsed_args):
         return self.export(
             parsed_args,
-            self.rr['GrantedEffects.dat'][parsed_args.start:parsed_args.end],
+            self.rr['GrantedEffects.dat64'][parsed_args.start:parsed_args.end],
         )
 
     def export(self, parsed_args, skills):
         self._image_init(parsed_args=parsed_args)
         console('Found %s skills, parsing...' % len(skills))
-        self.rr['SkillGems.dat'].build_index('GrantedEffectsKey')
+        self.rr['SkillGems.dat64'].build_index('GrantedEffectsKey')
         r = ExporterResult()
         for skill in skills:
             if not parsed_args.allow_skill_gems and skill in \
-                    self.rr['SkillGems.dat'].index['GrantedEffectsKey']:
+                    self.rr['SkillGems.dat64'].index['GrantedEffectsKey']:
                 console(
                     f"Skipping skill gem skill \"{skill['Id']}\" at row {skill.rowid}",
                     msg=Msg.warning)

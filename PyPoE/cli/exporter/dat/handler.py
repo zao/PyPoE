@@ -122,7 +122,7 @@ class DatExportHandler:
             dir_path = "Data/%s/" % lang
         remove = []
         for name in tqdm(args.files):
-            file_path = dir_path + name
+            file_path = dir_path + name + '64'
             try:
                 data = file_system.get_file(file_path)
             except FileNotFoundError:
@@ -132,7 +132,7 @@ class DatExportHandler:
 
             df = dat.DatFile(name)
 
-            df.read(file_path_or_raw=data, use_dat_value=False)
+            df.read(file_path_or_raw=data, use_dat_value=False, x64=True)
 
             dat_files[name] = df
 

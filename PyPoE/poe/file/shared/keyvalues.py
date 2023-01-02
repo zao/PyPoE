@@ -224,6 +224,7 @@ class AbstractKeyValueFile(AbstractFile, defaultdict):
     _re_header = re.compile(
         r'^'
         r'version (?P<version>[0-9]+)[\r\n]*'
+        r'(?P<abstract>abstract)?[\r\n]*'
         r'extends "(?P<extends>[\w\./_]+)"[\r\n]*'
         r'(?P<remainder>.*)' # Match the rest
         r'$',

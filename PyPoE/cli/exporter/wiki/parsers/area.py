@@ -172,14 +172,14 @@ class AreaCommandHandler(ExporterHandler):
 
 class AreaParser(parser.BaseParser):
     _files = [
-        'WorldAreas.dat',
-        'MapPins.dat',
-        'AtlasNode.dat',
+        'WorldAreas.dat64',
+        'MapPins.dat64',
+        'AtlasNode.dat64',
     ]
 
     _area_column_index_filter = partialmethod(
         parser.BaseParser._column_index_filter,
-        dat_file_name='WorldAreas.dat',
+        dat_file_name='WorldAreas.dat64',
         error_msg='Several areas have not been found:\n%s',
     )
 
@@ -355,7 +355,7 @@ class AreaParser(parser.BaseParser):
     def by_rowid(self, parsed_args):
         return self.export(
             parsed_args,
-            self.rr['WorldAreas.dat'][parsed_args.start:parsed_args.end],
+            self.rr['WorldAreas.dat64'][parsed_args.start:parsed_args.end],
         )
 
     def by_id(self, parsed_args):
@@ -372,7 +372,7 @@ class AreaParser(parser.BaseParser):
         re_id = re.compile(parsed_args.re_id) if parsed_args.re_id else None
 
         out = []
-        for row in self.rr['WorldAreas.dat']:
+        for row in self.rr['WorldAreas.dat64']:
             if re_id:
                 if not re_id.match(row['Id']):
                     continue
@@ -394,12 +394,12 @@ class AreaParser(parser.BaseParser):
 
         console('Accessing additional data...')
 
-        self.rr['MapPins.dat'].build_index('WorldAreasKeys')
-        self.rr['AtlasNode.dat'].build_index('WorldAreasKey')
-        self.rr['MapSeries.dat'].build_index('Id')
+        self.rr['MapPins.dat64'].build_index('WorldAreasKeys')
+        self.rr['AtlasNode.dat64'].build_index('WorldAreasKey')
+        self.rr['MapSeries.dat64'].build_index('Id')
         if not parsed_args.skip_main_page:
-            self.rr['Maps.dat'].build_index('Regular_WorldAreasKey')
-            self.rr['UniqueMaps.dat'].build_index('WorldAreasKey')
+            self.rr['Maps.dat64'].build_index('Regular_WorldAreasKey')
+            self.rr['UniqueMaps.dat64'].build_index('WorldAreasKey')
 
         console('Found %s areas. Processing...' % len(areas))
 
@@ -433,11 +433,11 @@ class AreaParser(parser.BaseParser):
                 data['spawn_weight%s_tag' % i] = tag['Id']
                 data['spawn_weight%s_value' % i] = value
 
-            map_pin = self.rr['MapPins.dat'].index['WorldAreasKeys'].get(area)
+            map_pin = self.rr['MapPins.dat64'].index['WorldAreasKeys'].get(area)
             if map_pin:
                 data['flavour_text'] = map_pin[0]['FlavourText']
 
-            atlas_node = self.rr['AtlasNode.dat'].index['WorldAreasKey'].get(
+            atlas_node = self.rr['AtlasNode.dat64'].index['WorldAreasKey'].get(
                 area)
             if atlas_node:
                 data['flavour_text'] = atlas_node[0]['FlavourTextKey']['Text']
@@ -446,7 +446,7 @@ class AreaParser(parser.BaseParser):
             # Add main-page if possible
             #
             if not parsed_args.skip_main_page:
-                map = self.rr['Maps.dat'].index['Regular_WorldAreasKey'].get(
+                map = self.rr['Maps.dat64'].index['Regular_WorldAreasKey'].get(
                     area)
                 if map:
                     map = map[0]
@@ -455,13 +455,13 @@ class AreaParser(parser.BaseParser):
                     data['main_page'] = map['BaseItemTypesKey']['Name']
                 elif data.get('tags') and 'map' in data['tags']:
                     map_version = None
-                    for row in self.rr['MapSeries.dat']:
+                    for row in self.rr['MapSeries.dat64']:
                         if not area['Id'].startswith(row['Id']):
                             continue
                         map_version = row['Name']
 
                     if map_version:
-                        if map_version == self.rr['MapSeries.dat'].index['Id'][
+                        if map_version == self.rr['MapSeries.dat64'].index['Id'][
                                 'MapWorlds']['Name']:
                             map_version = None
 

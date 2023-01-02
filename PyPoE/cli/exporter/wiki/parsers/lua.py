@@ -294,7 +294,7 @@ class LuaHandler(ExporterHandler):
 
 class MinimapIconsParser(GenericLuaParser):
     _files = [
-        'MinimapIcons.dat',
+        'MinimapIcons.dat64',
     ]
 
     _COPY_KEYS_MINIMAP_ICONS = (
@@ -307,7 +307,7 @@ class MinimapIconsParser(GenericLuaParser):
         minimap_icons = []
         minimap_icons_lookup = OrderedDict()
 
-        for row in self.rr['MinimapIcons.dat']:
+        for row in self.rr['MinimapIcons.dat64']:
             self._copy_from_keys(row, self._COPY_KEYS_MINIMAP_ICONS,
                                  minimap_icons)
 
@@ -385,8 +385,8 @@ class OTStatsParser(GenericLuaParser):
 
 class AtlasParser(GenericLuaParser):
     _files = [
-        'AtlasBaseTypeDrops.dat',
-        'AtlasRegions.dat',
+        'AtlasBaseTypeDrops.dat64',
+        'AtlasRegions.dat64',
     ]
 
     _COPY_KEYS_ATLAS_REGIONS = (
@@ -415,11 +415,11 @@ class AtlasParser(GenericLuaParser):
         atlas_regions = []
         atlas_base_item_types = []
 
-        for row in self.rr['AtlasRegions.dat']:
+        for row in self.rr['AtlasRegions.dat64']:
             self._copy_from_keys(row, self._COPY_KEYS_ATLAS_REGIONS,
                                  atlas_regions)
 
-        for row in self.rr['AtlasBaseTypeDrops.dat']:
+        for row in self.rr['AtlasBaseTypeDrops.dat64']:
             for i, tag in enumerate(row['SpawnWeight_TagsKeys']):
                 self._copy_from_keys(row, self._COPY_KEYS_ATLAS_BASE_TYPE_DROPS,
                                      atlas_base_item_types)
@@ -444,8 +444,8 @@ class AtlasParser(GenericLuaParser):
 class BestiaryParser(GenericLuaParser):
     _files = [
         # pretty much chain loads everything we need
-        'BestiaryRecipes.dat',
-        'ClientStrings.dat',
+        'BestiaryRecipes.dat64',
+        'ClientStrings.dat64',
     ]
 
     _COPY_KEYS_BESTIARY = (
@@ -497,18 +497,18 @@ class BestiaryParser(GenericLuaParser):
         components = []
         recipe_components_temp = defaultdict(lambda:defaultdict(int))
 
-        for row in self.rr['BestiaryRecipes.dat']:
+        for row in self.rr['BestiaryRecipes.dat64']:
             self._copy_from_keys(row, self._COPY_KEYS_BESTIARY, recipes)
             for value in row['BestiaryRecipeComponentKeys']:
                 recipe_components_temp[row['Id']][value['Id']] += 1
 
-        for row in self.rr['BestiaryRecipeComponent.dat']:
+        for row in self.rr['BestiaryRecipeComponent.dat64']:
             self._copy_from_keys(
                 row, self._COPY_KEYS_BESTIARY_COMPONENTS, components
             )
             if row['BeastRarity'] != RARITY.ANY and row['BeastRarity'] is not None:
                 display_string = 'ItemDisplayString' + row['BeastRarity'].name_lower.title()
-                components[-1]['rarity'] = self.rr['ClientStrings.dat'].index['Id'][display_string]['Text']
+                components[-1]['rarity'] = self.rr['ClientStrings.dat64'].index['Id'][display_string]['Text']
 
         recipe_components = []
         for recipe_id, data in recipe_components_temp.items():
@@ -535,8 +535,8 @@ class BestiaryParser(GenericLuaParser):
 
 class BlightParser(GenericLuaParser):
     _files = [
-        'BlightCraftingRecipes.dat',
-        'BlightTowers.dat',
+        'BlightCraftingRecipes.dat64',
+        'BlightTowers.dat64',
     ]
 
     _COPY_KEYS_CRAFTING_RECIPES = (
@@ -592,9 +592,9 @@ class BlightParser(GenericLuaParser):
         blight_crafting_recipes_items = []
         blight_towers = []
 
-        self.rr['BlightTowersPerLevel.dat'].build_index('BlightTowersKey')
+        self.rr['BlightTowersPerLevel.dat64'].build_index('BlightTowersKey')
 
-        for row in self.rr['BlightCraftingRecipes.dat']:
+        for row in self.rr['BlightCraftingRecipes.dat64']:
             self._copy_from_keys(row, self._COPY_KEYS_CRAFTING_RECIPES,
                                  blight_crafting_recipes)
 
@@ -606,10 +606,10 @@ class BlightParser(GenericLuaParser):
                     ('item_id', blight_crafting_item['BaseItemTypesKey']['Id']),
                 )))
 
-        for row in self.rr['BlightTowers.dat']:
+        for row in self.rr['BlightTowers.dat64']:
             self._copy_from_keys(row, self._COPY_KEYS_BLIGHT_TOWERS,
                                  blight_towers)
-            blight_towers[-1]['cost'] = self.rr['BlightTowersPerLevel.dat'].index['BlightTowersKey'][row][0]['Cost']
+            blight_towers[-1]['cost'] = self.rr['BlightTowersPerLevel.dat64'].index['BlightTowersKey'][row][0]['Cost']
 
         r = ExporterResult()
         for k in ('crafting_recipes', 'crafting_recipes_items', 'towers'):
@@ -627,10 +627,10 @@ class BlightParser(GenericLuaParser):
 
 class DelveParser(GenericLuaParser):
     _files = [
-        'DelveCraftingModifiers.dat',
-        'DelveLevelScaling.dat',
-        'DelveResourcePerLevel.dat',
-        'DelveUpgrades.dat',
+        'DelveCraftingModifiers.dat64',
+        'DelveLevelScaling.dat64',
+        'DelveResourcePerLevel.dat64',
+        'DelveUpgrades.dat64',
     ]
 
     _COPY_KEYS_DELVE_LEVEL_SCALING = (
@@ -729,15 +729,15 @@ class DelveParser(GenericLuaParser):
         fossils = []
         fossil_weights = []
 
-        for row in self.rr['DelveLevelScaling.dat']:
+        for row in self.rr['DelveLevelScaling.dat64']:
             self._copy_from_keys(row, self._COPY_KEYS_DELVE_LEVEL_SCALING,
                                  delve_level_scaling)
 
-        for row in self.rr['DelveResourcePerLevel.dat']:
+        for row in self.rr['DelveResourcePerLevel.dat64']:
             self._copy_from_keys(row, self._COPY_KEYS_DELVE_RESOURCES_PER_LEVEL,
                                  delve_resources_per_level)
 
-        for row in self.rr['DelveUpgrades.dat']:
+        for row in self.rr['DelveUpgrades.dat64']:
             self._copy_from_keys(row, self._COPY_KEYS_DELVE_UPGRADES,
                                  delve_upgrades)
             delve_upgrades[-1]['cost'] = row['Cost']
@@ -748,7 +748,7 @@ class DelveParser(GenericLuaParser):
                 delve_upgrade_stats[-1]['id'] = stat['Id']
                 delve_upgrade_stats[-1]['value'] = value
 
-        for row in self.rr['DelveCraftingModifiers.dat']:
+        for row in self.rr['DelveCraftingModifiers.dat64']:
             # Ignore all the weird RandomFossileOutcome items.
             if('RandomFossilOutcome' in row['BaseItemTypesKey']['Id']):
                 continue
@@ -814,7 +814,7 @@ class HarvestTagHandler(TagHandler):
 
 class HarvestParser(GenericLuaParser):
     _files = [
-        'HarvestCraftOptions.dat',
+        'HarvestCraftOptions.dat64',
     ]
 
     _COPY_KEYS_HARVEST_CRAFT_OPTIONS = (
@@ -857,7 +857,7 @@ class HarvestParser(GenericLuaParser):
         tag_handler = HarvestTagHandler(rr=self.rr)
         harvest_craft_options = []
 
-        for row in self.rr['HarvestCraftOptions.dat']:
+        for row in self.rr['HarvestCraftOptions.dat64']:
             self._copy_from_keys(row, self._COPY_KEYS_HARVEST_CRAFT_OPTIONS,
                                  harvest_craft_options)
             harvest_craft_options[-1]['text'] = parse_description_tags(
@@ -881,9 +881,9 @@ class HarvestParser(GenericLuaParser):
 
 class HeistParser(GenericLuaParser):
     _files = [
-        'HeistAreas.dat',
-        'HeistJobs.dat',
-        'HeistNPCs.dat',
+        'HeistAreas.dat64',
+        'HeistJobs.dat64',
+        'HeistNPCs.dat64',
     ]
 
     _COPY_KEYS_HEIST_AREAS = (
@@ -937,17 +937,17 @@ class HeistParser(GenericLuaParser):
 
     def main(self, parsed_args):
         heist_areas = []
-        for row in self.rr['HeistAreas.dat']:
+        for row in self.rr['HeistAreas.dat64']:
             self._copy_from_keys(row, self._COPY_KEYS_HEIST_AREAS, heist_areas)
 
         heist_jobs = []
-        for row in self.rr['HeistJobs.dat']:
+        for row in self.rr['HeistJobs.dat64']:
             self._copy_from_keys(row, self._COPY_KEYS_HEIST_JOBS, heist_jobs)
 
         heist_npcs = []
         heist_npc_skills = []
         heist_npc_stats = []
-        for row in self.rr['HeistNPCs.dat']:
+        for row in self.rr['HeistNPCs.dat64']:
             mid = row['MonsterVarietiesKey']['Id']
             self._copy_from_keys(row, self._COPY_KEYS_HEIST_NPCS, heist_npcs)
 
@@ -991,8 +991,8 @@ class HeistParser(GenericLuaParser):
 
 class PantheonParser(GenericLuaParser):
     _files = [
-        'PantheonPanelLayout.dat',
-        'PantheonSouls.dat',
+        'PantheonPanelLayout.dat64',
+        'PantheonSouls.dat64',
     ]
 
     _COPY_KEYS_PANTHEON = (
@@ -1020,13 +1020,13 @@ class PantheonParser(GenericLuaParser):
     )
 
     def main(self, parsed_args):
-        self.rr['PantheonSouls.dat'].build_index('PantheonPanelLayoutKey')
+        self.rr['PantheonSouls.dat64'].build_index('PantheonPanelLayoutKey')
 
         pantheon = []
         pantheon_souls = []
         pantheon_stats = []
 
-        for row in self.rr['PantheonPanelLayout.dat']:
+        for row in self.rr['PantheonPanelLayout.dat64']:
             if row['IsDisabled']:
                 continue
 
@@ -1048,7 +1048,7 @@ class PantheonParser(GenericLuaParser):
 
                 # The first entry is the god itself
                 if i > 1:
-                    souls = self.rr['PantheonSouls.dat'].index[
+                    souls = self.rr['PantheonSouls.dat64'].index[
                         'PantheonPanelLayoutKey'][row][i-2]
 
                     od.update(self._copy_from_keys(
@@ -1083,7 +1083,7 @@ class SynthesisParser(GenericLuaParser):
 
     _DATA = (
         {
-            'file': 'ItemSynthesisCorruptedMods.dat',
+            'file': 'ItemSynthesisCorruptedMods.dat64',
             'key': 'synthesis_corrupted_mods',
             'data': (
                 ('ItemClassesKey', {
@@ -1097,7 +1097,7 @@ class SynthesisParser(GenericLuaParser):
             ),
         },
         {
-            'file': 'ItemSynthesisMods.dat',
+            'file': 'ItemSynthesisMods.dat64',
             'key': 'synthesis_mods',
             'data': (
                 ('StatsKey', {
@@ -1118,7 +1118,7 @@ class SynthesisParser(GenericLuaParser):
             ),
         },
         {
-            'file': 'SynthesisAreas.dat',
+            'file': 'SynthesisAreas.dat64',
             'key': 'synthesis_areas',
             'data': (
                 ('Id', {
@@ -1143,7 +1143,7 @@ class SynthesisParser(GenericLuaParser):
             ),
         },
         {
-            'file': 'SynthesisGlobalMods.dat',
+            'file': 'SynthesisGlobalMods.dat64',
             'key': 'synthesis_global_mods',
             'data': (
                 ('ModsKey', {
@@ -1203,7 +1203,7 @@ class MonsterParser(GenericLuaParser):
     _DATA = (
         {
             'key': 'monster_types',
-            'file': 'MonsterTypes.dat',
+            'file': 'MonsterTypes.dat64',
             'data': (
                 ('Id', {
                     'key': 'id',
@@ -1237,7 +1237,7 @@ class MonsterParser(GenericLuaParser):
         },
         {
             'key': 'monster_resistances',
-            'file': 'MonsterResistances.dat',
+            'file': 'MonsterResistances.dat64',
             'data': (
                 ('Id', {
                     'key': 'id',
@@ -1282,7 +1282,7 @@ class MonsterParser(GenericLuaParser):
         },
         {
             'key': 'monster_base_stats',
-            'file': 'DefaultMonsterStats.dat',
+            'file': 'DefaultMonsterStats.dat64',
             'data': (
                 ('DisplayLevel', {
                     'key': 'level',
@@ -1315,7 +1315,7 @@ class MonsterParser(GenericLuaParser):
 
     _ENUM_DATA = {
         'monster_map_multipliers': {
-            'MonsterMapDifficulty.dat': (
+            'MonsterMapDifficulty.dat64': (
                 ('MapLevel', {
                     'key': 'level',
                 }),
@@ -1328,7 +1328,7 @@ class MonsterParser(GenericLuaParser):
                     'key': 'damage',
                 }),
             ),
-            'MonsterMapBossDifficulty.dat': (
+            'MonsterMapBossDifficulty.dat64': (
                 # stat1Key -> map_hidden_monster_life_+%_final
                 ('Stat1Value', {
                     'key': 'boss_life',
@@ -1348,7 +1348,7 @@ class MonsterParser(GenericLuaParser):
             ),
         },
         'monster_life_scaling': {
-            'MagicMonsterLifeScalingPerLevel.dat': (
+            'MagicMonsterLifeScalingPerLevel.dat64': (
                 ('Level', {
                     'key': 'level',
                 }),
@@ -1356,7 +1356,7 @@ class MonsterParser(GenericLuaParser):
                     'key': 'magic',
                 }),
             ),
-            'RareMonsterLifeScalingPerLevel.dat': (
+            'RareMonsterLifeScalingPerLevel.dat64': (
                 ('Life', {
                     'key': 'rare',
                 }),
@@ -1501,14 +1501,14 @@ class CraftingBenchParser(GenericLuaParser):
         }),
     )
 
-    _files = ['CraftingBenchOptions.dat']
+    _files = ['CraftingBenchOptions.dat64']
 
     def main(self, parsed_args):
         data = {
             'crafting_bench_options': [],
             'crafting_bench_options_costs': [],
         }
-        for row in self.rr['CraftingBenchOptions.dat']:
+        for row in self.rr['CraftingBenchOptions.dat64']:
             self._copy_from_keys(
                 row, self._DATA, data['crafting_bench_options'])
             data['crafting_bench_options'][-1]['id'] = row.rowid

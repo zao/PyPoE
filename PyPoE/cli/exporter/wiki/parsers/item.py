@@ -47,7 +47,7 @@ from PIL import Image, ImageOps
 from PyPoE.poe.constants import RARITY
 from PyPoE.cli.exporter.wiki.parsers.itemconstants import MAPS_IN_SERIES_BUT_NOT_ON_ATLAS, MAPS_TO_SKIP_COLORING, MAPS_TO_SKIP_COMPOSITING
 from PyPoE.poe.file.dat import RelationalReader
-from PyPoE.poe.file.ot import OTFile
+from PyPoE.poe.file.it import ITFile
 from PyPoE.poe.sim.formula import gem_stat_requirement, GemTypes
 from PyPoE.cli.core import console, Msg
 from PyPoE.cli.exporter import config
@@ -76,7 +76,7 @@ def _type_factory(data_file, data_mapping, row_index=True, function=None,
                   fail_condition=False, skip_warning=False):
     def func(self, infobox, base_item_type):
         try:
-            if data_file == 'BaseItemTypes.dat':
+            if data_file == 'BaseItemTypes.dat64':
                 data = base_item_type
             else:
                 data = self.rr[data_file].index['BaseItemTypesKey'][
@@ -384,7 +384,7 @@ class ItemsParser(SkillParserShared):
 
     # Core files we need to load
     _files = [
-        'BaseItemTypes.dat',
+        'BaseItemTypes.dat64',
     ]
 
     # Core translations we need
@@ -397,7 +397,7 @@ class ItemsParser(SkillParserShared):
 
     _item_column_index_filter = partialmethod(
         SkillParserShared._column_index_filter,
-        dat_file_name='BaseItemTypes.dat',
+        dat_file_name='BaseItemTypes.dat64',
         error_msg='Several items have not been found:\n%s',
     )
 
@@ -428,6 +428,7 @@ class ItemsParser(SkillParserShared):
         'Archnemesis': '3.17.0',
         'Sentinel': '3.18.0',
         'Lake': '3.19.0', # AKA Lake of Kalandra
+        'Sanctum': '3.20.0',  # AKA The Forbidden Sanctum
     }
 
     _IGNORE_DROP_LEVEL_CLASSES = (
@@ -2462,7 +2463,7 @@ class ItemsParser(SkillParserShared):
         if self._language != 'English':
             self.rr2 = RelationalReader(
                 path_or_file_system=self.file_system,
-                files=['BaseItemTypes.dat'],
+                files=['BaseItemTypes.dat64'],
                 read_options={
                     'use_dat_value': False,
                     'auto_build_index': True,
@@ -2475,7 +2476,7 @@ class ItemsParser(SkillParserShared):
 
     def _skill_gem(self, infobox: OrderedDict, base_item_type):
         try:
-            skill_gem = self.rr['SkillGems.dat'].index['BaseItemTypesKey'][
+            skill_gem = self.rr['SkillGems.dat64'].index['BaseItemTypesKey'][
                 base_item_type.rowid]
         except KeyError:
             return False
@@ -2497,7 +2498,7 @@ class ItemsParser(SkillParserShared):
         exp = 0
         exp_level = []
         exp_total = []
-        for row in self.rr['ItemExperiencePerLevel.dat']:
+        for row in self.rr['ItemExperiencePerLevel.dat64']:
             if row['BaseItemTypesKey'] == base_item_type:
                 exp_new = row['Experience']
                 exp_level.append(exp_new - exp)
@@ -2526,10 +2527,10 @@ class ItemsParser(SkillParserShared):
         if skill_gem['GrantedEffectsKey2']:
             index = None
             try:
-                index = self.rr['SkillGems.dat'].index['GrantedEffectsKey']
+                index = self.rr['SkillGems.dat64'].index['GrantedEffectsKey']
             except KeyError:
-                self.rr['SkillGems.dat'].build_index('GrantedEffectsKey')
-                index = self.rr['SkillGems.dat'].index['GrantedEffectsKey']
+                self.rr['SkillGems.dat64'].build_index('GrantedEffectsKey')
+                index = self.rr['SkillGems.dat64'].index['GrantedEffectsKey']
 
             if not index[skill_gem['GrantedEffectsKey2']]:
                 # If there is no skill granting this it's probably fine to
@@ -2677,7 +2678,7 @@ class ItemsParser(SkillParserShared):
         return True
 
     _type_attribute = _type_factory(
-        data_file='ComponentAttributeRequirements.dat',
+        data_file='ComponentAttributeRequirements.dat64',
         data_mapping=(
             ('ReqStr', {
                 'template': 'required_strength',
@@ -2704,7 +2705,7 @@ class ItemsParser(SkillParserShared):
         return True
 
     _type_armour = _type_factory(
-        data_file='ArmourTypes.dat',
+        data_file='ArmourTypes.dat64',
         data_mapping=(
             ('ArmourMin', {
                 'template': 'armour_min',
@@ -2747,7 +2748,7 @@ class ItemsParser(SkillParserShared):
     )
 
     _type_shield = _type_factory(
-        data_file='ShieldTypes.dat',
+        data_file='ShieldTypes.dat64',
         data_mapping=(
             ('Block', {
                 'template': 'block',
@@ -2773,7 +2774,7 @@ class ItemsParser(SkillParserShared):
 
     #TODO: BuffDefinitionsKey, BuffStatValues
     _type_flask = _type_factory(
-        data_file='Flasks.dat',
+        data_file='Flasks.dat64',
         data_mapping=(
             ('LifePerUse', {
                 'template': 'flask_life',
@@ -2799,7 +2800,7 @@ class ItemsParser(SkillParserShared):
     )
 
     _type_flask_charges = _type_factory(
-        data_file='ComponentCharges.dat',
+        data_file='ComponentCharges.dat64',
         data_mapping=(
             ('MaxCharges', {
                 'template': 'charges_max',
@@ -2812,7 +2813,7 @@ class ItemsParser(SkillParserShared):
     )
 
     _type_weapon = _type_factory(
-        data_file='WeaponTypes.dat',
+        data_file='WeaponTypes.dat64',
         data_mapping=(
             ('Critical', {
                 'template': 'critical_strike_chance',
@@ -2844,7 +2845,7 @@ class ItemsParser(SkillParserShared):
             else:
                 infobox['help_text'] = ''
 
-            infobox['help_text'] += self.rr['ClientStrings.dat'].index[
+            infobox['help_text'] += self.rr['ClientStrings.dat64'].index[
                 'Id']['ItemDisplayStackDescription']['Text']
 
         if infobox.get('description'):
@@ -2856,7 +2857,7 @@ class ItemsParser(SkillParserShared):
         return True
 
     _type_currency = _type_factory(
-        data_file='CurrencyItems.dat',
+        data_file='CurrencyItems.dat64',
         data_mapping=(
             ('Stacks', {
                 'template': 'stack_size',
@@ -2880,7 +2881,7 @@ class ItemsParser(SkillParserShared):
     )
 
     _type_microtransaction = _type_factory(
-        data_file='BaseItemTypes.dat',
+        data_file='BaseItemTypes.dat64',
         data_mapping=(
             # This field was removed in 3.17.
             # ('ItemShopType', {
@@ -2898,7 +2899,7 @@ class ItemsParser(SkillParserShared):
     )
 
     _type_hideout_doodad = _type_factory(
-        data_file='HideoutDoodads.dat',
+        data_file='HideoutDoodads.dat64',
         data_mapping=(
             ('IsNonMasterDoodad', {
                 'template': 'is_master_doodad',
@@ -2922,7 +2923,7 @@ class ItemsParser(SkillParserShared):
         '''# Regular items are handled in the main function
         if maps['Tier'] < 17:
             self._process_purchase_costs(
-                self.rr['MapPurchaseCosts.dat'].index['Tier'][maps['Tier']],
+                self.rr['MapPurchaseCosts.dat64'].index['Tier'][maps['Tier']],
                 infobox
             )'''
 
@@ -2954,7 +2955,7 @@ class ItemsParser(SkillParserShared):
         return map_series[d]
 
     _type_map = _type_factory(
-        data_file='Maps.dat',
+        data_file='Maps.dat64',
         data_mapping=(
             ('Tier', {
                 'template': 'map_tier',
@@ -3000,7 +3001,7 @@ class ItemsParser(SkillParserShared):
                 i += 1
 
     _type_map_fragment_mods = _type_factory(
-        data_file='MapFragmentMods.dat',
+        data_file='MapFragmentMods.dat64',
         data_mapping={},
         row_index=True,
         function=_map_fragment_extra,
@@ -3013,7 +3014,7 @@ class ItemsParser(SkillParserShared):
         #
         # Essence description
         #
-        get_str = lambda k: self.rr['ClientStrings.dat'].index['Id'][
+        get_str = lambda k: self.rr['ClientStrings.dat64'].index['Id'][
             'EssenceCategory%s' % k]['Text']
 
         essence_categories = OrderedDict((
@@ -3044,7 +3045,7 @@ class ItemsParser(SkillParserShared):
 
         if essence['ItemLevelRestriction'] != 0:
             out.append(
-                self.rr['ClientStrings.dat'].index['Id'][
+                self.rr['ClientStrings.dat64'].index['Id'][
                     'EssenceModLevelRestriction']['Text'].replace(
                     '{0}', str(essence['ItemLevelRestriction']))
             )
@@ -3091,7 +3092,7 @@ class ItemsParser(SkillParserShared):
         return True
 
     _type_essence = _type_factory(
-        data_file='Essences.dat',
+        data_file='Essences.dat64',
         data_mapping=(
             ('DropLevelMinimum', {
                 'template': 'drop_level',
@@ -3129,7 +3130,7 @@ class ItemsParser(SkillParserShared):
     )
 
     _type_blight_item = _type_factory(
-        data_file='BlightCraftingItems.dat',
+        data_file='BlightCraftingItems.dat64',
         data_mapping=(
             ('Tier', {
                 'template': 'blight_item_tier',
@@ -3141,7 +3142,7 @@ class ItemsParser(SkillParserShared):
     )
 
     _type_labyrinth_trinket = _type_factory(
-        data_file='LabyrinthTrinkets.dat',
+        data_file='LabyrinthTrinkets.dat64',
         data_mapping=(
             ('Buff_BuffDefinitionsKey', {
                 'template': 'description',
@@ -3151,23 +3152,23 @@ class ItemsParser(SkillParserShared):
         row_index=True
     )
 
-    # _type_incubator = _type_factory(
-    #     data_file='Incubators.dat',
-    #     data_mapping=(
-    #         ('Description', {
-    #             'template': 'incubator_effect',
-    #             'format': lambda v: v,
-    #         }),
-    #     ),
-    #     row_index=True
-    # )
+    _type_incubator = _type_factory(
+        data_file='Incubators.dat64',
+        data_mapping=(
+            ('Description', {
+                'template': 'incubator_effect',
+                'format': lambda v: v,
+            }),
+        ),
+        row_index=True
+    )
 
     def _harvest_seed_extra(self, infobox, base_item_type, harvest_object):
 
-        if not self.rr['HarvestSeedTypes.dat'].index.get('HarvestObjectsKey'):
-            self.rr['HarvestSeedTypes.dat'].build_index('HarvestObjectsKey')
+        if not self.rr['HarvestSeedTypes.dat64'].index.get('HarvestObjectsKey'):
+            self.rr['HarvestSeedTypes.dat64'].build_index('HarvestObjectsKey')
 
-        harvest_seed = self.rr['HarvestSeedTypes.dat'].index[
+        harvest_seed = self.rr['HarvestSeedTypes.dat64'].index[
             'HarvestObjectsKey'][harvest_object.rowid]
 
         _apply_column_map(infobox, (
@@ -3210,7 +3211,7 @@ class ItemsParser(SkillParserShared):
         return True
 
     _type_harvest_seed =_type_factory(
-        data_file='HarvestObjects.dat',
+        data_file='HarvestObjects.dat64',
         data_mapping=(
             ('ObjectType', {
                 'template': 'seed_type_id',
@@ -3225,10 +3226,10 @@ class ItemsParser(SkillParserShared):
     def _harvest_plant_booster_extra(self, infobox, base_item_type,
                                      harvest_object):
 
-        if not self.rr['HarvestSeedTypes.dat'].index.get('HarvestObjectsKey'):
-            self.rr['HarvestSeedTypes.dat'].build_index('HarvestObjectsKey')
+        if not self.rr['HarvestSeedTypes.dat64'].index.get('HarvestObjectsKey'):
+            self.rr['HarvestSeedTypes.dat64'].build_index('HarvestObjectsKey')
 
-        harvest_plant_booster = self.rr['HarvestPlantBoosters.dat'].index[
+        harvest_plant_booster = self.rr['HarvestPlantBoosters.dat64'].index[
             'HarvestObjectsKey'][harvest_object.rowid]
 
         _apply_column_map(infobox, (
@@ -3252,7 +3253,7 @@ class ItemsParser(SkillParserShared):
         return True
 
     _type_harvest_plant_booster =_type_factory(
-        data_file='HarvestObjects.dat',
+        data_file='HarvestObjects.dat64',
         data_mapping=(
         ),
         function=_harvest_plant_booster_extra,
@@ -3261,7 +3262,7 @@ class ItemsParser(SkillParserShared):
     )
 
     _type_heist_contract = _type_factory(
-        data_file='HeistContracts.dat',
+        data_file='HeistContracts.dat64',
         data_mapping=(
             ('HeistAreasKey', {
                 'template': 'heist_area_id',
@@ -3272,7 +3273,7 @@ class ItemsParser(SkillParserShared):
     )
 
     _type_heist_equipment = _type_factory(
-        data_file='HeistEquipment.dat',
+        data_file='HeistEquipment.dat64',
         data_mapping=(
             ('RequiredJob_HeistJobsKey', {
                 'template': 'heist_required_job_id',
@@ -3392,7 +3393,7 @@ class ItemsParser(SkillParserShared):
 
             try:
                 return base_item_type['Name'] + ' (%s)' % \
-                       rr['Quest.dat'].index['Id'][qid]['Name']
+                       rr['Quest.dat64'].index['Id'][qid]['Name']
             except KeyError:
                 console('Quest %s not found' % qid, msg=Msg.error)
         else:
@@ -3426,7 +3427,7 @@ class ItemsParser(SkillParserShared):
 
     def _conflict_hideout_doodad(self, infobox, base_item_type, rr, language):
         try:
-            ho = rr['HideoutDoodads.dat'].index[
+            ho = rr['HideoutDoodads.dat64'].index[
                 'BaseItemTypesKey'][base_item_type.rowid]
         except KeyError:
             return
@@ -3457,7 +3458,7 @@ class ItemsParser(SkillParserShared):
         id = base_item_type['Id'].replace('Metadata/Items/Maps/', '')
         # Legacy maps
         map_series = None
-        for row in rr['MapSeries.dat']:
+        for row in rr['MapSeries.dat64']:
             if not id.startswith(row['Id']):
                 continue
             map_series = row
@@ -3527,11 +3528,11 @@ class ItemsParser(SkillParserShared):
 
     def _parse_class_filter(self, parsed_args):
         if parsed_args.item_class_id:
-            return [self.rr['ItemClasses.dat'].index['Id'][cls]['Name']
+            return [self.rr['ItemClasses.dat64'].index['Id'][cls]['Name']
                     for cls in parsed_args.item_class_id]
         elif parsed_args.item_class:
-            self.rr['ItemClasses.dat'].build_index('Name')
-            return [self.rr['ItemClasses.dat'].index['Name'][cls][0]['Name']
+            self.rr['ItemClasses.dat64'].build_index('Name')
+            return [self.rr['ItemClasses.dat64'].index['Name'][cls][0]['Name']
                    for cls in parsed_args.item_class]
         else:
             return []
@@ -3550,7 +3551,7 @@ class ItemsParser(SkillParserShared):
     def by_rowid(self, parsed_args):
         return self._export(
             parsed_args,
-            self.rr['BaseItemTypes.dat'][parsed_args.start:parsed_args.end],
+            self.rr['BaseItemTypes.dat64'][parsed_args.start:parsed_args.end],
         )
 
     def by_id(self, parsed_args):
@@ -3572,7 +3573,7 @@ class ItemsParser(SkillParserShared):
 
         items = []
 
-        for item in self.rr['BaseItemTypes.dat']:
+        for item in self.rr['BaseItemTypes.dat64']:
 
             if parsed_args.re_name and not \
                     parsed_args.re_name.match(item['Name']):
@@ -3609,10 +3610,10 @@ class ItemsParser(SkillParserShared):
                     m_id not in self._IGNORE_DROP_LEVEL_ITEMS_BY_ID:
                 infobox['drop_level'] = base_item_type['DropLevel']
 
-            base_ot = OTFile(parent_or_file_system=self.file_system)
-            base_ot.read(self.file_system.get_file(base_item_type['InheritsFrom'] + '.ot'))
+            base_ot = ITFile(parent_or_file_system=self.file_system)
+            base_ot.read(self.file_system.get_file(base_item_type['InheritsFrom'] + '.it'))
             try:
-                ot = self.ot[m_id + '.ot']
+                ot = self.it[m_id + '.it']
             except FileNotFoundError:
                 ot = base_ot  # If we couldn't find an ot for the specific item, use the base ot.
             else:
@@ -3629,12 +3630,12 @@ class ItemsParser(SkillParserShared):
 
             description = ot['Stack'].get('function_text')
             if description:
-                infobox['description'] = self.rr['ClientStrings.dat'].index[
+                infobox['description'] = self.rr['ClientStrings.dat64'].index[
                     'Id'][description]['Text']
 
             help_text = ot['Base'].get('description_text')
             if help_text:
-                infobox['help_text'] = self.rr['ClientStrings.dat'].index['Id'][
+                infobox['help_text'] = self.rr['ClientStrings.dat64'].index['Id'][
                     help_text]['Text']
 
             for i, mod in enumerate(base_item_type['Implicit_ModsKeys']):
@@ -3643,7 +3644,7 @@ class ItemsParser(SkillParserShared):
     def _process_name_conflicts(self, infobox, base_item_type, language):
         rr = self.rr2 if language != self._language else self.rr
         # Get the base item of other language
-        base_item_type = rr['BaseItemTypes.dat'][base_item_type.rowid]
+        base_item_type = rr['BaseItemTypes.dat64'][base_item_type.rowid]
 
         name = base_item_type['Name']
         cls_id = base_item_type['ItemClassesKey']['Id']
@@ -3655,7 +3656,7 @@ class ItemsParser(SkillParserShared):
             name += appendix
             infobox['inventory_icon'] = name
         elif cls_id == 'Map' or \
-                len(rr['BaseItemTypes.dat'].index['Name'][name]) > 1:
+                len(rr['BaseItemTypes.dat64'].index['Name'][name]) > 1:
             resolver = self._conflict_resolver_map.get(cls_id)
 
             if resolver:
@@ -3699,11 +3700,11 @@ class ItemsParser(SkillParserShared):
         self._image_init(parsed_args)
 
         r = ExporterResult()
-        self.rr['BaseItemTypes.dat'].build_index('Name')
-        self.rr['MapPurchaseCosts.dat'].build_index('Tier')
+        self.rr['BaseItemTypes.dat64'].build_index('Name')
+        self.rr['MapPurchaseCosts.dat64'].build_index('Tier')
 
         if self._language != 'English' and parsed_args.english_file_link:
-            self.rr2['BaseItemTypes.dat'].build_index('Name')
+            self.rr2['BaseItemTypes.dat64'].build_index('Name')
 
         console('Processing item information...')
 
@@ -3753,7 +3754,7 @@ class ItemsParser(SkillParserShared):
                     infobox[key] = icon
                 else:
                     infobox[key] = \
-                        self.rr2['BaseItemTypes.dat'][base_item_type.rowid][
+                        self.rr2['BaseItemTypes.dat64'][base_item_type.rowid][
                             'Name']
 
             # putting this last since it's usually manually added
@@ -3806,6 +3807,8 @@ class ItemsParser(SkillParserShared):
         if not set(['start', 'end']).issubset(vars(parsed_args).keys()):
             return
 
+        start = parsed_args.start
+        
         try:
             export_row_count = parsed_args.end - parsed_args.start
         except TypeError:
@@ -3841,11 +3844,11 @@ class ItemsParser(SkillParserShared):
             return f"{base_item_type['Name']} ({map_series['Name']})"
 
     def _get_map_series(self, parsed_args):
-        self.rr['MapSeries.dat'].build_index('Id')
-        self.rr['MapSeries.dat'].build_index('Name')
+        self.rr['MapSeries.dat64'].build_index('Id')
+        self.rr['MapSeries.dat64'].build_index('Name')
         if parsed_args.map_series_id is not None:
             try:
-                map_series = self.rr['MapSeries.dat'].index['Id'][
+                map_series = self.rr['MapSeries.dat64'].index['Id'][
                     parsed_args.map_series_id]
             except IndexError:
                 console(
@@ -3854,7 +3857,7 @@ class ItemsParser(SkillParserShared):
                 return False
         elif parsed_args.map_series is not None:
             try:
-                map_series = self.rr['MapSeries.dat'].index['Name'][
+                map_series = self.rr['MapSeries.dat64'].index['Name'][
                     parsed_args.map_series][0]
             except IndexError:
                 console(
@@ -3862,7 +3865,7 @@ class ItemsParser(SkillParserShared):
                     msg=Msg.error)
                 return False
         else:
-            map_series = self.rr['MapSeries.dat'][-1]
+            map_series = self.rr['MapSeries.dat64'][-1]
             console(
                 'No map series specified. Using latest series "%s".' % (
                     map_series['Name'],
@@ -3902,7 +3905,7 @@ class ItemsParser(SkillParserShared):
         )
 
         # === Maps from Atlas ===
-        for atlas_node in self.rr['AtlasNode.dat']:
+        for atlas_node in self.rr['AtlasNode.dat64']:
             if not atlas_node['ItemVisualIdentityKey']['DDSFile']:
                 warnings.warn(
                    'Missing 2d art inventory icon at index %s' %
@@ -3952,17 +3955,17 @@ class ItemsParser(SkillParserShared):
 
         # Store whether this is the latest map series to determine later whether
         # atlas info should be stored
-        latest = map_series == self.rr['MapSeries.dat'][-1]
+        latest = map_series == self.rr['MapSeries.dat64'][-1]
 
-        self.rr['AtlasNode.dat'].build_index('MapsKey')
+        self.rr['AtlasNode.dat64'].build_index('MapsKey')
         names = set(parsed_args.name)
         map_series_tiers = {}
         # For each map, save off the atlas node
-        for row in self.rr['MapSeriesTiers.dat']:
+        for row in self.rr['MapSeriesTiers.dat64']:
             maps = row['MapsKey']
 
             # Try to find the atlas node for the map. Save that as atlas_node by breaking.
-            for atlas_node in self.rr['AtlasNode.dat'].index['MapsKey'][maps]:
+            for atlas_node in self.rr['AtlasNode.dat64'].index['MapsKey'][maps]:
                 # This excludes the unique maps
                 if atlas_node['ItemVisualIdentityKey']['IsAtlasOfWorldsMapIcon']:
                     break
@@ -3998,9 +4001,9 @@ class ItemsParser(SkillParserShared):
             base_ico = base_ico.replace('.dds', '.png')
             base_img = Image.open(base_ico)
 
-        self.rr['MapSeriesTiers.dat'].build_index('MapsKey')
-        self.rr['MapPurchaseCosts.dat'].build_index('Tier')
-        # self.rr['UniqueMaps.dat'].build_index('WorldAreasKey')
+        self.rr['MapSeriesTiers.dat64'].build_index('MapsKey')
+        self.rr['MapPurchaseCosts.dat64'].build_index('Tier')
+        # self.rr['UniqueMaps.dat64'].build_index('WorldAreasKey')
 
         for row, atlas_node in map_series_tiers.items():
             maps = row['MapsKey']
@@ -4029,8 +4032,8 @@ class ItemsParser(SkillParserShared):
 
             if self._language != 'English' and parsed_args.english_file_link:
                 infobox['inventory_icon'] = self._format_map_name(
-                    self.rr2['BaseItemTypes.dat'][base_item_type.rowid],
-                    self.rr2['MapSeries.dat'][map_series.rowid],
+                    self.rr2['BaseItemTypes.dat64'][base_item_type.rowid],
+                    self.rr2['MapSeries.dat64'][map_series.rowid],
                     'English',
                 )
             else:
@@ -4062,7 +4065,7 @@ class ItemsParser(SkillParserShared):
                     # The indexing isn't working well. It is using the entire mapped out object as keys.
                     # We can hold off on all connections for now. It's fairly obvious that unique maps are connected to their normal counterpart.
                     # See if there's a unique map for this base map.
-                    # unique_maps_area_index = self.rr['UniqueMaps.dat'].index['WorldAreasKey']
+                    # unique_maps_area_index = self.rr['UniqueMaps.dat64'].index['WorldAreasKey']
                     # area = atlas_node['MapsKey']['Unique_WorldAreasKey']
                     # if area in unique_maps_area_index:
                     #     #print(unique_maps_area_index.keys(), flush=True)
@@ -4083,7 +4086,7 @@ class ItemsParser(SkillParserShared):
 
             if 0 < tier < 17:
                 self._process_purchase_costs(
-                    self.rr['MapPurchaseCosts.dat'].index['Tier'][tier],
+                    self.rr['MapPurchaseCosts.dat64'].index['Tier'][tier],
                     infobox
                 )
             

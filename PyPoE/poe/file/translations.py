@@ -1220,7 +1220,7 @@ class TQReminderString(TranslationQuantifier):
         )
 
     def handle(self, *args):
-        return self.relational_reader['ClientStrings.dat'].index['Id'][args[0].strip()]['Text']
+        return self.relational_reader['ReminderText.dat64'].index['Id'][args[0].strip()]['Text']
 
 
 class TranslationResult(TranslationReprMixin):
@@ -2114,14 +2114,14 @@ def install_data_dependant_quantifiers(relational_reader):
 
     TranslationQuantifier(
         id='mod_value_to_item_class',
-        handler=lambda v: relational_reader['ItemClasses.dat'][v]['Name'],
+        handler=lambda v: relational_reader['ItemClasses.dat64'][v]['Name'],
         reverse_handler=_get_reverse_lookup_from_reader(
-            relational_reader['ItemClasses.dat'], 'Name'),
+            relational_reader['ItemClasses.dat64'], 'Name'),
     )
 
     def _tempest_mod_text_reverse(value):
         results = []
-        for row in relational_reader['Mods.dat']:
+        for row in relational_reader['Mods.dat64']:
             if row['GenerationType'] != MOD_GENERATION_TYPE.TEMPEST:
                 continue
             if row['Name'] == value:
@@ -2136,7 +2136,7 @@ def install_data_dependant_quantifiers(relational_reader):
 
     TranslationQuantifier(
         id='tempest_mod_text',
-        handler=lambda v: relational_reader['Mods.dat'][v]['Name'],
+        handler=lambda v: relational_reader['Mods.dat64'][v]['Name'],
         reverse_handler=_tempest_mod_text_reverse,
     )
 
@@ -2150,32 +2150,32 @@ def install_data_dependant_quantifiers(relational_reader):
     TranslationQuantifier(
         id='display_indexable_support',
         # TODO: Review this
-        # handler=lambda v: relational_reader['IndexableSupportGems.dat'][v]['Name'],
+        # handler=lambda v: relational_reader['IndexableSupportGems.dat64'][v]['Name'],
         reverse_handler=_get_reverse_lookup_from_reader(
-            relational_reader['IndexableSupportGems.dat'], 'Name'),
+            relational_reader['IndexableSupportGems.dat64'], 'Name'),
     )
 
     TranslationQuantifier(
         id='tree_expansion_jewel_passive',
-        handler=lambda v: relational_reader['Data/PassiveTreeExpansionJewelSizes.dat'][v]['Name'],
+        handler=lambda v: relational_reader['Data/PassiveTreeExpansionJewelSizes.dat64'][v]['Name'],
         reverse_handler=_get_reverse_lookup_from_reader(
-            relational_reader['Data/PassiveTreeExpansionJewelSizes.dat'], 'Name'),
+            relational_reader['Data/PassiveTreeExpansionJewelSizes.dat64'], 'Name'),
     )
 
     TranslationQuantifier(
         id='affliction_reward_type',
-        handler=lambda v: relational_reader['Data/AfflictionRewardTypeVisuals.dat'][v]['Name'],
+        handler=lambda v: relational_reader['Data/AfflictionRewardTypeVisuals.dat64'][v]['Name'],
         reverse_handler=_get_reverse_lookup_from_reader(
-            relational_reader['Data/AfflictionRewardTypeVisuals.dat'], 'Name'),
+            relational_reader['Data/AfflictionRewardTypeVisuals.dat64'], 'Name'),
     )
 
     # I believe this is currently not right, as the handler actually uses a value located in additionalProperties of the item, and
     # not in the mod itself. THe mod itself has min = max = 0.
     TranslationQuantifier(
         id='passive_hash',
-        handler=lambda v: relational_reader['Data/PassiveSkills.dat'][v]['PassiveSkillGraphId'],
+        handler=lambda v: relational_reader['Data/PassiveSkills.dat64'][v]['PassiveSkillGraphId'],
         reverse_handler=_get_reverse_lookup_from_reader(
-            relational_reader['Data/PassiveSkills.dat'], 'PassiveSkillGraphId'),
+            relational_reader['Data/PassiveSkills.dat64'], 'PassiveSkillGraphId'),
     )
 
     TQReminderString(relational_reader=relational_reader)
@@ -2471,6 +2471,12 @@ TranslationQuantifier(
     id='divide_by_one_thousand',
     handler=lambda v: v/1000,
     reverse_handler=lambda v: v*1000,
+)
+
+TranslationQuantifier(
+    id='plus_two_hundred',
+    handler=lambda v: v+200,
+    reverse_handler=lambda v: v-200,
 )
 
 TranslationQuantifier(

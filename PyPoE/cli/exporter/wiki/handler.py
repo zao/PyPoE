@@ -307,6 +307,9 @@ class ExporterHandler(BaseHandler):
                             # 3.15
                             # Added to escape quotes in "The Kiss Good Night"
                             item['out_file'].replace('"', "'", 2)))
+
+                        out_path = out_path.replace('\t', "")
+                        
                         console('Writing data to "%s"...' % out_path)
                         with open(out_path, 'w', encoding='utf-8') as f:
                             f.write(text)
