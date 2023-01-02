@@ -33,16 +33,16 @@ See PyPoE/LICENSE
 
 # Python
 import os
-from typing import Union
-import warnings
 import traceback
+import warnings
 from collections import OrderedDict, defaultdict
+from typing import Union
 
 # Self
-from PyPoE.cli.core import console, Msg
+from PyPoE.cli.core import Msg, console
 from PyPoE.cli.exporter import config
-from PyPoE.cli.exporter.wiki.handler import ExporterHandler, ExporterResult
 from PyPoE.cli.exporter.wiki import parser
+from PyPoE.cli.exporter.wiki.handler import ExporterHandler, ExporterResult
 from PyPoE.poe.file.stat_filters import StatFilterFile
 from PyPoE.poe.file.translations import TranslationFile
 
@@ -50,7 +50,7 @@ from PyPoE.poe.file.translations import TranslationFile
 # Globals
 # =============================================================================
 
-__all__ = ['SkillHandler']
+__all__ = ["SkillHandler"]
 
 
 # =============================================================================
@@ -64,13 +64,13 @@ __all__ = ['SkillHandler']
 
 class SkillHandler(ExporterHandler):
     def __init__(self, sub_parser):
-        self.parser = sub_parser.add_parser('skill', help='Skill data Exporter')
+        self.parser = sub_parser.add_parser("skill", help="Skill data Exporter")
         self.parser.set_defaults(func=lambda args: self.parser.print_help())
         skill_sub = self.parser.add_subparsers()
 
         s_id = skill_sub.add_parser(
-            'by_id',
-            help='Extract skill information by id.',
+            "by_id",
+            help="Extract skill information by id.",
         )
         self.add_default_parsers(
             parser=s_id,
@@ -78,64 +78,61 @@ class SkillHandler(ExporterHandler):
             func=SkillParser.by_id,
         )
         s_id.add_argument(
-            'skill_id',
-            help='Id of the area, can be specified multiple times.',
-            nargs='+',
+            "skill_id",
+            help="Id of the area, can be specified multiple times.",
+            nargs="+",
         )
 
         # by row ID
-        s_rid = skill_sub.add_parser(
-            'by_row',
-            help='Extract skills by rowid.'
-        )
+        s_rid = skill_sub.add_parser("by_row", help="Extract skills by rowid.")
         self.add_default_parsers(
             parser=s_rid,
             cls=SkillParser,
             func=SkillParser.by_rowid,
         )
         s_rid.add_argument(
-            'start',
-            help='Starting index',
-            nargs='?',
+            "start",
+            help="Starting index",
+            nargs="?",
             type=int,
             default=0,
         )
         s_rid.add_argument(
-            'end',
-            nargs='?',
-            help='Ending index',
+            "end",
+            nargs="?",
+            help="Ending index",
             type=int,
         )
 
     def add_default_parsers(self, *args, **kwargs):
         super().add_default_parsers(*args, **kwargs)
-        self.add_format_argument(kwargs['parser'])
-        self.add_image_arguments(kwargs['parser'])
-        kwargs['parser'].add_argument(
-            '--allow-skill-gems',
-            action='store_true',
-            help='Disable the check that prevents skill gems skill from being '
-                 'exported.',
-            dest='allow_skill_gems',
+        self.add_format_argument(kwargs["parser"])
+        self.add_image_arguments(kwargs["parser"])
+        kwargs["parser"].add_argument(
+            "--allow-skill-gems",
+            action="store_true",
+            help="Disable the check that prevents skill gems skill from being "
+            "exported.",
+            dest="allow_skill_gems",
         )
 
 
 class WikiCondition(parser.WikiCondition):
     COPY_KEYS = (
         # for skills
-        'radius',
-        'radius_description',
-        'radius_secondary',
-        'radius_secondary_description',
-        'radius_tertiary',
-        'radius_tertiary_description',
-        'has_percentage_mana_cost',
-        'has_reservation_mana_cost',
-        'skill_screenshot',
-        'skill_screenshot_file',
+        "radius",
+        "radius_description",
+        "radius_secondary",
+        "radius_secondary_description",
+        "radius_tertiary",
+        "radius_tertiary_description",
+        "has_percentage_mana_cost",
+        "has_reservation_mana_cost",
+        "skill_screenshot",
+        "skill_screenshot_file",
     )
 
-    NAME = 'Skill'
+    NAME = "Skill"
     INDENT = 40
     ADD_INCLUDE = False
 
@@ -143,27 +140,39 @@ class WikiCondition(parser.WikiCondition):
 class SkillParserShared(parser.BaseParser):
     _files = [
         # pretty much chain loads everything we need
-        'ActiveSkills.dat64',
-        'GrantedEffects.dat64',
-        'GrantedEffectsPerLevel.dat64',
-        'GrantedEffectQualityStats.dat64',
-        'GrantedEffectStatSetsPerLevel.dat64',
-        'GrantedEffectStatSets.dat64',
+        "ActiveSkills.dat64",
+        "GrantedEffects.dat64",
+        "GrantedEffectsPerLevel.dat64",
+        "GrantedEffectQualityStats.dat64",
+        "GrantedEffectStatSetsPerLevel.dat64",
+        "GrantedEffectStatSets.dat64",
     ]
 
     # Fields to copy from GrantedEffectsPerLevel.dat64
     _GEPL_COPY = (
-        'Level', 'PlayerLevelReq', 'CostMultiplier',
-        'CostAmounts', 'CostTypes', 'VaalSouls', 'VaalStoredUses',
-        'SoulGainPreventionDuration', 'Cooldown', 'StoredUses', 'AttackSpeedMultiplier',
-        'ManaReservationFlat', 'ManaReservationPercent', 'LifeReservationFlat', 'LifeReservationPercent',
+        "Level",
+        "PlayerLevelReq",
+        "CostMultiplier",
+        "CostAmounts",
+        "CostTypes",
+        "VaalSouls",
+        "VaalStoredUses",
+        "SoulGainPreventionDuration",
+        "Cooldown",
+        "StoredUses",
+        "AttackSpeedMultiplier",
+        "ManaReservationFlat",
+        "ManaReservationPercent",
+        "LifeReservationFlat",
+        "LifeReservationPercent",
     )
 
     # Fields to copy from GrantedEffectStatSetsPerLevel.dat64
     _GESSPL_COPY = (
-        'SpellCritChance', 'AttackCritChance',
-        'BaseMultiplier',
-        'DamageEffectiveness',
+        "SpellCritChance",
+        "AttackCritChance",
+        "BaseMultiplier",
+        "DamageEffectiveness",
     )
 
     # def CostTypeHelper(d):
@@ -176,130 +185,184 @@ class SkillParserShared(parser.BaseParser):
         #     'default': 0,
         #     'format': lambda v: '{0:n}'.format(v),
         # }),
-        ('CostAmounts', {
-            'template': 'cost_amounts',
-            'default': [],
-            'condition': lambda v: v[0] is not None,
-            'format': lambda v: v[0],
-        }),
-        ('CostTypes', {
-            'template': 'cost_types',
-            'default': [],
-            # 'format': CostTypeHelper,
-            'condition': lambda v: v[0] is not None,
-            'format': lambda v: v[0]['Id'],
-            #  lambda v: ','.join([r['Id'] for r in v])
-        }),
-        ('CostMultiplier', {
-            'template': 'cost_multiplier',
-            'format': lambda v: '{0:n}'.format(v),
-            'skip_active': True,
-        }),
-        ('StoredUses', {
-            'template': 'stored_uses',
-            'default': 0,
-            'format': lambda v: '{0:n}'.format(v),
-        }),
-        ('Cooldown', {
-            'template': 'cooldown',
-            'default': 0,
-            'format': lambda v: '{0:n}'.format(v/1000),
-        }),
-        ('VaalSouls', {
-            'template': 'vaal_souls_requirement',
-            'default': 0,
-            'format': lambda v: '{0:n}'.format(v),
-        }),
-        ('VaalStoredUses', {
-            'template': 'vaal_stored_uses',
-            'default': 0,
-            'format': lambda v: '{0:n}'.format(v),
-        }),
-        ('SoulGainPreventionDuration', {
-            'template': 'vaal_soul_gain_prevention_time',
-            'default': 0,
-            'format': lambda v: '{0:n}'.format(v/1000),
-        }),
-        ('SpellCritChance', {
-            'template': 'critical_strike_chance',
-            'default': 0,
-            'format': lambda v: '{0:n}'.format(v/100),
-        }),
-        ('AttackCritChance', {
-            'template': 'critical_strike_chance',
-            'default': 0,
-            'format': lambda v: '{0:n}'.format(v/100),
-        }),
-        ('DamageEffectiveness', {
-            'template': 'damage_effectiveness',
-            'format': lambda v: '{0:n}'.format(v/100+100),
-        }),
-        ('BaseMultiplier', {
-            'template': 'damage_multiplier',
-            'format': lambda v: '{0:n}'.format(v/100+100),
-        }),
-        ('AttackSpeedMultiplier', {
-            'template': 'attack_speed_multiplier',
-            'format': lambda v: '{0:n}'.format(v+100),
-        }),
-        ('BaseDuration', {
-            'template': 'duration',
-            'default': 0,
-            'format': lambda v: '{0:n}'.format(v / 1000),
-        }),
-        ('ManaReservationFlat', {
-            'template': 'mana_reservation_flat',
-            'default': 0,
-            'format': lambda v: '{0:n}'.format(v),
-        }),
-        ('ManaReservationPercent', {
-            'template': 'mana_reservation_percent',
-            'default': 0,
-            'format': lambda v: '{0:n}'.format(v/100),
-        }),
-        ('LifeReservationFlat', {
-            'template': 'life_reservation_flat',
-            'default': 0,
-            'format': lambda v: '{0:n}'.format(v),
-        }),
-        ('LifeReservationPercent', {
-            'template': 'life_reservation_percent',
-            'default': 0,
-            'format': lambda v: '{0:n}'.format(v/100),
-        }),
+        (
+            "CostAmounts",
+            {
+                "template": "cost_amounts",
+                "default": [],
+                "condition": lambda v: v[0] is not None,
+                "format": lambda v: v[0],
+            },
+        ),
+        (
+            "CostTypes",
+            {
+                "template": "cost_types",
+                "default": [],
+                # 'format': CostTypeHelper,
+                "condition": lambda v: v[0] is not None,
+                "format": lambda v: v[0]["Id"],
+                #  lambda v: ','.join([r['Id'] for r in v])
+            },
+        ),
+        (
+            "CostMultiplier",
+            {
+                "template": "cost_multiplier",
+                "format": lambda v: "{0:n}".format(v),
+                "skip_active": True,
+            },
+        ),
+        (
+            "StoredUses",
+            {
+                "template": "stored_uses",
+                "default": 0,
+                "format": lambda v: "{0:n}".format(v),
+            },
+        ),
+        (
+            "Cooldown",
+            {
+                "template": "cooldown",
+                "default": 0,
+                "format": lambda v: "{0:n}".format(v / 1000),
+            },
+        ),
+        (
+            "VaalSouls",
+            {
+                "template": "vaal_souls_requirement",
+                "default": 0,
+                "format": lambda v: "{0:n}".format(v),
+            },
+        ),
+        (
+            "VaalStoredUses",
+            {
+                "template": "vaal_stored_uses",
+                "default": 0,
+                "format": lambda v: "{0:n}".format(v),
+            },
+        ),
+        (
+            "SoulGainPreventionDuration",
+            {
+                "template": "vaal_soul_gain_prevention_time",
+                "default": 0,
+                "format": lambda v: "{0:n}".format(v / 1000),
+            },
+        ),
+        (
+            "SpellCritChance",
+            {
+                "template": "critical_strike_chance",
+                "default": 0,
+                "format": lambda v: "{0:n}".format(v / 100),
+            },
+        ),
+        (
+            "AttackCritChance",
+            {
+                "template": "critical_strike_chance",
+                "default": 0,
+                "format": lambda v: "{0:n}".format(v / 100),
+            },
+        ),
+        (
+            "DamageEffectiveness",
+            {
+                "template": "damage_effectiveness",
+                "format": lambda v: "{0:n}".format(v / 100 + 100),
+            },
+        ),
+        (
+            "BaseMultiplier",
+            {
+                "template": "damage_multiplier",
+                "format": lambda v: "{0:n}".format(v / 100 + 100),
+            },
+        ),
+        (
+            "AttackSpeedMultiplier",
+            {
+                "template": "attack_speed_multiplier",
+                "format": lambda v: "{0:n}".format(v + 100),
+            },
+        ),
+        (
+            "BaseDuration",
+            {
+                "template": "duration",
+                "default": 0,
+                "format": lambda v: "{0:n}".format(v / 1000),
+            },
+        ),
+        (
+            "ManaReservationFlat",
+            {
+                "template": "mana_reservation_flat",
+                "default": 0,
+                "format": lambda v: "{0:n}".format(v),
+            },
+        ),
+        (
+            "ManaReservationPercent",
+            {
+                "template": "mana_reservation_percent",
+                "default": 0,
+                "format": lambda v: "{0:n}".format(v / 100),
+            },
+        ),
+        (
+            "LifeReservationFlat",
+            {
+                "template": "life_reservation_flat",
+                "default": 0,
+                "format": lambda v: "{0:n}".format(v),
+            },
+        ),
+        (
+            "LifeReservationPercent",
+            {
+                "template": "life_reservation_percent",
+                "default": 0,
+                "format": lambda v: "{0:n}".format(v / 100),
+            },
+        ),
     )
 
     # Values without the Metadata/Projectiles/ prefix
     _SKILL_ID_TO_PROJECTILE_MAP = {
-        'ArcticBreath': 'ArcticBreath',
-        'BallLightning': 'BallLightningPlayer',
-        'BurningArrow': 'BurningArrow',
-        'EtherealKnives': 'ShadowProjectile',
-        'FlameTotem': 'TotemFireSpray',
-        'FreezingPulse': 'FreezingPulse',
-        'ExplosiveArrow': 'FuseArrow',
-        'FrostBlades': 'IceStrikeProjectile',
-        'FrostBolt': 'FrostBolt',
-        'Fireball': 'Fireball',
-        'IceShot': 'IceArrow',
-        'IceSpear': 'IceSpear',
+        "ArcticBreath": "ArcticBreath",
+        "BallLightning": "BallLightningPlayer",
+        "BurningArrow": "BurningArrow",
+        "EtherealKnives": "ShadowProjectile",
+        "FlameTotem": "TotemFireSpray",
+        "FreezingPulse": "FreezingPulse",
+        "ExplosiveArrow": "FuseArrow",
+        "FrostBlades": "IceStrikeProjectile",
+        "FrostBolt": "FrostBolt",
+        "Fireball": "Fireball",
+        "IceShot": "IceArrow",
+        "IceSpear": "IceSpear",
         # 'Incinerate': 'Flamethrower1',
-        'LightningArrow': 'LightningArrow',
-        'LightningTrap': 'LightningTrap',
-        'MoltenStrike': 'FireMortar',
+        "LightningArrow": "LightningArrow",
+        "LightningTrap": "LightningTrap",
+        "MoltenStrike": "FireMortar",
         # CausticArrow
-        'PoisonArrow': 'CausticArrow',
-        'Power Siphon': 'Siphon',
-        'ShrapnelShot': 'ShrapnelShot',
-        'SiegeBallista': 'CrossbowSnipeProjectile',
-        'Spark': 'Spark',
-        'SplitArrow': 'SplitArrowDefault',
-        #Spectral Throw
-        'ThrownWeapon': 'ThrownWeapon',
-        'Tornado Shot': 'TornadoShotArrow',
+        "PoisonArrow": "CausticArrow",
+        "Power Siphon": "Siphon",
+        "ShrapnelShot": "ShrapnelShot",
+        "SiegeBallista": "CrossbowSnipeProjectile",
+        "Spark": "Spark",
+        "SplitArrow": "SplitArrowDefault",
+        # Spectral Throw
+        "ThrownWeapon": "ThrownWeapon",
+        "Tornado Shot": "TornadoShotArrow",
         # TornadoShotSecondaryArrow,
-        'VaalBurningArrow': 'VaalBurningArrow',
-        'WildStrike': 'ElementalStrikeColdProjectile',
+        "VaalBurningArrow": "VaalBurningArrow",
+        "WildStrike": "ElementalStrikeColdProjectile",
     }
 
     def __init__(self, *args, **kwargs):
@@ -316,32 +379,41 @@ class SkillParserShared(parser.BaseParser):
         """
         if self._skill_stat_filters is None:
             self._skill_stat_filters = StatFilterFile()
-            self._skill_stat_filters.read(self.file_system.get_file(
-                'Metadata/StatDescriptions/skillpopup_stat_filters.txt'
-            ))
+            self._skill_stat_filters.read(
+                self.file_system.get_file(
+                    "Metadata/StatDescriptions/skillpopup_stat_filters.txt"
+                )
+            )
             # TODO: remove once fixed
-            #self._skill_stat_filters.skills['spirit_offering'] = SkillEntry(skill_id='spirit_offering', translation_file_path='Metadata/StatDescriptions/offering_skill_stat_descriptions.txt', stats=[])
+            # self._skill_stat_filters.skills['spirit_offering'] = SkillEntry(skill_id='spirit_offering', translation_file_path='Metadata/StatDescriptions/offering_skill_stat_descriptions.txt', stats=[])
 
         return self._skill_stat_filters
 
     def _write_stats(self, infobox, stats_and_values, global_prefix):
         for i, val in enumerate(stats_and_values):
-            prefix = '%sstat%s_' % (global_prefix, (i + 1))
-            infobox[prefix + 'id'] = val[0]
-            infobox[prefix + 'value'] = val[1]
+            prefix = "%sstat%s_" % (global_prefix, (i + 1))
+            infobox[prefix + "id"] = val[0]
+            infobox[prefix + "value"] = val[1]
 
-    def _translate_stats(self, stats, values: Union[list[int], list[tuple[int, int]]], trans_file: TranslationFile, data: defaultdict, stat_order: defaultdict) -> OrderedDict:
+    def _translate_stats(
+        self,
+        stats,
+        values: Union[list[int], list[tuple[int, int]]],
+        trans_file: TranslationFile,
+        data: defaultdict,
+        stat_order: defaultdict,
+    ) -> OrderedDict:
         stats_output = OrderedDict()
 
         trans_rslt = trans_file.get_translation(
             tags=stats,
             values=values,
             full_result=True,
-            lang=config.get_option('language'),
+            lang=config.get_option("language"),
         )
-        data['_tr'] = trans_rslt
+        data["_tr"] = trans_rslt
 
-        data['stats'] = {}
+        data["stats"] = {}
 
         for j, stats in enumerate(trans_rslt.found_ids):
             values = list(trans_rslt.values[j])
@@ -371,78 +443,88 @@ class SkillParserShared(parser.BaseParser):
                     pass
             if trans_rslt.values[j] == 0:
                 continue
-            k = '__'.join(stats)
+            k = "__".join(stats)
             stats_output[k] = None
-            data['stats']['__'.join(stats)] = {
-                'line': trans_rslt.found_lines[j],
-                'stats': stats,
-                'values': values,
-                'values_parsed': values_parsed,
+            data["stats"]["__".join(stats)] = {
+                "line": trans_rslt.found_lines[j],
+                "stats": stats,
+                "values": values,
+                "values_parsed": values_parsed,
             }
             stat_order[k] = trans_rslt.tf_indices[j]
         for stat, value in trans_rslt.missing:
-            warnings.warn(f'Missing translation for {stat}')
+            warnings.warn(f"Missing translation for {stat}")
             stats_output[stat] = None
-            data['stats'][stat] = {
-                'line': '',
-                'stats': [stat, ],
-                'values': [value, ],
-                'values_parsed': [value, ],
+            data["stats"][stat] = {
+                "line": "",
+                "stats": [
+                    stat,
+                ],
+                "values": [
+                    value,
+                ],
+                "values_parsed": [
+                    value,
+                ],
             }
             stat_order[stat] = -1
         return stats_output
 
-    def _skill(self, gra_eff, infobox: OrderedDict, parsed_args, max_level=None, msg_name=None):
+    def _skill(
+        self, gra_eff, infobox: OrderedDict, parsed_args, max_level=None, msg_name=None
+    ):
         if msg_name is None:
-            msg_name = gra_eff['Id']
+            msg_name = gra_eff["Id"]
 
-        stat_set = gra_eff['StatSet']
+        stat_set = gra_eff["StatSet"]
 
         gra_eff_per_lvl = []
-        for row in self.rr['GrantedEffectsPerLevel.dat64']:
-            if row['GrantedEffect'] == gra_eff:
+        for row in self.rr["GrantedEffectsPerLevel.dat64"]:
+            if row["GrantedEffect"] == gra_eff:
                 gra_eff_per_lvl.append(row)
 
         gra_eff_stats_pl = []
-        for row in self.rr['GrantedEffectStatSetsPerLevel.dat64']:
-            if row['StatSet'] == stat_set:
+        for row in self.rr["GrantedEffectStatSetsPerLevel.dat64"]:
+            if row["StatSet"] == stat_set:
                 gra_eff_stats_pl.append(row)
 
         if (not gra_eff_per_lvl) and (not gra_eff_stats_pl):
-            console('No level progression found for "%s". Skipping.' %
-                    msg_name, msg=Msg.error)
+            console(
+                'No level progression found for "%s". Skipping.' % msg_name,
+                msg=Msg.error,
+            )
             return False
 
-        gra_eff_per_lvl.sort(key=lambda x: x['Level'])
-        gra_eff_stats_pl.sort(key=lambda x: x['GemLevel'])
+        gra_eff_per_lvl.sort(key=lambda x: x["Level"])
+        gra_eff_stats_pl.sort(key=lambda x: x["GemLevel"])
         if max_level is None:
-            max_level = len(gra_eff_per_lvl)-1
+            max_level = len(gra_eff_per_lvl) - 1
 
-        act_skill = gra_eff['ActiveSkill']
+        act_skill = gra_eff["ActiveSkill"]
         if act_skill:
             try:
-                tf = self.tc[self.skill_stat_filter.skills[
-                    act_skill['Id']].translation_file_path]
+                tf = self.tc[
+                    self.skill_stat_filter.skills[act_skill["Id"]].translation_file_path
+                ]
             except KeyError as e:
-                warnings.warn('Missing active skill in stat filers: %s' % e.args[0])
-                tf = self.tc['skill_stat_descriptions.txt']
+                warnings.warn("Missing active skill in stat filers: %s" % e.args[0])
+                tf = self.tc["skill_stat_descriptions.txt"]
 
-            if parsed_args.store_images and act_skill['Icon_DDSFile']:
+            if parsed_args.store_images and act_skill["Icon_DDSFile"]:
                 self._write_dds(
-                    data=self.file_system.get_file(act_skill['Icon_DDSFile']),
+                    data=self.file_system.get_file(act_skill["Icon_DDSFile"]),
                     out_path=os.path.join(
-                        self._img_path,
-                        '%s skill icon.dds' % msg_name
+                        self._img_path, "%s skill icon.dds" % msg_name
                     ),
                     parsed_args=parsed_args,
                 )
         else:
-            tf = self.tc['gem_stat_descriptions.txt']
+            tf = self.tc["gem_stat_descriptions.txt"]
 
         # reformat the datas we need
         level_data = []
         stat_key_order = {
-            'stats': OrderedDict(),
+            "stats": OrderedDict(),
         }
 
         stat_order = defaultdict()
@@ -453,37 +535,47 @@ class SkillParserShared(parser.BaseParser):
                 lvl_effects = gra_eff_per_lvl[i]
             else:
                 lvl_effects = None
-                warnings.warn(f'GrantedEffectsPerLevel is missing level {lvl_stats["GemLevel"]} which GrantedEffectStatSetsPerLevel has.')
-            
-            if lvl_effects is not None and lvl_effects['Level'] != lvl_stats['GemLevel']:
-                lvl_effects = None
-                warnings.warn(f'GrantedEffectsPerLevel is missing level {lvl_stats["GemLevel"]} which GrantedEffectStatSetsPerLevel has.')
-                
+                warnings.warn(
+                    f'GrantedEffectsPerLevel is missing level {lvl_stats["GemLevel"]} which GrantedEffectStatSetsPerLevel has.'
+                )
 
-            stats = [r['Id'] for stat_index, r in enumerate(lvl_stats['FloatStats']) if stat_index < len(lvl_stats['BaseResolvedValues'])] + \
-                    [r['Id'] for r in lvl_stats['AdditionalStats']]
-            values = lvl_stats['BaseResolvedValues'] + lvl_stats['AdditionalStatsValues']
+            if (
+                lvl_effects is not None
+                and lvl_effects["Level"] != lvl_stats["GemLevel"]
+            ):
+                lvl_effects = None
+                warnings.warn(
+                    f'GrantedEffectsPerLevel is missing level {lvl_stats["GemLevel"]} which GrantedEffectStatSetsPerLevel has.'
+                )
+
+            stats = [
+                r["Id"]
+                for stat_index, r in enumerate(lvl_stats["FloatStats"])
+                if stat_index < len(lvl_stats["BaseResolvedValues"])
+            ] + [r["Id"] for r in lvl_stats["AdditionalStats"]]
+            values = (
+                lvl_stats["BaseResolvedValues"] + lvl_stats["AdditionalStatsValues"]
+            )
 
             # Remove 0 (unused) stats
             # This will remove all +0 gem level entries.
-            remove_ids = [
-                stat for stat, value in zip(stats, values) if value == 0
-            ]
+            remove_ids = [stat for stat, value in zip(stats, values) if value == 0]
             for stat_id in remove_ids:
                 index = stats.index(stat_id)
                 if values[index] == 0:
                     del stats[index]
                     del values[index]
 
-            translated_stats = self._translate_stats(stats, values, tf, data, stat_order)
+            translated_stats = self._translate_stats(
+                stats, values, tf, data, stat_order
+            )
             for tr_stat in translated_stats.keys():
-                stat_key_order['stats'][tr_stat] = translated_stats[tr_stat]
-            
+                stat_key_order["stats"][tr_stat] = translated_stats[tr_stat]
 
             if lvl_effects is not None:
                 for column in self._GEPL_COPY:
                     data[column] = lvl_effects[column]
-            
+
             for column in self._GESSPL_COPY:
                 data[column] = lvl_stats[column]
 
@@ -493,72 +585,83 @@ class SkillParserShared(parser.BaseParser):
 
         static = {
             # columns are standard attributes that every skill has
-            'columns': set(self._GEPL_COPY + self._GESSPL_COPY),
+            "columns": set(self._GEPL_COPY + self._GESSPL_COPY),
             # stats are specific to this skill
-            'stats': OrderedDict(stat_key_order['stats']),
+            "stats": OrderedDict(stat_key_order["stats"]),
         }
         dynamic = {
-            'columns': set(),
-            'stats': OrderedDict(),
+            "columns": set(),
+            "stats": OrderedDict(),
         }
 
         # Grab the data from the first row of per-level gem data.
         last = level_data[0]
 
         for data in level_data[1:]:
-            for key in list(static['columns']):
+            for key in list(static["columns"]):
                 if last[key] != data[key]:
-                    static['columns'].remove(key)
-                    dynamic['columns'].add(key)
-            for key in list(static['stats']):
-                in_last = key in last['stats']
-                in_data = key in data['stats']
+                    static["columns"].remove(key)
+                    dynamic["columns"].add(key)
+            for key in list(static["stats"]):
+                in_last = key in last["stats"]
+                in_data = key in data["stats"]
                 if not in_last and not in_data:
                     continue
 
                 # Consider a stat dynamic if it changes presence
                 # or value between levels.
-                if in_last != in_data or (last['stats'][key]['values'] !=
-                        data['stats'][key]['values']):
-                    del static['stats'][key]
-                    dynamic['stats'][key] = None
+                if in_last != in_data or (
+                    last["stats"][key]["values"] != data["stats"][key]["values"]
+                ):
+                    del static["stats"][key]
+                    dynamic["stats"][key] = None
             last = data
 
         # GrantedEffectStatSets.dat64
-        const_stats = [untr_stat['Id'] for untr_stat in stat_set['ConstantStats']]
-        impl_stats = [untr_stat['Id'] for untr_stat in stat_set['ImplicitStats']]
-        const_stat_vals = stat_set['ConstantStatsValues']
+        const_stats = [untr_stat["Id"] for untr_stat in stat_set["ConstantStats"]]
+        impl_stats = [untr_stat["Id"] for untr_stat in stat_set["ImplicitStats"]]
+        const_stat_vals = stat_set["ConstantStatsValues"]
 
         const_data = defaultdict()
         impl_data = defaultdict()
-        const_tr_stats = self._translate_stats(const_stats, const_stat_vals, tf, const_data, stat_order)
-        impl_tr_stats = self._translate_stats(impl_stats, [1 for i in range(len(impl_stats))], tf, impl_data, stat_order)
+        const_tr_stats = self._translate_stats(
+            const_stats, const_stat_vals, tf, const_data, stat_order
+        )
+        impl_tr_stats = self._translate_stats(
+            impl_stats, [1 for i in range(len(impl_stats))], tf, impl_data, stat_order
+        )
 
         # Later code that generates the infobox expects static stats to be in static, and to have values in level 0 of the gem.
         # It also expects them to be in the master list in stat_key_order
         for tr_stat in const_tr_stats.keys():
-            static['stats'][tr_stat] = const_tr_stats[tr_stat]
-            level_data[0]['stats'][tr_stat] = const_data['stats'][tr_stat]
-            stat_key_order['stats'][tr_stat] = const_tr_stats[tr_stat]
+            static["stats"][tr_stat] = const_tr_stats[tr_stat]
+            level_data[0]["stats"][tr_stat] = const_data["stats"][tr_stat]
+            stat_key_order["stats"][tr_stat] = const_tr_stats[tr_stat]
 
         for tr_stat in impl_tr_stats.keys():
-            static['stats'][tr_stat] = impl_tr_stats[tr_stat]
-            level_data[0]['stats'][tr_stat] = impl_data['stats'][tr_stat]
-            stat_key_order['stats'][tr_stat] = impl_tr_stats[tr_stat]
-        
+            static["stats"][tr_stat] = impl_tr_stats[tr_stat]
+            level_data[0]["stats"][tr_stat] = impl_data["stats"][tr_stat]
+            stat_key_order["stats"][tr_stat] = impl_tr_stats[tr_stat]
 
-
-        stat_key_order['stats'] = OrderedDict(sorted(stat_key_order['stats'].items(), key=lambda item: stat_order[item[0]]))
+        stat_key_order["stats"] = OrderedDict(
+            sorted(
+                stat_key_order["stats"].items(), key=lambda item: stat_order[item[0]]
+            )
+        )
 
         # Copy BaseDuration Data to skill_level's 'BaseDuration' node where the infobox is expecting it
         # Add 'BaseDuration' to the list of dynamic columns.
-        if 'base_skill_effect_duration' in dynamic['stats'].keys():
-            dynamic['columns'].add('BaseDuration')
+        if "base_skill_effect_duration" in dynamic["stats"].keys():
+            dynamic["columns"].add("BaseDuration")
             for row in level_data:
-                row['BaseDuration'] = row['stats']['base_skill_effect_duration']['values'][0]
-        elif 'base_skill_effect_duration' in static['stats'].keys():
-            static['columns'].add('BaseDuration')
-            level_data[0]['BaseDuration'] = level_data[0]['stats']['base_skill_effect_duration']['values'][0]
+                row["BaseDuration"] = row["stats"]["base_skill_effect_duration"][
+                    "values"
+                ][0]
+        elif "base_skill_effect_duration" in static["stats"].keys():
+            static["columns"].add("BaseDuration")
+            level_data[0]["BaseDuration"] = level_data[0]["stats"][
+                "base_skill_effect_duration"
+            ]["values"][0]
 
         #
         # Output handling for gem infobox
@@ -566,58 +669,57 @@ class SkillParserShared(parser.BaseParser):
 
         # From ActiveSkills.dat64
         if act_skill:
-            infobox['gem_description'] = act_skill['Description']
-            infobox['active_skill_name'] = act_skill['DisplayedName']
-            if act_skill['WeaponRestriction_ItemClassesKeys']:
-                infobox['item_class_id_restriction'] = ', '.join([
-                    c['Id'] for c in act_skill['WeaponRestriction_ItemClassesKeys']
-                ])
+            infobox["gem_description"] = act_skill["Description"]
+            infobox["active_skill_name"] = act_skill["DisplayedName"]
+            if act_skill["WeaponRestriction_ItemClassesKeys"]:
+                infobox["item_class_id_restriction"] = ", ".join(
+                    [c["Id"] for c in act_skill["WeaponRestriction_ItemClassesKeys"]]
+                )
 
         # From Projectile.dat64 if available
         # TODO - remap
-        key = self._SKILL_ID_TO_PROJECTILE_MAP.get(gra_eff['Id'])
+        key = self._SKILL_ID_TO_PROJECTILE_MAP.get(gra_eff["Id"])
         if key:
-            infobox['projectile_speed'] = self.rr['Projectiles.dat64'].index[
-                'Id']['Metadata/Projectiles/' + key]['ProjectileSpeed']
+            infobox["projectile_speed"] = self.rr["Projectiles.dat64"].index["Id"][
+                "Metadata/Projectiles/" + key
+            ]["ProjectileSpeed"]
 
         # From GrantedEffects.dat64
 
-        infobox['skill_id'] = gra_eff['Id']
-        if gra_eff['SupportGemLetter']:
-            infobox['support_gem_letter'] = gra_eff['SupportGemLetter']
+        infobox["skill_id"] = gra_eff["Id"]
+        if gra_eff["SupportGemLetter"]:
+            infobox["support_gem_letter"] = gra_eff["SupportGemLetter"]
 
-        if not gra_eff['IsSupport']:
-            infobox['cast_time'] = gra_eff['CastTime'] / 1000
+        if not gra_eff["IsSupport"]:
+            infobox["cast_time"] = gra_eff["CastTime"] / 1000
 
         # GrantedEffectsPerLevel.dat64
-        infobox['required_level'] = level_data[0]['PlayerLevelReq']
-
+        infobox["required_level"] = level_data[0]["PlayerLevelReq"]
 
         #
         # Quality stats
         #
         qual_stats = []
-        for row in self.rr['GrantedEffectQualityStats.dat64']:
-            if row['GrantedEffectsKey'] == gra_eff:
+        for row in self.rr["GrantedEffectQualityStats.dat64"]:
+            if row["GrantedEffectsKey"] == gra_eff:
                 qual_stats.append(row)
 
-        qual_stats.sort(key=lambda row: row['SetId'])
+        qual_stats.sort(key=lambda row: row["SetId"])
 
         for row in qual_stats:
-            prefix = 'quality_type%s_' % \
-                     (row['SetId'] + 1)
-            infobox[prefix + 'weight'] = row['Weight']
+            prefix = "quality_type%s_" % (row["SetId"] + 1)
+            infobox[prefix + "weight"] = row["Weight"]
 
             # Quality stat data
-            stat_ids = [r['Id'] for r in row['StatsKeys']]
-            
+            stat_ids = [r["Id"] for r in row["StatsKeys"]]
+
             # Quality Translation?
             qtr = tf.get_translation(
                 tags=stat_ids,
                 # Offset Q1000
-                values=[v // 50 for v in row['StatsValuesPermille']],
+                values=[v // 50 for v in row["StatsValuesPermille"]],
                 full_result=True,
-                lang=config.get_option('language'),
+                lang=config.get_option("language"),
             )
 
             lines = []
@@ -629,19 +731,18 @@ class SkillParserShared(parser.BaseParser):
                     except ValueError:
                         values.append(0)
                     else:
-                        values.append(
-                            row['StatsValuesPermille'][index] / 1000
-                        )
-                lines.extend(ts.format_string(
-                    values=values,
-                    is_range=[False, ] * len(values),
-                )[0].split('\n'))
+                        values.append(row["StatsValuesPermille"][index] / 1000)
+                lines.extend(
+                    ts.format_string(values=values, is_range=[False,] * len(values),)[
+                        0
+                    ].split("\n")
+                )
 
-            infobox[prefix + 'stat_text'] = '<br>'.join(lines)
+            infobox[prefix + "stat_text"] = "<br>".join(lines)
 
             self._write_stats(
                 infobox,
-                zip(stat_ids, row['StatsValuesPermille']),
+                zip(stat_ids, row["StatsValuesPermille"]),
                 prefix,
             )
 
@@ -651,10 +752,10 @@ class SkillParserShared(parser.BaseParser):
 
         # Don't add columns that are zero/default
         for column, column_data in self._SKILL_COLUMN_MAP:
-            if column not in static['columns']:
+            if column not in static["columns"]:
                 continue
 
-            default = column_data.get('default')
+            default = column_data.get("default")
             if column in gra_eff_per_lvl[0].keys():
                 raw_value = gra_eff_per_lvl[0][column]
             elif column in gra_eff_stats_pl[0].keys():
@@ -662,31 +763,33 @@ class SkillParserShared(parser.BaseParser):
             else:
                 raw_value = level_data[0][column]
 
-            if default is not None and raw_value == column_data['default']:
+            if default is not None and raw_value == column_data["default"]:
                 continue
 
-            df = column_data.get('skip_active')
-            if df is not None and not gra_eff['IsSupport']:
+            df = column_data.get("skip_active")
+            if df is not None and not gra_eff["IsSupport"]:
                 continue
-            infobox['static_' + column_data['template']] = column_data['format'](raw_value)
+            infobox["static_" + column_data["template"]] = column_data["format"](
+                raw_value
+            )
 
         # Normal stats
         # TODO: Loop properly - some stats not available at level 0
         stats = []
         values = []
         lines = []
-        for key in stat_key_order['stats']:
-            if key in static['stats']:
+        for key in stat_key_order["stats"]:
+            if key in static["stats"]:
                 try:
-                    sdict = level_data[0]['stats'][key]
+                    sdict = level_data[0]["stats"][key]
                 except:
-                    sdict = level_data[-1]['stats'][key]
-                line = sdict['line']
-                stats.extend(sdict['stats'])
-                values.extend(sdict['values'])
-            elif key in dynamic['stats']:
+                    sdict = level_data[-1]["stats"][key]
+                line = sdict["line"]
+                stats.extend(sdict["stats"])
+                values.extend(sdict["values"])
+            elif key in dynamic["stats"]:
                 try:
-                    stat_dict_max = level_data[max_level]['stats'][key]
+                    stat_dict_max = level_data[max_level]["stats"][key]
                 except KeyError:
                     maxerr = True
                 else:
@@ -694,38 +797,41 @@ class SkillParserShared(parser.BaseParser):
 
                 # Stat was 0
                 try:
-                    stat_dict = level_data[0]['stats'][key]
+                    stat_dict = level_data[0]["stats"][key]
                 except KeyError:
                     minerr = True
                 else:
                     minerr = False
 
                 if not maxerr and not minerr:
-                    stat_ids = stat_dict['stats']
+                    stat_ids = stat_dict["stats"]
                 elif maxerr and not minerr:
-                    stat_ids = stat_dict['stats']
-                    stat_dict_max = {'values': [0] * len(stat_ids)}
+                    stat_ids = stat_dict["stats"]
+                    stat_dict_max = {"values": [0] * len(stat_ids)}
                 elif not maxerr and minerr:
-                    stat_ids = stat_dict_max['stats']
-                    stat_dict = {'values': [0] * len(stat_ids)}
+                    stat_ids = stat_dict_max["stats"]
+                    stat_dict = {"values": [0] * len(stat_ids)}
                 elif maxerr and minerr:
-                    console('Neither min or max skill available. Investigate.',
-                            msg=Msg.error)
+                    console(
+                        "Neither min or max skill available. Investigate.",
+                        msg=Msg.error,
+                    )
                     return
 
                 tr_values = []
-                for j, value in enumerate(stat_dict['values']):
-                    tr_values.append((value, stat_dict_max['values'][j]))
+                for j, value in enumerate(stat_dict["values"]):
+                    tr_values.append((value, stat_dict_max["values"][j]))
 
                 # Should only be one
-                line = tf.get_translation(stat_ids, tr_values,
-                                          lang=config.get_option('language'))
-                line = line[0] if line else ''
+                line = tf.get_translation(
+                    stat_ids, tr_values, lang=config.get_option("language")
+                )
+                line = line[0] if line else ""
 
             if line:
                 lines.append(line)
 
-        self._write_stats(infobox, zip(stats, values), 'static_')
+        self._write_stats(infobox, zip(stats, values), "static_")
 
         # Add the attack damage stat from the game data
         if act_skill:
@@ -740,11 +846,11 @@ class SkillParserShared(parser.BaseParser):
                 #     ('active_skill_attack_damage_final_permyriad', ),
                 #     0,
                 # ),
-                #(
+                # (
                 #    ('BaseDuration', ),
                 #    ('base_skill_effect_duration', ),
                 #    0,
-                #),
+                # ),
             )
             added = []
             for value_keys, tags, default in field_stats:
@@ -754,16 +860,18 @@ class SkillParserShared(parser.BaseParser):
                 ]
                 # Account for default (0 = 100%)
                 if values[0] != default:
-                    added.extend(tf.get_translation(
-                        tags=tags,
-                        values=values,
-                        lang=config.get_option('language'),
-                    ))
+                    added.extend(
+                        tf.get_translation(
+                            tags=tags,
+                            values=values,
+                            lang=config.get_option("language"),
+                        )
+                    )
 
             if added:
                 lines = added + lines
 
-        infobox['stat_text'] = self._format_lines(lines)
+        infobox["stat_text"] = self._format_lines(lines)
 
         #
         # Output handling for progression
@@ -771,45 +879,44 @@ class SkillParserShared(parser.BaseParser):
 
         # Body
         for i, row in enumerate(level_data):
-            prefix = 'level%s' % (i + 1)
-            infobox[prefix] = 'True'
+            prefix = "level%s" % (i + 1)
+            infobox[prefix] = "True"
 
-            prefix += '_'
+            prefix += "_"
 
-            infobox[prefix + 'level_requirement'] = row['PlayerLevelReq']
+            infobox[prefix + "level_requirement"] = row["PlayerLevelReq"]
 
             # Column handling
             for column, column_data in self._SKILL_COLUMN_MAP:
-                if column not in dynamic['columns']:
+                if column not in dynamic["columns"]:
                     continue
                 # Removed the check of defaults on purpose, makes sense
                 # to add the info since it is dynamically changed
-                infobox[prefix + column_data['template']] = column_data['format'](row[column])
+                infobox[prefix + column_data["template"]] = column_data["format"](
+                    row[column]
+                )
 
             # Stat handling
             lines = []
             values = []
             stats = []
-            for key in stat_key_order['stats']:
-                if key not in dynamic['stats']:
+            for key in stat_key_order["stats"]:
+                if key not in dynamic["stats"]:
                     continue
 
                 try:
-                    stat_dict = row['stats'][key]
+                    stat_dict = row["stats"][key]
                 # No need to add stat that don't exist at specific levels
                 except KeyError:
                     continue
                 # Don't add empty lines
-                if stat_dict['line']:
-                    lines.append(stat_dict['line'])
-                stats.extend(stat_dict['stats'])
-                values.extend(stat_dict['values'])
+                if stat_dict["line"]:
+                    lines.append(stat_dict["line"])
+                stats.extend(stat_dict["stats"])
+                values.extend(stat_dict["values"])
             if lines:
-                infobox[prefix + 'stat_text'] = \
-                    self._format_lines(lines)
-            self._write_stats(
-                infobox, zip(stats, values), prefix
-            )
+                infobox[prefix + "stat_text"] = self._format_lines(lines)
+            self._write_stats(infobox, zip(stats, values), prefix)
 
         return True
 
@@ -819,8 +926,8 @@ class SkillParser(SkillParserShared):
         return self.export(
             parsed_args,
             self._column_index_filter(
-                dat_file_name='GrantedEffects.dat64',
-                column_id='Id',
+                dat_file_name="GrantedEffects.dat64",
+                column_id="Id",
                 arg_list=parsed_args.skill_id,
             ),
         )
@@ -828,20 +935,23 @@ class SkillParser(SkillParserShared):
     def by_rowid(self, parsed_args):
         return self.export(
             parsed_args,
-            self.rr['GrantedEffects.dat64'][parsed_args.start:parsed_args.end],
+            self.rr["GrantedEffects.dat64"][parsed_args.start : parsed_args.end],
         )
 
     def export(self, parsed_args, skills):
         self._image_init(parsed_args=parsed_args)
-        console('Found %s skills, parsing...' % len(skills))
-        self.rr['SkillGems.dat64'].build_index('GrantedEffectsKey')
+        console("Found %s skills, parsing..." % len(skills))
+        self.rr["SkillGems.dat64"].build_index("GrantedEffectsKey")
         r = ExporterResult()
         for skill in skills:
-            if not parsed_args.allow_skill_gems and skill in \
-                    self.rr['SkillGems.dat64'].index['GrantedEffectsKey']:
+            if (
+                not parsed_args.allow_skill_gems
+                and skill in self.rr["SkillGems.dat64"].index["GrantedEffectsKey"]
+            ):
                 console(
                     f"Skipping skill gem skill \"{skill['Id']}\" at row {skill.rowid}",
-                    msg=Msg.warning)
+                    msg=Msg.warning,
+                )
                 continue
             data = OrderedDict()
 
@@ -850,7 +960,8 @@ class SkillParser(SkillParserShared):
             except Exception as e:
                 console(
                     f"Error when parsing skill \"{skill['Id']}\" at {skill.rowid}:",
-                    msg=Msg.error)
+                    msg=Msg.error,
+                )
                 console(traceback.format_exc(), msg=Msg.error)
 
             cond = WikiCondition(
@@ -859,15 +970,14 @@ class SkillParser(SkillParserShared):
             )
             r.add_result(
                 text=cond,
-                out_file='skill_%s.txt' % data['skill_id'],
+                out_file="skill_%s.txt" % data["skill_id"],
                 wiki_page=[
                     {
-                        'page': 'Skill:' + self._format_wiki_title(
-                            data['skill_id']),
-                        'condition': cond,
+                        "page": "Skill:" + self._format_wiki_title(data["skill_id"]),
+                        "condition": cond,
                     },
                 ],
-                wiki_message='Skill updater',
+                wiki_message="Skill updater",
             )
 
         return r
