@@ -5492,8 +5492,9 @@ specification = Specification({
                 type='ref|list|int',
             ),
             Field(
-                name='Key2',
+                name='ShopTagKey',
                 type='ref|out',
+                key='ShopTag.dat',
             ),
             Field(
                 name='Flag1',
@@ -20771,6 +20772,33 @@ specification = Specification({
                 unique=True,
             ),
         ),
+    ),
+    'ShopTag.dat': File(
+        fields=(
+            Field(
+                name='Id',
+                type='ref|string',
+                unique=True,
+            ),
+            Field(
+                name='Name',
+                type='ref|string',
+            ),
+            Field(
+                name='IsCategory',
+                type='bool',
+            ),
+            Field(
+                name='Category',
+                type='ref|self',
+                key='ShopTag.dat',
+            ),
+            Field(
+                name='SkillGem',
+                type='ref|list|ref|out',
+                key='BaseItemTypes.dat',
+            ),
+        )
     ),
     'ShopToken.dat': File(
         fields=(
