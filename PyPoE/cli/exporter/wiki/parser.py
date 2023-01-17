@@ -1716,7 +1716,7 @@ class TagHandler:
         :func:`parse_description_tags`
     """
 
-    _IL_FORMAT = '{{iil|%s}}'
+    _IL_FORMAT = '{{il|%s}}'
     _C_FORMAT = '{{c|%s|%s}}'
 
     def __init__(self, rr):
