@@ -3923,8 +3923,9 @@ specification = Specification({
                 type='ref|list|ref|out',
             ),
             Field(
-                name='Keys2',
+                name='Binary_StatsKeys',
                 type='ref|list|ref|out',
+                key='Stats.dat',
             ),
             Field(
                 name='Keys3',
