@@ -5472,17 +5472,19 @@ specification = Specification({
                 type='ref|out',
             ),
             Field(
-                name='AchievementItemsKeys',
+                name='ModifyMapsAchievements',
                 type='ref|list|ref|out',
                 key='AchievementItems.dat',
             ),
             Field(
-                name='Keys1',
+                name='ModifyContractsAchievements',
                 type='ref|list|ref|out',
+                key='AchievementItems.dat',
             ),
             Field(
-                name='Keys2',
+                name='CombineAchievements',
                 type='ref|list|ref|out',
+                key='AchievementItems.dat',
             ),
             Field(
                 name='Unknown1',
@@ -5493,16 +5495,21 @@ specification = Specification({
                 type='ref|list|int',
             ),
             Field(
-                name='Key2',
+                name='ShopTagKey',
                 type='ref|out',
+                key='ShopTag.dat',
             ),
             Field(
-                name='Flag1',
+                name='IsHardmode',
                 type='bool',
             ),
             Field(
-                name='Unknown2',
+                name='DescriptionHardmode',
                 type='ref|string',
+            ),
+            Field(
+                name='IsGold',
+                type='bool',
             ),
         ),
     ),
@@ -6057,6 +6064,14 @@ specification = Specification({
             Field(
                 name='Flag1',
                 type='bool',
+            ),
+            Field(
+                name='Unknown0',
+                type='ref|list|int',
+            ),
+            Field(
+                name='Unknown2',
+                type='ref|list|int',
             ),
         ),
     ),
@@ -18531,11 +18546,6 @@ specification = Specification({
                 type='int',
             ),
             Field(
-                name='NPCShop',
-                type='ref|out',
-                key='NPCShop.dat',
-            ),
-            Field(
                 name='NPCAudios1',
                 type='ref|list|ref|out',
                 key='NPCAudio.dat',
@@ -18565,12 +18575,16 @@ specification = Specification({
                 key='NPCDialogueStyles.dat',
             ),
             Field(
+                name='Flag0',
+                type='bool',
+            ),
+            Field(
                 name='Unknown4',
                 type='ref|out',
             ),
             Field(
-                name='Flag0',
-                type='bool',
+                name='Gender',
+                type='ref|string',
             ),
         ),
     ),
@@ -20770,6 +20784,32 @@ specification = Specification({
                 name='Id',
                 type='ref|string',
                 unique=True,
+            ),
+        ),
+    ),
+    'ShopTag.dat': File(
+        fields=(
+            Field(
+                name='Id',
+                type='ref|string',
+            ),
+            Field(
+                name='Name',
+                type='ref|string',
+            ),
+            Field(
+                name='IsCategory',
+                type='bool',
+            ),
+            Field(
+                name='Category',
+                type='ref|self',
+                key='ShopTag.dat',
+            ),
+            Field(
+                name='SkillGem',
+                type='ref|list|ref|out',
+                key='BaseItemTypes.dat',
             ),
         ),
     ),

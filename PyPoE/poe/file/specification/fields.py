@@ -511,7 +511,7 @@ class Field(_Common, ReprMixin):
 
     Variable/Pointer types:
         ref|<other>
-            32 bit value, unsigned
+            32 or 64 bit value, unsigned
 
             a pointer to the data section
         ref|list|<other>
