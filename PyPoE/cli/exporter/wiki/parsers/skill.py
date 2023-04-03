@@ -33,7 +33,7 @@ See PyPoE/LICENSE
 
 # Python
 import os
-from typing import Union
+from typing import List, Tuple, Union
 import warnings
 import traceback
 from collections import OrderedDict, defaultdict
@@ -330,7 +330,7 @@ class SkillParserShared(parser.BaseParser):
             infobox[prefix + 'id'] = val[0]
             infobox[prefix + 'value'] = val[1]
 
-    def _translate_stats(self, stats, values: Union[list[int], list[tuple[int, int]]], trans_file: TranslationFile, data: defaultdict, stat_order: defaultdict) -> OrderedDict:
+    def _translate_stats(self, stats, values: Union[List[int], List[Tuple[int, int]]], trans_file: TranslationFile, data: defaultdict, stat_order: defaultdict) -> OrderedDict:
         stats_output = OrderedDict()
 
         trans_rslt = trans_file.get_translation(
