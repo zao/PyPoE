@@ -165,7 +165,7 @@ class DatValue:
         elif self.is_list:
             return repr([repr(dv) for dv in self.children])
         else:
-            return 'DatValue(' + repr(self.value) +')'
+            return 'DatValue(' + repr(self.value) + ')'
 
     def __lt__(self, other):
         if not isinstance(other, DatValue):
@@ -228,7 +228,8 @@ class DatValue:
         elif self.is_pointer:
             size = self.child.size
         else:
-            raise TypeError('Only supported on DatValue instances with data (lists, pointers)')
+            raise TypeError(
+                'Only supported on DatValue instances with data (lists, pointers)')
         return size
 
     def _get_data_start_offset(self):
@@ -252,7 +253,8 @@ class DatValue:
         elif self.is_pointer:
             return self.value
         else:
-            raise TypeError('Only supported on DatValue instances with data (lists, pointers)')
+            raise TypeError(
+                'Only supported on DatValue instances with data (lists, pointers)')
 
     def _get_data_end_offset(self):
         """
@@ -393,7 +395,8 @@ class DatRecord(list):
     def __getitem__(self, item):
         if isinstance(item, str):
             if item in self.parent.table_columns:
-                value = list.__getitem__(self, self.parent.table_columns[item]['index'])
+                value = list.__getitem__(
+                    self, self.parent.table_columns[item]['index'])
                 if isinstance(value, DatValue):
                     value = value.get_value()
                 return value
@@ -408,7 +411,8 @@ class DatRecord(list):
         return list.__getitem__(self, item)
 
     def __repr__(self):
-        stuff = ["{%s: %s}" % (k, self[i]) for i, k in enumerate(self.parent.table_columns)]
+        stuff = ["{%s: %s}" % (k, self[i])
+                 for i, k in enumerate(self.parent.table_columns)]
         return '[%s]' % ', '.join(stuff)
     '''def find_all(self, key, value):
         row_index = self._get_column_index(key)
@@ -582,7 +586,8 @@ class DatReader(ReprMixin):
                 try:
                     remainder, cast_type = self._get_cast_type(remainder)
                 except UnboundLocalError as e:
-                    warnings.warn(f'{_file_name}, field {k.name} has unknown cast type.')
+                    warnings.warn(
+                        f'{_file_name}, field {k.name} has unknown cast type.')
                     raise e
                 casts.append(cast_type)
             self.cast_size += casts[0][1]
@@ -712,7 +717,7 @@ class DatReader(ReprMixin):
                 # values for size and pointer. The pointer is always zero and will be discarded when
                 # reading.
                 size *= 2
-                cast *= 2 
+                cast *= 2
             elif caststr.startswith('ref|generic') or caststr.startswith('ref|self'):
                 cast_type = self.CastTypes.POINTER_SELF
             else:
@@ -722,13 +727,15 @@ class DatReader(ReprMixin):
 
     def _cast_from_spec(self, specification, casts, parent=None, offset=None, data=None, queue_data=None):
         if casts[0][0] in (self.CastTypes.VALUE, self.CastTypes.POINTER_SELF, self.CastTypes.POINTER_OUT):
-            ivalue = data[0] if data else struct.unpack('<' + casts[0][2], self._file_raw[offset:offset+casts[0][1]])[0]
+            ivalue = data[0] if data else struct.unpack(
+                '<' + casts[0][2], self._file_raw[offset:offset+casts[0][1]])[0]
 
             if ivalue in (-0x1010102, 0xFEFEFEFE, -0x101010101010102, 0xFEFEFEFEFEFEFEFE, 0xFFFFFFFF):
                 ivalue = None
 
             if self.use_dat_value:
-                value = DatValue(ivalue, offset, casts[0][1], parent, specification)
+                value = DatValue(
+                    ivalue, offset, casts[0][1], parent, specification)
             else:
                 value = ivalue
         elif casts[0][0] == self.CastTypes.STRING:
@@ -742,21 +749,25 @@ class DatReader(ReprMixin):
                 # with \x00
                 # UTF-16 must be at least a multiple of 2
                 while (offset_new-offset) % 2:
-                    offset_new = self._file_raw.find(b'\x00\x00\x00\x00', offset_new+1)
+                    offset_new = self._file_raw.find(
+                        b'\x00\x00\x00\x00', offset_new+1)
                 string = self._file_raw[offset:offset_new].decode('utf-16')
             # Store the offset including the null terminator
             if self.use_dat_value:
-                value = DatValue(string, offset, offset_new-offset+4, parent, specification)
+                value = DatValue(string, offset, offset_new -
+                                 offset+4, parent, specification)
             else:
                 value = string
 
         elif casts[0][0] in (self.CastTypes.POINTER_LIST, self.CastTypes.POINTER):
-            data = data if data else struct.unpack('<' + casts[0][2], self._file_raw[offset:offset+casts[0][1]])
+            data = data if data else struct.unpack(
+                '<' + casts[0][2], self._file_raw[offset:offset+casts[0][1]])
             data_offset = data[-1] + self.data_offset
 
             # Instance..
             if self.use_dat_value:
-                value = DatValue(data[0] if casts[0][0] == 4 else data, offset, casts[0][1], parent, specification)
+                value = DatValue(
+                    data[0] if casts[0][0] == 4 else data, offset, casts[0][1], parent, specification)
 
                 if casts[0][0] == self.CastTypes.POINTER_LIST:
                     value.children = []
@@ -764,17 +775,24 @@ class DatReader(ReprMixin):
                         '''if offset < self._data_offset_current:
                             print(self._data_offset_current, offset)
                             raise SpecificationError("Overlapping offset for cast %s:%s" % (parent.is_list, casts[0]))'''
-                        value.children.append(self._cast_from_spec(specification, casts[1:], value, data_offset+i*casts[1:][0][1]))
+                        value.children.append(self._cast_from_spec(
+                            specification, casts[1:], value, data_offset+i*casts[1:][0][1]))
                 elif casts[0][0] == self.CastTypes.POINTER:
-                    value.child = self._cast_from_spec(specification, casts[1:], value, data_offset)
+                    value.child = self._cast_from_spec(
+                        specification, casts[1:], value, data_offset)
                 self.data_parsed.append(value)
             else:
                 if casts[0][0] == self.CastTypes.POINTER_LIST:
                     value = []
                     for i in range(0, data[0]):
-                        value.append(self._cast_from_spec(specification, casts[1:], value, data_offset+i*casts[1:][0][1]))
+                        if casts[1:][0][1] is None:
+                            return None
+                        else:
+                            value.append(self._cast_from_spec(
+                                specification, casts[1:], value, data_offset+i*casts[1:][0][1]))
                 elif casts[0][0] == self.CastTypes.POINTER:
-                    value = self._cast_from_spec(specification, casts[1:], None, data_offset)
+                    value = self._cast_from_spec(
+                        specification, casts[1:], None, data_offset)
         # TODO:
         # if parent:
         #    self._data_offset_current = offset
@@ -801,14 +819,15 @@ class DatReader(ReprMixin):
                 i += 1
             else:
                 cell_data = (row_unpacked[i], )
-            row_data.append(self._cast_from_spec(spec, casts, data=cell_data, offset=offset))
+            row_data.append(self._cast_from_spec(
+                spec, casts, data=cell_data, offset=offset))
             offset += casts[0][1]
             i += 1
 
         return row_data
 
     def read(self, raw):
-        # TODO consider memory issues for saving raw contents
+        # TODO: consider memory issues for saving raw contents
         if isinstance(raw, bytes):
             self._file_raw = raw
         elif isinstance(raw, BytesIO):
@@ -1056,7 +1075,8 @@ class RelationalReader(AbstractFileCache):
         if value.is_pointer:
             self._dv_set_value(value.child, other, key, offset)
         elif value.is_list:
-            [self._dv_set_value(dv, other, key, offset) for dv in value.children]
+            [self._dv_set_value(dv, other, key, offset)
+             for dv in value.children]
         else:
             value.value = self._set_value(value.value, other, key, offset)
 
@@ -1099,10 +1119,10 @@ class RelationalReader(AbstractFileCache):
             return self.files[file_name]
 
         df = self._create_instance(file_name)
-        
+
         # Helpful during the 3.20 patch .dat purge and transition to reading .dat64 format.
         # TODO: Comment this out before committing.
-        
+
         # print(df)
 
         self.files[file_name] = df

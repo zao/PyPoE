@@ -1911,6 +1911,22 @@ specification = Specification({
                 name='NotOnAtlas',
                 type='bool',
             ),
+            Field(
+                name='Unknown2',
+                type='int',
+            ),
+            Field(
+                name='Unknown3',
+                type='int',
+            ),
+            Field(
+                name='Unknown4',
+                type='int',
+            ),
+            Field(
+                name='Unknown5',
+                type='int',
+            ),
         ),
     ),
     'AtlasNodeDefinition.dat': File(
@@ -2262,6 +2278,14 @@ specification = Specification({
             Field(
                 name='Key2',
                 type='ref|out',
+            ),
+            Field(
+                name='Flag2',
+                type='bool',
+            ),
+            Field(
+                name='Achievement',
+                type='ref|list|ref|out',
             ),
         ),
     ),
@@ -3140,7 +3164,7 @@ specification = Specification({
     'BlightCraftingItems.dat': File(
         fields=(
             Field(
-                name='BaseItemTypesKey',
+                name='Oil',
                 type='ref|out',
                 key='BaseItemTypes.dat',
                 unique=True,
@@ -3155,8 +3179,12 @@ specification = Specification({
                 key='AchievementItems.dat',
             ),
             Field(
-                name='Unknown0',
+                name='UseType',
                 type='int',
+            ),
+            Field(
+                name='NameShort',
+                type='ref|string',
             ),
         ),
     ),
@@ -3871,10 +3899,6 @@ specification = Specification({
                 type='bool',
             ),
             Field(
-                name='Flag11',
-                type='bool',
-            ),
-            Field(
                 name='Key0',
                 type='ref|out',
             ),
@@ -3967,6 +3991,10 @@ specification = Specification({
                 name='Unknown5',
                 type='ref|string',
             ),
+            Field(
+                name='Unknown6',
+                type='ref|list|ref|out',
+            ),
         ),
     ),
     'BuffTemplates.dat': File(
@@ -4028,7 +4056,7 @@ specification = Specification({
                 type='bool',
             ),
             Field(
-                name='SentinelStat', # Looks Sentinel-related.
+                name='SentinelStat',  # Looks Sentinel-related.
                 type='ref|out',
                 key='Stats.dat',
             ),
@@ -4060,6 +4088,14 @@ specification = Specification({
             ),
             Field(
                 name='Unknown1',
+                type='ref|string',
+            ),
+            Field(
+                name='Unknown2',
+                type='ref|string',
+            ),
+            Field(
+                name='Unknown3',
                 type='ref|string',
             ),
         ),
@@ -4113,7 +4149,23 @@ specification = Specification({
             ),
             Field(
                 name='Unknown6',
+                type='float',
+            ),
+            Field(
+                name='Unknown7',
                 type='int',
+            ),
+            Field(
+                name='Unknown8',
+                type='float',
+            ),
+            Field(
+                name='Flag2',
+                type='bool',
+            ),
+            Field(
+                name='Unknown9',
+                type='float',
             ),
         ),
     ),
@@ -4750,6 +4802,42 @@ specification = Specification({
                 name='Key9',
                 type='ref|out',
             ),
+            Field(
+                name='Double',
+                type='ref|out',
+            ),
+            Field(
+                name='MirageWarrior',
+                type='ref|out',
+            ),
+            Field(
+                name='DoubleTwo',
+                type='ref|out',
+            ),
+            Field(
+                name='DarkExile',
+                type='ref|out',
+            ),
+            Field(
+                name='Attr',
+                type='ref|string',
+            ),
+            Field(
+                name='AttrLowercase',
+                type='ref|string',
+            ),
+            Field(
+                name='Script',
+                type='ref|string',
+            ),
+            Field(
+                name='Unknown7',
+                type='ref|out',
+            ),
+            Field(
+                name='Unknown8',
+                type='int',
+            ),
         ),
     ),
     'ChestClusters.dat': File(
@@ -5144,7 +5232,8 @@ specification = Specification({
                 type='ref|string',
             ),
             Field(
-                name='Unknown0', #Might be a rate divisor. The per-minute costs are 60 while normal costs are 1
+                # Might be a rate divisor. The per-minute costs are 60 while normal costs are 1
+                name='Unknown0',
                 type='int',
             ),
         ),
@@ -5318,7 +5407,7 @@ specification = Specification({
             ),
             VirtualField(
                 name='AddModOrEnchantment',
-                fields=('AddMod','AddEnchantment'),
+                fields=('AddMod', 'AddEnchantment'),
             )
         ),
     ),
@@ -6312,8 +6401,9 @@ specification = Specification({
                 name='Unknown5',
                 type='int',
             ),
-            Field( 
-                name='EndlessDelveMonsterLevel', #This is pobably endless delve mosnter level scaling.
+            Field(
+                # This is pobably endless delve mosnter level scaling.
+                name='EndlessDelveMonsterLevel',
                 type='int',
             ),
         ),
@@ -9259,6 +9349,10 @@ specification = Specification({
                 name='IncrementalEffectiveness',
                 type='float',
             ),
+            Field(
+                name='Unknown0',
+                type='int',
+            ),
         ),
     ),
     'GrantedEffectStatSetsPerLevel.dat': File(
@@ -11764,7 +11858,7 @@ specification = Specification({
             Field(
                 name='Tags',
                 type='ref|list|ref|out',
-                #key='HideoutDoodadTags.dat',
+                # key='HideoutDoodadTags.dat',
             ),
             Field(
                 name='Flag1',
@@ -11777,7 +11871,7 @@ specification = Specification({
             Field(
                 name='Category',
                 type='ref|out',
-                #key='HideoutDoodadCategory.dat',
+                # key='HideoutDoodadCategory.dat',
             ),
             Field(
                 name='Unknown0',
@@ -11794,6 +11888,10 @@ specification = Specification({
             Field(
                 name='Flag3',
                 type='bool',
+            ),
+            Field(
+                name='Key2',
+                type='ref|out',
             ),
         ),
     ),
@@ -12451,6 +12549,18 @@ specification = Specification({
                 name='Cost4Values',
                 type='ref|list|int',
             ),
+            Field(
+                name='Unknown0',
+                type='ref|string',
+            ),
+            Field(
+                name='Unknown1',
+                type='int',
+            ),
+            Field(
+                name='Unknown2',
+                type='int',
+            ),
         )
     ),
     'ItemClasses.dat': File(
@@ -12546,37 +12656,42 @@ specification = Specification({
                 type='bool',
             ),
             Field(
-                name='Flag0',
+                name='CanUpgradeRarity',
                 type='bool',
             ),
-            Field( # added in 3.17
+            Field(  # added in 3.17
                 name='Flag1',
                 type='bool',
             ),
-            Field( # added in 3.18
+            Field(  # added in 3.18
                 name='Flag2',
                 type='bool',
             ),
-            Field(
-                name='SizeDimensions', # Hybrid Flasks seems wrong for this but the rest seems to match.
+            Field(  # updated in 3.21
+                # Hybrid Flasks seems wrong for this but the rest seems to match.
+                name='MaxInventoryDimensions',
                 type='ref|list|int',
             ),
             Field(
                 name='Flags',
                 type='ref|list|int',
             ),
-            Field( # added in 3.19
-                name='Flag3',
+            Field(  # added in 3.19
+                name='IsUnmodifiable',
                 type='bool',
             ),
-            Field( # added in 3.19
-                name='Flag4',
+            Field(  # added in 3.19
+                name='CanBeFractured',
                 type='bool',
             ),
             Field(
                 name='EquipAchievements',
                 type='ref|out',
                 key='AchievementItems.dat',
+            ),
+            Field(  # added in 3.21
+                name='Flag4',
+                type='bool',
             ),
         ),
     ),
@@ -12632,9 +12747,9 @@ specification = Specification({
     'ItemExperiencePerLevel.dat': File(
         fields=(
             Field(
-                name='BaseItemTypesKey',
+                name='ItemExperienceType',
                 type='ref|out',
-                key='BaseItemTypes.dat',
+                key='ItemExperienceTypes.dat',
             ),
             Field(
                 name='ItemCurrentLevel',
@@ -12643,6 +12758,15 @@ specification = Specification({
             Field(
                 name='Experience',
                 type='int',
+            ),
+        ),
+    ),
+    'ItemExperienceTypes.dat': File(
+        fields=(
+            Field(
+                name='Id',
+                type='ref|string',
+                unique=True,
             ),
         ),
     ),
@@ -14605,7 +14729,7 @@ specification = Specification({
                 type='int',
             ),
             Field(
-                name='HellscapeTier', #AKA Scourge
+                name='HellscapeTier',  # AKA Scourge
                 type='int',
             ),
             Field(
@@ -14622,6 +14746,10 @@ specification = Specification({
             ),
             Field(
                 name='SanctumTier',
+                type='int',
+            ),
+            Field(
+                name='CrucibleTier',
                 type='int',
             ),
         ),
@@ -15664,6 +15792,10 @@ specification = Specification({
                 file_path=True,
                 file_ext='.epk',
             ),
+            Field(
+                name='Flag1',
+                type='bool',
+            ),
         ),
     ),
     'MiscObjects.dat': File(
@@ -16228,7 +16360,8 @@ specification = Specification({
             ),
             VirtualField(
                 name='StatsKeys',
-                fields=('StatsKey1', 'StatsKey2', 'StatsKey3', 'StatsKey4', 'StatsKey5', 'StatsKey6'),
+                fields=('StatsKey1', 'StatsKey2', 'StatsKey3',
+                        'StatsKey4', 'StatsKey5', 'StatsKey6'),
             ),
             VirtualField(
                 name='Stats',
@@ -16236,7 +16369,8 @@ specification = Specification({
             ),
             VirtualField(
                 name='GenerationWeight',
-                fields=('GenerationWeight_TagsKeys', 'GenerationWeight_Values'),
+                fields=('GenerationWeight_TagsKeys',
+                        'GenerationWeight_Values'),
                 zip=True,
             ),
         ),
@@ -17618,8 +17752,8 @@ specification = Specification({
                 type='int',
             ),
             Field(
-                name='Data1',
-                type='ref|list|byte',
+                name='ScourgeVariant',
+                type='ref|list|string',
             ),
             Field(
                 name='Unknown37',
@@ -17632,6 +17766,18 @@ specification = Specification({
             Field(
                 name='Unknown39',
                 type='int',
+            ),
+            Field(
+                name='Unknown40',
+                type='int',
+            ),
+            Field(
+                name='Unknown41',
+                type='int',
+            ),
+            Field(
+                name='Unknown42',
+                type='bool',
             ),
         ),
     ),
@@ -19210,10 +19356,10 @@ specification = Specification({
             Field(
                 name='AtlasInfluenceSet',
                 type='ref|out',
-                #key='AtlasInfluenceSets.dat', FIXME: Define spec
+                # key='AtlasInfluenceSets.dat', FIXME: Define spec
             ),
             Field(
-                name='SoundEffect', #Used by the atlas keystones. Values from 380-392
+                name='SoundEffect',  # Used by the atlas keystones. Values from 380-392
                 type='ref|out',
             ),
             Field(
@@ -19252,11 +19398,20 @@ specification = Specification({
                 name='Unknown8',
                 type='int',
             ),
+            Field(
+                name='Key1',
+                type='ref|list|ref|out',
+            ),
+            Field(
+                name='Unknown9',
+                type='bool',
+            ),
         ),
         virtual_fields=(
             VirtualField(
                 name='StatValues',
-                fields=('Stat1Value', 'Stat2Value', 'Stat3Value', 'Stat4Value', 'Stat5Value'),
+                fields=('Stat1Value', 'Stat2Value', 'Stat3Value',
+                        'Stat4Value', 'Stat5Value'),
             ),
             VirtualField(
                 name='Stats',
@@ -21136,6 +21291,10 @@ specification = Specification({
                 name='Unknown2',
                 type='int',
             ),
+            Field(
+                name='Unknown3',
+                type='ref|out',
+            ),
         ),
     ),
     'SkillMineVariations.dat': File(
@@ -21558,10 +21717,6 @@ specification = Specification({
                 type='int',
             ),
             Field(
-                name='Flag1',
-                type='bool',
-            ),
-            Field(
                 name='Text',
                 type='ref|string',
             ),
@@ -21588,7 +21743,7 @@ specification = Specification({
                 type='bool',
             ),
             Field(
-                name='Unknown0',
+                name='Hash32',
                 type='int',
             ),
             Field(
@@ -21598,7 +21753,7 @@ specification = Specification({
                 key_id='Id',
             ),
             Field(
-                name='Key0',
+                name='Category',
                 type='ref|out',
             ),
             Field(
@@ -21618,6 +21773,10 @@ specification = Specification({
                 name='ContextFlags',
                 type='ref|list|ref|out',
                 key='VirtualStatContextFlags.dat',
+            ),
+            Field(
+                name='Unknown0',
+                type='ref|list|ref|out',
             ),
         ),
     ),
@@ -24130,6 +24289,10 @@ specification = Specification({
             ),
             Field(
                 name='Unknown55',
+                type='ref|out',
+            ),
+            Field(
+                name='Unknown56',
                 type='ref|out',
             ),
         ),

@@ -608,7 +608,7 @@ class MAP_FRAGMENT_FAMILIES(IntEnumOverride):
     """
     Representation of map fragment families (MapFragmentFamilies.dat)
     """
-    BESTIARY_AND_SULPHITE = 0 #Maybe just master-related?
+    BESTIARY_AND_SULPHITE = 0  # Maybe just master-related?
     BREACH = 1
     CARTOGRAPHY_SCARAB = 2
     RELIQUARY_SCARAB = 3
@@ -726,7 +726,8 @@ class MOD_DOMAIN(IntEnumOverride):
     SENTINEL = 30
     MEMORY_LINES = 31
     SANCTUM_RELIC = 32
-    MODS_DISALLOWED = 33 # Used in BaseItemTypes.dat, not Mods.dat.
+    MODS_DISALLOWED = 33  # Used in BaseItemTypes.dat, not Mods.dat.
+    CRUCIBLE = 34
 
     # legacy names
     MASTER = CRAFTED
@@ -810,6 +811,8 @@ class MOD_GENERATION_TYPE(IntEnumOverride):
     ARCHNEMESIS = 28
     SEARING_EXARCH_IMPLICIT = 29
     EATER_OF_WORLDS_IMPLICIT = 30
+    CRUCIBLE_TREE = 31
+    CRUCIBLE_UNIQUE_TREE = 32
 
 
 class WORDLISTS(IntEnumOverride):

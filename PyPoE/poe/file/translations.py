@@ -149,7 +149,8 @@ __all__ = [
 ]
 
 CUSTOM_TRANSLATION_FILE = os.path.join(DATA_DIR, 'custom_descriptions.txt')
-HARDCODED_TRANSLATION_FILE = os.path.join(DATA_DIR, 'hardcoded_descriptions.txt')
+HARDCODED_TRANSLATION_FILE = os.path.join(
+    DATA_DIR, 'hardcoded_descriptions.txt')
 
 regex_translation_string = re.compile(
     r'^'
@@ -259,7 +260,7 @@ class Translation(TranslationReprMixin):
 
         if self.languages != other.languages:
             return False
-        
+
         if self.identifier != other.identifier:
             return False
 
@@ -400,7 +401,7 @@ class TranslationLanguage(TranslationReprMixin):
         temp = []
         for ts in self.strings:
             # TODO: check whether this really is a non issue now
-            #if len(values) != len(ts.range):
+            # if len(values) != len(ts.range):
             #   raise Exception('mismatch %s' % ts.range)
 
             match = ts.match_range(test_values)
@@ -699,7 +700,7 @@ class TranslationString(TranslationReprMixin):
                                 range_fmt = self._NEGATIVE_RANGE_FORMAT
                             else:
                                 range_fmt = self._RANGE_FORMAT
-                        #TODO: how to show ranges for text stuff?
+                        # TODO: how to show ranges for text stuff?
                         except TypeError:
                             range_fmt = self._RANGE_FORMAT
                         value = range_fmt.format(
@@ -948,7 +949,7 @@ class TranslationQuantifierHandler(TranslationReprMixin):
     In the GGG files often there are qualifiers specified to adjust the output
     of the values; for example, a value might be negated (i.e so that it would
     show "5% reduced Damage" instead of "-5% reduced Damage").
-    
+
     Attributes
     ----------
     index_handlers : dict[str, list[int]]
@@ -990,7 +991,7 @@ class TranslationQuantifierHandler(TranslationReprMixin):
         return True
 
     def __hash__(self) -> int:
-        #return hash((tuple(self.registered_handlers.keys()), tuple(self.registered_handlers.values())))
+        # return hash((tuple(self.registered_handlers.keys()), tuple(self.registered_handlers.values())))
         return hash(tuple(self.index_handlers.keys()))
 
     def _warn_uncaptured(self, name: str):
@@ -1030,7 +1031,7 @@ class TranslationQuantifierHandler(TranslationReprMixin):
         if not isinstance(other, TranslationQuantifierHandler):
             raise TypeError
 
-        #if self.registered_handlers != other.registered_handlers:
+        # if self.registered_handlers != other.registered_handlers:
         _diff_dict(self.index_handlers, other.index_handlers)
 
     def _get_handler_func(self, handler_name: str) -> Callable:
@@ -1067,7 +1068,8 @@ class TranslationQuantifierHandler(TranslationReprMixin):
                     try:
                         self.index_handlers[handler.id].append(int(args[0]))
                     except ValueError as e:
-                        warnings.warn(f'Broken quantifier "{string}" - Error: {e.args[0]}', TranslationWarning)
+                        warnings.warn(
+                            f'Broken quantifier "{string}" - Error: {e.args[0]}', TranslationWarning)
                 elif handler.type == TranslationQuantifier.QuantifierTypes.STRING:
                     self.string_handlers[handler.id] = args
             else:
@@ -1451,7 +1453,8 @@ class TranslationFile(AbstractFileReadOnly):
             match_next = regex_tokens.search(data, offset)
             offset_max = match_next.start() if match_next else len(data)
             if match.group('description'):
-                translation = Translation(identifier=match.group('identifier'), tf_index=translation_index)
+                translation = Translation(identifier=match.group(
+                    'identifier'), tf_index=translation_index)
 
                 # Parse the IDs for the translations
                 id_count = regex_int.search(data, offset, offset_max)
@@ -1575,7 +1578,8 @@ class TranslationFile(AbstractFileReadOnly):
                 elif self._base_dir:
                     real_path = os.path.join(
                         self._base_dir, match.group('include'))
-                    other_tf = TranslationFile(real_path, base_dir=self._base_dir)
+                    other_tf = TranslationFile(
+                        real_path, base_dir=self._base_dir)
                     self.merge(other_tf)
                     translation_index += len(other_tf.translations)
                 else:
@@ -1620,7 +1624,8 @@ class TranslationFile(AbstractFileReadOnly):
                 translation.diff(other)
                 print('')'''
 
-                warnings.warn(f'Duplicate id "{translation_id}"', DuplicateIdentifierWarning)
+                warnings.warn(
+                    f'Duplicate id "{translation_id}"', DuplicateIdentifierWarning)
                 self.translations_hash[translation_id].append(translation)
         else:
             self.translations_hash[translation_id] = [translation, ]
@@ -1666,7 +1671,7 @@ class TranslationFile(AbstractFileReadOnly):
                 trans.tf_index += translation_count
                 self._add_translation_hashed(trans_id, trans)
 
-        #self.translations_hash.update(other.translations_hash)
+        # self.translations_hash.update(other.translations_hash)
 
     def get_translation(self,
                         tags: List[str],
@@ -1796,7 +1801,7 @@ class TranslationFile(AbstractFileReadOnly):
             else:
                 trans_found_lines.append('')
                 values_parsed.append([])
-            
+
             tf_indices.append(tr.tf_index)
 
         if full_result:
@@ -2483,6 +2488,10 @@ TranslationQuantifier(
     id='canonical_line',
     type=TranslationQuantifier.QuantifierTypes.STRING,
     arg_size=0,
+)
+
+TranslationQuantifier(
+    id='weapon_tree_unique_base_type_name',
 )
 
 TranslationQuantifier(

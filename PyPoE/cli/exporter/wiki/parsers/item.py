@@ -61,7 +61,7 @@ from PyPoE.cli.exporter.wiki.parsers.skill import SkillParserShared
 
 
 def _apply_column_map(infobox, column_map, list_object):
-    
+
     for k, data in column_map:
         value = list_object[k]
         if data.get('condition') and not data['condition'](value):
@@ -108,11 +108,13 @@ def _simple_conflict_factory(data):
 
     return _conflict_handler
 
+
 def _colorize_rgba(img, black, white, mid=None, blackpoint=0, whitepoint=255, midpoint=127):
     img_a = img.getchannel('A')
     img_gray = ImageOps.grayscale(img)
-    
-    ret = ImageOps.colorize(img_gray, black, white, mid, blackpoint, whitepoint, midpoint)
+
+    ret = ImageOps.colorize(img_gray, black, white, mid,
+                            blackpoint, whitepoint, midpoint)
     ret.putalpha(img_a)
     return ret
 
@@ -217,8 +219,7 @@ class WikiCondition(parser.WikiCondition):
         'sentinel_charge',
     )
     COPY_MATCH = re.compile(
-        r'^(recipe|implicit[0-9]+_(?:text|random_list)).*'
-        , re.UNICODE)
+        r'^(recipe|implicit[0-9]+_(?:text|random_list)).*', re.UNICODE)
 
     NAME = 'Base item'
     INDENT = 40
@@ -236,8 +237,7 @@ class MapItemWikiCondition(WikiCondition):
 class UniqueMapItemWikiCondition(MapItemWikiCondition):
     NAME = 'Item'
     COPY_MATCH = re.compile(
-        r'^(recipe|(ex|im)plicit[0-9]+_(?:text|random_list)).*'
-        , re.UNICODE)
+        r'^(recipe|(ex|im)plicit[0-9]+_(?:text|random_list)).*', re.UNICODE)
 
 
 class ProphecyWikiCondition(WikiCondition):
@@ -424,11 +424,12 @@ class ItemsParser(SkillParserShared):
         'Ritual': '3.13.0',
         'Ultimatum': '3.14.0',
         'Expedition': '3.15.0',
-        'Hellscape': '3.16.0', # AKA Scourge
+        'Hellscape': '3.16.0',  # AKA Scourge
         'Archnemesis': '3.17.0',
         'Sentinel': '3.18.0',
-        'Lake': '3.19.0', # AKA Lake of Kalandra
+        'Lake': '3.19.0',  # AKA Lake of Kalandra
         'Sanctum': '3.20.0',  # AKA The Forbidden Sanctum
+        'Crucible': '3.21.0',
     }
 
     _IGNORE_DROP_LEVEL_CLASSES = (
@@ -464,8 +465,8 @@ class ItemsParser(SkillParserShared):
         # Demigod items
         'Metadata/Items/Belts/BeltDemigods1',
         'Metadata/Items/Rings/RingDemigods1',
-        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgradeFinal', # Ivory Watchstone Base Item
-        
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgradeFinal',  # Ivory Watchstone Base Item
+
         # Old Watchstones
         # Tirn's End:
         'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable1_2',
@@ -658,7 +659,7 @@ class ItemsParser(SkillParserShared):
             # =================================================================
             # Helmets
             # =================================================================
-            'Metadata/Items/Armours/Helmets/HelmetStrInt4': '', #Crusader Helmet
+            'Metadata/Items/Armours/Helmets/HelmetStrInt4': '',  # Crusader Helmet
 
             'Metadata/Items/Weapons/OneHandWeapons/OneHandAxes/OneHandAxe22':
                 '',
@@ -674,7 +675,7 @@ class ItemsParser(SkillParserShared):
             # =================================================================
             'Metadata/Items/Weapons/TwoHandWeapons/TwoHandSwords/StormBladeTwoHand':
                 ' (Two Handed Sword)',
-            
+
             # =================================================================
             # Boots
             # =================================================================
@@ -688,18 +689,18 @@ class ItemsParser(SkillParserShared):
                 ' (Fire and Cold Resistance)',
             'Metadata/Items/Armours/Boots/BootsAtlas3':
                 ' (Fire and Lightning Resistance)',
-            'Metadata/Items/Armours/Boots/BootsStrInt8': '', #Crusader Boots
+            'Metadata/Items/Armours/Boots/BootsStrInt8': '',  # Crusader Boots
             # =================================================================
             # Gloves
             # =================================================================
 
             # Legion Gloves
             'Metadata/Items/Armours/Gloves/GlovesStrInt7': '',
-            'Metadata/Items/Armours/Gloves/GlovesStrInt8': '', #Crusader Gloves
+            'Metadata/Items/Armours/Gloves/GlovesStrInt8': '',  # Crusader Gloves
             # =================================================================
             # Quivers
             # =================================================================
-            
+
             # Serrated Arrow Quiver
             'Metadata/Items/Quivers/QuiverNew1': '',
             'Metadata/Items/Quivers/Quiver6': ' (legacy)',
@@ -785,8 +786,8 @@ class ItemsParser(SkillParserShared):
             'Metadata/Items/Hideout/HideoutChestVaal': ' (hideout decoration)',
             'Metadata/Items/Hideout/HideoutIncaPyramid': ' (hideout decoration)',
             'Metadata/Items/Hideout/HideoutRitualTotem': ' (hideout decoration)',
-            'Metadata/Items/Hideout/HideoutCharredSkeleton' : " (hideout decoration)",
-            'Metadata/Items/Hideout/HideoutVaalWhispySmoke' : " (hideout decoration)",
+            'Metadata/Items/Hideout/HideoutCharredSkeleton': " (hideout decoration)",
+            'Metadata/Items/Hideout/HideoutVaalWhispySmoke': " (hideout decoration)",
             'Metadata/Items/Hideout/HideoutLionStatueKneeling': '',
             'Metadata/Items/Hideout/HideoutChurchRuins': ' (hideout decoration)',
             'Metadata/Items/Hideout/HideoutIncaLetter': ' (hideout decoration)',
@@ -1340,7 +1341,7 @@ class ItemsParser(SkillParserShared):
             'Metadata/Items/MicrotransactionItemEffects/Microtransaction'
             'ScholarBoots': ' (Mikrotransaktion)',
             'Metadata/Items/Pets/DemonLion': ' (Haustier)',
-        
+
             # =================================================================
             # Quest items
             # =================================================================
@@ -1466,7 +1467,8 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Gems/SkillGemNewPhaseRun',
         'Metadata/Items/Gems/SkillGemNewArcticArmour',
         'Metadata/Items/Gems/SkillGemFlammableShot',
-        'Metadata/Items/Gems/SkillGemCallOfTheWild',    # Skill gem's name causes errors when exporting to wiki page since it includes [DNT]
+        # Skill gem's name causes errors when exporting to wiki page since it includes [DNT]
+        'Metadata/Items/Gems/SkillGemCallOfTheWild',
 
 
         #
@@ -2499,12 +2501,9 @@ class ItemsParser(SkillParserShared):
         exp_level = []
         exp_total = []
         for row in self.rr['ItemExperiencePerLevel.dat64']:
-            if row['BaseItemTypesKey'] == base_item_type:
-                exp_new = row['Experience']
-                exp_level.append(exp_new - exp)
-                exp_total.append(exp_new)
-                exp = exp_new
-
+            exp = row['Experience']
+            exp_level = row['ItemCurrentLevel']
+            # print(row)
         if not exp_level:
             console('No experience progression found for "%s" - assuming max '
                     'level 1' %
@@ -2546,6 +2545,7 @@ class ItemsParser(SkillParserShared):
                 msg_name=base_item_type['Name'],
                 max_level=max_level
             )
+
             def get_stat(i, prefix, data):
                 return (data['%s_stat%s_id' % (prefix, i)],
                         data['%s_stat%s_value' % (prefix, i)])
@@ -2585,21 +2585,22 @@ class ItemsParser(SkillParserShared):
                     except KeyError:
                         break
                     set_stat(i, prefix, sid, sv)
-                    infobox[f'{prefix}_stat_text']=stext
+                    infobox[f'{prefix}_stat_text'] = stext
                     i += 1
 
             for k, v in list(primary.items()) + list(secondary.items()):
                 # Just override the stuff if needs be.
                 if 'stat' not in k and k not in infobox.keys():
                     infobox[k] = v
-            
+
             cp_stats_primary('quality_type1')
             cp_stats_primary('quality_type2')
             cp_stats_primary('quality_type3')
             cp_stats_primary('quality_type4')
 
             infobox['stat_text'] = '<br>'.join(
-                [x for x in (primary['stat_text'], secondary['stat_text']) if x]
+                [x for x in (primary['stat_text'],
+                             secondary['stat_text']) if x]
             )
 
             # Stat merging...
@@ -2655,10 +2656,11 @@ class ItemsParser(SkillParserShared):
                 if skill_gem[attr]:
                     try:
                         infobox[prefix + map2[attr]] = gem_stat_requirement(
-                            level=infobox[prefix + 'level_requirement'],
+                            level=infobox.get(prefix + 'level_requirement'),
                             gtype=gtype,
                             multi=skill_gem[attr],
                         )
+
                     except ValueError as e:
                         warnings.warn(str(e))
                     except KeyError:
@@ -2674,7 +2676,6 @@ class ItemsParser(SkillParserShared):
 
     def _type_level(self, infobox, base_item_type):
         infobox['required_level'] = base_item_type['DropLevel']
-
         return True
 
     _type_attribute = _type_factory(
@@ -2762,7 +2763,8 @@ class ItemsParser(SkillParserShared):
             infobox['buff_value%s' % i] = value
 
         if flasks['BuffDefinitionsKey']:
-            stats = [s['Id'] for s in flasks['BuffDefinitionsKey']['StatsKeys']]
+            stats = [s['Id']
+                     for s in flasks['BuffDefinitionsKey']['StatsKeys']]
             tr = self.tc['stat_descriptions.txt'].get_translation(
                 stats, flasks['BuffStatValues'], full_result=True,
                 lang=self._language,
@@ -2771,8 +2773,7 @@ class ItemsParser(SkillParserShared):
                 parser.make_inter_wiki_links(line) for line in tr.lines
             ])
 
-
-    #TODO: BuffDefinitionsKey, BuffStatValues
+    # TODO: BuffDefinitionsKey, BuffStatValues
     _type_flask = _type_factory(
         data_file='Flasks.dat64',
         data_mapping=(
@@ -2928,7 +2929,7 @@ class ItemsParser(SkillParserShared):
             )'''
 
     # 3.15
-    # This is a hack and should be done better.   
+    # This is a hack and should be done better.
     # TODO: properly parse map series
 
     def MapSeriesHelper(d):
@@ -3014,31 +3015,31 @@ class ItemsParser(SkillParserShared):
         #
         # Essence description
         #
-        get_str = lambda k: self.rr['ClientStrings.dat64'].index['Id'][
+        def get_str(k): return self.rr['ClientStrings.dat64'].index['Id'][
             'EssenceCategory%s' % k]['Text']
 
         essence_categories = OrderedDict((
             (None,
                 ('OneHandWeapon', 'TwoHandWeapon'),
-            ),
+             ),
             ('MeleeWeapon',
                 (),
-            ),
+             ),
             ('RangedWeapon',
                 ('Wand', 'Bow'),
-            ),
+             ),
             ('Weapon',
                 ('TwoHandMeleeWeapon', ),
-            ),
+             ),
             ('Armour',
                 ('Gloves', 'Boots', 'BodyArmour', 'Helmet', 'Shield')
-            ),
+             ),
             ('Quiver',
                 ()
-            ),
+             ),
             ('Jewellery',
                 ('Amulet', 'Ring', 'Belt')
-            ),
+             ),
         ))
 
         out = []
@@ -3087,7 +3088,7 @@ class ItemsParser(SkillParserShared):
             # TODO: Can't find items in clientstrings
             add_line(get_str('Other').replace('{0}', 'Items'), item_mod)
 
-        infobox['description'] +='<br />' +  '<br />'.join(out)
+        infobox['description'] += '<br />' + '<br />'.join(out)
 
         return True
 
@@ -3172,45 +3173,45 @@ class ItemsParser(SkillParserShared):
             'HarvestObjectsKey'][harvest_object.rowid]
 
         _apply_column_map(infobox, (
-                ('Text', {
-                    'template': 'seed_effect',
-                }),
-                ('Tier', {
-                    'template': 'seed_tier',
-                }),
-                ('GrowthCycles', {
-                    'template': 'seed_growth_cycles',
-                }),
-                ('RequiredNearbySeed_Tier', {
-                    'template': 'seed_required_nearby_seed_tier',
-                    'condition': lambda v: v > 0,
-                }),
-                ('RequiredNearbySeed_Amount', {
-                    'template': 'seed_required_nearby_seed_amount',
-                    'condition': lambda v: v > 0,
-                }),
-                ('WildLifeforceConsumedPercentage', {
-                    'template': 'seed_consumed_wild_lifeforce_percentage',
-                    'condition': lambda v: v > 0,
-                }),
-                ('VividLifeforceConsumedPercentage', {
-                    'template': 'seed_consumed_vivid_lifeforce_percentage',
-                    'condition': lambda v: v > 0,
-                }),
-                ('PrimalLifeforceConsumedPercentage', {
-                    'template': 'seed_consumed_primal_lifeforce_percentage',
-                    'condition': lambda v: v > 0,
-                }),
-                ('HarvestCraftOptionsKeys', {
-                    'template': 'seed_granted_craft_option_ids',
-                    'format': lambda v: ','.join([k['Id'] for k in v]),
-                    'condition': lambda v: v,
-                }),
-            ), harvest_seed)
+            ('Text', {
+                'template': 'seed_effect',
+            }),
+            ('Tier', {
+                'template': 'seed_tier',
+            }),
+            ('GrowthCycles', {
+                'template': 'seed_growth_cycles',
+            }),
+            ('RequiredNearbySeed_Tier', {
+                'template': 'seed_required_nearby_seed_tier',
+                'condition': lambda v: v > 0,
+            }),
+            ('RequiredNearbySeed_Amount', {
+                'template': 'seed_required_nearby_seed_amount',
+                'condition': lambda v: v > 0,
+            }),
+            ('WildLifeforceConsumedPercentage', {
+                'template': 'seed_consumed_wild_lifeforce_percentage',
+                'condition': lambda v: v > 0,
+            }),
+            ('VividLifeforceConsumedPercentage', {
+                'template': 'seed_consumed_vivid_lifeforce_percentage',
+                'condition': lambda v: v > 0,
+            }),
+            ('PrimalLifeforceConsumedPercentage', {
+                'template': 'seed_consumed_primal_lifeforce_percentage',
+                'condition': lambda v: v > 0,
+            }),
+            ('HarvestCraftOptionsKeys', {
+                'template': 'seed_granted_craft_option_ids',
+                'format': lambda v: ','.join([k['Id'] for k in v]),
+                'condition': lambda v: v,
+            }),
+        ), harvest_seed)
 
         return True
 
-    _type_harvest_seed =_type_factory(
+    _type_harvest_seed = _type_factory(
         data_file='HarvestObjects.dat64',
         data_mapping=(
             ('ObjectType', {
@@ -3219,7 +3220,7 @@ class ItemsParser(SkillParserShared):
             }),
         ),
         function=_harvest_seed_extra,
-        #fail_condition=True,
+        # fail_condition=True,
         row_index=True,
     )
 
@@ -3233,31 +3234,31 @@ class ItemsParser(SkillParserShared):
             'HarvestObjectsKey'][harvest_object.rowid]
 
         _apply_column_map(infobox, (
-                ('Radius', {
-                    'template': 'plant_booster_radius',
-                }),
-                ('Lifeforce', {
-                    'template': 'plant_booster_lifeforce',
-                    'condition': lambda v: v > 0,
-                }),
-                ('AdditionalCraftingOptionsChance', {
-                    'template': 'plant_booster_additional_crafting_options',
-                    'condition': lambda v: v > 0,
-                }),
-                ('RareExtraChances', {
-                    'template': 'plant_booster_extra_chances',
-                    'condition': lambda v: v > 0,
-                }),
-            ), harvest_plant_booster)
+            ('Radius', {
+                'template': 'plant_booster_radius',
+            }),
+            ('Lifeforce', {
+                'template': 'plant_booster_lifeforce',
+                'condition': lambda v: v > 0,
+            }),
+            ('AdditionalCraftingOptionsChance', {
+                'template': 'plant_booster_additional_crafting_options',
+                'condition': lambda v: v > 0,
+            }),
+            ('RareExtraChances', {
+                'template': 'plant_booster_extra_chances',
+                'condition': lambda v: v > 0,
+            }),
+        ), harvest_plant_booster)
 
         return True
 
-    _type_harvest_plant_booster =_type_factory(
+    _type_harvest_plant_booster = _type_factory(
         data_file='HarvestObjects.dat64',
         data_mapping=(
         ),
         function=_harvest_plant_booster_extra,
-        #fail_condition=True,
+        # fail_condition=True,
         row_index=True,
     )
 
@@ -3292,7 +3293,7 @@ class ItemsParser(SkillParserShared):
     '''
     This defines the expected data elements for an item class.
     '''
-    _cls_map = {  
+    _cls_map = {
         # Jewellery
         'Amulet': (_type_amulet, ),
         # Armour types
@@ -3328,7 +3329,7 @@ class ItemsParser(SkillParserShared):
         'HybridFlask': (_type_level, _type_flask, _type_flask_charges),
         'UtilityFlask': (_type_level, _type_flask, _type_flask_charges),
         'UtilityFlaskCritical': (_type_level, _type_flask,
-                                    _type_flask_charges),
+                                 _type_flask_charges),
         # Gems
         'Active Skill Gem': (_skill_gem, ),
         'Support Skill Gem': (_skill_gem, ),
@@ -3344,9 +3345,9 @@ class ItemsParser(SkillParserShared):
         'HarvestSeed': (_type_currency, _type_harvest_seed),
         'HarvestPlantBooster': (_type_currency, _type_harvest_plant_booster),
         # Labyrinth stuff
-        #'LabyrinthItem': (),
+        # 'LabyrinthItem': (),
         'LabyrinthTrinket': (_type_labyrinth_trinket, ),
-        #'LabyrinthMapItem': (),
+        # 'LabyrinthMapItem': (),
         # Misc
         'Map': (_type_map,),
         'MapFragment': (_type_map_fragment_mods,),
@@ -3393,7 +3394,7 @@ class ItemsParser(SkillParserShared):
 
             try:
                 return base_item_type['Name'] + ' (%s)' % \
-                       rr['Quest.dat64'].index['Id'][qid]['Name']
+                    rr['Quest.dat64'].index['Id'][qid]['Name']
             except KeyError:
                 console('Quest %s not found' % qid, msg=Msg.error)
         else:
@@ -3416,9 +3417,9 @@ class ItemsParser(SkillParserShared):
                     if match:
                         pageid = '%s (%s)' % (
                             base_item_type['Name'],
-                             self._LANG[language]['of'] % (
+                            self._LANG[language]['of'] % (
                                  match.group('id'), 7
-                             ),
+                            ),
                         )
                         infobox['inventory_icon'] = pageid
                         return pageid
@@ -3465,7 +3466,8 @@ class ItemsParser(SkillParserShared):
         # Maps are updated using the map series exporter.
         name = self._format_map_name(base_item_type)
 
-        name_with_wonky_series = self._format_map_name(base_item_type, map_series)
+        name_with_wonky_series = self._format_map_name(
+            base_item_type, map_series)
 
         # Each iteration of maps has it's own art
         infobox['inventory_icon'] = name_with_wonky_series
@@ -3511,8 +3513,8 @@ class ItemsParser(SkillParserShared):
     _conflict_resolver_map = {
         'Active Skill Gem': _conflict_active_skill_gems,
         'QuestItem': _conflict_quest_items,
-        #TODO: Make a new doodad resolver that doesn't rely on 'HideoutNPCsKey'
-        #'HideoutDoodad': _conflict_hideout_doodad,
+        # TODO: Make a new doodad resolver that doesn't rely on 'HideoutNPCsKey'
+        # 'HideoutDoodad': _conflict_hideout_doodad,
         'Map': _conflict_maps,
         'MapFragment': _conflict_map_fragments,
         'DivinationCard': _conflict_divination_card,
@@ -3533,7 +3535,7 @@ class ItemsParser(SkillParserShared):
         elif parsed_args.item_class:
             self.rr['ItemClasses.dat64'].build_index('Name')
             return [self.rr['ItemClasses.dat64'].index['Name'][cls][0]['Name']
-                   for cls in parsed_args.item_class]
+                    for cls in parsed_args.item_class]
         else:
             return []
 
@@ -3589,57 +3591,61 @@ class ItemsParser(SkillParserShared):
 
     def _process_base_item_type(self, base_item_type, infobox,
                                 not_new_map=True):
-            m_id = base_item_type['Id']
+        m_id = base_item_type['Id']
 
-            infobox['rarity_id'] = 'normal'
+        infobox['rarity_id'] = 'normal'
 
-            # BaseItemTypes.dat
-            infobox['name'] = base_item_type['Name']
-            infobox['class_id'] = base_item_type['ItemClassesKey']['Id']
-            infobox['size_x'] = base_item_type['Width']
-            infobox['size_y'] = base_item_type['Height']
-            if base_item_type['FlavourTextKey']:
-                infobox['flavour_text'] = \
-                    parser.parse_and_handle_description_tags(
-                        rr=self.rr,
-                        text=base_item_type['FlavourTextKey']['Text'],
-                    )
+        # BaseItemTypes.dat
+        infobox['name'] = base_item_type['Name']
+        infobox['class_id'] = base_item_type['ItemClassesKey']['Id']
+        infobox['size_x'] = base_item_type['Width']
+        infobox['size_y'] = base_item_type['Height']
+        if base_item_type['FlavourTextKey']:
+            infobox['flavour_text'] = \
+                parser.parse_and_handle_description_tags(
+                    rr=self.rr,
+                    text=base_item_type['FlavourTextKey']['Text'],
+            )
 
-            if base_item_type['ItemClassesKey']['Id'] not in \
-                    self._IGNORE_DROP_LEVEL_CLASSES and \
-                    m_id not in self._IGNORE_DROP_LEVEL_ITEMS_BY_ID:
-                infobox['drop_level'] = base_item_type['DropLevel']
+        if base_item_type['ItemClassesKey']['Id'] not in \
+                self._IGNORE_DROP_LEVEL_CLASSES and \
+                m_id not in self._IGNORE_DROP_LEVEL_ITEMS_BY_ID:
+            infobox['drop_level'] = base_item_type['DropLevel']
 
-            base_ot = ITFile(parent_or_file_system=self.file_system)
-            base_ot.read(self.file_system.get_file(base_item_type['InheritsFrom'] + '.it'))
-            try:
-                ot = self.it[m_id + '.it']
-            except FileNotFoundError:
-                ot = base_ot  # If we couldn't find an ot for the specific item, use the base ot.
-            else:
-                ot.merge(base_ot) # If we did find an ot for the specific item, use it and add things from the base to it.
+        base_ot = ITFile(parent_or_file_system=self.file_system)
+        base_ot.read(self.file_system.get_file(
+            base_item_type['InheritsFrom'] + '.it'))
+        try:
+            ot = self.it[m_id + '.it']
+        except FileNotFoundError:
+            # If we couldn't find an ot for the specific item, use the base ot.
+            ot = base_ot
+        else:
+            # If we did find an ot for the specific item, use it and add things from the base to it.
+            ot.merge(base_ot)
 
-            if 'enable_rarity' in ot['Mods']:
-                infobox['drop_rarities_ids'] = ', '.join(ot['Mods']['enable_rarity'])
+        if 'enable_rarity' in ot['Mods']:
+            infobox['drop_rarities_ids'] = ', '.join(
+                ot['Mods']['enable_rarity'])
 
-            tags = [t['Id'] for t in base_item_type['TagsKeys']]
-            infobox['tags'] = ', '.join(tags + list(ot['Base']['tag']))
+        tags = [t['Id'] for t in base_item_type['TagsKeys']]
+        infobox['tags'] = ', '.join(tags + list(ot['Base']['tag']))
 
-            if not_new_map:
-                infobox['metadata_id'] = m_id
+        if not_new_map:
+            infobox['metadata_id'] = m_id
 
-            description = ot['Stack'].get('function_text')
-            if description:
-                infobox['description'] = self.rr['ClientStrings.dat64'].index[
-                    'Id'][description]['Text']
+        description = ot['Stack'].get('function_text')
+        if description:
+            infobox['description'] = self.rr['ClientStrings.dat64'].index[
+                'Id'][description]['Text']
 
-            help_text = ot['Base'].get('description_text')
-            if help_text:
-                infobox['help_text'] = self.rr['ClientStrings.dat64'].index['Id'][
-                    help_text]['Text']
+        help_text = ot['Base'].get('description_text')
+        if help_text:
+            infobox['help_text'] = self.rr['ClientStrings.dat64'].index['Id'][
+                help_text]['Text']
 
-            for i, mod in enumerate(base_item_type['Implicit_ModsKeys']):
-                infobox['implicit%s' % (i+1)] = mod['Id']
+        for i, mod in enumerate(base_item_type['Implicit_ModsKeys']):
+            infobox['implicit%s' % (i+1)] = mod['Id']
 
     def _process_name_conflicts(self, infobox, base_item_type, language):
         rr = self.rr2 if language != self._language else self.rr
@@ -3650,7 +3656,6 @@ class ItemsParser(SkillParserShared):
         cls_id = base_item_type['ItemClassesKey']['Id']
         m_id = base_item_type['Id']
         appendix = self._NAME_OVERRIDE_BY_ID[language].get(m_id)
-
 
         if appendix is not None:
             name += appendix
@@ -3671,11 +3676,11 @@ class ItemsParser(SkillParserShared):
                     return
             else:
                 console(
-                        'Unresolved ambiguous item "%s" with name "%s". '
-                        'Skipping' %
-                        (m_id, infobox['name']),
-                        msg=Msg.error
-                    )
+                    'Unresolved ambiguous item "%s" with name "%s". '
+                    'Skipping' %
+                    (m_id, infobox['name']),
+                    msg=Msg.error
+                )
                 console('No name conflict handler defined for item class id'
                         ' "%s"' % cls_id, msg=Msg.error)
                 return
@@ -3803,27 +3808,27 @@ class ItemsParser(SkillParserShared):
         return r
 
     def _print_item_rowid(self, parsed_args, base_item_type):
-        #Don't print anything if not running in the rowid mode.
+        # Don't print anything if not running in the rowid mode.
         if not set(['start', 'end']).issubset(vars(parsed_args).keys()):
             return
 
         start = parsed_args.start
-        
+
         try:
             export_row_count = parsed_args.end - parsed_args.start
         except TypeError:
             export_row_count = parsed_args.start
-        #If we're printing less than 100 rows, print every rowid
+        # If we're printing less than 100 rows, print every rowid
         if export_row_count <= 100:
             print_granularity = 1
         else:
             start = 0
             print_granularity = 500
 
-        
         item_offset = base_item_type.rowid - start
         if (item_offset == 0) or item_offset % print_granularity == 0:
-            console(f"Processing item with rowid {base_item_type.rowid}: {base_item_type['Name']}")
+            console(
+                f"Processing item with rowid {base_item_type.rowid}: {base_item_type['Name']}")
         return
 
     def _format_map_name(self, base_item_type, map_series=None, language=None):
@@ -3837,7 +3842,8 @@ class ItemsParser(SkillParserShared):
         elif 'Harbinger' in base_item_type['Id']:
             return '%s (%s) (%s)' % (
                 base_item_type['Name'],
-                self._LANG[language][re.sub(r'^.*Harbinger', '', base_item_type['Id'])],
+                self._LANG[language][re.sub(
+                    r'^.*Harbinger', '', base_item_type['Id'])],
                 map_series['Name']
             )
         else:
@@ -3908,7 +3914,7 @@ class ItemsParser(SkillParserShared):
         for atlas_node in self.rr['AtlasNode.dat64']:
             if not atlas_node['ItemVisualIdentityKey']['DDSFile']:
                 warnings.warn(
-                   'Missing 2d art inventory icon at index %s' %
+                    'Missing 2d art inventory icon at index %s' %
                     atlas_node.index,
                 )
                 continue
@@ -3929,12 +3935,13 @@ class ItemsParser(SkillParserShared):
                 for name, color in self._MAP_COLORS.items():
                     ico_path = Path(ico)
                     out_path = ico_path.with_suffix(f'.{name}.png')
-                    
+
                     # Tint with tier color, this historically differs from the colorization
                     # used for composing map glyphs onto on the itemized map base.
                     img = Image.open(ico_path)
                     midpoint = self._MAP_COLOR_MIDPOINTS[name]
-                    img = _colorize_rgba(img, 'black', 'white', mid=f'rgb({color})', midpoint=midpoint)
+                    img = _colorize_rgba(
+                        img, 'black', 'white', mid=f'rgb({color})', midpoint=midpoint)
                     img.save(out_path)
 
         return r
@@ -3950,7 +3957,7 @@ class ItemsParser(SkillParserShared):
             console(
                 'Only Betrayal and newer map series are supported by this '
                 'function',
-                    msg=Msg.error)
+                msg=Msg.error)
             return r
 
         # Store whether this is the latest map series to determine later whether
@@ -3974,8 +3981,8 @@ class ItemsParser(SkillParserShared):
                 # Maps that are no longer on the atlas such as guardian maps
                 # or harbinger
                 atlas_node = None
-            
-            # Save off the atlas_node for each map in the series, 
+
+            # Save off the atlas_node for each map in the series,
             # filtering to the maps from the names command argument if it was provided.
             if (names and maps['BaseItemTypesKey']['Name'] in names) or not names:
                 map_series_tiers[row] = atlas_node
@@ -3986,7 +3993,7 @@ class ItemsParser(SkillParserShared):
                 console(
                     'Map images need to be processed and require conversion '
                     'option to be enabled.',
-                        msg=Msg.error)
+                    msg=Msg.error)
                 return r
 
             self._image_init(parsed_args)
@@ -4089,7 +4096,7 @@ class ItemsParser(SkillParserShared):
                     self.rr['MapPurchaseCosts.dat64'].index['Tier'][tier],
                     infobox
                 )
-            
+
             # Skip maps that aren't in the rotation this map series.
             if tier == 0:
                 continue
@@ -4135,10 +4142,12 @@ class ItemsParser(SkillParserShared):
 
                 # Warn about and skip maps that are on atlas but have no icon.
                 elif atlas_node is not None and not atlas_node['ItemVisualIdentityKey']['DDSFile']:
-                    warnings.warn(f'Missing 2d art inventory icon for item "{base_item_type["Name"]}"')
+                    warnings.warn(
+                        f'Missing 2d art inventory icon for item "{base_item_type["Name"]}"')
                     continue
-                
-                ico = os.path.join(self._img_path, name + ' inventory icon.dds')
+
+                ico = os.path.join(self._img_path, name +
+                                   ' inventory icon.dds')
 
                 # If the atlas doesn't point to an icon, use the base_item_type for the icon.
                 if atlas_node is not None:
@@ -4170,7 +4179,8 @@ class ItemsParser(SkillParserShared):
                         img.save(ico)
 
                 if base_item_type['Id'] not in MAPS_TO_SKIP_COMPOSITING:
-                    canvas = Image.new(base_img.mode, base_img.size, (0, 0, 0, 0))
+                    canvas = Image.new(
+                        base_img.mode, base_img.size, (0, 0, 0, 0))
                     paste_origin = (
                         (base_img.size[0] - img.size[0]) // 2,
                         (base_img.size[1] - img.size[1]) // 2
