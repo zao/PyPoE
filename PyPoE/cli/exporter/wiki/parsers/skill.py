@@ -599,6 +599,13 @@ class SkillParserShared(parser.BaseParser):
         # GrantedEffectsPerLevel.dat64
         infobox['required_level'] = level_data[0]['PlayerLevelReq']
 
+        # In 3.21, the player level requirement is a float
+        # Cast required level to an int
+        infobox['required_level'] = int(infobox['required_level'])
+        # If its not a whole number, raise error, just to be safe
+        if infobox['required_level'] % 1 != 0:
+            raise ValueError('PlayerLevelReq is not a whole number')
+
         #
         # Quality stats
         #
@@ -780,6 +787,13 @@ class SkillParserShared(parser.BaseParser):
         for i, row in enumerate(level_data):
             prefix = 'level%s' % (i + 1)
             infobox[prefix] = 'True'
+
+            # In 3.21 the level requirement is a float so we need to cast it to int
+            if row['PlayerLevelReq'] == int(row['PlayerLevelReq']):
+                row['PlayerLevelReq'] = int(row['PlayerLevelReq'])
+                # If its not a whole number, raise error, just to be safe
+                if row['PlayerLevelReq'] % 1 != 0:
+                    raise ValueError('Level requirement is not a whole number')
 
             prefix += '_'
             infobox[prefix + 'level_requirement'] = row['PlayerLevelReq']

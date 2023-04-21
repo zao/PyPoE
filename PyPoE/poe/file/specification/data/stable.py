@@ -9574,7 +9574,7 @@ specification = Specification({
             ),
             Field(
                 name='PlayerLevelReq',
-                type='int',
+                type='float',
             ),
             Field(
                 name='CostMultiplier',
