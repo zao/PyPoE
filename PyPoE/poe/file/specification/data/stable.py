@@ -21292,8 +21292,9 @@ specification = Specification({
                 type='int',
             ),
             Field(
-                name='Unknown3',
+                name='ExperienceProgression',
                 type='ref|out',
+                key='ItemExperienceTypes.dat',
             ),
         ),
     ),

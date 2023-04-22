@@ -652,6 +652,7 @@ class ItemsParser(SkillParserShared):
             'Metadata/Items/Gems/SupportGemIncreasedCriticalStrikes': '',
             'Metadata/Items/Gems/SupportGemMeleeSplash': '',
             'Metadata/Items/Gems/SkillGemEnergyBlade': '',
+            'Metadata/Items/Gems/SkillGemChannelledSnipe': '',
             # =================================================================
             # One Hand Axes
             # =================================================================
@@ -2495,15 +2496,18 @@ class ItemsParser(SkillParserShared):
 
         # No longer used
         #
+        exp_type = skill_gem['ExperienceProgression']['Id']
 
         # TODO: Maybe catch empty stuff here?
         exp = 0
         exp_level = []
         exp_total = []
         for row in self.rr['ItemExperiencePerLevel.dat64']:
-            exp = row['Experience']
-            exp_level = row['ItemCurrentLevel']
-            # print(row)
+            if row['ItemExperienceType']['Id'] == exp_type:
+                exp_new = row['Experience']
+                exp_level.append(exp_new - exp)
+                exp_total.append(exp_new)
+                exp = exp_new
         if not exp_level:
             console('No experience progression found for "%s" - assuming max '
                     'level 1' %
