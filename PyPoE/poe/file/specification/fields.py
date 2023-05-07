@@ -227,6 +227,7 @@ class Specification(dict):
     """
     Specification file
     """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -318,7 +319,7 @@ class Specification(dict):
 
                 for other_field in virtual_field.fields:
                     if other_field not in file.fields and \
-                                    other_field not in file.virtual_fields:
+                            other_field not in file.virtual_fields:
                         raise SpecificationError(
                             SpecificationError.ERRORS.VIRTUAL_KEY_INVALID_KEY,
                             '%(dat_file)s->virtual_fields->%(field)s->fields: '
@@ -409,13 +410,15 @@ class File:
         else:
             starting_fields_length = len(fields)
             fields = OrderedDict(((field.name, field) for field in fields))
-        assert starting_fields_length == len(fields), "Field names must be unique within each file definition."
-        
+        assert starting_fields_length == len(
+            fields), "Field names must be unique within each file definition."
+
         self.fields = fields
         if virtual_fields is None:
             virtual_fields = OrderedDict()
         else:
-            virtual_fields = OrderedDict(((field.name, field) for field in virtual_fields))
+            virtual_fields = OrderedDict(
+                ((field.name, field) for field in virtual_fields))
         self.virtual_fields = virtual_fields
 
         # Set utility columns from the given data
@@ -468,7 +471,8 @@ class File:
         for k in self.__slots__:
             v = getattr(self, k)
             if k in ('fields', 'virtual_fields'):
-                out[k] = OrderedDict([(ok, ov.as_dict()) for ok, ov in v.items()])
+                out[k] = OrderedDict([(ok, ov.as_dict())
+                                     for ok, ov in v.items()])
             else:
                 out[k] = v
         return out

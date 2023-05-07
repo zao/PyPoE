@@ -64,7 +64,8 @@ __all__ = ['SkillHandler']
 
 class SkillHandler(ExporterHandler):
     def __init__(self, sub_parser):
-        self.parser = sub_parser.add_parser('skill', help='Skill data Exporter')
+        self.parser = sub_parser.add_parser(
+            'skill', help='Skill data Exporter')
         self.parser.set_defaults(func=lambda args: self.parser.print_help())
         skill_sub = self.parser.add_subparsers()
 
@@ -294,7 +295,7 @@ class SkillParserShared(parser.BaseParser):
         'SiegeBallista': 'CrossbowSnipeProjectile',
         'Spark': 'Spark',
         'SplitArrow': 'SplitArrowDefault',
-        #Spectral Throw
+        # Spectral Throw
         'ThrownWeapon': 'ThrownWeapon',
         'Tornado Shot': 'TornadoShotArrow',
         # TornadoShotSecondaryArrow,
@@ -424,7 +425,8 @@ class SkillParserShared(parser.BaseParser):
                 tf = self.tc[self.skill_stat_filter.skills[
                     act_skill['Id']].translation_file_path]
             except KeyError as e:
-                warnings.warn('Missing active skill in stat filers: %s' % e.args[0])
+                warnings.warn(
+                    'Missing active skill in stat filers: %s' % e.args[0])
                 tf = self.tc['skill_stat_descriptions.txt']
 
             if parsed_args.store_images and act_skill['Icon_DDSFile']:
@@ -453,16 +455,18 @@ class SkillParserShared(parser.BaseParser):
                 lvl_effects = gra_eff_per_lvl[i]
             else:
                 lvl_effects = None
-                warnings.warn(f'GrantedEffectsPerLevel is missing level {lvl_stats["GemLevel"]} which GrantedEffectStatSetsPerLevel has.')
-            
+                warnings.warn(
+                    f'GrantedEffectsPerLevel is missing level {lvl_stats["GemLevel"]} which GrantedEffectStatSetsPerLevel has.')
+
             if lvl_effects is not None and lvl_effects['Level'] != lvl_stats['GemLevel']:
                 lvl_effects = None
-                warnings.warn(f'GrantedEffectsPerLevel is missing level {lvl_stats["GemLevel"]} which GrantedEffectStatSetsPerLevel has.')
-                
+                warnings.warn(
+                    f'GrantedEffectsPerLevel is missing level {lvl_stats["GemLevel"]} which GrantedEffectStatSetsPerLevel has.')
 
             stats = [r['Id'] for stat_index, r in enumerate(lvl_stats['FloatStats']) if stat_index < len(lvl_stats['BaseResolvedValues'])] + \
                     [r['Id'] for r in lvl_stats['AdditionalStats']]
-            values = lvl_stats['BaseResolvedValues'] + lvl_stats['AdditionalStatsValues']
+            values = lvl_stats['BaseResolvedValues'] + \
+                lvl_stats['AdditionalStatsValues']
 
             # Remove 0 (unused) stats
             # This will remove all +0 gem level entries.
@@ -475,15 +479,15 @@ class SkillParserShared(parser.BaseParser):
                     del stats[index]
                     del values[index]
 
-            translated_stats = self._translate_stats(stats, values, tf, data, stat_order)
+            translated_stats = self._translate_stats(
+                stats, values, tf, data, stat_order)
             for tr_stat in translated_stats.keys():
                 stat_key_order['stats'][tr_stat] = translated_stats[tr_stat]
-            
 
             if lvl_effects is not None:
                 for column in self._GEPL_COPY:
                     data[column] = lvl_effects[column]
-            
+
             for column in self._GESSPL_COPY:
                 data[column] = lvl_stats[column]
 
@@ -519,20 +523,24 @@ class SkillParserShared(parser.BaseParser):
                 # Consider a stat dynamic if it changes presence
                 # or value between levels.
                 if in_last != in_data or (last['stats'][key]['values'] !=
-                        data['stats'][key]['values']):
+                                          data['stats'][key]['values']):
                     del static['stats'][key]
                     dynamic['stats'][key] = None
             last = data
 
         # GrantedEffectStatSets.dat64
-        const_stats = [untr_stat['Id'] for untr_stat in stat_set['ConstantStats']]
-        impl_stats = [untr_stat['Id'] for untr_stat in stat_set['ImplicitStats']]
+        const_stats = [untr_stat['Id']
+                       for untr_stat in stat_set['ConstantStats']]
+        impl_stats = [untr_stat['Id']
+                      for untr_stat in stat_set['ImplicitStats']]
         const_stat_vals = stat_set['ConstantStatsValues']
 
         const_data = defaultdict()
         impl_data = defaultdict()
-        const_tr_stats = self._translate_stats(const_stats, const_stat_vals, tf, const_data, stat_order)
-        impl_tr_stats = self._translate_stats(impl_stats, [1 for i in range(len(impl_stats))], tf, impl_data, stat_order)
+        const_tr_stats = self._translate_stats(
+            const_stats, const_stat_vals, tf, const_data, stat_order)
+        impl_tr_stats = self._translate_stats(
+            impl_stats, [1 for i in range(len(impl_stats))], tf, impl_data, stat_order)
 
         # Later code that generates the infobox expects static stats to be in static, and to have values in level 0 of the gem.
         # It also expects them to be in the master list in stat_key_order
@@ -545,10 +553,9 @@ class SkillParserShared(parser.BaseParser):
             static['stats'][tr_stat] = impl_tr_stats[tr_stat]
             level_data[0]['stats'][tr_stat] = impl_data['stats'][tr_stat]
             stat_key_order['stats'][tr_stat] = impl_tr_stats[tr_stat]
-        
 
-
-        stat_key_order['stats'] = OrderedDict(sorted(stat_key_order['stats'].items(), key=lambda item: stat_order[item[0]]))
+        stat_key_order['stats'] = OrderedDict(
+            sorted(stat_key_order['stats'].items(), key=lambda item: stat_order[item[0]]))
 
         # Copy BaseDuration Data to skill_level's 'BaseDuration' node where the infobox is expecting it
         # Add 'BaseDuration' to the list of dynamic columns.
@@ -592,6 +599,12 @@ class SkillParserShared(parser.BaseParser):
         # GrantedEffectsPerLevel.dat64
         infobox['required_level'] = level_data[0]['PlayerLevelReq']
 
+        # In 3.21, the player level requirement is a float
+        # Cast required level to an int
+        infobox['required_level'] = int(infobox['required_level'])
+        # If its not a whole number, raise error, just to be safe
+        if infobox['required_level'] % 1 != 0:
+            raise ValueError('PlayerLevelReq is not a whole number')
 
         #
         # Quality stats
@@ -610,7 +623,7 @@ class SkillParserShared(parser.BaseParser):
 
             # Quality stat data
             stat_ids = [r['Id'] for r in row['StatsKeys']]
-            
+
             # Quality Translation?
             qtr = tf.get_translation(
                 tags=stat_ids,
@@ -668,7 +681,8 @@ class SkillParserShared(parser.BaseParser):
             df = column_data.get('skip_active')
             if df is not None and not gra_eff['IsSupport']:
                 continue
-            infobox['static_' + column_data['template']] = column_data['format'](raw_value)
+            infobox['static_' + column_data['template']
+                    ] = column_data['format'](raw_value)
 
         # Normal stats
         # TODO: Loop properly - some stats not available at level 0
@@ -740,11 +754,11 @@ class SkillParserShared(parser.BaseParser):
                 #     ('active_skill_attack_damage_final_permyriad', ),
                 #     0,
                 # ),
-                #(
+                # (
                 #    ('BaseDuration', ),
                 #    ('base_skill_effect_duration', ),
                 #    0,
-                #),
+                # ),
             )
             added = []
             for value_keys, tags, default in field_stats:
@@ -774,8 +788,14 @@ class SkillParserShared(parser.BaseParser):
             prefix = 'level%s' % (i + 1)
             infobox[prefix] = 'True'
 
-            prefix += '_'
+            # In 3.21 the level requirement is a float so we need to cast it to int
+            if row['PlayerLevelReq'] == int(row['PlayerLevelReq']):
+                row['PlayerLevelReq'] = int(row['PlayerLevelReq'])
+                # If its not a whole number, raise error, just to be safe
+                if row['PlayerLevelReq'] % 1 != 0:
+                    raise ValueError('Level requirement is not a whole number')
 
+            prefix += '_'
             infobox[prefix + 'level_requirement'] = row['PlayerLevelReq']
 
             # Column handling
@@ -784,7 +804,8 @@ class SkillParserShared(parser.BaseParser):
                     continue
                 # Removed the check of defaults on purpose, makes sense
                 # to add the info since it is dynamically changed
-                infobox[prefix + column_data['template']] = column_data['format'](row[column])
+                infobox[prefix + column_data['template']
+                        ] = column_data['format'](row[column])
 
             # Stat handling
             lines = []
@@ -846,7 +867,8 @@ class SkillParser(SkillParserShared):
             data = OrderedDict()
 
             try:
-                self._skill(gra_eff=skill, infobox=data, parsed_args=parsed_args)
+                self._skill(gra_eff=skill, infobox=data,
+                            parsed_args=parsed_args)
             except Exception as e:
                 console(
                     f"Error when parsing skill \"{skill['Id']}\" at {skill.rowid}:",

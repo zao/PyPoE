@@ -115,7 +115,7 @@ class WikiHandler:
                     console(e.args[0], Msg.error)
                     console('Retrying in 30s- total attempts: %s' % fail)
                     time.sleep(30)
-                    fail +=1
+                    fail += 1
                 else:
                     console(
                         'HTTPError occurred. Retrying - total attempts: %s' %
@@ -197,7 +197,8 @@ class WikiHandler:
                 if self.cmdargs.wiki_diff:
                     wiki_lines = page.text().splitlines(keepends=True)
                     new_lines = text.splitlines(keepends=True)
-                    u_diff = unified_diff(wiki_lines, new_lines, "Wiki", "Export")
+                    u_diff = unified_diff(
+                        wiki_lines, new_lines, "Wiki", "Export")
                     sys.stdout.writelines(u_diff)
                 else:
                     console(text)
@@ -207,13 +208,13 @@ class WikiHandler:
                     summary='PyPoE/ExporterBot/%s: %s' % (
                         __version__,
                         self.cmdargs.wiki_message or row['wiki_message']
-                     )
+                    )
                 )
                 if response['result'] == 'Success':
                     console('Page was edited successfully (time: %s)' %
                             response.get('newtimestamp'))
                 else:
-                    #TODO: what happens if it fails?
+                    # TODO: what happens if it fails?
                     console('Something went wrong, status code:', msg=Msg.error)
                     console(response, msg=Msg.error)
         else:
@@ -309,7 +310,7 @@ class ExporterHandler(BaseHandler):
                             item['out_file'].replace('"', "'", 2)))
 
                         out_path = out_path.replace('\t', "")
-                        
+
                         console('Writing data to "%s"...' % out_path)
                         with open(out_path, 'w', encoding='utf-8') as f:
                             f.write(text)
@@ -366,7 +367,7 @@ class ExporterHandler(BaseHandler):
 
         # by row ID
         self.add_rowid_subparser_filters(sub_parser, cls, *args, **kwargs)
-    
+
     def add_name_subparser_filters(self, sub_parser, cls, *args, **kwargs):
         """
         Adds default sub parsers for id, name and rowid.
@@ -439,7 +440,7 @@ class ExporterHandler(BaseHandler):
             help='Ending index',
             type=int,
         )
-        
+
     def add_id_subparser_filters(self, sub_parser, cls, *args, **kwargs):
         """
         Adds default sub parsers for id, name and rowid.
@@ -472,7 +473,6 @@ class ExporterHandler(BaseHandler):
             nargs='+',
         )
 
-
     def add_default_parsers(self, parser, cls, func=None, handler=None,
                             wiki=True, wiki_handler=None):
         if handler is None:
@@ -489,7 +489,8 @@ class ExporterHandler(BaseHandler):
                 wiki_handler = WikiHandler()
             wiki_handler.add_arguments(parser)
 
-        parser.set_defaults(func=self.get_wrap(cls, func, handler, wiki_handler))
+        parser.set_defaults(func=self.get_wrap(
+            cls, func, handler, wiki_handler))
         parser.add_argument(
             '-d', '--outdir',
             help='Destination directory. If empty, uses current directory.'
