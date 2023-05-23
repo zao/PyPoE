@@ -2176,13 +2176,12 @@ def install_data_dependant_quantifiers(relational_reader):
 
     # I believe this is currently not right, as the handler actually uses a value located in additionalProperties of the item, and
     # not in the mod itself. THe mod itself has min = max = 0.
-    TranslationQuantifier(
-        id='passive_hash',
-        handler=lambda v: relational_reader['Data/PassiveSkills.dat64'][v]['PassiveSkillGraphId'],
-        reverse_handler=_get_reverse_lookup_from_reader(
-            relational_reader['Data/PassiveSkills.dat64'], 'PassiveSkillGraphId'),
-    )
-
+    # TranslationQuantifier(
+    #     id='passive_hash',
+    #     handler=lambda v: relational_reader['Data/PassiveSkills.dat64'][v]['PassiveSkillGraphId'],
+    #     reverse_handler=_get_reverse_lookup_from_reader(
+    #         relational_reader['Data/PassiveSkills.dat64'], 'PassiveSkillGraphId'),
+    # )
     TQReminderString(relational_reader=relational_reader)
 
     TranslationQuantifierHandler.init()

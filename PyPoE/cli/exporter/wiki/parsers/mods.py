@@ -311,6 +311,7 @@ class ModParser(BaseParser):
                 sell_price = defaultdict(int)
             for msp in mod['ModTypeKey']['ModSellPriceTypesKeys']:
                 if mod['ModTypeKey']['Name'] != 'SellPriceIsWisdomFragment':
+                  if msp['Id'] in MOD_SELL_PRICES:
                     for i, (item_id, amount) in enumerate(
                             MOD_SELL_PRICES[msp['Id']].items(), start=1):
                         # print(mod['ModTypeKey']['Name'])
