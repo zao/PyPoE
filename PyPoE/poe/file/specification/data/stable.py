@@ -3164,7 +3164,7 @@ specification = Specification({
     'BlightCraftingItems.dat': File(
         fields=(
             Field(
-                name='Oil',
+                name='BaseItemTypesKey',
                 type='ref|out',
                 key='BaseItemTypes.dat',
                 unique=True,
