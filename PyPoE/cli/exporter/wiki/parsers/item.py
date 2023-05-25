@@ -3390,7 +3390,7 @@ class ItemsParser(SkillParserShared):
         if match:
             qid = match.group('id')
             ver = re.findall(r'v[0-9]$', qid)
-            # Only need one of the skill books from "choice" quets
+            # Only need one of the skill books from "choice" quests
             if ver:
                 if ver[0] != 'v0':
                     return
