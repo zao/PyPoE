@@ -67,6 +67,7 @@ from typing import List, Union, Dict, Tuple
 
 # 3rd party
 from fnvhash import fnv1a_64
+from mmhash2 import murmurhash64a
 import ooz
 
 # self
@@ -89,6 +90,11 @@ __all__ = [
 # =============================================================================
 # Classes
 # =============================================================================
+
+
+class HASH_ALGORITHM(IntEnum):
+    FNV1A64 = 1
+    MURMURHASH64A = 2
 
 
 class ENCODE_TYPES_HEX(IntEnum):
@@ -377,6 +383,17 @@ class DirectoryRecord(IndexRecord):
         return [x.rsplit('/', maxsplit=1)[-1] for x in self.paths]
 
 
+def _hash_path_3_21_2(path, seed):
+    if isinstance(path, str):
+        path = path.encode('utf-8')
+    elif not isinstance(path, bytes):
+        raise TypeError('path must be a string')
+    if path.endswith(b'/'):
+        path = path.strip(b'/')
+    path = path.lower()
+    return murmurhash64a(path, seed)
+
+
 class Index(Bundle):
     PATH = 'Bundles2/_.index.bin'
 
@@ -436,7 +453,7 @@ class Index(Bundle):
 
     def get_hash(self, path: Union[str, bytes], type: PATH_TYPES = None) -> int:
         """
-        Calculates the 64 bit FNA1a hash value for a given path
+        Calculates the 64 bit FNA1a or MurmurHash64A hash value for a given path
 
         Parameters
         ----------
@@ -449,23 +466,25 @@ class Index(Bundle):
 
         Returns
         -------
-        Calculated 64bit FNV1a hash value
+        Calculated 64bit hash value
         """
-        if isinstance(path, str):
-            path = path.encode('utf-8')
-        elif not isinstance(path, bytes):
-            raise TypeError('path must be a string')
+        if self.hash_algorithm == HASH_ALGORITHM.FNV1A64:
+            if isinstance(path, str):
+                path = path.encode('utf-8')
+            elif not isinstance(path, bytes):
+                raise TypeError('path must be a string')
+            if path.endswith(b'/'):
+                if type is None:
+                    type = PATH_TYPES.DIR
+                path = path.strip(b'/')
+            # If type wasn't set before, assume this is a file
+            if type == PATH_TYPES.FILE or type is None:
+                path = path.lower()
+            path += b'++'
 
-        if path.endswith(b'/'):
-            if type is None:
-                type = PATH_TYPES.DIR
-            path = path.strip(b'/')
-        # If type wasn't set before, assume this is a file
-        if type == PATH_TYPES.FILE or type is None:
-            path = path.lower()
-        path += b'++'
-
-        return fnv1a_64(path)
+            return fnv1a_64(path)
+        elif self.hash_algorithm == HASH_ALGORITHM.MURMURHASH64A:
+            return _hash_path_3_21_2(path, self.hash_seed)
 
     def _read(self, buffer: BytesIO):
         if self.bundles:
@@ -509,6 +528,27 @@ class Index(Bundle):
                     directory_record.offset + directory_record.size
                 ]
             )
+        
+        self.hash_algorithm = None
+        if len(dirs := self.directories) > 0:
+            dir_iter = iter(dirs.values())
+            root_entry = next(dir_iter)
+            if root_entry.hash == 0x07e47507b4a92e53:
+                self.hash_algorithm = HASH_ALGORITHM.FNV1A64
+            else:
+                h = root_entry.hash
+                # Find seed from root directory hash via inverses
+                h ^= h >> 47
+                h = (h * 0x5F7A0EA7E59B19BD) % 2**64
+                h ^= h >> 47
+                for cand in dir_iter:
+                    if len(cand.paths) > 0:
+                        dir = cand.paths[0].rsplit('/', 1)[0]
+                        if _hash_path_3_21_2(dir, h) == cand.hash:
+                            self.hash_algorithm = HASH_ALGORITHM.MURMURHASH64A
+                            self.hash_seed = h
+                        break
+
 
     def _make_paths(self, raw: bytes) -> List[bytes]:
         """
