@@ -67,10 +67,10 @@ from typing import List, Union, Dict, Tuple
 
 # 3rd party
 from fnvhash import fnv1a_64
-from mmhash2 import murmurhash64a
 import ooz
 
 # self
+from PyPoE.shared.murmur2 import murmur2_64a
 from PyPoE.shared.mixins import ReprMixin
 from PyPoE.shared.decorators import doc
 from PyPoE.poe.file.shared import AbstractFileReadOnly
@@ -391,7 +391,7 @@ def _hash_path_3_21_2(path, seed):
     if path.endswith(b'/'):
         path = path.strip(b'/')
     path = path.lower()
-    return murmurhash64a(path, seed)
+    return murmur2_64a(path, seed)
 
 
 class Index(Bundle):
