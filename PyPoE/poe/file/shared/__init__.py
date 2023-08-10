@@ -377,7 +377,7 @@ class AbstractFileSystemNode(ReprMixin):
                 return obj
 
             for child in obj.children.values():
-                if child.name == partial:
+                if child.name.lower() == partial.lower():
                     obj = child
                     break
             else:

@@ -541,13 +541,8 @@ class Index(Bundle):
                 h ^= h >> 47
                 h = (h * 0x5F7A0EA7E59B19BD) % 2**64
                 h ^= h >> 47
-                for cand in dir_iter:
-                    if len(cand.paths) > 0:
-                        dir = cand.paths[0].rsplit('/', 1)[0]
-                        if _hash_path_3_21_2(dir, h) == cand.hash:
-                            self.hash_algorithm = HASH_ALGORITHM.MURMURHASH64A
-                            self.hash_seed = h
-                        break
+                self.hash_algorithm = HASH_ALGORITHM.MURMURHASH64A
+                self.hash_seed = h
 
 
     def _make_paths(self, raw: bytes) -> List[bytes]:
