@@ -2511,7 +2511,7 @@ class ItemsParser(SkillParserShared):
         if not exp_level:
             console('No experience progression found for "%s" - assuming max '
                     'level 1' %
-                    base_item_type['Name'], msg=Msg.error)
+                    base_item_type['Name'], msg=Msg.warning)
             exp_total = [0]
 
         max_level = len(exp_total)-1
@@ -3400,7 +3400,7 @@ class ItemsParser(SkillParserShared):
                 return base_item_type['Name'] + ' (%s)' % \
                     rr['Quest.dat64'].index['Id'][qid]['Name']
             except KeyError:
-                console('Quest %s not found' % qid, msg=Msg.error)
+                console('Quest %s not found' % qid, msg=Msg.warning)
         else:
             # Descent skill books
             match = re.match(r'SkillBooks/Descent2_(?P<id>[0-9]+)', qid)
@@ -3675,7 +3675,7 @@ class ItemsParser(SkillParserShared):
                         'Unresolved ambiguous item "%s" with name "%s". '
                         'Skipping' %
                         (m_id, infobox['name']),
-                        msg=Msg.error
+                        msg=Msg.warning
                     )
                     return
             else:
@@ -3683,10 +3683,10 @@ class ItemsParser(SkillParserShared):
                     'Unresolved ambiguous item "%s" with name "%s". '
                     'Skipping' %
                     (m_id, infobox['name']),
-                    msg=Msg.error
+                    msg=Msg.warning
                 )
                 console('No name conflict handler defined for item class id'
-                        ' "%s"' % cls_id, msg=Msg.error)
+                        ' "%s"' % cls_id, msg=Msg.warning)
                 return
 
         return name
@@ -3737,7 +3737,7 @@ class ItemsParser(SkillParserShared):
                         console(
                             f'Required extra info for item "{name}" with class id '
                             f'"{cls_id}" not found. Skipping.',
-                            msg=Msg.error)
+                            msg=Msg.warning)
                         break
                 if fail:
                     continue
@@ -3863,7 +3863,7 @@ class ItemsParser(SkillParserShared):
             except IndexError:
                 console(
                     'Invalid map series id',
-                    msg=Msg.error)
+                    msg=Msg.warning)
                 return False
         elif parsed_args.map_series is not None:
             try:
@@ -3872,7 +3872,7 @@ class ItemsParser(SkillParserShared):
             except IndexError:
                 console(
                     'Invalid map series name',
-                    msg=Msg.error)
+                    msg=Msg.warning)
                 return False
         else:
             map_series = self.rr['MapSeries.dat64'][-1]

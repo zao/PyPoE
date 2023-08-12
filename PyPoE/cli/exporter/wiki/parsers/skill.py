@@ -723,7 +723,7 @@ class SkillParserShared(parser.BaseParser):
                     stat_ids = stat_dict_max['stats']
                     stat_dict = {'values': [0] * len(stat_ids)}
                 elif maxerr and minerr:
-                    console('Neither min or max skill available. Investigate.',
+                    console(f'{msg_name} - Neither min or max level available for "{key}". Investigate.',
                             msg=Msg.error)
                     return
 

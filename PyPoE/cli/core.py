@@ -119,6 +119,7 @@ class OutputHook:
 # Functions
 # =============================================================================
 
+quiet = False
 
 def run(parser, config):
     """
@@ -140,6 +141,12 @@ def run(parser, config):
         config object to use for the CLI application wide config
     """
     args = parser.parse_args()
+
+    if args.quiet:
+        global quiet
+        quiet = True
+        warnings.simplefilter('ignore')
+
     if hasattr(args, 'func'):
         try:
             code = args.func(args)
@@ -181,6 +188,6 @@ def console(message, msg=Msg.default, rtr=False, raw=False):
         f = msg.value + strftime('%X ') + message + Msg.default.value
     if rtr:
         return f
-    else:
+    global quiet
+    if not quiet or msg == Msg.error:
         print(f)
-
