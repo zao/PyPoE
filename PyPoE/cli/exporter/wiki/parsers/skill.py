@@ -450,7 +450,7 @@ class SkillParserShared(parser.BaseParser):
         stat_order = defaultdict()
         # Copy per-level stats into level_data
         for i, lvl_stats in enumerate(gra_eff_stats_pl):
-            data = defaultdict()
+            data = defaultdict(lambda: None)
             if len(gra_eff_per_lvl) > i:
                 lvl_effects = gra_eff_per_lvl[i]
             else:
@@ -511,7 +511,11 @@ class SkillParserShared(parser.BaseParser):
 
         for data in level_data[1:]:
             for key in list(static['columns']):
-                if last[key] != data[key]:
+                in_last = key in last
+                in_data = key in data
+                if not in_last and not in_data:
+                    continue
+                if in_last != in_data or last[key] != data[key]:
                     static['columns'].remove(key)
                     dynamic['columns'].add(key)
             for key in list(static['stats']):
@@ -562,7 +566,8 @@ class SkillParserShared(parser.BaseParser):
         if 'base_skill_effect_duration' in dynamic['stats'].keys():
             dynamic['columns'].add('BaseDuration')
             for row in level_data:
-                row['BaseDuration'] = row['stats']['base_skill_effect_duration']['values'][0]
+                if 'base_skill_effect_duration' in row['stats']:
+                    row['BaseDuration'] = row['stats']['base_skill_effect_duration']['values'][0]
         elif 'base_skill_effect_duration' in static['stats'].keys():
             static['columns'].add('BaseDuration')
             level_data[0]['BaseDuration'] = level_data[0]['stats']['base_skill_effect_duration']['values'][0]
@@ -723,8 +728,8 @@ class SkillParserShared(parser.BaseParser):
                     stat_ids = stat_dict_max['stats']
                     stat_dict = {'values': [0] * len(stat_ids)}
                 elif maxerr and minerr:
-                    console(f'{msg_name} - Neither min or max level available for "{key}". Investigate.',
-                            msg=Msg.error)
+                    console(f'{msg_name} - Neither min or max level value available for "{key}". Investigate.',
+                            msg=Msg.warning)
                     return
 
                 tr_values = []
@@ -789,18 +794,18 @@ class SkillParserShared(parser.BaseParser):
             infobox[prefix] = 'True'
 
             # In 3.21 the level requirement is a float so we need to cast it to int
-            if row['PlayerLevelReq'] == int(row['PlayerLevelReq']):
+            if 'PlayerLevelReq' in row and row['PlayerLevelReq'] == int(row['PlayerLevelReq']):
                 row['PlayerLevelReq'] = int(row['PlayerLevelReq'])
-                # If its not a whole number, raise error, just to be safe
-                if row['PlayerLevelReq'] % 1 != 0:
-                    raise ValueError('Level requirement is not a whole number')
+            # If its not a whole number, raise error, just to be safe
+            if 'PlayerLevelReq' in row and row['PlayerLevelReq'] % 1 != 0:
+                console(f"{msg_name} level requirement for level {i} is {row['PlayerLevelReq']}", msg=Msg.warning)
 
             prefix += '_'
             infobox[prefix + 'level_requirement'] = row['PlayerLevelReq']
 
             # Column handling
             for column, column_data in self._SKILL_COLUMN_MAP:
-                if column not in dynamic['columns']:
+                if column not in dynamic['columns'] or not row[column]:
                     continue
                 # Removed the check of defaults on purpose, makes sense
                 # to add the info since it is dynamically changed
@@ -879,6 +884,8 @@ class SkillParser(SkillParserShared):
                 data=data,
                 cmdargs=parsed_args,
             )
+            if not ('skill_id' in data):
+                continue
             r.add_result(
                 text=cond,
                 out_file='skill_%s.txt' % data['skill_id'],

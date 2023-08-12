@@ -53,6 +53,7 @@ Functions
 # =============================================================================
 
 # Python
+from hashlib import md5
 import re
 import warnings
 import os
@@ -1546,9 +1547,12 @@ class BaseParser:
 
     def _write_dds(self, data, out_path, parsed_args):
         out_path = fix_path(out_path.replace('"', "'", 2))
-        if parsed_args.convert_images:
+        if parsed_args.convert_images == 'md5sum':
+            with open(out_path.replace('.dds', '.md5sum'), 'w') as f:
+                f.write(md5(data).hexdigest())
+        elif parsed_args.convert_images:
             out_img = decode_dds(data)
-            out_img.save(out_path.replace('.dds', '.png'))
+            out_img.save(out_path.replace('.dds', parsed_args.convert_images))
 
             console('Converted "%s" to png' % out_path)
         else:

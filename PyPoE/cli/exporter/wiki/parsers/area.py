@@ -262,16 +262,9 @@ class AreaParser(parser.BaseParser):
                 area['FirstEntry_NPCTextAudioKey'] is not None,
             'format': lambda value: value['Name'],
         }),
-        # Spawn chances section
-        ('VaalArea_SpawnChance', {
-            'template': 'vaal_area_spawn_chance',
-            'condition': lambda area: area['VaalArea_SpawnChance'] > 0 and
-                                      area['VaalArea_WorldAreasKeys'],
-        }),
         ('VaalArea_WorldAreasKeys', {
             'template': 'vaal_area_ids',
-            'condition': lambda area: area['VaalArea_SpawnChance'] > 0 and
-                                      area['VaalArea_WorldAreasKeys'],
+            'condition': lambda area: area['VaalArea_WorldAreasKeys'],
             'format': lambda value: ', '.join([
                 area['Id'] for area in value
             ]),
@@ -409,6 +402,7 @@ class AreaParser(parser.BaseParser):
             data = OrderedDict()
 
             for row_key, copy_data in self._COPY_KEYS.items():
+
                 value = area[row_key]
 
                 condition = copy_data.get('condition')

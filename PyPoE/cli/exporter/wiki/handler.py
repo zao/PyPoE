@@ -517,8 +517,10 @@ class ExporterHandler(BaseHandler):
 
         parser.add_argument(
             '-im-c', '--convert-images',
-            help='Convert extracted images to png.',
-            action='store_true',
+            help='Convert extracted images. Can be any file type supported by PIL (default .png), or md5sum to just save a hash',
+            action='store',
+            nargs='?',
+            default='.png',
             dest='convert_images',
         )
 

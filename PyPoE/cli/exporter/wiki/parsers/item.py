@@ -3939,6 +3939,8 @@ class ItemsParser(SkillParserShared):
                 for name, color in self._MAP_COLORS.items():
                     ico_path = Path(ico)
                     out_path = ico_path.with_suffix(f'.{name}.png')
+                    if not os.path.isfile(ico_path):
+                        continue
 
                     # Tint with tier color, this historically differs from the colorization
                     # used for composing map glyphs onto on the itemized map base.
@@ -3993,10 +3995,10 @@ class ItemsParser(SkillParserShared):
 
         # Save off the base icon
         if parsed_args.store_images:
-            if not parsed_args.convert_images:
+            if not parsed_args.convert_images or parsed_args.convert_images != '.png':
                 console(
-                    'Map images need to be processed and require conversion '
-                    'option to be enabled.',
+                    "Map images need to be processed and require conversion "
+                    "option to be '.png'.",
                     msg=Msg.error)
                 return r
 
