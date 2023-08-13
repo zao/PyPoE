@@ -3722,7 +3722,7 @@ class ItemsParser(SkillParserShared):
             cls_id = base_item_type['ItemClassesKey']['Id']
             m_id = base_item_type['Id']
 
-            self._print_item_rowid(parsed_args, base_item_type)
+            self._print_item_rowid(len(items), base_item_type)
 
             infobox = OrderedDict()
             self._process_base_item_type(base_item_type, infobox)
@@ -3811,17 +3811,7 @@ class ItemsParser(SkillParserShared):
 
         return r
 
-    def _print_item_rowid(self, parsed_args, base_item_type):
-        # Don't print anything if not running in the rowid mode.
-        if not set(['start', 'end']).issubset(vars(parsed_args).keys()):
-            return
-
-        start = parsed_args.start
-
-        try:
-            export_row_count = parsed_args.end - parsed_args.start
-        except TypeError:
-            export_row_count = parsed_args.start
+    def _print_item_rowid(self, export_row_count, base_item_type):
         # If we're printing less than 100 rows, print every rowid
         if export_row_count <= 100:
             print_granularity = 1

@@ -75,6 +75,7 @@ def get_content_path():
 
 
 def fix_path(path: str) -> str:
+    path = path.replace('"', "'", 2).replace('\t', "")
     if re.search('[a-zA-Z]:.*', path) is not None:
         return path[:2] + re.sub(r':', '_', path[2:])
     else:

@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# dry run:
+# ./export.bash --write -w -w-dr -w-d -w-mt 8 -w-u $USERNAME -w-pw $PASSWORD
+# perform export:
+# ./export.bash --write -w -w-mt 8 -w-u $USERNAME -w-pw $PASSWORD
+
 set -x
 
 pypoe_exporter setup perform

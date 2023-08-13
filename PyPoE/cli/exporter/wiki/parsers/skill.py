@@ -559,7 +559,7 @@ class SkillParserShared(parser.BaseParser):
             stat_key_order['stats'][tr_stat] = impl_tr_stats[tr_stat]
 
         stat_key_order['stats'] = OrderedDict(
-            sorted(stat_key_order['stats'].items(), key=lambda item: stat_order[item[0]]))
+            sorted(sorted(stat_key_order['stats'].items(), key=lambda item: item[0]), key=lambda item: stat_order[item[0]]))
 
         # Copy BaseDuration Data to skill_level's 'BaseDuration' node where the infobox is expecting it
         # Add 'BaseDuration' to the list of dynamic columns.

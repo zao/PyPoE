@@ -12262,7 +12262,7 @@ specification = Specification({
             ),
             Field(
                 name='ModsKey',
-                type='ref|out',
+                type='ref|list|ref|out',
                 key='Mods.dat',
             ),
             Field(
@@ -12333,8 +12333,8 @@ specification = Specification({
                 type='ref|string',
             ),
             Field(
-                name='ModKey',
-                type='ref|out',
+                name='ModsKey2',
+                type='ref|list|ref|out',
                 key='Mods.dat',
             ),
         ),

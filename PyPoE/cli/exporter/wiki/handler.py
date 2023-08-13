@@ -198,8 +198,14 @@ class WikiHandler:
                     wiki_lines = page.text().splitlines(keepends=True)
                     new_lines = text.splitlines(keepends=True)
                     u_diff = unified_diff(
-                        wiki_lines, new_lines, "Wiki", "Export")
-                    sys.stdout.writelines(u_diff)
+                        wiki_lines, new_lines, page.name, "Export")
+                    if self.cmdargs.write:
+                        os.makedirs(os.path.join(self.out_dir, 'diff'), exist_ok=True)
+                        out_path = os.path.join(self.out_dir, 'diff', fix_path(row['out_file']))
+                        with open(out_path + ".patch", 'w') as f:
+                            f.writelines(u_diff)
+                    else:
+                        sys.stdout.writelines(u_diff)
                 else:
                     console(text)
             else:
@@ -213,17 +219,19 @@ class WikiHandler:
                 if response['result'] == 'Success':
                     console('Page was edited successfully (time: %s)' %
                             response.get('newtimestamp'))
+                    page.touch()
+                    page.purge()
                 else:
                     # TODO: what happens if it fails?
                     console('Something went wrong, status code:', msg=Msg.error)
                     console(response, msg=Msg.error)
         else:
             console(
-                'No wiki page candidates found, skipping this row.',
-                msg=Msg.error,
+                f'No wiki page candidates found from {[page["page"] for page in pages]}, skipping this row.',
+                msg=Msg.warning,
             )
 
-    def handle(self, *a, mwclient, result, cmdargs, parser):
+    def handle(self, *a, mwclient, result, cmdargs, parser, out_dir):
         # First row is handled separately to prompt the user for his password
 
         url = WIKIS.get(config.get_option('language'))
@@ -249,6 +257,7 @@ class WikiHandler:
         self.mwclient = mwclient
         self.cmdargs = cmdargs
         self.parser = parser
+        self.out_dir = out_dir
 
         if cmdargs.wiki_threads > 1:
             console('Starting thread pool...')
@@ -304,12 +313,7 @@ class ExporterHandler(BaseHandler):
                         console(text)
 
                     if pargs.write:
-                        out_path = os.path.join(out_dir, fix_path(
-                            # 3.15
-                            # Added to escape quotes in "The Kiss Good Night"
-                            item['out_file'].replace('"', "'", 2)))
-
-                        out_path = out_path.replace('\t', "")
+                        out_path = os.path.join(out_dir, fix_path(item['out_file']))
 
                         console('Writing data to "%s"...' % out_path)
                         with open(out_path, 'w', encoding='utf-8') as f:
@@ -333,7 +337,7 @@ class ExporterHandler(BaseHandler):
                     console('Running wikibot...')
                     console('-'*80)
                     wiki_handler.handle(mwclient=mwclient, result=result, cmdargs=pargs,
-                                        parser=parser)
+                                        parser=parser, out_dir=out_dir)
                     console('-'*80)
                     console('Completed wikibot execution.')
 

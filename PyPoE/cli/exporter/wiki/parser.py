@@ -1546,7 +1546,7 @@ class BaseParser:
         )
 
     def _write_dds(self, data, out_path, parsed_args):
-        out_path = fix_path(out_path.replace('"', "'", 2))
+        out_path = fix_path(out_path)
         if parsed_args.convert_images == 'md5sum':
             with open(out_path.replace('.dds', '.md5sum'), 'w') as f:
                 f.write(md5(data).hexdigest())
