@@ -2577,30 +2577,44 @@ class ItemsParser(SkillParserShared):
                     set_stat(j + i - 1, prefix, sid, sv)
                     j += 1
 
-            def cp_stats_primary(prefix):
+            def get_quality_stats(prefix, source, result):
                 i = 1
                 while True:
                     try:
-                        # print(f'{prefix}_stat{i}')
-                        sid, sv = get_stat(i, prefix, primary)
-                        # print(sid, sv)
-                        stext = primary[f'{prefix}_stat_text']
-                        # print(stext)
+                        id, value = get_stat(i, prefix, source)
+                        if id != 'dummy_stat_display_nothing':
+                            result[id] = value
                     except KeyError:
-                        break
-                    set_stat(i, prefix, sid, sv)
-                    infobox[f'{prefix}_stat_text'] = stext
+                        return
                     i += 1
+
+            def cp_quality(prefix):
+                stats: OrderedDict[str, int] = OrderedDict()
+                stextkey = f'{prefix}_stat_text'
+                text1 = primary.get(stextkey)
+                text2 = secondary.get(stextkey)
+                stext = text1 if text1 == text2 else '<br>'.join(filter(bool, [text1, text2]))
+                if not stext:
+                    return
+                # Both primary and secondary can have stats eg CoC has
+                # quality_type1_stat1_id = attack_critical_strike_chance_+% on primary and
+                # quality_type1_stat1_id = spell_critical_strike_chance_+% on secondary
+                get_quality_stats(prefix, primary, stats)
+                get_quality_stats(prefix, secondary, stats)
+                for i, (sid, sv) in enumerate(stats.items()):
+                    set_stat(i+1, prefix, sid, sv)
+                infobox[stextkey] = stext
 
             for k, v in list(primary.items()) + list(secondary.items()):
                 # Just override the stuff if needs be.
-                if 'stat' not in k and k not in infobox.keys():
+                if 'stat' not in k[k.startswith('static_') and 6:] and k not in infobox.keys():
                     infobox[k] = v
 
-            cp_stats_primary('quality_type1')
-            cp_stats_primary('quality_type2')
-            cp_stats_primary('quality_type3')
-            cp_stats_primary('quality_type4')
+
+            cp_quality('quality_type1')
+            cp_quality('quality_type2')
+            cp_quality('quality_type3')
+            cp_quality('quality_type4')
 
             infobox['stat_text'] = '<br>'.join(
                 [x for x in (primary['stat_text'],
