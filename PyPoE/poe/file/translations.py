@@ -183,6 +183,9 @@ regex_tokens = re.compile(
 _custom_translation_file = None
 _hardcoded_translation_file = None
 
+StatValue = Union[int, Tuple[int, int]]
+'''Numeric value to interpolate into a stat string. If a tuple is supplied, a range will be displayed instead'''
+
 # =============================================================================
 # Warnings
 # =============================================================================
@@ -1675,7 +1678,7 @@ class TranslationFile(AbstractFileReadOnly):
 
     def get_translation(self,
                         tags: List[str],
-                        values: Union[List[int], List[Tuple[int, int]]],
+                        values: Union[Dict[str, StatValue], List[StatValue]],
                         lang: str = 'English',
                         full_result: bool = False,
                         use_placeholder: Union[bool, Callable] = False,
@@ -1727,35 +1730,36 @@ class TranslationFile(AbstractFileReadOnly):
         if isinstance(tags, str):
             tags = [tags, ]
 
+        if isinstance(values, list):
+            values = dict(zip(tags, values))
+
         trans_found: List[Translation] = []
         trans_missing = []
         trans_missing_values = []
         trans_found_values = []
-        for i, tag in enumerate(tags):
+        for tag in tags:
             # stats that are zero are not displayed
             try:
-                if values[i][0] == 0 and values[i][1] == 0:
+                if tag not in values:
+                    warnings.warn(f"tag {tag} not present in supplied values {values}", TranslationWarning)
+                    continue
+                if values[tag][0] == 0 and values[tag][1] == 0:
                     continue
             except TypeError:
-                if values[i] == 0:
+                if values[tag] == 0:
                     continue
 
             if tag not in self.translations_hash:
                 trans_missing.append(tag)
-                trans_missing_values.append(values[i])
+                trans_missing_values.append(values[tag])
                 continue
 
             #tr = self.translations_hash[tag][-1]
             for tr in self.translations_hash[tag]:
                 index = tr.ids.index(tag)
-                if tr in trans_found:
-                    tf_index = trans_found.index(tr)
-                    trans_found_values[tf_index][index] = values[i]
-                else:
+                if tr not in trans_found:
                     trans_found.append(tr)
-                    # Used to identify invalid translations later
-                    v = [0xFFFFFFFF for i in range(0, len(tr.ids))]
-                    v[index] = values[i]
+                    v = [values.get(id) for id in tr.ids]
                     trans_found_values.append(v)
 
         # It seems that partial matches for the tags are indeed allowed and not
@@ -1764,14 +1768,14 @@ class TranslationFile(AbstractFileReadOnly):
         partial = []
         for i, found_values in enumerate(trans_found_values):
             for j, value in enumerate(found_values):
-                if value == 0xFFFFFFFF:
+                if value is None:
                     # Assume 0 as default.
                     found_values[j] = 0
                     partial.append(trans_found[i])
 
         if partial:
             warnings.warn(
-                'Partial tag match for %s' % ', '.join([
+                'Partial tag match for %s from values ' % ', '.join([
                     str(p) for p in partial
                 ]),
                 TranslationWarning
