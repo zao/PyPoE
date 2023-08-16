@@ -3716,6 +3716,7 @@ class ItemsParser(SkillParserShared):
             self.rr2['BaseItemTypes.dat64'].build_index('Name')
 
         console('Processing item information...')
+        self.num_processed = 0
 
         for base_item_type in items:
             name = base_item_type['Name']
@@ -3816,13 +3817,11 @@ class ItemsParser(SkillParserShared):
         if export_row_count <= 100:
             print_granularity = 1
         else:
-            start = 0
             print_granularity = 500
 
-        item_offset = base_item_type.rowid - start
-        if (item_offset == 0) or item_offset % print_granularity == 0:
-            console(
-                f"Processing item with rowid {base_item_type.rowid}: {base_item_type['Name']}")
+        if (self.num_processed == 0) or self.num_processed % print_granularity == 0:
+            console(f"Processing item with rowid {base_item_type.rowid}: {base_item_type['Name']}")
+        self.num_processed = self.num_processed + 1
         return
 
     def _format_map_name(self, base_item_type, map_series=None, language=None):
