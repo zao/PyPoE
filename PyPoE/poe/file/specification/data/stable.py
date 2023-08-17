@@ -12262,7 +12262,7 @@ specification = Specification({
             ),
             Field(
                 name='ModsKey',
-                type='ref|out',
+                type='ref|list|ref|out',
                 key='Mods.dat',
             ),
             Field(
@@ -12324,8 +12324,18 @@ specification = Specification({
                 key='IncursionRooms.dat',
             ),
             Field(
-                name='Key0',
+                name='ItemisedFlavourText',
                 type='ref|out',
+                key='FlavourText.dat',
+            ),
+            Field(
+                name='Description2',
+                type='ref|string',
+            ),
+            Field(
+                name='ModsKey2',
+                type='ref|list|ref|out',
+                key='Mods.dat',
             ),
         ),
     ),
@@ -14601,6 +14611,18 @@ specification = Specification({
             Field(
                 name='Unknown1',
                 type='int',
+            ),
+            Field(
+                name='Unknown2',
+                type='ref|self',
+            ),
+            Field(
+                name='Unknown3',
+                type='int',
+            ),
+            Field(
+                name='Unknown4',
+                type='ref|out',
             ),
         ),
     ),
@@ -18997,13 +19019,17 @@ specification = Specification({
             ),
             Field(
                 name='MonsterVarietiesKey',
-                type='ref|out',
+                type='ref|list|ref|out',
                 key='MonsterVarieties.dat',
             ),
             Field(
                 name='PantheonPanelLayoutKey',
                 type='ref|out',
                 key='PantheonPanelLayout.dat',
+            ),
+            Field(
+                name='BossDescription',
+                type='ref|string',
             ),
         ),
     ),

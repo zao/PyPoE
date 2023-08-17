@@ -173,7 +173,7 @@ class LuaHandler(ExporterHandler):
 
         parser = lua_sub.add_parser(
             'atlas',
-            help='Extract atlas information not covered by maps',
+            help='Extract atlas information not covered by maps (deprecated)',
         )
         self.add_default_parsers(
             parser=parser,
@@ -413,19 +413,10 @@ class AtlasParser(GenericLuaParser):
 
     def main(self, parsed_args):
         atlas_regions = []
-        atlas_base_item_types = []
 
         for row in self.rr['AtlasRegions.dat64']:
             self._copy_from_keys(row, self._COPY_KEYS_ATLAS_REGIONS,
                                  atlas_regions)
-
-        for row in self.rr['AtlasBaseTypeDrops.dat64']:
-            for i, tag in enumerate(row['SpawnWeight_TagsKeys']):
-                self._copy_from_keys(row, self._COPY_KEYS_ATLAS_BASE_TYPE_DROPS,
-                                     atlas_base_item_types)
-                atlas_base_item_types[-1]['tag'] = tag['Id']
-                atlas_base_item_types[-1]['weight'] = \
-                    row['SpawnWeight_Values'][i]
 
         r = ExporterResult()
         for k in ('atlas_regions', 'atlas_base_item_types'):
@@ -1011,7 +1002,15 @@ class PantheonParser(GenericLuaParser):
         }),
         ('MonsterVarietiesKey', {
             'key': 'target_monster_id',
-            'value': lambda v: v['Id'],
+            'value': lambda v: v[0]['Id'],
+        }),
+        ('MonsterVarietiesKey', {
+            'key': 'name',
+            'value': lambda v: v[0]['Name'],
+        }),
+        ('BossDescription', {
+            'key': 'name',
+            'value': lambda v: v,
         }),
         ('BaseItemTypesKey', {
             'key': 'item_id',
@@ -1050,7 +1049,6 @@ class PantheonParser(GenericLuaParser):
                 if i > 1:
                     souls = self.rr['PantheonSouls.dat64'].index[
                         'PantheonPanelLayoutKey'][row][i-2]
-
                     od.update(self._copy_from_keys(
                         souls, self._COPY_KEYS_PANTHEON_SOULS, rtr=True
                     ))
@@ -1082,41 +1080,6 @@ class PantheonParser(GenericLuaParser):
 class SynthesisParser(GenericLuaParser):
 
     _DATA = (
-        {
-            'file': 'ItemSynthesisCorruptedMods.dat64',
-            'key': 'synthesis_corrupted_mods',
-            'data': (
-                ('ItemClassesKey', {
-                    'key': 'item_class_id',
-                    'value': lambda v: v['Id'],
-                }),
-                ('ModsKeys', {
-                    'key': 'mod_ids',
-                    'value': lambda v: [m['Id'] for m in v],
-                }),
-            ),
-        },
-        {
-            'file': 'ItemSynthesisMods.dat64',
-            'key': 'synthesis_mods',
-            'data': (
-                ('StatsKey', {
-                    'key': 'stat_id',
-                    'value': lambda v: v['Id'],
-                }),
-                ('StatValue', {
-                    'key': 'stat_value',
-                }),
-                ('ItemClassesKeys', {
-                    'key': 'item_class_ids',
-                    'value': lambda v: [ic['Id'] for ic in v],
-                }),
-                ('ModsKeys', {
-                    'key': 'mod_ids',
-                    'value': lambda v: [m['Id'] for m in v],
-                }),
-            ),
-        },
         {
             'file': 'SynthesisAreas.dat64',
             'key': 'synthesis_areas',
@@ -1173,16 +1136,6 @@ class SynthesisParser(GenericLuaParser):
                 self._copy_from_keys(
                     row, definition['data'], data[definition['key']]
                 )
-
-        for row in data['synthesis_mods']:
-            row['stat_text'] = self._format_tr(
-                self.tc['stat_descriptions.txt'].get_translation(
-                    tags=(row['stat_id'], ),
-                    values=(row['stat_value'], ),
-                    lang=self.lang,
-                    full_result=True
-                )
-            )
 
         r = ExporterResult()
         for definition in self._DATA:

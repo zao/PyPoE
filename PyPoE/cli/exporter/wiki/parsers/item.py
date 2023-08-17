@@ -2511,7 +2511,7 @@ class ItemsParser(SkillParserShared):
         if not exp_level:
             console('No experience progression found for "%s" - assuming max '
                     'level 1' %
-                    base_item_type['Name'], msg=Msg.error)
+                    base_item_type['Name'], msg=Msg.warning)
             exp_total = [0]
 
         max_level = len(exp_total)-1
@@ -3400,7 +3400,7 @@ class ItemsParser(SkillParserShared):
                 return base_item_type['Name'] + ' (%s)' % \
                     rr['Quest.dat64'].index['Id'][qid]['Name']
             except KeyError:
-                console('Quest %s not found' % qid, msg=Msg.error)
+                console('Quest %s not found' % qid, msg=Msg.warning)
         else:
             # Descent skill books
             match = re.match(r'SkillBooks/Descent2_(?P<id>[0-9]+)', qid)
@@ -3675,7 +3675,7 @@ class ItemsParser(SkillParserShared):
                         'Unresolved ambiguous item "%s" with name "%s". '
                         'Skipping' %
                         (m_id, infobox['name']),
-                        msg=Msg.error
+                        msg=Msg.warning
                     )
                     return
             else:
@@ -3683,10 +3683,10 @@ class ItemsParser(SkillParserShared):
                     'Unresolved ambiguous item "%s" with name "%s". '
                     'Skipping' %
                     (m_id, infobox['name']),
-                    msg=Msg.error
+                    msg=Msg.warning
                 )
                 console('No name conflict handler defined for item class id'
-                        ' "%s"' % cls_id, msg=Msg.error)
+                        ' "%s"' % cls_id, msg=Msg.warning)
                 return
 
         return name
@@ -3716,13 +3716,14 @@ class ItemsParser(SkillParserShared):
             self.rr2['BaseItemTypes.dat64'].build_index('Name')
 
         console('Processing item information...')
+        self.num_processed = 0
 
         for base_item_type in items:
             name = base_item_type['Name']
             cls_id = base_item_type['ItemClassesKey']['Id']
             m_id = base_item_type['Id']
 
-            self._print_item_rowid(parsed_args, base_item_type)
+            self._print_item_rowid(len(items), base_item_type)
 
             infobox = OrderedDict()
             self._process_base_item_type(base_item_type, infobox)
@@ -3737,7 +3738,7 @@ class ItemsParser(SkillParserShared):
                         console(
                             f'Required extra info for item "{name}" with class id '
                             f'"{cls_id}" not found. Skipping.',
-                            msg=Msg.error)
+                            msg=Msg.warning)
                         break
                 if fail:
                     continue
@@ -3811,28 +3812,16 @@ class ItemsParser(SkillParserShared):
 
         return r
 
-    def _print_item_rowid(self, parsed_args, base_item_type):
-        # Don't print anything if not running in the rowid mode.
-        if not set(['start', 'end']).issubset(vars(parsed_args).keys()):
-            return
-
-        start = parsed_args.start
-
-        try:
-            export_row_count = parsed_args.end - parsed_args.start
-        except TypeError:
-            export_row_count = parsed_args.start
+    def _print_item_rowid(self, export_row_count, base_item_type):
         # If we're printing less than 100 rows, print every rowid
         if export_row_count <= 100:
             print_granularity = 1
         else:
-            start = 0
             print_granularity = 500
 
-        item_offset = base_item_type.rowid - start
-        if (item_offset == 0) or item_offset % print_granularity == 0:
-            console(
-                f"Processing item with rowid {base_item_type.rowid}: {base_item_type['Name']}")
+        if (self.num_processed == 0) or self.num_processed % print_granularity == 0:
+            console(f"Processing item with rowid {base_item_type.rowid}: {base_item_type['Name']}")
+        self.num_processed = self.num_processed + 1
         return
 
     def _format_map_name(self, base_item_type, map_series=None, language=None):
@@ -3863,7 +3852,7 @@ class ItemsParser(SkillParserShared):
             except IndexError:
                 console(
                     'Invalid map series id',
-                    msg=Msg.error)
+                    msg=Msg.warning)
                 return False
         elif parsed_args.map_series is not None:
             try:
@@ -3872,7 +3861,7 @@ class ItemsParser(SkillParserShared):
             except IndexError:
                 console(
                     'Invalid map series name',
-                    msg=Msg.error)
+                    msg=Msg.warning)
                 return False
         else:
             map_series = self.rr['MapSeries.dat64'][-1]
@@ -3939,6 +3928,8 @@ class ItemsParser(SkillParserShared):
                 for name, color in self._MAP_COLORS.items():
                     ico_path = Path(ico)
                     out_path = ico_path.with_suffix(f'.{name}.png')
+                    if not os.path.isfile(ico_path):
+                        continue
 
                     # Tint with tier color, this historically differs from the colorization
                     # used for composing map glyphs onto on the itemized map base.
@@ -3993,10 +3984,10 @@ class ItemsParser(SkillParserShared):
 
         # Save off the base icon
         if parsed_args.store_images:
-            if not parsed_args.convert_images:
+            if not parsed_args.convert_images or parsed_args.convert_images != '.png':
                 console(
-                    'Map images need to be processed and require conversion '
-                    'option to be enabled.',
+                    "Map images need to be processed and require conversion "
+                    "option to be '.png'.",
                     msg=Msg.error)
                 return r
 

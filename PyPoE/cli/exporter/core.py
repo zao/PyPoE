@@ -105,6 +105,8 @@ def main():
     SetupHandler(main_sub, config)
     ConfigHandler(main_sub, config)
 
+    main_parser.add_argument('--quiet', action='store_true')
+
     # Execute
     run(main_parser, config)
 
