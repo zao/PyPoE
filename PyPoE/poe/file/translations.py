@@ -2174,6 +2174,13 @@ def install_data_dependant_quantifiers(relational_reader):
             relational_reader['Data/AfflictionRewardTypeVisuals.dat64'], 'Name'),
     )
 
+    TranslationQuantifier(
+        id='display_indexable_skill',
+        # handler=lambda v: relational_reader['IndexableSkillGems.dat64'][v]['Name'],
+        reverse_handler=_get_reverse_lookup_from_reader(
+            relational_reader['IndexableSkillGems.dat64'], 'Name'),
+    )
+
     # I believe this is currently not right, as the handler actually uses a value located in additionalProperties of the item, and
     # not in the mod itself. THe mod itself has min = max = 0.
     # TranslationQuantifier(
@@ -2484,6 +2491,12 @@ TranslationQuantifier(
 )
 
 TranslationQuantifier(
+    id='divide_by_twenty',
+    handler=lambda v: v/20,
+    reverse_handler=lambda v: v*20,
+)
+
+TranslationQuantifier(
     id='canonical_line',
     type=TranslationQuantifier.QuantifierTypes.STRING,
     arg_size=0,
@@ -2522,7 +2535,6 @@ TranslationQuantifier(
     id='passive_hash',
 )
 
-
 TranslationQuantifier(
     id='metamorphosis_reward_description',
 )
@@ -2530,6 +2542,10 @@ TranslationQuantifier(
 TranslationQuantifier(
     id='reminderstring',
     type=TranslationQuantifier.QuantifierTypes.STRING,
+)
+
+TranslationQuantifier(
+    id='display_indexable_skill',
 )
 
 TranslationQuantifierHandler.init()

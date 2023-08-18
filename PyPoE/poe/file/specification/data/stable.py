@@ -4098,6 +4098,10 @@ specification = Specification({
                 name='Unknown3',
                 type='ref|string',
             ),
+            Field(
+                name='Unknown4',
+                type='int',
+            ),
         ),
     ),
     'BuffVisualOrbTypes.dat': File(
@@ -4144,12 +4148,8 @@ specification = Specification({
                 type='int',
             ),
             Field(
-                name='Flag1',
-                type='bool',
-            ),
-            Field(
                 name='Unknown6',
-                type='float',
+                type='int',
             ),
             Field(
                 name='Unknown7',
@@ -4157,15 +4157,19 @@ specification = Specification({
             ),
             Field(
                 name='Unknown8',
-                type='float',
+                type='int',
             ),
             Field(
-                name='Flag2',
+                name='Flag1',
                 type='bool',
             ),
             Field(
                 name='Unknown9',
-                type='float',
+                type='int',
+            ),
+            Field(
+                name='Unknown10',
+                type='int',
             ),
         ),
     ),
@@ -5397,6 +5401,14 @@ specification = Specification({
             Field(
                 name='Key4',
                 type='ref|out',
+            ),
+            Field(
+                name='Flag1',
+                type='bool',
+            ),
+            Field(
+                name='Keys2',
+                type='ref|list|ref|out',
             ),
         ),
         virtual_fields=(
@@ -12352,6 +12364,38 @@ specification = Specification({
             ),
         ),
     ),
+    'IndexableSkillGems.dat': File(
+        fields=(
+            Field(
+                name='Index',
+                type='int',
+                unique=True,
+            ),
+            Field(
+                name='SkillGems',
+                type='ref|list|ref|out',
+                key='SkillGems.dat',
+            ),
+            Field(
+                name='Name',
+                type='ref|string',
+            ),
+            Field(
+                name='SkillGemsHardmode',
+                type='ref|list|ref|out',
+                key='SkillGems.dat',
+            ),
+            Field(
+                name='NameHardmode',
+                type='ref|string',
+            ),
+            Field(
+                name='HardmodeIndexToCanonicalIndex',
+                type='ref|self',
+                key='IndexableSkillGems.dat',
+            ),
+        ),
+    ),
     'IndexableSupportGems.dat': File(
         fields=(
             Field(
@@ -14772,6 +14816,10 @@ specification = Specification({
             ),
             Field(
                 name='CrucibleTier',
+                type='int',
+            ),
+            Field(
+                name='AncestralTier',  # AKA Ancestor
                 type='int',
             ),
         ),
@@ -24321,6 +24369,10 @@ specification = Specification({
             Field(
                 name='Unknown56',
                 type='ref|out',
+            ),
+            Field(
+                name='Unknown57',
+                type='int',
             ),
         ),
     ),
