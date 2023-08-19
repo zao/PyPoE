@@ -1740,6 +1740,8 @@ class TagHandler:
             self.tag_handlers[key] = partial(func, self)
 
     def _check_link(self, string):
+        if any(category['Text'] == string for category in self.rr['ItemClassCategories.dat64']):
+            return '[[%s]]' % string
         items = self.rr['BaseItemTypes.dat64'].index['Name'][string]
         if items:
             if items[0]['ItemClassesKey']['Name'] == 'Maps':
