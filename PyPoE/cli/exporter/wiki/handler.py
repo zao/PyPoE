@@ -524,7 +524,7 @@ class ExporterHandler(BaseHandler):
             help='Convert extracted images. Can be any file type supported by PIL (default .png), or md5sum to just save a hash',
             action='store',
             nargs='?',
-            default='.png',
+            const='.png',
             dest='convert_images',
         )
 

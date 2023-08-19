@@ -9,9 +9,9 @@ options:
   -i, --image           process images and convert them to the specified format
 
 export to the file system:
-  '$(basename $0)' -q --write
+  '$(basename $0)' -q -- --write
 to perform a dry run comparing changes against the wiki:
-  '$(basename $0)' --write -w -w-dr -w-d -w-mt 8 -w-u $USERNAME -w-pw $PASSWORD
+  '$(basename $0)' -- --write -w -w-dr -w-d -w-mt 8 -w-u $USERNAME -w-pw $PASSWORD
 to perform a full export:
   '$(basename $0)' -i .png -- -w -w-mt 8 -w-u $USERNAME -w-pw $PASSWORD'
 }
