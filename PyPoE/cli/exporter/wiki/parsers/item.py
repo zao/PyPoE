@@ -2479,10 +2479,15 @@ class ItemsParser(SkillParserShared):
         else:
             self.rr2 = None
     
+    def _skip_quest_contracts(self, infobox: OrderedDict, base_item_type):
+        return base_item_type.rowid not in self.rr['HeistContracts.dat64'].index['BaseItemTypesKey']
+        
+
+    
     def _tattoo(self, infobox: OrderedDict, base_item_type):
         if 'BaseItemTypesKey' not in self.rr['PassiveSkillTattoos.dat64'].index:
             self.rr['PassiveSkillTattoos.dat64'].build_index('BaseItemTypesKey')
-        data: list = next(iter(self.rr['PassiveSkillTattoos.dat64'].index['BaseItemTypesKey'][base_item_type]), None)
+        data = next(iter(self.rr['PassiveSkillTattoos.dat64'].index['BaseItemTypesKey'][base_item_type]), None)
         if not data:
             return True
         try:
@@ -3398,7 +3403,7 @@ class ItemsParser(SkillParserShared):
         # Misc
         'Map': (_type_map,),
         'MapFragment': (_type_map_fragment_mods,),
-        'QuestItem': (),
+        'QuestItem': (_skip_quest_contracts, ),
         'AtlasRegionUpgradeItem': (),
         'MetamorphosisDNA': (),
         # heist league
