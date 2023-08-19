@@ -33,7 +33,7 @@ See PyPoE/LICENSE
 
 # Python
 import os
-from typing import List, Tuple, Union
+from typing import Dict, List, Tuple, Union
 import warnings
 import traceback
 from collections import OrderedDict, defaultdict
@@ -44,7 +44,7 @@ from PyPoE.cli.exporter import config
 from PyPoE.cli.exporter.wiki.handler import ExporterHandler, ExporterResult
 from PyPoE.cli.exporter.wiki import parser
 from PyPoE.poe.file.stat_filters import StatFilterFile
-from PyPoE.poe.file.translations import TranslationFile
+from PyPoE.poe.file.translations import TranslationFile, StatValue
 
 # =============================================================================
 # Globals
@@ -336,8 +336,8 @@ class SkillParserShared(parser.BaseParser):
             infobox[prefix + 'id'] = val[0]
             infobox[prefix + 'value'] = val[1]
 
-    def _translate_stats(self, stats, values: Union[List[int], List[Tuple[int, int]]], trans_file: TranslationFile, data: defaultdict, stat_order: defaultdict) -> OrderedDict:
-        stats_output = OrderedDict()
+    def _translate_stats(self, stats, values: Union[List[StatValue], Dict[str, StatValue]], trans_file: TranslationFile, data: defaultdict, stat_order: defaultdict) -> OrderedDict:
+        stats_output: OrderedDict[str, None] = OrderedDict()
 
         trans_rslt = trans_file.get_translation(
             tags=stats,
@@ -453,6 +453,15 @@ class SkillParserShared(parser.BaseParser):
         }
 
         stat_order = defaultdict()
+
+        # GrantedEffectStatSets.dat64
+        const_stats = [untr_stat['Id']
+                       for untr_stat in stat_set['ConstantStats']]
+        impl_stats = [untr_stat['Id']
+                      for untr_stat in stat_set['ImplicitStats']]
+        const_stat_vals = stat_set['ConstantStatsValues']
+        impl_stat_vals = [1 for i in range(len(impl_stats))]
+
         # Copy per-level stats into level_data
         for i, lvl_stats in enumerate(gra_eff_stats_pl):
             data = defaultdict(lambda: None)
@@ -485,7 +494,7 @@ class SkillParserShared(parser.BaseParser):
                     del values[index]
 
             translated_stats = self._translate_stats(
-                stats, values, tf, data, stat_order)
+                stats, dict(zip(stats + const_stats + impl_stats, values + const_stat_vals + impl_stat_vals)), tf, data, stat_order)
             for tr_stat in translated_stats.keys():
                 stat_key_order['stats'][tr_stat] = translated_stats[tr_stat]
 
@@ -505,10 +514,12 @@ class SkillParserShared(parser.BaseParser):
             'columns': set(self._GEPL_COPY + self._GESSPL_COPY),
             # stats are specific to this skill
             'stats': OrderedDict(stat_key_order['stats']),
+            'stat_keys': set(),
         }
         dynamic = {
             'columns': set(),
             'stats': OrderedDict(),
+            'stat_keys': set(),
         }
 
         # Grab the data from the first row of per-level gem data.
@@ -535,6 +546,7 @@ class SkillParserShared(parser.BaseParser):
                                           data['stats'][key]['values']):
                     del static['stats'][key]
                     dynamic['stats'][key] = None
+                    dynamic['stat_keys'].update(last['stats'].get(key, data['stats'].get(key))['stats'])
             last = data
 
         # GrantedEffectStatSets.dat64
@@ -555,11 +567,13 @@ class SkillParserShared(parser.BaseParser):
         # It also expects them to be in the master list in stat_key_order
         for tr_stat in const_tr_stats.keys():
             static['stats'][tr_stat] = const_tr_stats[tr_stat]
+            static['stat_keys'].update(const_data['stats'][tr_stat]['stats'])
             level_data[0]['stats'][tr_stat] = const_data['stats'][tr_stat]
             stat_key_order['stats'][tr_stat] = const_tr_stats[tr_stat]
 
         for tr_stat in impl_tr_stats.keys():
             static['stats'][tr_stat] = impl_tr_stats[tr_stat]
+            static['stat_keys'].update(impl_data['stats'][tr_stat]['stats'])
             level_data[0]['stats'][tr_stat] = impl_data['stats'][tr_stat]
             stat_key_order['stats'][tr_stat] = impl_tr_stats[tr_stat]
 
@@ -705,7 +719,7 @@ class SkillParserShared(parser.BaseParser):
                     sdict = level_data[0]['stats'][key]
                 except:
                     sdict = level_data[-1]['stats'][key]
-                line = sdict['line']
+                line = None if key in dynamic['stat_keys'] else sdict['line']
                 stats.extend(sdict['stats'])
                 values.extend(sdict['values'])
             elif key in dynamic['stats']:
@@ -839,7 +853,7 @@ class SkillParserShared(parser.BaseParser):
                 infobox[prefix + 'stat_text'] = \
                     self._format_lines(lines)
             self._write_stats(
-                infobox, zip(stats, values), prefix
+                infobox, [(s,v) for s, v in zip(stats, values) if s not in static['stat_keys']], prefix
             )
 
         return True
