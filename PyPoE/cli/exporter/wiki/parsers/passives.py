@@ -128,7 +128,7 @@ class PassiveSkillParser(parser.BaseParser):
 
     _MAX_STAT_ID = 5
 
-    _COPY_KEYS = OrderedDict((
+    _COPY_KEYS = (
         ('Id', {
             'template': 'id',
         }),
@@ -161,6 +161,12 @@ class PassiveSkillParser(parser.BaseParser):
         ('AscendancyKey', {
             'template': 'ascendancy_class',
             'format': lambda value: value['Name'],
+            'condition': lambda passive: 'SpecialEldritch' not in passive['Id']
+        }),
+        ('AscendancyKey', {
+            'template': 'ascendancy_class',
+            'format': lambda value: value['CharactersKey'][0]['Name'],
+            'condition': lambda passive: 'SpecialEldritch' in passive['Id']
         }),
         ('IsKeystone', {
             'template': 'is_keystone',
@@ -190,7 +196,7 @@ class PassiveSkillParser(parser.BaseParser):
             'template': 'is_ascendancy_starting_node',
             'default': False,
         }),
-    ))
+    )
 
     def _apply_filter(self, parsed_args, passives):
         if parsed_args.re_id:
@@ -276,7 +282,7 @@ class PassiveSkillParser(parser.BaseParser):
                 console(f"Processing passive {passive['Id']} at {passive.rowid}")
 
             # Copy over simple fields from the .dat64
-            for row_key, copy_data in self._COPY_KEYS.items():
+            for row_key, copy_data in self._COPY_KEYS:
                 value = passive[row_key]
 
                 condition = copy_data.get('condition')
