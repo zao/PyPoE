@@ -142,6 +142,7 @@ class WikiCondition(parser.WikiCondition):
         'alternate_art_inventory_icons',
         'frame_type',
         'influences',
+        'card_background',
 
         # Drop restrictions
         'drop_enabled',

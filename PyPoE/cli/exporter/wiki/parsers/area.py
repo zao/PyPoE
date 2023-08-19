@@ -65,6 +65,7 @@ class WikiCondition(parser.WikiCondition):
         'main_page',
         'release_version',
         'screenshot_ext',
+        'vaal_area_spawn_chance',
     )
 
     NAME = 'Area'
