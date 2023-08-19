@@ -157,7 +157,7 @@ class SkillParserShared(parser.BaseParser):
         'Level', 'PlayerLevelReq', 'CostMultiplier',
         'CostAmounts', 'CostTypes', 'VaalSouls', 'VaalStoredUses',
         'SoulGainPreventionDuration', 'Cooldown', 'StoredUses', 'AttackSpeedMultiplier',
-        'ManaReservationFlat', 'ManaReservationPercent', 'LifeReservationFlat', 'LifeReservationPercent',
+        'ManaReservationFlat', 'ManaReservationPercent', 'LifeReservationFlat', 'LifeReservationPercent', 'AttackTime'
     )
 
     # Fields to copy from GrantedEffectStatSetsPerLevel.dat64
@@ -267,6 +267,11 @@ class SkillParserShared(parser.BaseParser):
             'template': 'life_reservation_percent',
             'default': 0,
             'format': lambda v: '{0:n}'.format(v/100),
+        }),
+        ('AttackTime', {
+            'template': 'attack_time',
+            'default': 0,
+            'format': lambda v: '{0:n}'.format(v/1000),
         }),
     )
 
