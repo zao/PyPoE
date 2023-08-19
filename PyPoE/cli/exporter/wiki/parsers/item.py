@@ -2478,6 +2478,33 @@ class ItemsParser(SkillParserShared):
             )
         else:
             self.rr2 = None
+    
+    def _tattoo(self, infobox: OrderedDict, base_item_type):
+        if 'BaseItemTypesKey' not in self.rr['PassiveSkillTattoos.dat64'].index:
+            self.rr['PassiveSkillTattoos.dat64'].build_index('BaseItemTypesKey')
+        data: list = next(iter(self.rr['PassiveSkillTattoos.dat64'].index['BaseItemTypesKey'][base_item_type]), None)
+        if not data:
+            return True
+        try:
+            description = []
+            set = data['Set']
+            infobox['tattoo_target'] = f"{set['Qualifier']} {set['Name']}" if set['Qualifier'] else set['Name']
+            description.append(f"Replaces a {infobox['tattoo_target']} Passive Skill")
+            override = data['Override']
+            stats = [s['Id'] for s in override['Stats']]
+            tr = self.tc['stat_descriptions.txt'].get_translation(
+                stats, override['StatValues'], full_result=True,
+                lang=self._language,
+            )
+            infobox['tattoo_stat_text'] = '<br>'.join(parser.make_inter_wiki_links(line) for line in tr.lines)
+            description.append(f'Grants "{infobox["tattoo_stat_text"]}"')
+            if override['Limit']:
+                infobox['tattoo_limit'] = override['Limit']['Description']
+                description.append(f"Limit {infobox['tattoo_limit']}")
+            infobox['description'] = '<br>'.join(description)
+        except KeyError:
+            return False
+        return True
 
     def _skill_gem(self, infobox: OrderedDict, base_item_type):
         try:
@@ -3355,7 +3382,7 @@ class ItemsParser(SkillParserShared):
         'Support Skill Gem': (_skill_gem, ),
         # Currency-like items
         'Currency': (_type_currency, ),
-        'StackableCurrency': (_type_currency, _type_essence, _type_blight_item),
+        'StackableCurrency': (_type_currency, _type_essence, _type_blight_item, _tattoo),
         'DelveSocketableCurrency': (_type_currency, ),
         'DelveStackableSocketableCurrency': (_type_currency,),
         'HideoutDoodad': (_type_currency, _type_hideout_doodad),
