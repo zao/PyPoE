@@ -218,36 +218,43 @@ class SkillParserShared(parser.BaseParser):
         ('StoredUses', {
             'template': 'stored_uses',
             'default': 0,
+            'condition': lambda v: v,
             'format': lambda v: '{0:n}'.format(v),
         }),
         ('Cooldown', {
             'template': 'cooldown',
             'default': 0,
+            'condition': lambda v: v,
             'format': lambda v: '{0:n}'.format(v/1000),
         }),
         ('VaalSouls', {
             'template': 'vaal_souls_requirement',
             'default': 0,
+            'condition': lambda v: v,
             'format': lambda v: '{0:n}'.format(v),
         }),
         ('VaalStoredUses', {
             'template': 'vaal_stored_uses',
             'default': 0,
+            'condition': lambda v: v,
             'format': lambda v: '{0:n}'.format(v),
         }),
         ('SoulGainPreventionDuration', {
             'template': 'vaal_soul_gain_prevention_time',
             'default': 0,
+            'condition': lambda v: v,
             'format': lambda v: '{0:n}'.format(v/1000),
         }),
         ('SpellCritChance', {
             'template': 'critical_strike_chance',
             'default': 0,
+            'condition': lambda v: v,
             'format': lambda v: '{0:n}'.format(v/100),
         }),
         ('AttackCritChance', {
             'template': 'critical_strike_chance',
             'default': 0,
+            'condition': lambda v: v,
             'format': lambda v: '{0:n}'.format(v/100),
         }),
         ('DamageEffectiveness', {
@@ -270,26 +277,31 @@ class SkillParserShared(parser.BaseParser):
         ('ManaReservationFlat', {
             'template': 'mana_reservation_flat',
             'default': 0,
+            'condition': lambda v: v,
             'format': lambda v: '{0:n}'.format(v),
         }),
         ('ManaReservationPercent', {
             'template': 'mana_reservation_percent',
             'default': 0,
+            'condition': lambda v: v,
             'format': lambda v: '{0:n}'.format(v/100),
         }),
         ('LifeReservationFlat', {
             'template': 'life_reservation_flat',
             'default': 0,
+            'condition': lambda v: v,
             'format': lambda v: '{0:n}'.format(v),
         }),
         ('LifeReservationPercent', {
             'template': 'life_reservation_percent',
             'default': 0,
+            'condition': lambda v: v,
             'format': lambda v: '{0:n}'.format(v/100),
         }),
         ('AttackTime', {
             'template': 'attack_time',
             'default': 0,
+            'condition': lambda v: v,
             'format': lambda v: '{0:n}'.format(v/1000),
         }),
     )
@@ -436,7 +448,7 @@ class SkillParserShared(parser.BaseParser):
         if (not gra_eff_per_lvl) and (not gra_eff_stats_pl):
             console('No level progression found for "%s". Skipping.' %
                     msg_name, msg=Msg.error)
-            return False
+            return
 
         gra_eff_per_lvl.sort(key=lambda x: x['Level'])
         gra_eff_stats_pl.sort(key=lambda x: x['GemLevel'])
@@ -768,7 +780,7 @@ class SkillParserShared(parser.BaseParser):
                 elif maxerr and minerr:
                     console(f'{msg_name} - Neither min or max level value available for "{key}". Investigate.',
                             msg=Msg.warning)
-                    return
+                    continue
 
                 tr_values = []
                 for j, value in enumerate(stat_dict['values']):
@@ -877,8 +889,6 @@ class SkillParserShared(parser.BaseParser):
                 infobox, [(s,v) for s, v in zip(stats, values) if s not in static['stat_keys']], prefix
             )
 
-        return True
-
 
 class SkillParser(SkillParserShared):
     def by_id(self, parsed_args):
@@ -913,8 +923,9 @@ class SkillParser(SkillParserShared):
         gra_eff = OrderedDict()
         self.rr['GrantedEffects.dat64'].build_index('ActiveSkill')
         for skill in active_skills:
-            for effect in self.rr['GrantedEffects.dat64'].index['ActiveSkill'][skill]:
-                gra_eff[effect['Id']] = effect
+            if skill['DisplayedName']:
+                for effect in self.rr['GrantedEffects.dat64'].index['ActiveSkill'][skill]:
+                    gra_eff[effect['Id']] = effect
         return gra_eff.values()
 
     def export(self, parsed_args, skills):
