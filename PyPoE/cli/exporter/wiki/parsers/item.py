@@ -2498,16 +2498,20 @@ class ItemsParser(SkillParserShared):
                 return ' '.join("{{c|" + fmt + '|' + str(val) + "}}" for fmt, val in vals)
 
             target = f"{set['Qualifier']} {set['Name']}" if set['Qualifier'] else set['Name']
+            infobox['tattoo_target'] = target
             infobox['implicit1_text'] = format(('default', 'Replaces a'), ('value', target), ('default', 'Passive Skill'))
 
             if override['Limit']:
+                infobox['tattoo_limit'] = override['Limit']['Description']
                 infobox['implicit2_text'] = format(('default', 'Limit'),
                                                    ('value', override['Limit']['Description']))
             elif override['RequiresAdjacent']:
+                infobox['tattoo_min_adjacent'] = override['RequiresAdjacent']
                 infobox['implicit2_text'] = format(('default', 'Requires'),
                                                    ('value', override['RequiresAdjacent']),
                                                    ('default', 'adjacent Passive Skills Allocated'))
             elif override['MaxAdjacent']:
+                infobox['tattoo_max_adjacent'] = override['MaxAdjacent']
                 infobox['implicit2_text'] = format(('default', 'Requires'),
                                                    ('value', f"Maximum {override['MaxAdjacent']}"),
                                                    ('default', 'adjacent Passive Skill Allocated'))
@@ -2518,8 +2522,10 @@ class ItemsParser(SkillParserShared):
                 lang=self._language,
             )
             lines = tr.lines
+            infobox['tattoo_stat_text'] = '\n'.join(lines)
             if override['Effect']:
                 skill = override['Effect']['GrantedEffect']
+                infobox['tattoo_skill_id'] = skill['Id']
                 skill_name = skill['ActiveSkill']['DisplayedName']
                 link = f"[[Skill:{skill['Id']}|{skill_name}]]"
                 lines = [line.replace(skill_name, link) for line in lines]
