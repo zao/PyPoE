@@ -2501,7 +2501,13 @@ class ItemsParser(SkillParserShared):
                 stats, override['StatValues'], full_result=True,
                 lang=self._language,
             )
-            infobox['tattoo_stat_text'] = '<br>'.join(parser.make_inter_wiki_links(line) for line in tr.lines)
+            lines = tr.lines
+            if override['Effect']:
+                skill = override['Effect']['GrantedEffect']
+                skill_name = skill['ActiveSkill']['DisplayedName']
+                link = f"[[Skill:{skill['Id']}|{skill_name}]]"
+                lines = [line.replace(skill_name, link) for line in lines]
+            infobox['tattoo_stat_text'] = '<br>'.join(parser.make_inter_wiki_links(line) for line in lines)
             description.append(f'Grants "{infobox["tattoo_stat_text"]}"')
             if override['Limit']:
                 infobox['tattoo_limit'] = override['Limit']['Description']
