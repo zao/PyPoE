@@ -66,7 +66,7 @@ pypoe_exporter setup perform
 
 pypoe_exporter $QUIET wiki items item rowid $IMG "$@"
 pypoe_exporter $QUIET wiki passive rowid $IMG "$@"
-pypoe_exporter $QUIET wiki skill by_row $IMG "$@"
+pypoe_exporter $QUIET wiki skill by_name $IMG "$@"
 pypoe_exporter $QUIET wiki incursion rooms rowid "$@"
 pypoe_exporter $QUIET wiki area rowid "$@"
 pypoe_exporter $QUIET wiki lua bestiary "$@"

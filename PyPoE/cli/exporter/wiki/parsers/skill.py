@@ -107,6 +107,25 @@ class SkillHandler(ExporterHandler):
             help='Ending index',
             type=int,
         )
+        
+        # by row ID
+        s_name = skill_sub.add_parser(
+            'by_name',
+            help='Extract skills by active skill name.'
+        )
+        self.add_default_parsers(
+            parser=s_name,
+            cls=SkillParser,
+            func=SkillParser.by_name,
+        )
+        s_name.add_argument(
+            'name',
+            help='Visible name (i.e. the name you see in game). Can be '
+                 'specified multiple times. If not specified all named '
+                 'skills will be exported',
+            nargs='*',
+            type=str,
+        )
 
     def add_default_parsers(self, *args, **kwargs):
         super().add_default_parsers(*args, **kwargs)
@@ -875,6 +894,26 @@ class SkillParser(SkillParserShared):
             parsed_args,
             self.rr['GrantedEffects.dat64'][parsed_args.start:parsed_args.end],
         )
+    
+    def by_name(self, parsed_args):
+        return self.export(
+            parsed_args,
+            self._effects_from_named_skills(
+                self._column_index_filter(
+                    dat_file_name='ActiveSkills.dat64',
+                    column_id='DisplayedName',
+                    arg_list=parsed_args.name,
+                ) if parsed_args.name else self.rr['ActiveSkills.dat64']
+            ),
+        )
+    
+    def _effects_from_named_skills(self, active_skills):
+        gra_eff = OrderedDict()
+        self.rr['GrantedEffects.dat64'].build_index('ActiveSkill')
+        for skill in active_skills:
+            for effect in self.rr['GrantedEffects.dat64'].index['ActiveSkill'][skill]:
+                gra_eff[effect['Id']] = effect
+        return gra_eff.values()
 
     def export(self, parsed_args, skills):
         self._image_init(parsed_args=parsed_args)
