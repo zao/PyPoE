@@ -32,11 +32,12 @@ See PyPoE/LICENSE
 # Python
 from difflib import unified_diff
 import os
+from queue import Empty, SimpleQueue
 import sys
 import time
 import re
 from collections.abc import Iterable
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, wait
 from requests.exceptions import HTTPError
 
 # 3rd Party
@@ -109,6 +110,7 @@ class WikiHandler:
                     'APIError occurred. Retrying - total attempts: %s' % fail,
                     msg=Msg.error
                 )
+                time.sleep(.01 * 1.5 ** fail)
                 fail += 1
             except HTTPError as e:
                 if '429' in e.args[0]:
@@ -124,7 +126,21 @@ class WikiHandler:
                     )
                     fail += 1
 
-    def handle_page(self, *a, row):
+    def recache_pages(self):
+        try:
+            while True:
+                recache_page = self.pages_to_recache.get_nowait()
+                console(f'Clearing page cache for {recache_page.name}')
+                try:
+                    recache_page.touch()
+                    recache_page.purge()
+                except:
+                    console(f'Failed to clear page cache for {recache_page.name}', Msg.warning)
+                time.sleep(self.cmdargs.wiki_sleep)
+        except Empty:
+            pass
+
+    def handle_page(self, *a, row=None):
         if isinstance(row['wiki_page'], str):
             pages = [
                 {'page': row['wiki_page'], 'condition': None},
@@ -188,6 +204,9 @@ class WikiHandler:
                 if not new:
                     kwargs['page'] = page
                 text = text(**kwargs)
+            
+            if self.cmdargs.purge_cache == 'all' and not new:
+                self.pages_to_recache.put(page)
 
             if text == page.text():
                 console('No update required. Skipping.')
@@ -219,8 +238,8 @@ class WikiHandler:
                 if response['result'] == 'Success':
                     console('Page was edited successfully (time: %s)' %
                             response.get('newtimestamp'))
-                    page.touch()
-                    page.purge()
+                    if self.cmdargs.purge_cache == 'edited':
+                        self.pages_to_recache.put(page)
                 else:
                     # TODO: what happens if it fails?
                     console('Something went wrong, status code:', msg=Msg.error)
@@ -258,23 +277,24 @@ class WikiHandler:
         self.cmdargs = cmdargs
         self.parser = parser
         self.out_dir = out_dir
+        self.pages_to_recache = SimpleQueue()
 
         if cmdargs.wiki_threads > 1:
             console('Starting thread pool...')
             tp = ThreadPoolExecutor(max_workers=cmdargs.wiki_threads)
 
-            for row in result:
-                tp.submit(
-                    self._error_catcher,
-                    row=row,
-                )
+            wait(tp.submit(self._error_catcher, row=row) for row in result)
+                
+            for i in range(cmdargs.wiki_threads):
+                tp.submit(self.recache_pages)
 
             tp.shutdown(wait=True)
         else:
-            console('Editing pages...')
+            console(f'Editing {len(result)} pages...')
             for row in result:
                 self._error_catcher(row=row)
                 time.sleep(cmdargs.wiki_sleep)
+            self.recache_pages()
 
 
 class ExporterHandler(BaseHandler):
@@ -592,6 +612,15 @@ def add_parser_arguments(parser):
         dest='wiki_diff',
         help='For use with --wiki-dry-run. Instead of printing the new page, print a diff against the existing page.',
         action='store_true',
+    )
+
+    parser.add_argument(
+        '-w-pc', '--wiki-purge-cache',
+        dest='purge_cache',
+        help='Perform a null edit and cache purge on each page seen.',
+        choices=['all', 'edit'],
+        nargs='?',
+        const='edited',
     )
 
     parser.add_argument(
