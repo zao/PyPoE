@@ -199,14 +199,14 @@ class SkillParserShared(parser.BaseParser):
         ('CostAmounts', {
             'template': 'cost_amounts',
             'default': [],
-            'condition': lambda v: v[0] is not None,
+            'condition': lambda v: v and v[0] is not None,
             'format': lambda v: v[0],
         }),
         ('CostTypes', {
             'template': 'cost_types',
             'default': [],
             # 'format': CostTypeHelper,
-            'condition': lambda v: v[0] is not None,
+            'condition': lambda v: v and v[0] is not None,
             'format': lambda v: v[0]['Id'],
             #  lambda v: ','.join([r['Id'] for r in v])
         }),
@@ -843,7 +843,9 @@ class SkillParserShared(parser.BaseParser):
 
             # Column handling
             for column, column_data in self._SKILL_COLUMN_MAP:
-                if column not in dynamic['columns'] or not row[column]:
+                if column not in dynamic['columns'] or row[column] is None:
+                    continue
+                if 'condition' in column_data and not column_data['condition'](row[column]):
                     continue
                 # Removed the check of defaults on purpose, makes sense
                 # to add the info since it is dynamically changed
