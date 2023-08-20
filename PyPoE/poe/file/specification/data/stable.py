@@ -19770,11 +19770,11 @@ specification = Specification({
                 key='PassiveOverrideLimits.dat',
             ),
             Field(
-                name='Unknown0',
+                name='RequiresAdjacent',
                 type='int',
             ),
             Field(
-                name='Unknown1',
+                name='MaxAdjacent',
                 type='int',
             ),
         ),

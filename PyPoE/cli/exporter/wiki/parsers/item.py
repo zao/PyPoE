@@ -2492,11 +2492,26 @@ class ItemsParser(SkillParserShared):
         if not data:
             return True
         try:
-            description = []
             set = data['Set']
-            infobox['tattoo_target'] = f"{set['Qualifier']} {set['Name']}" if set['Qualifier'] else set['Name']
-            description.append(f"Replaces a {infobox['tattoo_target']} Passive Skill")
             override = data['Override']
+            def format(*vals):
+                return ' '.join("{{c|" + fmt + '|' + str(val) + "}}" for fmt, val in vals)
+
+            target = f"{set['Qualifier']} {set['Name']}" if set['Qualifier'] else set['Name']
+            infobox['implicit1_text'] = format(('default', 'Replaces a'), ('value', target), ('default', 'Passive Skill'))
+
+            if override['Limit']:
+                infobox['implicit2_text'] = format(('default', 'Limit'),
+                                                   ('value', override['Limit']['Description']))
+            elif override['RequiresAdjacent']:
+                infobox['implicit2_text'] = format(('default', 'Requires'),
+                                                   ('value', override['RequiresAdjacent']),
+                                                   ('default', 'adjacent Passive Skills Allocated'))
+            elif override['MaxAdjacent']:
+                infobox['implicit2_text'] = format(('default', 'Requires'),
+                                                   ('value', f"Maximum {override['MaxAdjacent']}"),
+                                                   ('default', 'adjacent Passive Skill Allocated'))
+
             stats = [s['Id'] for s in override['Stats']]
             tr = self.tc['stat_descriptions.txt'].get_translation(
                 stats, override['StatValues'], full_result=True,
@@ -2508,12 +2523,8 @@ class ItemsParser(SkillParserShared):
                 skill_name = skill['ActiveSkill']['DisplayedName']
                 link = f"[[Skill:{skill['Id']}|{skill_name}]]"
                 lines = [line.replace(skill_name, link) for line in lines]
-            infobox['tattoo_stat_text'] = '<br>'.join(parser.make_inter_wiki_links(line) for line in lines)
-            description.append(f'Grants "{infobox["tattoo_stat_text"]}"')
-            if override['Limit']:
-                infobox['tattoo_limit'] = override['Limit']['Description']
-                description.append(f"Limit {infobox['tattoo_limit']}")
-            infobox['description'] = '<br>'.join(description)
+            stat_text = '<br>'.join(parser.make_inter_wiki_links(line) for line in lines)
+            infobox['description'] = f'Grants "{stat_text}"'
         except KeyError:
             return False
         return True
