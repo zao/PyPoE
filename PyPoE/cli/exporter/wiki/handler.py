@@ -211,6 +211,9 @@ class WikiHandler:
             if text == page.text():
                 console('No update required. Skipping.')
                 return
+            if '[DNT]' in text and new:
+                console('Found text marked as Do Not Translate. Skipping.')
+                return
 
             if self.cmdargs.dry_run:
                 if self.cmdargs.wiki_diff:
