@@ -1,20 +1,23 @@
 [tool.black]
-max-line-length = 100
+line-length = 100
 target-version = ["py311"]
 
 [tool.isort]
 profile = "black"
 
-[tool.flake8]
-max-line-length = 100
-
 [tool.poetry]
-name = "pypoe"
+name = "PyPoE"
 version = "1.1.0"
 description = "A suite of tools to export game data for Path of Exile"
 authors = ["Your Name <you@example.com>"]
 license = "MIT"
 readme = "README.md"
+packages = [
+    { include = "PyPoE", from = "." },
+]
+
+[tool.poetry.scripts]
+pypoe_exporter = 'PyPoE.cli.exporter.core:main'
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -27,6 +30,7 @@ rapidfuzz = "^2.13.7"
 pydds = "^0.0.5"
 pyooz = "^0.0.6"
 fnvhash = "^0.1.0"
+brotli = "^1.0.9"
 
 
 [tool.poetry.group.dev.dependencies]
