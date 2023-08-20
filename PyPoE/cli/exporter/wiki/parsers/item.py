@@ -151,6 +151,7 @@ class WikiCondition(parser.WikiCondition):
         'drop_text',
         'drop_monsters',
         'is_drop_restricted',
+        'drop_level_maximum',
 
         # Item flags
         'is_corrupted',
