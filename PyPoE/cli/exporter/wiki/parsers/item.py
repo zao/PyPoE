@@ -3717,8 +3717,11 @@ class ItemsParser(SkillParserShared):
 
         help_text = ot['Base'].get('description_text')
         if help_text:
-            infobox['help_text'] = self.rr['ClientStrings.dat64'].index['Id'][
-                help_text]['Text']
+            infobox['help_text'] = infobox["help_text"] = "<br>".join(
+                self.rr["ClientStrings.dat64"]
+                .index["Id"][help_text]["Text"]
+                .splitlines()
+            )
 
         for i, mod in enumerate(base_item_type['Implicit_ModsKeys']):
             infobox['implicit%s' % (i+1)] = mod['Id']
