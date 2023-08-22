@@ -750,7 +750,7 @@ class SkillParserShared(parser.BaseParser):
                     sdict = level_data[0]['stats'][key]
                 except:
                     sdict = level_data[-1]['stats'][key]
-                line = None if key in dynamic['stat_keys'] else sdict['line']
+                line = None if any(stat_key in dynamic['stat_keys'] for stat_key in sdict['stats']) else sdict['line']
                 stats.extend(sdict['stats'])
                 values.extend(sdict['values'])
             elif key in dynamic['stats']:
