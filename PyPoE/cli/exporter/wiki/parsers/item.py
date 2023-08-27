@@ -811,25 +811,6 @@ class ItemsParser(SkillParserShared):
             'Metadata/Items/MapFragments/Primordial/QuestCleansingFireBossKey': ' (quest)',
 
             # =================================================================
-            # Royale non-gem items
-            # =================================================================
-
-            'Metadata/Items/Weapons/OneHandWeapons/Wands/Wand1Royale': " (Royale)",
-            'Metadata/Items/Weapons/TwoHandWeapons/Bows/Bow1': " (Royale)",
-            'Metadata/Items/Rings/RingRoyale1': " (Royale)",
-            'Metadata/Items/Rings/RingRoyale2': " (Royale)",
-            'Metadata/Items/Rings/RingRoyale3': " (Royale)",
-            'Metadata/Items/Rings/RingRoyale4': " (Royale)",
-            'Metadata/Items/Amulets/AmuletRoyale1': " (Royale)",
-            'Metadata/Items/Belts/BeltRoyale1': " (Royale)",
-            'Metadata/Items/Belts/BeltRoyale2': " (Royale)",
-            'Metadata/Items/Belts/BeltRoyale3': " (Royale)",
-            'Metadata/Items/Flasks/FlaskLife1Royale': " (Royale)",
-            'Metadata/Items/Flasks/FlaskLife2Royale': " (Royale)",
-            'Metadata/Items/Flasks/FlaskLife3Royale': " (Royale)",
-
-
-            # =================================================================
             # Piece
             # =================================================================
 
@@ -872,26 +853,6 @@ class ItemsParser(SkillParserShared):
             # =================================================================
             # MTX
             # =================================================================
-            'Metadata/Items/MicrotransactionCurrency/MysteryBox1x1':
-                ' (1x1)',
-            'Metadata/Items/MicrotransactionCurrency/MysteryBox1x2':
-                ' (1x2)',
-            'Metadata/Items/MicrotransactionCurrency/MysteryBox1x3':
-                ' (1x3)',
-            'Metadata/Items/MicrotransactionCurrency/MysteryBox1x4':
-                ' (1x4)',
-            'Metadata/Items/MicrotransactionCurrency/MysteryBox2x1':
-                ' (2x1)',
-            'Metadata/Items/MicrotransactionCurrency/MysteryBox2x2':
-                ' (2x2)',
-            'Metadata/Items/MicrotransactionCurrency/MysteryBox2x3':
-                ' (2x3)',
-            'Metadata/Items/MicrotransactionCurrency/MysteryBox2x4':
-                ' (2x4)',
-            'Metadata/Items/MicrotransactionCurrency/MysteryBox3x2':
-                ' (3x2)',
-            'Metadata/Items/MicrotransactionCurrency/MysteryBox3x3':
-                ' (3x3)',
             'Metadata/Items/MicrotransactionItemEffects/Microtransaction'
             'IronMaiden': ' (helmet skin)',
             'Metadata/Items/MicrotransactionItemEffects/Microtransaction'
