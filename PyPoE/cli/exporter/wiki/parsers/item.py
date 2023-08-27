@@ -773,6 +773,11 @@ class ItemsParser(SkillParserShared):
                 '  (Endurance Charge on Kill)',
 
             # =================================================================
+            # Currency items
+            # =================================================================
+            'Metadata/Items/Currency/CurrencyAncestralSilverCoin': '',
+
+            # =================================================================
             # Hideout decorations
             # =================================================================
             'Metadata/Items/Hideout/HideoutLightningCoil': ' (hideout decoration)',
@@ -2338,9 +2343,9 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/MicrotransactionCurrency/ProxySkinTransferPack50',
         'Metadata/Items/MicrotransactionCurrency/TradeMarketBuyoutTabTemporary',
 
-        #
-        # Hideout Doodads
-        #
+        # =================================================================
+        # Hideout decorations
+        # =================================================================
 
         # Hideout totem test variants, not needed
         'Metadata/Items/Hideout/HideoutTotemPoleTest',
@@ -2390,11 +2395,14 @@ class ItemsParser(SkillParserShared):
 
         'Metadata/Items/Hideout/HideoutLionStatueKneeling2',
 
-        #
-        # Stackable currency
-        #
+        # =================================================================
+        # Currency items
+        # =================================================================
+        'Metadata/Items/Currency/CurrencySilverCoin',
 
-        # Legacy variants of items before item stash tabs
+        # =================================================================
+        # Non-stackable resonators from before 3.8.0
+        # =================================================================
         'Metadata/Items/Delve/DelveSocketableCurrencyUpgrade1',
         'Metadata/Items/Delve/DelveSocketableCurrencyUpgrade2',
         'Metadata/Items/Delve/DelveSocketableCurrencyUpgrade3',
@@ -2403,33 +2411,10 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Delve/DelveSocketableCurrencyReroll2',
         'Metadata/Items/Delve/DelveSocketableCurrencyReroll3',
         'Metadata/Items/Delve/DelveSocketableCurrencyReroll4',
-        'Metadata/Items/MapFragments/VaalFragment1_1',
-        'Metadata/Items/MapFragments/VaalFragment1_2',
-        'Metadata/Items/MapFragments/VaalFragment1_3',
-        'Metadata/Items/MapFragments/VaalFragment1_4',
-        'Metadata/Items/MapFragments/VaalFragment2_1',
-        'Metadata/Items/MapFragments/VaalFragment2_2',
-        'Metadata/Items/MapFragments/VaalFragment2_3',
-        'Metadata/Items/MapFragments/VaalFragment2_4',
-        'Metadata/Items/MapFragments/ProphecyFragment1',
-        'Metadata/Items/MapFragments/ProphecyFragment2',
-        'Metadata/Items/MapFragments/ProphecyFragment3',
-        'Metadata/Items/MapFragments/ProphecyFragment4',
-        'Metadata/Items/MapFragments/ShaperFragment1',
-        'Metadata/Items/MapFragments/ShaperFragment2',
-        'Metadata/Items/MapFragments/ShaperFragment3',
-        'Metadata/Items/MapFragments/ShaperFragment4',
-        'Metadata/Items/MapFragments/FragmentPantheonFlask',
-        'Metadata/Items/MapFragments/BreachFragmentFire',
-        'Metadata/Items/MapFragments/BreachFragmentCold',
-        'Metadata/Items/MapFragments/BreachFragmentLightning',
-        'Metadata/Items/MapFragments/BreachFragmentPhysical',
-        'Metadata/Items/MapFragments/BreachFragmentChaos',
-        'Metadata/Items/Labyrinth/OfferingToTheGoddess',
 
-        #
-        # Non-stackable incubators before 3.16
-        #
+        # =================================================================
+        # Non-stackable incubators from before 3.16.0
+        # =================================================================
         'Metadata/Items/Currency/CurrencyIncubationEssence',
         'Metadata/Items/Currency/CurrencyIncubationCurrency',
         'Metadata/Items/Currency/CurrencyIncubationUniques',
@@ -2461,9 +2446,36 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Currency/CurrencyIncubationMetamorph',
         'Metadata/Items/Currency/CurrencyIncubationDelirium',
 
-        #
+        # =================================================================
+        # Old map fragments
+        # =================================================================
+        'Metadata/Items/MapFragments/VaalFragment1_1',
+        'Metadata/Items/MapFragments/VaalFragment1_2',
+        'Metadata/Items/MapFragments/VaalFragment1_3',
+        'Metadata/Items/MapFragments/VaalFragment1_4',
+        'Metadata/Items/MapFragments/VaalFragment2_1',
+        'Metadata/Items/MapFragments/VaalFragment2_2',
+        'Metadata/Items/MapFragments/VaalFragment2_3',
+        'Metadata/Items/MapFragments/VaalFragment2_4',
+        'Metadata/Items/MapFragments/ProphecyFragment1',
+        'Metadata/Items/MapFragments/ProphecyFragment2',
+        'Metadata/Items/MapFragments/ProphecyFragment3',
+        'Metadata/Items/MapFragments/ProphecyFragment4',
+        'Metadata/Items/MapFragments/ShaperFragment1',
+        'Metadata/Items/MapFragments/ShaperFragment2',
+        'Metadata/Items/MapFragments/ShaperFragment3',
+        'Metadata/Items/MapFragments/ShaperFragment4',
+        'Metadata/Items/MapFragments/FragmentPantheonFlask',
+        'Metadata/Items/MapFragments/BreachFragmentFire',
+        'Metadata/Items/MapFragments/BreachFragmentCold',
+        'Metadata/Items/MapFragments/BreachFragmentLightning',
+        'Metadata/Items/MapFragments/BreachFragmentPhysical',
+        'Metadata/Items/MapFragments/BreachFragmentChaos',
+        'Metadata/Items/Labyrinth/OfferingToTheGoddess',
+
+        # =================================================================
         # Quest items
-        #
+        # =================================================================
         'Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment1_1',
         'Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment2_1',
         'Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment3_1',
@@ -2480,9 +2492,9 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment10_2',
         'Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment10_3',
 
-        #
+        # =================================================================
         # Misc
-        #
+        # =================================================================
         'Metadata/Items/Heist/HeistEquipmentToolTest',
         'Metadata/Items/Heist/HeistEquipmentWeaponTest',
         'Metadata/Items/Heist/HeistEquipmentUtilityTest',
