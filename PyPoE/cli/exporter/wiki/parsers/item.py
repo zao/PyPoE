@@ -653,17 +653,17 @@ class ItemsParser(SkillParserShared):
             'Metadata/Items/Gems/SupportGemMeleeSplash': '',
             'Metadata/Items/Gems/SkillGemEnergyBlade': '',
             'Metadata/Items/Gems/SkillGemChannelledSnipe': '',
-            # =================================================================
-            # One Hand Axes
-            # =================================================================
 
             # =================================================================
             # Helmets
             # =================================================================
             'Metadata/Items/Armours/Helmets/HelmetStrInt4': '',  # Crusader Helmet
 
+            # =================================================================
+            # One Hand Axes
+            # =================================================================
             'Metadata/Items/Weapons/OneHandWeapons/OneHandAxes/OneHandAxe22':
-                '',
+                '', # Infernal Axe
 
             # =================================================================
             # One Hand Swords
@@ -680,10 +680,8 @@ class ItemsParser(SkillParserShared):
             # =================================================================
             # Boots
             # =================================================================
-
-            'Metadata/Items/Armours/Boots/BootsInt4': '',
-            # Legion Boots
-            'Metadata/Items/Armours/Boots/BootsStrInt7': '',
+            'Metadata/Items/Armours/Boots/BootsInt4': '', # Scholar Boots
+            'Metadata/Items/Armours/Boots/BootsStrInt7': '', # Legion Boots
             'Metadata/Items/Armours/Boots/BootsAtlas1':
                 ' (Cold and Lightning Resistance)',
             'Metadata/Items/Armours/Boots/BootsAtlas2':
@@ -691,13 +689,13 @@ class ItemsParser(SkillParserShared):
             'Metadata/Items/Armours/Boots/BootsAtlas3':
                 ' (Fire and Lightning Resistance)',
             'Metadata/Items/Armours/Boots/BootsStrInt8': '',  # Crusader Boots
+
             # =================================================================
             # Gloves
             # =================================================================
-
-            # Legion Gloves
-            'Metadata/Items/Armours/Gloves/GlovesStrInt7': '',
+            'Metadata/Items/Armours/Gloves/GlovesStrInt7': '', # Legion Gloves
             'Metadata/Items/Armours/Gloves/GlovesStrInt8': '',  # Crusader Gloves
+
             # =================================================================
             # Quivers
             # =================================================================
@@ -773,10 +771,10 @@ class ItemsParser(SkillParserShared):
                 '  (Frenzy Charge on Kill)',
             'Metadata/Items/Amulets/Talismans/Talisman3_6_3':
                 '  (Endurance Charge on Kill)',
-            # =================================================================
-            # Hideout Doodads
-            # =================================================================
 
+            # =================================================================
+            # Hideout decorations
+            # =================================================================
             'Metadata/Items/Hideout/HideoutLightningCoil': ' (hideout decoration)',
             'Metadata/Items/Hideout/HideoutVollConfession': ' (hideout decoration)',
             'Metadata/Items/Hideout/HideoutRaptureDevice': ' (hideout decoration)',
@@ -789,14 +787,13 @@ class ItemsParser(SkillParserShared):
             'Metadata/Items/Hideout/HideoutRitualTotem': ' (hideout decoration)',
             'Metadata/Items/Hideout/HideoutCharredSkeleton': " (hideout decoration)",
             'Metadata/Items/Hideout/HideoutVaalWhispySmoke': " (hideout decoration)",
-            'Metadata/Items/Hideout/HideoutLionStatueKneeling': '',
+            'Metadata/Items/Hideout/HideoutLionStatueKneeling': '', # Sitting Lion Statue
             'Metadata/Items/Hideout/HideoutChurchRuins': ' (hideout decoration)',
             'Metadata/Items/Hideout/HideoutIncaLetter': ' (hideout decoration)',
 
             # =================================================================
-            # invitations
+            # Invitations
             # =================================================================
-
             'Metadata/Items/MapFragments/Maven/MavenMapOutsideBottomRight5': " (10 bosses)",
             'Metadata/Items/MapFragments/Maven/MavenMapOutsideBottomLeft5': " (10 bosses)",
             'Metadata/Items/MapFragments/Maven/MavenMapOutsideTopLeft5': " (10 bosses)",
@@ -811,9 +808,8 @@ class ItemsParser(SkillParserShared):
             'Metadata/Items/MapFragments/Primordial/QuestCleansingFireBossKey': ' (quest)',
 
             # =================================================================
-            # Piece
+            # Item pieces
             # =================================================================
-
             'Metadata/Items/UniqueFragments/FragmentUniqueShield1_1':
                 ' (1 of 4)',
             'Metadata/Items/UniqueFragments/FragmentUniqueShield1_2':
@@ -850,29 +846,24 @@ class ItemsParser(SkillParserShared):
                 ' (2 of 3)',
             'Metadata/Items/UniqueFragments/FragmentUniqueHelmet1_3':
                 ' (3 of 3)',
+
             # =================================================================
-            # MTX
+            # Cosmetic items
             # =================================================================
-            'Metadata/Items/MicrotransactionItemEffects/Microtransaction'
-            'IronMaiden': ' (helmet skin)',
-            'Metadata/Items/MicrotransactionItemEffects/Microtransaction'
-            'InfernalAxe': ' (weapon skin)',
-            'Metadata/Items/MicrotransactionItemEffects/Microtransaction'
-            'ColossusSword': '',
-            'Metadata/Items/MicrotransactionItemEffects/Microtransaction'
-            'LegionBoots': ' (boots skin)',
-            'Metadata/Items/MicrotransactionItemEffects/Microtransaction'
-            'LegionGloves': ' (gloves skin)',
-            'Metadata/Items/MicrotransactionItemEffects/Microtransaction'
-            'ScholarBoots': ' (boots skin)',
-            'Metadata/Items/Pets/DemonLion': ' (pet)',
-            'Metadata/Items/MicrotransactionItemEffects/MicrotransactionHooded'
-            'Cloak': ' (armour attachment)',
+            'Metadata/Items/MicrotransactionItemEffects/MicrotransactionIronMaiden': ' (helmet skin)',
+            'Metadata/Items/MicrotransactionItemEffects/MicrotransactionInfernalAxe': ' (weapon skin)',
+            'Metadata/Items/MicrotransactionItemEffects/MicrotransactionColossusSword': '',
+            'Metadata/Items/MicrotransactionItemEffects/MicrotransactionLegionBoots': ' (boots skin)',
+            'Metadata/Items/MicrotransactionItemEffects/MicrotransactionLegionGloves': ' (gloves skin)',
+            'Metadata/Items/MicrotransactionItemEffects/MicrotransactionScholarBoots': ' (boots skin)',
+            'Metadata/Items/Pets/DemonLion': ' (pet)', # Shadow
+            'Metadata/Items/MicrotransactionItemEffects/MicrotransactionHoodedCloak': ' (armour attachment)',
             'Metadata/Items/MicrotransactionItemEffects/MicrotransactionArcaneCloak': ' (armour attachment)',
             'Metadata/Items/MicrotransactionItemEffects/MicrotransactionCrusaderHelmet': ' (helmet skin)',
             'Metadata/Items/MicrotransactionItemEffects/MicrotransactionCrusaderBoots': ' (boots skin)',
             'Metadata/Items/MicrotransactionItemEffects/MicrotransactionCrusaderGloves': ' (gloves skin)',
             'Metadata/Items/MicrotransactionCurrency/StashTab': ' (consumable item)',
+
             # =================================================================
             # Quest items
             # =================================================================
@@ -884,10 +875,12 @@ class ItemsParser(SkillParserShared):
                 ' (3 of 4)',
             'Metadata/Items/QuestItems/GoldenPages/Page4':
                 ' (4 of 4)',
+
             # =================================================================
-            # Misc
+            # Heist equipment
             # =================================================================
-            'Metadata/Items/Heist/HeistEquipmentCloak3': '',
+            'Metadata/Items/Heist/HeistEquipmentCloak3': '', # Hooded Cloak
+
         },
         'Russian': {
             # =================================================================
@@ -1379,9 +1372,9 @@ class ItemsParser(SkillParserShared):
 
     # Unreleased or disabled items to avoid exporting to the wiki
     _SKIP_ITEMS_BY_ID = {
-        #
-        # Active Skill Gems
-        #
+        # =================================================================
+        # Skill Gems
+        # =================================================================
         'Metadata/Items/Gems/SkillGemBackstab',
         'Metadata/Items/Gems/SkillGemBlitz',
         'Metadata/Items/Gems/SkillGemBloodWhirl',
@@ -1432,11 +1425,9 @@ class ItemsParser(SkillParserShared):
         # Skill gem's name causes errors when exporting to wiki page since it includes [DNT]
         'Metadata/Items/Gems/SkillGemCallOfTheWild',
 
-
-        #
+        # =================================================================
         # Royale Gear
-        #
-
+        # =================================================================
         'Metadata/Items/Weapons/OneHandWeapons/Wands/Wand1Royale',
         'Metadata/Items/Weapons/TwoHandWeapons/Bows/Bow1',
         'Metadata/Items/Rings/RingRoyale1',
@@ -1451,10 +1442,9 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Flasks/FlaskLife2Royale',
         'Metadata/Items/Flasks/FlaskLife3Royale',
 
-        #
-        # Royale Gems
-        #
-
+        # =================================================================
+        # Royale Skill Gems
+        # =================================================================
         'Metadata/Items/Gems/SkillGemChargedAttackRoyale',
         'Metadata/Items/Gems/SkillGemCycloneRoyale',
         'Metadata/Items/Gems/SkillGemDualStrikeRoyale',
@@ -1569,6 +1559,10 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Gems/SkillGemHeavyStrikeRoyale',
         'Metadata/Items/Gems/SkillGemCobraLashRoyale',
         'Metadata/Items/Gems/SkillGemIceSpearRoyale',
+
+        # =================================================================
+        # Royale Support Gems
+        # =================================================================
         'Metadata/Items/Gems/SupportGemMultistrikeRoyale',
         'Metadata/Items/Gems/SupportGemSpellCascadeRoyale',
         'Metadata/Items/Gems/SupportGemHandcastAnticipationRoyale',
@@ -1610,10 +1604,9 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Gems/SupportGemIncreasedCriticalStrikesRoyale',
         'Metadata/Items/Gems/SupportGemMeleeSplashRoyale',
 
-
-        #
-        # Support Skill Gems
-        #
+        # =================================================================
+        # Support Gems
+        # =================================================================
         'Metadata/Items/Gems/SupportGemCastLinkedCursesOnCurse',
         'Metadata/Items/Gems/SupportGemHandcastRapidFire',
         'Metadata/Items/Gems/SupportGemSplit',
@@ -1621,9 +1614,9 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Gems/SupportGemTemporaryForTutorial',
         'Metadata/Items/Gems/SupportGemVaalSoulHarvesting',
 
-        #
-        # MTX
-        #
+        # =================================================================
+        # Cosmetic items
+        # =================================================================
         'Metadata/Items/MicrotransactionCurrency/MysteryBox1x1',
         'Metadata/Items/MicrotransactionCurrency/MysteryBox1x2',
         'Metadata/Items/MicrotransactionCurrency/MysteryBox1x3',
