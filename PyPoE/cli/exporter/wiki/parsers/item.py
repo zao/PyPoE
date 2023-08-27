@@ -867,6 +867,13 @@ class ItemsParser(SkillParserShared):
             # =================================================================
             'Metadata/Items/Heist/HeistEquipmentCloak3': '', # Hooded Cloak
 
+            # =================================================================
+            # Sanctified relics
+            # =================================================================
+            'Metadata/Items/Relics/SanctumSpecialRelic1': ' (strength)',
+            'Metadata/Items/Relics/SanctumSpecialRelic2': ' (dexterity)',
+            'Metadata/Items/Relics/SanctumSpecialRelic3': ' (intelligence)',
+
         },
         'Russian': {
             # =================================================================
