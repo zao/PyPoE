@@ -1417,6 +1417,9 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Gems/SkillGemFlammableShot',
         # Skill gem's name causes errors when exporting to wiki page since it includes [DNT]
         'Metadata/Items/Gems/SkillGemCallOfTheWild',
+        'Metadata/Items/Gems/SkillGemPlaytestAttack',
+        'Metadata/Items/Gems/SkillGemPlaytestSpell',
+        'Metadata/Items/Gems/SkillGemPlaytestSlam',
 
         # =================================================================
         # Royale Gear
