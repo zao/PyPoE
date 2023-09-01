@@ -1417,6 +1417,9 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Gems/SkillGemFlammableShot',
         # Skill gem's name causes errors when exporting to wiki page since it includes [DNT]
         'Metadata/Items/Gems/SkillGemCallOfTheWild',
+        'Metadata/Items/Gems/SkillGemPlaytestAttack',
+        'Metadata/Items/Gems/SkillGemPlaytestSpell',
+        'Metadata/Items/Gems/SkillGemPlaytestSlam',
 
         # =================================================================
         # Royale Gear
@@ -2442,6 +2445,12 @@ class ItemsParser(SkillParserShared):
         # Currency items
         # =================================================================
         'Metadata/Items/Currency/CurrencySilverCoin',
+
+        'Metadata/Items/Currency/AncestralTattooSpecialUnique1',
+        'Metadata/Items/Currency/AncestralTattooSpecialUnique2',
+        'Metadata/Items/Currency/AncestralTattooSpecialUnique3',
+        'Metadata/Items/Currency/AncestralTattooSpecialUnique4',
+        'Metadata/Items/Currency/AncestralTattooSpecialUnique5',
 
         # =================================================================
         # Non-stackable resonators from before 3.8.0
