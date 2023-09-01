@@ -211,7 +211,7 @@ class WikiHandler:
                 if not new:
                     kwargs['page'] = page
                 text = text(**kwargs)
-            
+
             if self.cmdargs.purge_cache == 'all' and not new:
                 self.pages_to_recache.put(page)
 
@@ -226,8 +226,6 @@ class WikiHandler:
 
             if self.cmdargs.dry_run:
                 if self.cmdargs.wiki_diff:
-                    wiki_lines = page.text().splitlines(keepends=True)
-                    new_lines = text.splitlines(keepends=True)
                     u_diff = unified_diff(
                         wiki_lines, new_lines, page.name, "Export", lineterm='')
                     if self.cmdargs.write:
@@ -261,6 +259,12 @@ class WikiHandler:
                 f'No wiki page candidates found from {[page["page"] for page in pages]}, skipping this row.',
                 msg=Msg.warning,
             )
+            if self.cmdargs.wiki_diff and self.cmdargs.write:
+                os.makedirs(os.path.join(self.out_dir, 'diff'), exist_ok=True)
+                out_path = os.path.join(self.out_dir, 'diff', fix_path(row['out_file']))
+                with open(out_path + ".skip", 'w') as f:
+                    f.write('\n'.join(p['page'] for p in pages))
+
 
     def handle(self, *a, mwclient, result, cmdargs, parser, out_dir):
         # First row is handled separately to prompt the user for his password
