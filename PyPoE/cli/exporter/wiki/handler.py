@@ -153,6 +153,13 @@ class WikiHandler:
         new = False
         for pdata in pages:
             page = self.site.pages[pdata['page']]
+            if not page.can('edit'):
+                console(
+                    f"Cannot edit {pdata['page']}. Skipping",
+                    msg=Msg.warning,
+                )
+                continue
+
             if page.exists:
                 condition = pdata.get('condition')
                 success = True
@@ -256,7 +263,7 @@ class WikiHandler:
     def handle(self, *a, mwclient, result, cmdargs, parser, out_dir):
         # First row is handled separately to prompt the user for his password
 
-        url = WIKIS.get(config.get_option('language'))
+        url = cmdargs.wiki_url or WIKIS.get(config.get_option('language'))
         if url is None:
             console(
                 'There is no wiki defined for language "%s"' % cmdargs.language,
@@ -608,6 +615,15 @@ def add_parser_arguments(parser):
         dest='dry_run',
         help='Don\'t actually save the wiki page and print it instead',
         action='store_true',
+    )
+
+    parser.add_argument(
+        '-w-url', '--wiki-url',
+        dest='wiki_url',
+        help='Url of the wiki to update',
+        action='store',
+        type=str,
+        default='',
     )
 
     parser.add_argument(
