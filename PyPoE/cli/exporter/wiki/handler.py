@@ -215,7 +215,9 @@ class WikiHandler:
             if self.cmdargs.purge_cache == 'all' and not new:
                 self.pages_to_recache.put(page)
 
-            if text == page.text():
+            wiki_lines = page.text().splitlines()
+            new_lines = text.splitlines()
+            if wiki_lines == new_lines:
                 console('No update required. Skipping.')
                 return
             if '[DNT]' in text and new:
@@ -227,14 +229,14 @@ class WikiHandler:
                     wiki_lines = page.text().splitlines(keepends=True)
                     new_lines = text.splitlines(keepends=True)
                     u_diff = unified_diff(
-                        wiki_lines, new_lines, page.name, "Export")
+                        wiki_lines, new_lines, page.name, "Export", lineterm='')
                     if self.cmdargs.write:
                         os.makedirs(os.path.join(self.out_dir, 'diff'), exist_ok=True)
                         out_path = os.path.join(self.out_dir, 'diff', fix_path(row['out_file']))
                         with open(out_path + ".patch", 'w') as f:
-                            f.writelines(u_diff)
+                            f.write('\n'.join(u_diff))
                     else:
-                        sys.stdout.writelines(u_diff)
+                        sys.stdout.write('\n'.join(u_diff))
                 else:
                     console(text)
             else:
