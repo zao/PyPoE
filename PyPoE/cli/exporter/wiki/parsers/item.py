@@ -468,25 +468,6 @@ class ItemsParser(SkillParserShared):
         # Demigod items
         'Metadata/Items/Belts/BeltDemigods1',
         'Metadata/Items/Rings/RingDemigods1',
-        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgradeFinal',  # Ivory Watchstone Base Item
-
-        # Old Watchstones
-        # Tirn's End:
-        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable1_2',
-        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable2_2',
-        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable3_2',
-        # Lex Proxima:
-        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable1_3',
-        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable2_3',
-        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable3_3',
-        # Lex Ejoris:
-        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable1_4',
-        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable2_4',
-        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable3_4',
-        # New Vastir:
-        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable1_5',
-        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable2_5',
-        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable3_5',
     }
 
     _NAME_OVERRIDE_BY_ID = {
@@ -656,17 +637,17 @@ class ItemsParser(SkillParserShared):
             'Metadata/Items/Gems/SupportGemMeleeSplash': '',
             'Metadata/Items/Gems/SkillGemEnergyBlade': '',
             'Metadata/Items/Gems/SkillGemChannelledSnipe': '',
-            # =================================================================
-            # One Hand Axes
-            # =================================================================
 
             # =================================================================
             # Helmets
             # =================================================================
             'Metadata/Items/Armours/Helmets/HelmetStrInt4': '',  # Crusader Helmet
 
+            # =================================================================
+            # One Hand Axes
+            # =================================================================
             'Metadata/Items/Weapons/OneHandWeapons/OneHandAxes/OneHandAxe22':
-                '',
+                '', # Infernal Axe
 
             # =================================================================
             # One Hand Swords
@@ -683,10 +664,8 @@ class ItemsParser(SkillParserShared):
             # =================================================================
             # Boots
             # =================================================================
-
-            'Metadata/Items/Armours/Boots/BootsInt4': '',
-            # Legion Boots
-            'Metadata/Items/Armours/Boots/BootsStrInt7': '',
+            'Metadata/Items/Armours/Boots/BootsInt4': '', # Scholar Boots
+            'Metadata/Items/Armours/Boots/BootsStrInt7': '', # Legion Boots
             'Metadata/Items/Armours/Boots/BootsAtlas1':
                 ' (Cold and Lightning Resistance)',
             'Metadata/Items/Armours/Boots/BootsAtlas2':
@@ -694,13 +673,13 @@ class ItemsParser(SkillParserShared):
             'Metadata/Items/Armours/Boots/BootsAtlas3':
                 ' (Fire and Lightning Resistance)',
             'Metadata/Items/Armours/Boots/BootsStrInt8': '',  # Crusader Boots
+
             # =================================================================
             # Gloves
             # =================================================================
-
-            # Legion Gloves
-            'Metadata/Items/Armours/Gloves/GlovesStrInt7': '',
+            'Metadata/Items/Armours/Gloves/GlovesStrInt7': '', # Legion Gloves
             'Metadata/Items/Armours/Gloves/GlovesStrInt8': '',  # Crusader Gloves
+
             # =================================================================
             # Quivers
             # =================================================================
@@ -776,10 +755,15 @@ class ItemsParser(SkillParserShared):
                 '  (Frenzy Charge on Kill)',
             'Metadata/Items/Amulets/Talismans/Talisman3_6_3':
                 '  (Endurance Charge on Kill)',
-            # =================================================================
-            # Hideout Doodads
-            # =================================================================
 
+            # =================================================================
+            # Currency items
+            # =================================================================
+            'Metadata/Items/Currency/CurrencyAncestralSilverCoin': '',
+
+            # =================================================================
+            # Hideout decorations
+            # =================================================================
             'Metadata/Items/Hideout/HideoutLightningCoil': ' (hideout decoration)',
             'Metadata/Items/Hideout/HideoutVollConfession': ' (hideout decoration)',
             'Metadata/Items/Hideout/HideoutRaptureDevice': ' (hideout decoration)',
@@ -792,14 +776,13 @@ class ItemsParser(SkillParserShared):
             'Metadata/Items/Hideout/HideoutRitualTotem': ' (hideout decoration)',
             'Metadata/Items/Hideout/HideoutCharredSkeleton': " (hideout decoration)",
             'Metadata/Items/Hideout/HideoutVaalWhispySmoke': " (hideout decoration)",
-            'Metadata/Items/Hideout/HideoutLionStatueKneeling': '',
+            'Metadata/Items/Hideout/HideoutLionStatueKneeling': '', # Sitting Lion Statue
             'Metadata/Items/Hideout/HideoutChurchRuins': ' (hideout decoration)',
             'Metadata/Items/Hideout/HideoutIncaLetter': ' (hideout decoration)',
 
             # =================================================================
-            # invitations
+            # Invitations
             # =================================================================
-
             'Metadata/Items/MapFragments/Maven/MavenMapOutsideBottomRight5': " (10 bosses)",
             'Metadata/Items/MapFragments/Maven/MavenMapOutsideBottomLeft5': " (10 bosses)",
             'Metadata/Items/MapFragments/Maven/MavenMapOutsideTopLeft5': " (10 bosses)",
@@ -814,28 +797,8 @@ class ItemsParser(SkillParserShared):
             'Metadata/Items/MapFragments/Primordial/QuestCleansingFireBossKey': ' (quest)',
 
             # =================================================================
-            # Royale non-gem items
+            # Item pieces
             # =================================================================
-
-            'Metadata/Items/Weapons/OneHandWeapons/Wands/Wand1Royale': " (Royale)",
-            'Metadata/Items/Weapons/TwoHandWeapons/Bows/Bow1': " (Royale)",
-            'Metadata/Items/Rings/RingRoyale1': " (Royale)",
-            'Metadata/Items/Rings/RingRoyale2': " (Royale)",
-            'Metadata/Items/Rings/RingRoyale3': " (Royale)",
-            'Metadata/Items/Rings/RingRoyale4': " (Royale)",
-            'Metadata/Items/Amulets/AmuletRoyale1': " (Royale)",
-            'Metadata/Items/Belts/BeltRoyale1': " (Royale)",
-            'Metadata/Items/Belts/BeltRoyale2': " (Royale)",
-            'Metadata/Items/Belts/BeltRoyale3': " (Royale)",
-            'Metadata/Items/Flasks/FlaskLife1Royale': " (Royale)",
-            'Metadata/Items/Flasks/FlaskLife2Royale': " (Royale)",
-            'Metadata/Items/Flasks/FlaskLife3Royale': " (Royale)",
-
-
-            # =================================================================
-            # Piece
-            # =================================================================
-
             'Metadata/Items/UniqueFragments/FragmentUniqueShield1_1':
                 ' (1 of 4)',
             'Metadata/Items/UniqueFragments/FragmentUniqueShield1_2':
@@ -872,49 +835,24 @@ class ItemsParser(SkillParserShared):
                 ' (2 of 3)',
             'Metadata/Items/UniqueFragments/FragmentUniqueHelmet1_3':
                 ' (3 of 3)',
+
             # =================================================================
-            # MTX
+            # Cosmetic items
             # =================================================================
-            'Metadata/Items/MicrotransactionCurrency/MysteryBox1x1':
-                ' (1x1)',
-            'Metadata/Items/MicrotransactionCurrency/MysteryBox1x2':
-                ' (1x2)',
-            'Metadata/Items/MicrotransactionCurrency/MysteryBox1x3':
-                ' (1x3)',
-            'Metadata/Items/MicrotransactionCurrency/MysteryBox1x4':
-                ' (1x4)',
-            'Metadata/Items/MicrotransactionCurrency/MysteryBox2x1':
-                ' (2x1)',
-            'Metadata/Items/MicrotransactionCurrency/MysteryBox2x2':
-                ' (2x2)',
-            'Metadata/Items/MicrotransactionCurrency/MysteryBox2x3':
-                ' (2x3)',
-            'Metadata/Items/MicrotransactionCurrency/MysteryBox2x4':
-                ' (2x4)',
-            'Metadata/Items/MicrotransactionCurrency/MysteryBox3x2':
-                ' (3x2)',
-            'Metadata/Items/MicrotransactionCurrency/MysteryBox3x3':
-                ' (3x3)',
-            'Metadata/Items/MicrotransactionItemEffects/Microtransaction'
-            'IronMaiden': ' (helmet skin)',
-            'Metadata/Items/MicrotransactionItemEffects/Microtransaction'
-            'InfernalAxe': ' (weapon skin)',
-            'Metadata/Items/MicrotransactionItemEffects/Microtransaction'
-            'ColossusSword': '',
-            'Metadata/Items/MicrotransactionItemEffects/Microtransaction'
-            'LegionBoots': ' (boots skin)',
-            'Metadata/Items/MicrotransactionItemEffects/Microtransaction'
-            'LegionGloves': ' (gloves skin)',
-            'Metadata/Items/MicrotransactionItemEffects/Microtransaction'
-            'ScholarBoots': ' (boots skin)',
-            'Metadata/Items/Pets/DemonLion': ' (pet)',
-            'Metadata/Items/MicrotransactionItemEffects/MicrotransactionHooded'
-            'Cloak': ' (armour attachment)',
+            'Metadata/Items/MicrotransactionItemEffects/MicrotransactionIronMaiden': ' (helmet skin)',
+            'Metadata/Items/MicrotransactionItemEffects/MicrotransactionInfernalAxe': ' (weapon skin)',
+            'Metadata/Items/MicrotransactionItemEffects/MicrotransactionColossusSword': '',
+            'Metadata/Items/MicrotransactionItemEffects/MicrotransactionLegionBoots': ' (boots skin)',
+            'Metadata/Items/MicrotransactionItemEffects/MicrotransactionLegionGloves': ' (gloves skin)',
+            'Metadata/Items/MicrotransactionItemEffects/MicrotransactionScholarBoots': ' (boots skin)',
+            'Metadata/Items/Pets/DemonLion': ' (pet)', # Shadow
+            'Metadata/Items/MicrotransactionItemEffects/MicrotransactionHoodedCloak': ' (armour attachment)',
             'Metadata/Items/MicrotransactionItemEffects/MicrotransactionArcaneCloak': ' (armour attachment)',
             'Metadata/Items/MicrotransactionItemEffects/MicrotransactionCrusaderHelmet': ' (helmet skin)',
             'Metadata/Items/MicrotransactionItemEffects/MicrotransactionCrusaderBoots': ' (boots skin)',
             'Metadata/Items/MicrotransactionItemEffects/MicrotransactionCrusaderGloves': ' (gloves skin)',
             'Metadata/Items/MicrotransactionCurrency/StashTab': ' (consumable item)',
+
             # =================================================================
             # Quest items
             # =================================================================
@@ -926,10 +864,19 @@ class ItemsParser(SkillParserShared):
                 ' (3 of 4)',
             'Metadata/Items/QuestItems/GoldenPages/Page4':
                 ' (4 of 4)',
+
             # =================================================================
-            # Misc
+            # Heist equipment
             # =================================================================
-            'Metadata/Items/Heist/HeistEquipmentCloak3': '',
+            'Metadata/Items/Heist/HeistEquipmentCloak3': '', # Hooded Cloak
+
+            # =================================================================
+            # Sanctified relics
+            # =================================================================
+            'Metadata/Items/Relics/SanctumSpecialRelic1': ' (strength)',
+            'Metadata/Items/Relics/SanctumSpecialRelic2': ' (dexterity)',
+            'Metadata/Items/Relics/SanctumSpecialRelic3': ' (intelligence)',
+
         },
         'Russian': {
             # =================================================================
@@ -1421,9 +1368,9 @@ class ItemsParser(SkillParserShared):
 
     # Unreleased or disabled items to avoid exporting to the wiki
     _SKIP_ITEMS_BY_ID = {
-        #
-        # Active Skill Gems
-        #
+        # =================================================================
+        # Skill Gems
+        # =================================================================
         'Metadata/Items/Gems/SkillGemBackstab',
         'Metadata/Items/Gems/SkillGemBlitz',
         'Metadata/Items/Gems/SkillGemBloodWhirl',
@@ -1474,11 +1421,9 @@ class ItemsParser(SkillParserShared):
         # Skill gem's name causes errors when exporting to wiki page since it includes [DNT]
         'Metadata/Items/Gems/SkillGemCallOfTheWild',
 
-
-        #
+        # =================================================================
         # Royale Gear
-        #
-
+        # =================================================================
         'Metadata/Items/Weapons/OneHandWeapons/Wands/Wand1Royale',
         'Metadata/Items/Weapons/TwoHandWeapons/Bows/Bow1',
         'Metadata/Items/Rings/RingRoyale1',
@@ -1493,10 +1438,9 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Flasks/FlaskLife2Royale',
         'Metadata/Items/Flasks/FlaskLife3Royale',
 
-        #
-        # Royale Gems
-        #
-
+        # =================================================================
+        # Royale Skill Gems
+        # =================================================================
         'Metadata/Items/Gems/SkillGemChargedAttackRoyale',
         'Metadata/Items/Gems/SkillGemCycloneRoyale',
         'Metadata/Items/Gems/SkillGemDualStrikeRoyale',
@@ -1611,6 +1555,10 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Gems/SkillGemHeavyStrikeRoyale',
         'Metadata/Items/Gems/SkillGemCobraLashRoyale',
         'Metadata/Items/Gems/SkillGemIceSpearRoyale',
+
+        # =================================================================
+        # Royale Support Gems
+        # =================================================================
         'Metadata/Items/Gems/SupportGemMultistrikeRoyale',
         'Metadata/Items/Gems/SupportGemSpellCascadeRoyale',
         'Metadata/Items/Gems/SupportGemHandcastAnticipationRoyale',
@@ -1652,10 +1600,9 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Gems/SupportGemIncreasedCriticalStrikesRoyale',
         'Metadata/Items/Gems/SupportGemMeleeSplashRoyale',
 
-
-        #
-        # Support Skill Gems
-        #
+        # =================================================================
+        # Support Gems
+        # =================================================================
         'Metadata/Items/Gems/SupportGemCastLinkedCursesOnCurse',
         'Metadata/Items/Gems/SupportGemHandcastRapidFire',
         'Metadata/Items/Gems/SupportGemSplit',
@@ -1663,9 +1610,9 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Gems/SupportGemTemporaryForTutorial',
         'Metadata/Items/Gems/SupportGemVaalSoulHarvesting',
 
-        #
-        # MTX
-        #
+        # =================================================================
+        # Cosmetic items
+        # =================================================================
         'Metadata/Items/MicrotransactionCurrency/MysteryBox1x1',
         'Metadata/Items/MicrotransactionCurrency/MysteryBox1x2',
         'Metadata/Items/MicrotransactionCurrency/MysteryBox1x3',
@@ -1676,6 +1623,8 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/MicrotransactionCurrency/MysteryBox2x4',
         'Metadata/Items/MicrotransactionCurrency/MysteryBox3x2',
         'Metadata/Items/MicrotransactionCurrency/MysteryBox3x3',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBox3x1',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBox4x1',
         'Metadata/Items/MicrotransactionCurrency/HiddenItem1x1',
         'Metadata/Items/MicrotransactionCurrency/HiddenItem1x2',
         'Metadata/Items/MicrotransactionCurrency/HiddenItem1x3',
@@ -1685,6 +1634,19 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/MicrotransactionCurrency/HiddenItem2x3',
         'Metadata/Items/MicrotransactionCurrency/HiddenItem2x4',
         'Metadata/Items/MicrotransactionCurrency/HiddenItem3x2',
+        'Metadata/Items/MicrotransactionCurrency/HiddenItem3x1',
+        'Metadata/Items/MicrotransactionCurrency/HiddenItem4x1',
+        'Metadata/Items/MicrotransactionCurrency/GiftBox1x1',
+        'Metadata/Items/MicrotransactionCurrency/GiftBox1x2',
+        'Metadata/Items/MicrotransactionCurrency/GiftBox1x3',
+        'Metadata/Items/MicrotransactionCurrency/GiftBox1x4',
+        'Metadata/Items/MicrotransactionCurrency/GiftBox2x1',
+        'Metadata/Items/MicrotransactionCurrency/GiftBox2x2',
+        'Metadata/Items/MicrotransactionCurrency/GiftBox2x3',
+        'Metadata/Items/MicrotransactionCurrency/GiftBox2x4',
+        'Metadata/Items/MicrotransactionCurrency/GiftBox3x2',
+        'Metadata/Items/MicrotransactionCurrency/GiftBox3x1',
+        'Metadata/Items/MicrotransactionCurrency/GiftBox4x1',
         'Metadata/Items/MicrotransactionCurrency/HiddenItem1x1Ritual',
         'Metadata/Items/MicrotransactionCurrency/HiddenItem1x2Ritual',
         'Metadata/Items/MicrotransactionCurrency/HiddenItem1x3Ritual',
@@ -1694,6 +1656,8 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/MicrotransactionCurrency/HiddenItem2x3Ritual',
         'Metadata/Items/MicrotransactionCurrency/HiddenItem2x4Ritual',
         'Metadata/Items/MicrotransactionCurrency/HiddenItem3x2Ritual',
+        'Metadata/Items/MicrotransactionCurrency/HiddenItem3x1Ritual',
+        'Metadata/Items/MicrotransactionCurrency/HiddenItem4x1Ritual',
 
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionRemoveCosmetic',
         'Metadata/Items/MicrotransactionSkillEffects/MicrotransactionSpectralThrowEbony',
@@ -1909,8 +1873,6 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Pets/NineTailedFoxPremiumExpiredPet',
         'Metadata/Items/Pets/ArcticDragonHunterPremiumPet',
         'Metadata/Items/Pets/ArcticDragonHunterPremiumExpiredPet',
-        'Metadata/Items/Pets/DaughterOfSinPremiumPet',
-        'Metadata/Items/Pets/DaughterOfSinPremiumExpiredPet',
         'Metadata/Items/Pets/NightfallDragonPremiumPet',
         'Metadata/Items/Pets/NightfallDragonPremiumExpiredPet',
         'Metadata/Items/Pets/FreyaPet',
@@ -1923,6 +1885,8 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Pets/HasinaPet',
         'Metadata/Items/Pets/HasinaPremiumPet',
         'Metadata/Items/Pets/HasinaPremiumExpiredPet',
+        'Metadata/Items/Pets/HasinaSpringPremiumPet',
+        'Metadata/Items/Pets/HasinaSpringPremiumExpiredPet',
         'Metadata/Items/Pets/AuspiciousDragonPremiumPet',
         'Metadata/Items/Pets/AuspiciousDragonPremiumExpiredPet',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionAuspiciousBlueDragonWeaponEffect',
@@ -1933,6 +1897,38 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Pets/DaughterOfSinPet',
         'Metadata/Items/Pets/DaughterOfSinPremiumPet',
         'Metadata/Items/Pets/DaughterOfSinPremiumExpiredPet',
+        'Metadata/Items/Pets/DaughterOfSinSpringPremiumPet',
+        'Metadata/Items/Pets/DaughterOfSinSpringPremiumExpiredPet',
+        'Metadata/Items/Pets/SkadiPet',
+        'Metadata/Items/Pets/SkadiPremiumPet',
+        'Metadata/Items/Pets/SkadiPremiumExpiredPet',
+        'Metadata/Items/Pets/SpectralGryffonPet',
+        'Metadata/Items/Pets/SpectralGryffonPremiumPet',
+        'Metadata/Items/Pets/SpectralGryffonPremiumExpiredPet',
+        'Metadata/Items/Pets/SkadiWolfPet',
+        'Metadata/Items/Pets/SkadiWolfPremiumPet',
+        'Metadata/Items/Pets/SkadiWolfPremiumExpiredPet',
+        'Metadata/Items/Pets/GodofThunderPet',
+        'Metadata/Items/Pets/GodofThunderPremiumPet',
+        'Metadata/Items/Pets/GodofThunderPremiumExpiredPet',
+        'Metadata/Items/Pets/BladeSoulPet',
+        'Metadata/Items/Pets/BladeSoulPremiumPet',
+        'Metadata/Items/Pets/BladeSoulPremiumExpiredPet',
+        'Metadata/Items/Pets/TencentAristocratCatPet',
+        'Metadata/Items/Pets/TencentAristocratCatPremiumPet',
+        'Metadata/Items/Pets/TencentAristocratCatPremiumExpiredPet',
+        'Metadata/Items/Pets/LunarRabbitPet',
+        'Metadata/Items/Pets/LunarRabbitPremiumPet',
+        'Metadata/Items/Pets/LunarRabbitPremiumExpiredPet',
+        'Metadata/Items/Pets/GhostriderCompanionPet',
+        'Metadata/Items/Pets/GhostriderCompanionPremiumPet',
+        'Metadata/Items/Pets/GhostriderCompanionPremiumExpiredPet',
+        'Metadata/Items/Pets/BeastofBurdenPremiumPet',
+        'Metadata/Items/Pets/BeastofBurdenPremiumExpiredPet',
+        'Metadata/Items/Pets/AlchemistCompanionPet',
+        'Metadata/Items/Pets/AlchemistCompanionPremiumPet',
+        'Metadata/Items/Pets/AlchemistCompanionPremiumExpiredPet',
+        'Metadata/Items/Pets/AlchemistCompanionPetTemporary',
 
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionGreenLichHelmet',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionGreenLichBodyArmour',
@@ -2088,14 +2084,32 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentBadge20_5',
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentBadge20_6',
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentBadge20_7',
+        'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentGradingBadgeRank1',
+        'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentGradingBadgeRank2',
+        'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentGradingBadgeRank3',
+        'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentGradingBadgeRank4',
+        'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentGradingBadgeRank5',
+        'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentGradingBadgeRank6',
+        'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentGradingBadgeRank7',
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencent4YearPortraitFrame',
+        'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencent5YearPortraitFrame',
+        'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentDouyuStreamerPortraitFrame',
+        'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentHuyaStreamerPortraitFrame',
+        'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentBilibiliStreamerPortraitFrame',
 
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionPetUpgradeScroll',
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionPetConvertToNormalScroll',
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionPetConvertToSpecialScroll',
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionPetConvertAndUpgradeScroll',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionPetConvertToNormalScrollSpringDaughterOfSin',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionPetConvertToSpecialScrollSpringDaughterOfSin',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionPetConvertAndUpgradeScrollSpringDaughterOfSin',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionPetConvertToNormalScrollSpringHasina',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionPetConvertToSpecialScrollSpringHasina',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionPetConvertAndUpgradeScrollSpringHasina',
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionDaughterUpgradeScroll',
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionGoddessSetUpgradeScroll',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionLunarSetUpgradeScroll',
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScroll',
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS6',
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS7',
@@ -2106,6 +2120,13 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS13',
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS15',
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS16',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS17',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS18',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS19',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS20',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS21',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS22',
+        'Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS23',
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionSalvageFragmentSmall',
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionSalvageFragment',
         'Metadata/Items/MicrotransactionCurrency/MicrotransactionSalvageFragmentLarge',
@@ -2123,6 +2144,8 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionTencentAnniversary3BackAttachment',
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentAnniversary3PortraitFrame',
         'Metadata/Items/MicrotransactionItemEffects/MicrotransactionTencentCoreAtlasWings',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionTencentMasterGradingWings2021',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionTencentUnstableExplosivesBackAttachment',
 
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentGradingFrame1_1',
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentGradingFrame1_2',
@@ -2266,8 +2289,16 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentGradingFrame20_7',
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentTopPlayerFrame',
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentTwoYearsFrame',
-
-        'Metadata/Items/MicrotrransactionCharacterEffects/MicrotransactionTencentTopPlayerFrame',
+        'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentS8Frame1',
+        'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentS8Frame2',
+        'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentS8Frame3',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionTencentGradingPortraitFrame1',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionTencentGradingPortraitFrame2',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionTencentGradingPortraitFrame3',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionTencentGradingPortraitFrame4',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionTencentGradingPortraitFrame5',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionTencentGradingPortraitFrame6',
+        'Metadata/Items/MicrotransactionItemEffects/MicrotransactionTencentGradingPortraitFrame7',
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentS3HideOutFrame',
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentS3FashionFrame',
         'Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentS3BDMasterFrame',
@@ -2284,16 +2315,72 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/MicrotransactionCurrency/TradeMarketBuyoutTab',
         'Metadata/Items/MicrotransactionCurrency/TradeMarketBuyoutTabTemporary',
 
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxDarknessTencent',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxArcticTencent',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxCarnageTencent',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxEmberTencent',
         'Metadata/Items/MicrotransactionCurrency/MysteryBoxLightChaos',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxLightChaosTencent',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxRadiant',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxRadiantTencent',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxSolarisTencent',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxStormcallerTencent',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxStPattyTencent',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxChaosVsOrderTencent',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxChaosVsOrderTencentTradeable',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxFireAndIceTencent',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxFireAndIceTencentTradeable',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxSinAndInnocenceTencent',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxSinAndInnocenceTencentTradeable',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxApocalypseTencent',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxApocalypseTencentTradeable',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxOriathanTencent',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxOriathanTencentTradeable',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxFairgravesTencent',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxFairgravesTencentTradeable',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxGlimmerwoodTencent',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxGlimmerwoodTencentTradeable',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxFrontierTencent',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxFrontierTencentTradeable',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxCircusTencent',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxCircusTencentTradeable',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxAltDeicide',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxAltDeicideTradeable',
         'Metadata/Items/MicrotransactionCurrency/MysteryBoxChiyou',
         'Metadata/Items/MicrotransactionCurrency/MysteryBoxGoddess',
         'Metadata/Items/MicrotransactionCurrency/MysteryBoxJingwei',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxGodOfThunder',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxLunar',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxPolarisTencent',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxPolarisTencentTradeable',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxThaumaturgyTencent',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxThaumaturgyTencentTradeable',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxAngelsAndDemonsTencent',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxAngelsAndDemonsTencentTradeable',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxTwilightTencent',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxTwilightTencentTradeable',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxWarlordTencent',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxWarlordTencentTradeable',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxApollyonTencent',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxApollyonTencentTradeable',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxMidnightPactTencent',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxMidnightPactTencentTradeable',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxAtlantisTencent',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxAtlantisTencentTradeable',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxHarmonyTencent',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxHarmonyTencentTradeable',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxSentinelTencent',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxLakeOfKalandraTencent',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxSanctumTencent',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxCrucibleTencent',
         'Metadata/Items/MicrotransactionCurrency/MysteryBoxFreyaPouch',
         'Metadata/Items/MicrotransactionCurrency/MysteryBoxFreyaBox',
         'Metadata/Items/MicrotransactionCurrency/MysteryBoxHasinaPouch',
         'Metadata/Items/MicrotransactionCurrency/MysteryBoxSkadiPetBowl',
+        'Metadata/Items/MicrotransactionCurrency/MysteryBoxBladeSoul',
 
         'Metadata/Items/MicrotransactionCurrency/ProxyArcticAurora10',
+        'Metadata/Items/MicrotransactionCurrency/ProxyFireworksClassic20',
         'Metadata/Items/MicrotransactionCurrency/ProxyFireworksDarkSoulercoaster15',
         'Metadata/Items/MicrotransactionCurrency/ProxyGarenaPassiveRefundPack10',
         'Metadata/Items/MicrotransactionCurrency/ProxyGarenaPassiveRefundPack50',
@@ -2302,9 +2389,9 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/MicrotransactionCurrency/ProxySkinTransferPack50',
         'Metadata/Items/MicrotransactionCurrency/TradeMarketBuyoutTabTemporary',
 
-        #
-        # Hideout Doodads
-        #
+        # =================================================================
+        # Hideout decorations
+        # =================================================================
 
         # Hideout totem test variants, not needed
         'Metadata/Items/Hideout/HideoutTotemPoleTest',
@@ -2354,11 +2441,20 @@ class ItemsParser(SkillParserShared):
 
         'Metadata/Items/Hideout/HideoutLionStatueKneeling2',
 
-        #
-        # Stackable currency
-        #
+        # =================================================================
+        # Currency items
+        # =================================================================
+        'Metadata/Items/Currency/CurrencySilverCoin',
 
-        # Legacy variants of items before item stash tabs
+        'Metadata/Items/Currency/AncestralTattooSpecialUnique1',
+        'Metadata/Items/Currency/AncestralTattooSpecialUnique2',
+        'Metadata/Items/Currency/AncestralTattooSpecialUnique3',
+        'Metadata/Items/Currency/AncestralTattooSpecialUnique4',
+        'Metadata/Items/Currency/AncestralTattooSpecialUnique5',
+
+        # =================================================================
+        # Non-stackable resonators from before 3.8.0
+        # =================================================================
         'Metadata/Items/Delve/DelveSocketableCurrencyUpgrade1',
         'Metadata/Items/Delve/DelveSocketableCurrencyUpgrade2',
         'Metadata/Items/Delve/DelveSocketableCurrencyUpgrade3',
@@ -2367,33 +2463,10 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Delve/DelveSocketableCurrencyReroll2',
         'Metadata/Items/Delve/DelveSocketableCurrencyReroll3',
         'Metadata/Items/Delve/DelveSocketableCurrencyReroll4',
-        'Metadata/Items/MapFragments/VaalFragment1_1',
-        'Metadata/Items/MapFragments/VaalFragment1_2',
-        'Metadata/Items/MapFragments/VaalFragment1_3',
-        'Metadata/Items/MapFragments/VaalFragment1_4',
-        'Metadata/Items/MapFragments/VaalFragment2_1',
-        'Metadata/Items/MapFragments/VaalFragment2_2',
-        'Metadata/Items/MapFragments/VaalFragment2_3',
-        'Metadata/Items/MapFragments/VaalFragment2_4',
-        'Metadata/Items/MapFragments/ProphecyFragment1',
-        'Metadata/Items/MapFragments/ProphecyFragment2',
-        'Metadata/Items/MapFragments/ProphecyFragment3',
-        'Metadata/Items/MapFragments/ProphecyFragment4',
-        'Metadata/Items/MapFragments/ShaperFragment1',
-        'Metadata/Items/MapFragments/ShaperFragment2',
-        'Metadata/Items/MapFragments/ShaperFragment3',
-        'Metadata/Items/MapFragments/ShaperFragment4',
-        'Metadata/Items/MapFragments/FragmentPantheonFlask',
-        'Metadata/Items/MapFragments/BreachFragmentFire',
-        'Metadata/Items/MapFragments/BreachFragmentCold',
-        'Metadata/Items/MapFragments/BreachFragmentLightning',
-        'Metadata/Items/MapFragments/BreachFragmentPhysical',
-        'Metadata/Items/MapFragments/BreachFragmentChaos',
-        'Metadata/Items/Labyrinth/OfferingToTheGoddess',
 
-        #
-        # Non-stackable incubators before 3.16
-        #
+        # =================================================================
+        # Non-stackable incubators from before 3.16.0
+        # =================================================================
         'Metadata/Items/Currency/CurrencyIncubationEssence',
         'Metadata/Items/Currency/CurrencyIncubationCurrency',
         'Metadata/Items/Currency/CurrencyIncubationUniques',
@@ -2425,9 +2498,97 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Currency/CurrencyIncubationMetamorph',
         'Metadata/Items/Currency/CurrencyIncubationDelirium',
 
-        #
+        # =================================================================
+        # Old map fragments
+        # =================================================================
+        'Metadata/Items/MapFragments/VaalFragment1_1',
+        'Metadata/Items/MapFragments/VaalFragment1_2',
+        'Metadata/Items/MapFragments/VaalFragment1_3',
+        'Metadata/Items/MapFragments/VaalFragment1_4',
+        'Metadata/Items/MapFragments/VaalFragment2_1',
+        'Metadata/Items/MapFragments/VaalFragment2_2',
+        'Metadata/Items/MapFragments/VaalFragment2_3',
+        'Metadata/Items/MapFragments/VaalFragment2_4',
+        'Metadata/Items/MapFragments/ProphecyFragment1',
+        'Metadata/Items/MapFragments/ProphecyFragment2',
+        'Metadata/Items/MapFragments/ProphecyFragment3',
+        'Metadata/Items/MapFragments/ProphecyFragment4',
+        'Metadata/Items/MapFragments/ShaperFragment1',
+        'Metadata/Items/MapFragments/ShaperFragment2',
+        'Metadata/Items/MapFragments/ShaperFragment3',
+        'Metadata/Items/MapFragments/ShaperFragment4',
+        'Metadata/Items/MapFragments/FragmentPantheonFlask',
+        'Metadata/Items/MapFragments/BreachFragmentFire',
+        'Metadata/Items/MapFragments/BreachFragmentCold',
+        'Metadata/Items/MapFragments/BreachFragmentLightning',
+        'Metadata/Items/MapFragments/BreachFragmentPhysical',
+        'Metadata/Items/MapFragments/BreachFragmentChaos',
+        'Metadata/Items/Labyrinth/OfferingToTheGoddess',
+
+        # =================================================================
+        # Watchstones (removed from the game in 3.17.0)
+        # =================================================================
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgradeFinal',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade1_1',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade1_2',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade1_3',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade1_4',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade1_5',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade1_6',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade1_7',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade1_8',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade2_1',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade2_2',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade2_3',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade2_4',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade2_5',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade2_6',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade2_7',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade2_8',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade3_1',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade3_2',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade3_3',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade3_4',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade3_5',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade3_6',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade3_7',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade3_8',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade4_1',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade4_2',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade4_3',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade4_4',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade4_5',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade4_6',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade4_7',
+        'Metadata/Items/AtlasUpgrades/AtlasRegionUpgrade4_8',
+        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable1_1',
+        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable1_2',
+        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable1_3',
+        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable1_4',
+        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable1_5',
+        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable1_6',
+        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable1_7',
+        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable1_8',
+        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable2_1',
+        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable2_2',
+        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable2_3',
+        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable2_4',
+        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable2_5',
+        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable2_6',
+        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable2_7',
+        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable2_8',
+        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable3_1',
+        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable3_2',
+        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable3_3',
+        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable3_4',
+        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable3_5',
+        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable3_6',
+        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable3_7',
+        'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable3_8',
+
+        # =================================================================
         # Quest items
-        #
+        # =================================================================
         'Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment1_1',
         'Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment2_1',
         'Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment3_1',
@@ -2444,9 +2605,9 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment10_2',
         'Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment10_3',
 
-        #
+        # =================================================================
         # Misc
-        #
+        # =================================================================
         'Metadata/Items/Heist/HeistEquipmentToolTest',
         'Metadata/Items/Heist/HeistEquipmentWeaponTest',
         'Metadata/Items/Heist/HeistEquipmentUtilityTest',
@@ -2454,6 +2615,7 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Weapons/OneHandWeapons/Daggers/EtherealBlade1',
         'Metadata/Items/ItemEffects/SekhemasBanner',
         'Metadata/Items/Armours/BodyArmours/BodyStrTemp',
+        'Metadata/Items/Classic/MysteryLeaguestone',
     }
 
     _attribute_map = OrderedDict((
