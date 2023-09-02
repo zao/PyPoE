@@ -238,10 +238,9 @@ class ModParser(BaseParser):
 
             # TODO: need to look into this before completely removing it.
 
-            # print('yep', mod)
-            # if mod['BuffDefinitionsKey']:
-            #     data['granted_buff_id'] = mod['BuffDefinitionsKey']['Id']
-            #     data['granted_buff_value'] = mod['BuffValue']
+            if mod['BuffTemplate'] and mod['BuffTemplate']['BuffDefinitionsKey']:
+                data['granted_buff_id'] = mod['BuffTemplate']['BuffDefinitionsKey']['Id']
+                data['granted_buff_value'] = mod['BuffTemplate']['AuraRadius']
             # todo ID for GEPL
 
             # 3.19 Update - Lake of Kalandra
