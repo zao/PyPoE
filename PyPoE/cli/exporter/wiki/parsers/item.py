@@ -221,7 +221,7 @@ class WikiCondition(parser.WikiCondition):
         'sentinel_charge',
     )
     COPY_MATCH = re.compile(
-        r'^(recipe|implicit[0-9]+_(?:text|random_list)).*', re.UNICODE)
+        r'^(recipe|sell_price|implicit[0-9]+_(?:text|random_list)).*', re.UNICODE)
 
     NAME = 'Base item'
     INDENT = 40
@@ -469,6 +469,8 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Belts/BeltDemigods1',
         'Metadata/Items/Rings/RingDemigods1',
     }
+
+    _EXCLUDE_CLASSES = {'Maps'}
 
     _NAME_OVERRIDE_BY_ID = {
         'English': {
@@ -783,18 +785,10 @@ class ItemsParser(SkillParserShared):
             # =================================================================
             # Invitations
             # =================================================================
-            'Metadata/Items/MapFragments/Maven/MavenMapOutsideBottomRight5': " (10 bosses)",
-            'Metadata/Items/MapFragments/Maven/MavenMapOutsideBottomLeft5': " (10 bosses)",
-            'Metadata/Items/MapFragments/Maven/MavenMapOutsideTopLeft5': " (10 bosses)",
-            'Metadata/Items/MapFragments/Maven/MavenMapOutsideTopRight5': " (10 bosses)",
-            'Metadata/Items/MapFragments/Maven/MavenMapInsideBottomRight5': " (10 bosses)",
-            'Metadata/Items/MapFragments/Maven/MavenMapInsideBottomLeft5': " (10 bosses)",
-            'Metadata/Items/MapFragments/Maven/MavenMapInsideTopLeft5': " (10 bosses)",
-            'Metadata/Items/MapFragments/Maven/MavenMapInsideTopRight5': " (10 bosses)",
-            'Metadata/Items/MapFragments/Primordial/QuestTangleKey': ' (quest)',
-            'Metadata/Items/MapFragments/Primordial/QuestTangleBossKey': ' (quest)',
-            'Metadata/Items/MapFragments/Primordial/QuestCleansingFireKey': ' (quest)',
-            'Metadata/Items/MapFragments/Primordial/QuestCleansingFireBossKey': ' (quest)',
+            'Metadata/Items/MapFragments/Primordial/QuestTangleKey': ' (quest item)',
+            'Metadata/Items/MapFragments/Primordial/QuestTangleBossKey': ' (quest item)',
+            'Metadata/Items/MapFragments/Primordial/QuestCleansingFireKey': ' (quest item)',
+            'Metadata/Items/MapFragments/Primordial/QuestCleansingFireBossKey': ' (quest item)',
 
             # =================================================================
             # Item pieces
@@ -2587,6 +2581,63 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable3_8',
 
         # =================================================================
+        # Mavenvitations (removed from the game in 3.17.0)
+        # =================================================================
+        'Metadata/Items/MapFragments/Maven/MavenMapOutsideBottomRight5',
+        'Metadata/Items/MapFragments/Maven/MavenMapOutsideBottomLeft5',
+        'Metadata/Items/MapFragments/Maven/MavenMapOutsideTopLeft5',
+        'Metadata/Items/MapFragments/Maven/MavenMapOutsideTopRight5',
+        'Metadata/Items/MapFragments/Maven/MavenMapInsideBottomRight5',
+        'Metadata/Items/MapFragments/Maven/MavenMapInsideBottomLeft5',
+        'Metadata/Items/MapFragments/Maven/MavenMapInsideTopLeft5',
+        'Metadata/Items/MapFragments/Maven/MavenMapInsideTopRight5',
+
+        # =================================================================
+        # Invocations (only present for sanctum league)
+        # =================================================================
+        'Metadata/Items/Currency/SanctumCurrencyAcrobatics',
+        'Metadata/Items/Currency/SanctumCurrencyAncestralBond',
+        'Metadata/Items/Currency/SanctumCurrencyArrowDancing',
+        'Metadata/Items/Currency/SanctumCurrencyAvatarOfFire',
+        'Metadata/Items/Currency/SanctumCurrencyBloodMagic',
+        'Metadata/Items/Currency/SanctumCurrencyCallToArms',
+        'Metadata/Items/Currency/SanctumCurrencyConduit',
+        'Metadata/Items/Currency/SanctumCurrencyCrimsonDance',
+        'Metadata/Items/Currency/SanctumCurrencyDivineShield',
+        'Metadata/Items/Currency/SanctumCurrencyEldritchBattery',
+        'Metadata/Items/Currency/SanctumCurrencyElementalEquilibrium',
+        'Metadata/Items/Currency/SanctumCurrencyElementalOverload',
+        'Metadata/Items/Currency/SanctumCurrencyEternalYouth',
+        'Metadata/Items/Currency/SanctumCurrencyGhostDance',
+        'Metadata/Items/Currency/SanctumCurrencyGhostReaver',
+        'Metadata/Items/Currency/SanctumCurrencyGlancingBlows',
+        'Metadata/Items/Currency/SanctumCurrencyDoomsday',
+        'Metadata/Items/Currency/SanctumCurrencyImbalancedGuard',
+        'Metadata/Items/Currency/SanctumCurrencyIronGrip',
+        'Metadata/Items/Currency/SanctumCurrencyIronReflexes',
+        'Metadata/Items/Currency/SanctumCurrencyIronWill',
+        'Metadata/Items/Currency/SanctumCurrencyLetheShade',
+        'Metadata/Items/Currency/SanctumCurrencyMagebane',
+        'Metadata/Items/Currency/SanctumCurrencyMindoverMatter',
+        'Metadata/Items/Currency/SanctumCurrencyMinionInstability',
+        'Metadata/Items/Currency/SanctumCurrencyPainAttunement',
+        'Metadata/Items/Currency/SanctumCurrencyPerfectAgony',
+        'Metadata/Items/Currency/SanctumCurrencyPointBlank',
+        'Metadata/Items/Currency/SanctumCurrencyPreciseTechnique',
+        'Metadata/Items/Currency/SanctumCurrencyResoluteTechnique',
+        'Metadata/Items/Currency/SanctumCurrencyRunebinder',
+        'Metadata/Items/Currency/SanctumCurrencySolipsism',
+        'Metadata/Items/Currency/SanctumCurrencySupremeEgo',
+        'Metadata/Items/Currency/SanctumCurrencyTheAgnostic',
+        'Metadata/Items/Currency/SanctumCurrencyTheImpaler',
+        'Metadata/Items/Currency/SanctumCurrencyUnwaveringStance',
+        'Metadata/Items/Currency/SanctumCurrencyVaalPact',
+        'Metadata/Items/Currency/SanctumCurrencyVersatileCombatant',
+        'Metadata/Items/Currency/SanctumCurrencyWickedWard',
+        'Metadata/Items/Currency/SanctumCurrencyWindDancer',
+        'Metadata/Items/Currency/SanctumCurrencyZealotsOath',
+
+        # =================================================================
         # Quest items
         # =================================================================
         'Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment1_1',
@@ -3933,6 +3984,9 @@ class ItemsParser(SkillParserShared):
         if classes:
             items = [item for item in items if item['ItemClassesKey']['Name']
                      in classes]
+        else:
+            items = [item for item in items if item['ItemClassesKey']['Name']
+                     not in self._EXCLUDE_CLASSES]
 
         self._parsed_args = parsed_args
         console('Found %s items. Removing disabled items...' % len(items))
@@ -4017,15 +4071,23 @@ class ItemsParser(SkillParserShared):
                 cmdargs=parsed_args,
             )
 
+            wiki_page = [
+                {
+                    'page': page,
+                    'condition': cond,
+                }
+            ]
+
+            if infobox.get('cosmetic_type', None) == 'Armour Skin' and 'Armour' not in page:
+                wiki_page.append({
+                    'page': page + " Armour",
+                    'condition': cond,
+                })
+
             r.add_result(
                 text=cond,
                 out_file='item_%s.txt' % page,
-                wiki_page=[
-                    {
-                        'page': page,
-                        'condition': cond,
-                    }
-                ],
+                wiki_page=wiki_page,
                 wiki_message='Item exporter',
             )
 
