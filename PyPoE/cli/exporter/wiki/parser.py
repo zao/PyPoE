@@ -1815,6 +1815,7 @@ class WikiCondition:
     COPY_KEYS = (
     )
     COPY_MATCH = None
+    COPY_CONDITIONS = {}
 
     NAME = NotImplemented
     MATCH = None
@@ -1852,6 +1853,11 @@ class WikiCondition:
                 for k, v in self.template_arguments['kwargs'].items():
                     if self.COPY_MATCH.match(k):
                         self.data[k] = v
+
+            for k, condition in self.COPY_CONDITIONS:
+                if k in self.template_arguments['kwargs'] and \
+                        condition(self.template_arguments['kwargs'][k], self.data.get(k, None)):
+                    self.data[k] = self.template_arguments['kwargs'][k]
 
             prefix = ''
             if self.ADD_INCLUDE and '<onlyinclude></onlyinclude>' not in \
