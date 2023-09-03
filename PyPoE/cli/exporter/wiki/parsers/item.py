@@ -474,6 +474,31 @@ class ItemsParser(SkillParserShared):
 
     _NAME_OVERRIDE_BY_ID = {
         'English': {
+            "Metadata/Items/PantheonSouls/PantheonSoulBrineKingUpgrade1": "Captured Soul (The Brine King upgrade 1 of 3)",
+            "Metadata/Items/PantheonSouls/PantheonSoulBrineKingUpgrade2": "Captured Soul (The Brine King upgrade 2 of 3)",
+            "Metadata/Items/PantheonSouls/PantheonSoulBrineKingUpgrade3": "Captured Soul (The Brine King upgrade 3 of 3)",
+            "Metadata/Items/PantheonSouls/PantheonSoulArakaaliUpgrade1": "Captured Soul (Arakaali upgrade 1 of 3)",
+            "Metadata/Items/PantheonSouls/PantheonSoulArakaaliUpgrade2": "Captured Soul (Arakaali upgrade 2 of 3)",
+            "Metadata/Items/PantheonSouls/PantheonSoulArakaaliUpgrade3": "Captured Soul (Arakaali upgrade 3 of 3)",
+            "Metadata/Items/PantheonSouls/PantheonSoulSolarisUpgrade1": "Captured Soul (Solaris upgrade 1 of 3)",
+            "Metadata/Items/PantheonSouls/PantheonSoulSolarisUpgrade2": "Captured Soul (Solaris upgrade 2 of 3)",
+            "Metadata/Items/PantheonSouls/PantheonSoulSolarisUpgrade3": "Captured Soul (Solaris upgrade 3 of 3)",
+            "Metadata/Items/PantheonSouls/PantheonSoulLunarisUpgrade1": "Captured Soul (Lunaris upgrade 1 of 3)",
+            "Metadata/Items/PantheonSouls/PantheonSoulLunarisUpgrade2": "Captured Soul (Lunaris upgrade 2 of 3)",
+            "Metadata/Items/PantheonSouls/PantheonSoulLunarisUpgrade3": "Captured Soul (Lunaris upgrade 3 of 3)",
+            "Metadata/Items/PantheonSouls/PantheonSoulAbberathUpgrade1": "Captured Soul (Abberath upgrade)",
+            "Metadata/Items/PantheonSouls/PantheonSoulGruthkulUpgrade1": "Captured Soul (Gruthkul upgrade)",
+            "Metadata/Items/PantheonSouls/PantheonSoulYugulUpgrade1": "Captured Soul (Yugul upgrade)",
+            "Metadata/Items/PantheonSouls/PantheonSoulShakariUpgrade1": "Captured Soul (Shakari upgrade)",
+            "Metadata/Items/PantheonSouls/PantheonSoulTukohamaUpgrade1": "Captured Soul (Tukohama upgrade)",
+            "Metadata/Items/PantheonSouls/PantheonSoulRalakeshUpgrade1": "Captured Soul (Ralakesh upgrade)",
+            "Metadata/Items/PantheonSouls/PantheonSoulGarukhanUpgrade1": "Captured Soul (Garukhan upgrade)",
+            "Metadata/Items/PantheonSouls/PantheonSoulRyslathaUpgrade1": "Captured Soul (Ryslatha upgrade)",
+        }
+    }
+
+    _NAME_APPENDIX_BY_ID = {
+        'English': {
 
             # =================================================================
             # Skill Gems
@@ -3947,8 +3972,12 @@ class ItemsParser(SkillParserShared):
         name = base_item_type['Name']
         cls_id = base_item_type['ItemClassesKey']['Id']
         m_id = base_item_type['Id']
-        appendix = self._NAME_OVERRIDE_BY_ID[language].get(m_id)
+        override = self._NAME_OVERRIDE_BY_ID[language].get(m_id)
+        appendix = self._NAME_APPENDIX_BY_ID[language].get(m_id)
 
+        if override is not None:
+            name = override
+            infobox['inventory_icon'] = name
         if appendix is not None:
             name += appendix
             infobox['inventory_icon'] = name
