@@ -131,11 +131,14 @@ class WikiHandler:
             while True:
                 recache_page = self.pages_to_recache.get_nowait()
                 console(f'Clearing page cache for {recache_page.name}')
-                try:
-                    recache_page.touch()
-                    recache_page.purge()
-                except:
-                    console(f'Failed to clear page cache for {recache_page.name}', Msg.warning)
+                for retry in range(5):
+                    try:
+                        recache_page.touch()
+                        recache_page.purge()
+                        break
+                    except:
+                        console(f'Failed to clear page cache for {recache_page.name} ({retry} retries)', Msg.warning)
+                        time.sleep(.01 * 2 ** retry)
                 time.sleep(self.cmdargs.wiki_sleep)
         except Empty:
             pass
@@ -645,7 +648,7 @@ def add_parser_arguments(parser):
         help='Perform a null edit and cache purge on each page seen.',
         choices=['all', 'edit'],
         nargs='?',
-        const='edited',
+        const='edit',
     )
 
     parser.add_argument(
