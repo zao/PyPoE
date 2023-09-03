@@ -1,29 +1,31 @@
 #!/usr/bin/env bash
 
 function usage () {
-    echo 'usage: '$(basename $0)' [-h] [-q] [-i {.png,md5sum}] [--] [PYPOE_ARGS]
+    echo 'usage: '$(basename $0)' [-h] [-q] [-i {.png,md5sum}] [-t n] [-u <username>] [-p <password>] [{-w,-d,-e,-c}] [--] [PYPOE_ARGS]
 
 options:
   -h, --help            show this help message and exit
   -q, --quiet           hide all non-error messages from pypoe
   -i, --image           process images and convert them to the specified format
+  -t, --threads         number of threads that can read wiki pages simultaneously (equivalent to the -w-mt pypoe argument)
+  -u, --username        wiki username (if not supplied pypoe will prompt several times during the export)
+  -p, --password        wiki password (will be printed to console)
 
   -w, --write           export to the file system
                       - alias for '$(basename $0)' -- --write
 
-  -d, --dry-run         perform a dry run, comparing changes against the wiki
-                      - alias for '$(basename $0)' -- --write -w -w-dr -w-d -w-mt 8 -w-u "$POEWIKI_USER" -w-pw "$POEWIKI_PASS"
-                      - if $POEWIKI_USER and $POEWIKI_PASS are not set you will be prompted several times by the exporter
+  -d, --dry-run         perform a dry run, comparing changes against the wiki and saving diffs in the output directory
+                      - alias for '$(basename $0)' -- --write -w -w-dr -w-d
 
   -e, --export          perform a full export to the wiki
-                      - alias for '$(basename $0)' -i .png -- -w -w-pc -w-mt 8 -w-u "$POEWIKI_USER" -w-pw "$POEWIKI_PASS"
+                      - alias for '$(basename $0)' -i .png -- -w -w-pc
 
-  -p, --purge-cache     perform a null edit and cache purge of every page managed by the exporter
-                      - alias for '$(basename $0)' -- -w -w-dr -w-pc all -w-mt 8 -w-u "$POEWIKI_USER" -w-pw "$POEWIKI_PASS"'
+  -c, --cache           perform a null edit and cache purge of every page managed by the exporter
+                      - alias for '$(basename $0)' -- -w -w-dr -w-pc all'
 }
 
 
-VALID_ARGS=$(getopt -o i:wdepqh --long image:,write,dry-run,export,purge-cache,quiet,help -- "$@")
+VALID_ARGS=$(getopt -o hqi:t:u:p:wdec --long help,quiet,image:,threads:,username:,password:,write,dry-run,export,cache -- "$@")
 if [[ $? -ne 0 ]]; then
     usage
     exit $?;
@@ -51,40 +53,34 @@ while [[ $# -gt 0 ]]; do
         fi
         shift 2
         ;;
+    -t | --threads)
+        ARGS+=(-w-mt $2)
+        shift 2
+        ;;
+    -u | --username)
+        ARGS+=(-w-u $2)
+        shift 2
+        ;;
+    -p | --password)
+        ARGS+=(-w-pw $2)
+        shift 2
+        ;;
     -w | --write)
-        ARGS=(--write)
+        ARGS+=(--write)
         shift
         ;;
     -d | --dry-run)
-        ARGS=(--write -w -w-dr -w-d -w-mt 8)
-        if [[ -n "$POEWIKI_USER" ]]; then
-          ARGS+=(-w-u $POEWIKI_USER)
-        fi
-        if [[ -n "$POEWIKI_PASS" ]]; then
-          ARGS+=(-w-pw "$POEWIKI_PASS")
-        fi
+        ARGS+=(--write -w -w-dr -w-d)
         shift
         ;;
     -e | --export)
-        ARGS=(-w -w-pc -w-mt 8)
-        if [[ -n "$POEWIKI_USER" ]]; then
-          ARGS+=(-w-u $POEWIKI_USER)
-        fi
-        if [[ -n "$POEWIKI_PASS" ]]; then
-          ARGS+=(-w-pw "$POEWIKI_PASS")
-        fi
+        ARGS+=(-w -w-pc)
         IMG=(--store-images --convert-images)
         SKIP_ICON_EXPORT=
         shift
         ;;
-    -p | --purge-cache)
-        ARGS=(-w -w-dr -w-pc all -w-mt 8)
-        if [[ -n "$POEWIKI_USER" ]]; then
-          ARGS+=(-w-u $POEWIKI_USER)
-        fi
-        if [[ -n "$POEWIKI_PASS" ]]; then
-          ARGS+=(-w-pw "$POEWIKI_PASS")
-        fi
+    -c | --cache)
+        ARGS+=(-w -w-dr -w-pc all)
         IMG=(--store-images --convert-images)
         SKIP_ICON_EXPORT=
         shift
@@ -98,7 +94,8 @@ while [[ $# -gt 0 ]]; do
         exit
         shift
         ;;
-    --) shift;
+    --)
+        shift
         break
         ;;
   esac

@@ -34,8 +34,8 @@ from difflib import unified_diff
 import os
 from queue import Empty, SimpleQueue
 import sys
+from threading import Lock
 import time
-import re
 from collections.abc import Iterable
 from concurrent.futures import ThreadPoolExecutor, wait
 from requests.exceptions import HTTPError
@@ -143,7 +143,7 @@ class WikiHandler:
         except Empty:
             pass
 
-    def handle_page(self, *a, row=None):
+    def handle_page(self, *a, row=None, rownum=None):
         if isinstance(row['wiki_page'], str):
             pages = [
                 {'page': row['wiki_page'], 'condition': None},
@@ -152,6 +152,10 @@ class WikiHandler:
             pages = row['wiki_page']
         console('Scanning for wiki page candidates "%s"' %
                 ', '.join([p['page'] for p in pages]))
+        if self.cmdargs.quiet:
+            if self.cmdargs.wiki_threads == 1 or self.print_lock.acquire(False):
+                print(f"processed: {rownum:>5}", end='\r')
+                self.cmdargs.wiki_threads == 1 or self.print_lock.release()
         page_found = False
         new = False
         for pdata in pages:
@@ -241,13 +245,14 @@ class WikiHandler:
                 else:
                     console(text)
             else:
-                response = page.save(
-                    text=text,
-                    summary='PyPoE/ExporterBot/%s: %s' % (
-                        __version__,
-                        self.cmdargs.wiki_message or row['wiki_message']
+                with self.write_lock:
+                    response = page.save(
+                        text=text,
+                        summary='PyPoE/ExporterBot/%s: %s' % (
+                            __version__,
+                            self.cmdargs.wiki_message or row['wiki_message']
+                        )
                     )
-                )
                 if response['result'] == 'Success':
                     console('Page was edited successfully (time: %s)' %
                             response.get('newtimestamp'))
@@ -297,21 +302,25 @@ class WikiHandler:
         self.parser = parser
         self.out_dir = out_dir
         self.pages_to_recache = SimpleQueue()
+        self.print_lock = Lock()
+        self.write_lock = Lock()
+        if cmdargs.quiet:
+            print(f"processing {len(result):>5} pages")
 
         if cmdargs.wiki_threads > 1:
             console('Starting thread pool...')
             tp = ThreadPoolExecutor(max_workers=cmdargs.wiki_threads)
 
-            wait(tp.submit(self._error_catcher, row=row) for row in result)
-                
+            wait(tp.submit(self._error_catcher, row=row, rownum=rownum) for (rownum, row) in enumerate(result))
+
             for i in range(cmdargs.wiki_threads):
                 tp.submit(self.recache_pages)
 
             tp.shutdown(wait=True)
         else:
             console(f'Editing {len(result)} pages...')
-            for row in result:
-                self._error_catcher(row=row)
+            for (rownum, row) in enumerate(result):
+                self._error_catcher(row=row, rownum=rownum)
                 time.sleep(cmdargs.wiki_sleep)
             self.recache_pages()
 
