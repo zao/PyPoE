@@ -39,11 +39,10 @@ function exporting() {
 function usage () {
     echo '
 usage:
- '$(basename $0)' <exporters> [-h] [-q] [-i {.png,md5sum}] [-t n] [-u <username>] [-p <password>] [{-w,-d,-e,-c}] [-- PYPOE_ARGS]
+  '$(basename $0)' [EXPORTERS]... [OPTIONS]... [-- PYPOE_OPTIONS]
 
-  if present, exporters should be listed space-separated before any other arguments.
-  if not present, all exporters will be run
-  recognized exporters: '"${ALL_EXPORTERS[@]}"'
+  exporters can be any or all of: '"${ALL_EXPORTERS[@]}"'
+  if no exporters are listed, all exporters will be run
 
 options:
   -h, --help            show this help message and exit
@@ -66,17 +65,6 @@ options:
                       - alias for '$(basename $0)' -- -w -w-dr -w-pc all'
   exit $1
 }
-
-while [[ $# -gt 0 ]] && [[ $1 != -* ]]
-do
-  if ! find $1 ALL_EXPORTERS
-  then
-    echo "$1 not recognized - known exporters: ${ALL_EXPORTERS[@]}"
-    usage 1
-  fi
-  EXPORTERS+=($1)
-  shift
-done
 
 VALID_ARGS=$(getopt -o hqi:t:u:p:wdec --long help,quiet,image:,threads:,username:,password:,write,dry-run,export,cache -- "$@")
 if [[ $? -ne 0 ]]; then
@@ -147,6 +135,17 @@ while [[ $# -gt 0 ]]; do
         ;;
     --)
         shift
+        # getopt puts all arguments not starting with '-' after the '--'
+        while [[ $# -gt 0 ]] && [[ $1 != -* ]]
+        do
+          if ! find $1 ALL_EXPORTERS
+          then
+            echo "$1 not recognized - known exporters: ${ALL_EXPORTERS[@]}"
+            usage 1
+          fi
+          EXPORTERS+=($1)
+          shift
+        done
         break
         ;;
   esac
@@ -192,3 +191,5 @@ exporting modules && {
 $SKIP_ICON_EXPORT
 exporting atlas-icons &&
 pypoe_exporter $QUIET wiki items atlas_icons "${ARGS[@]}" "$@" --store-images --convert-images
+
+date -ud "@$SECONDS" "+Export completed in: %H:%M:%S"
