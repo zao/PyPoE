@@ -304,14 +304,16 @@ class WikiHandler:
         self.pages_to_recache = SimpleQueue()
         self.print_lock = Lock()
         self.write_lock = Lock()
-        if cmdargs.quiet:
-            print(f"processing {len(result):>5} pages")
 
         if cmdargs.wiki_threads > 1:
             console('Starting thread pool...')
             tp = ThreadPoolExecutor(max_workers=cmdargs.wiki_threads)
 
+            if cmdargs.quiet:
+                print(f"processing {len(result):>5} pages")
             wait(tp.submit(self._error_catcher, row=row, rownum=rownum) for (rownum, row) in enumerate(result))
+            if cmdargs.quiet:
+                print(f"processed: {len(result):>5}")
 
             for i in range(cmdargs.wiki_threads):
                 tp.submit(self.recache_pages)
