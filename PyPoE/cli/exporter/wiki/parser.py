@@ -1723,6 +1723,14 @@ class TagHandler:
     _IL_FORMAT = '{{il|html=|%s}}'
     _C_FORMAT = '{{c|%s|%s}}'
 
+    # Language should not be necessary as we are checking Words.dat['Text'],
+    # while the translated name is in Text2
+    UNIQ_FORMATS = {
+        "Lightpoacher": '[[%s]]',
+        "Precursor's Emblem": '[[%s]]',
+        "Thread of Hope": '{{il|page=%s}}',
+    }
+
     def __init__(self, rr):
         """
         Parameters
@@ -1768,6 +1776,8 @@ class TagHandler:
             items = self.rr['BaseItemTypes.dat64'].index['Name'][hstr]
             if len(items) > 0:
                 hstr = '[[%s]]' % hstr
+            elif hstr in self.UNIQ_FORMATS:
+                hstr = self.UNIQ_FORMATS[hstr] % hstr
             else:
                 hstr = self._IL_FORMAT % hstr
         else:
