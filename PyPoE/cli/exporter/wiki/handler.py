@@ -227,7 +227,7 @@ class WikiHandler:
             if wiki_lines == new_lines:
                 console('No update required. Skipping.')
                 return
-            if '[DNT]' in text and new:
+            if ('[DNT]' in text or '[UNUSED]' in text) and new:
                 console('Found text marked as Do Not Translate. Skipping.')
                 return
 

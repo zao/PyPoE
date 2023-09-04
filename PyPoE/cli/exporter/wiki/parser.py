@@ -1881,6 +1881,9 @@ class WikiCondition:
             ordered_dict=self.data,
         )
 
+    def tagsets_equal(page_value, new_value):
+        return new_value and set(page_value.split(', ')) == set(new_value.split(', '))
+
 # =============================================================================
 # Functions
 # =============================================================================

@@ -69,7 +69,7 @@ class ModWikiCondition(WikiCondition):
         'tier_text',
     )
     COPY_CONDITIONS = {
-        'tags': lambda page_value, new_value: new_value and set(page_value.split(', ')) == set(new_value.split(', '))
+        'tags': WikiCondition.tagsets_equal
     }
 
     NAME = 'Mod'

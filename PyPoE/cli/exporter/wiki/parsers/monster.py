@@ -57,6 +57,11 @@ class MonsterWikiCondition(parser.WikiCondition):
         'release_version',
         'screenshot_ext',
     )
+    COPY_CONDITIONS = {
+        'tags': parser.WikiCondition.tagsets_equal,
+        'mod_ids': parser.WikiCondition.tagsets_equal,
+        'skill_ids': parser.WikiCondition.tagsets_equal,
+    }
 
     NAME = 'Monster'
     ADD_INCLUDE = False
