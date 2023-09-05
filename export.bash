@@ -5,7 +5,6 @@ ARGS=()
 IMG=()
 export ALL_EXPORTERS=(items passives skills mastery-effects mastery-groups mods monsters areas maps incursion-rooms modules atlas-icons)
 EXPORTERS=()
-SKIP_ICON_EXPORT=exit
 
 # check if value is in array
 # https://stackoverflow.com/a/68702551/2063518
@@ -28,7 +27,7 @@ function exporting() {
     exit 1
   fi
 
-  if [[ -z ${EXPORTERS[@]} ]] || find $1 EXPORTERS
+  if [[ -z ${EXPORTERS[@]} ]] && [[ $1 != atlas-icons ]] || find $1 EXPORTERS
   then
     echo exporting $1
   else
@@ -42,7 +41,7 @@ usage:
   '$(basename $0)' [EXPORTERS]... [OPTIONS]... [-- PYPOE_OPTIONS]
 
   exporters can be any or all of: '"${ALL_EXPORTERS[@]}"'
-  if no exporters are listed, all exporters will be run
+  if no exporters are listed, all exporters except atlas-icons will be run
 
 options:
   -h, --help            show this help message and exit
@@ -78,7 +77,6 @@ while [[ $# -gt 0 ]]; do
         if [[ $2 == .png ]]
         then
           IMG=(--store-images --convert-images)
-          SKIP_ICON_EXPORT=
         elif [[ $2 == md5sum ]]
         then
           IMG=(--store-images --convert-images=md5sum)
@@ -110,19 +108,16 @@ while [[ $# -gt 0 ]]; do
     -d | --dry-run)
         ARGS+=(--write -w -w-dr -w-d)
         IMG=(--store-images --convert-images=md5sum)
-        SKIP_ICON_EXPORT=
         shift
         ;;
     -e | --export)
         ARGS+=(-w -w-pc)
         IMG=(--store-images --convert-images)
-        SKIP_ICON_EXPORT=
         shift
         ;;
     -c | --cache)
         ARGS+=(-w -w-dr -w-pc all)
         IMG=(--store-images --convert-images)
-        SKIP_ICON_EXPORT=
         shift
         ;;
     -q | --quiet)
@@ -188,7 +183,6 @@ exporting modules && {
   pypoe_exporter $QUIET wiki lua ot "${ARGS[@]}" "$@"
   pypoe_exporter $QUIET wiki lua minimap "${ARGS[@]}" "$@"
 }
-$SKIP_ICON_EXPORT
 exporting atlas-icons &&
 pypoe_exporter $QUIET wiki items atlas_icons "${ARGS[@]}" "$@" --store-images --convert-images
 
