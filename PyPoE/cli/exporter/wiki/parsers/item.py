@@ -2465,12 +2465,6 @@ class ItemsParser(SkillParserShared):
         # =================================================================
         'Metadata/Items/Currency/CurrencySilverCoin',
 
-        'Metadata/Items/Currency/AncestralTattooSpecialUnique1',
-        'Metadata/Items/Currency/AncestralTattooSpecialUnique2',
-        'Metadata/Items/Currency/AncestralTattooSpecialUnique3',
-        'Metadata/Items/Currency/AncestralTattooSpecialUnique4',
-        'Metadata/Items/Currency/AncestralTattooSpecialUnique5',
-
         # =================================================================
         # Non-stackable resonators from before 3.8.0
         # =================================================================
@@ -2739,6 +2733,7 @@ class ItemsParser(SkillParserShared):
 
             target = f"{set['Qualifier']} {set['Name']}" if set['Qualifier'] else set['Name']
             infobox['tattoo_target'] = target
+            infobox['tattoo_tribe'] = data['Tribe']
             infobox['implicit1_text'] = format(('default', 'Replaces a'), ('value', target), ('default', 'Passive Skill'))
 
             if override['Limit']:
@@ -2770,7 +2765,11 @@ class ItemsParser(SkillParserShared):
                 link = f"[[Skill:{skill['Id']}|{skill_name}]]"
                 lines = [line.replace(skill_name, link) for line in lines]
             stat_text = '<br>'.join(parser.make_inter_wiki_links(line) for line in lines)
-            infobox['description'] = f'Grants "{stat_text}"'
+            if data['PassiveSkillOverrideTypesKey']:
+                # grants a random keystone
+                infobox['description'] = stat_text
+            else:
+                infobox['description'] = f'Grants "{stat_text}"'
         except KeyError:
             return False
         return True

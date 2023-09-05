@@ -13211,6 +13211,14 @@ specification = Specification({
                 name='Flag4',
                 type='bool',
             ),
+            Field(  # added in 3.22
+                name='Flag5',
+                type='bool',
+            ),
+            Field(  # added in 3.22
+                name='Flag6',
+                type='bool',
+            ),
         ),
     ),
     'ItemCostPerLevel.dat': File(
@@ -19266,6 +19274,10 @@ specification = Specification({
                 name='Gender',
                 type='ref|string',
             ),
+            Field(
+                name='Flag1',
+                type='bool',
+            ),
         ),
     ),
     'NearbyMonsterConditions.dat': File(
@@ -19777,6 +19789,11 @@ specification = Specification({
                 name='MaxAdjacent',
                 type='int',
             ),
+            Field(
+                name='AllocatedPassiveSkillKey',
+                type='ref|out',
+                key='PassiveSkills.dat',
+            ),
         ),
     ),
     'PassiveSkillStatCategories.dat': File(
@@ -19828,6 +19845,15 @@ specification = Specification({
                 name='Set',
                 type='ref|out',
                 key='PassiveSkillTattooTargetSets.dat',
+            ),
+            Field(
+                name='Tribe',
+                type='int',
+            ),
+            Field(
+                name='PassiveSkillOverrideTypesKey',
+                type='ref|out',
+                key='PassiveSkillOverrideTypes.dat',
             ),
         ),
     ),

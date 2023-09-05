@@ -2501,6 +2501,12 @@ TranslationQuantifier(
 )
 
 TranslationQuantifier(
+    id='locations_to_metres',
+    handler=lambda v: v/10,
+    reverse_handler=lambda v: v*10,
+)
+
+TranslationQuantifier(
     id='canonical_line',
     type=TranslationQuantifier.QuantifierTypes.STRING,
     arg_size=0,
