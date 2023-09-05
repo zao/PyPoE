@@ -2694,6 +2694,8 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Classic/MysteryLeaguestone',
     }
 
+    _PLACEHOLDER_IMAGES = {'Art/2DItems/Hideout/HideoutPlaceholder.dds'}
+
     _attribute_map = OrderedDict((
         ('Str', 'strength'),
         ('Dex', 'dexterity'),
@@ -4113,6 +4115,14 @@ class ItemsParser(SkillParserShared):
                     'condition': cond,
                 })
 
+            ddsfile = base_item_type['ItemVisualIdentityKey']['DDSFile']
+            if ddsfile and ddsfile in self._PLACEHOLDER_IMAGES:
+                warnings.warn(
+                    'Item "%s" has placeholder icon art. Skipping.' %
+                    base_item_type['Name']
+                )
+                continue
+
             r.add_result(
                 text=cond,
                 out_file='item_%s.txt' % page,
@@ -4121,7 +4131,7 @@ class ItemsParser(SkillParserShared):
             )
 
             if parsed_args.store_images:
-                if not base_item_type['ItemVisualIdentityKey']['DDSFile']:
+                if not ddsfile:
                     warnings.warn(
                         'Missing 2d art inventory icon for item "%s"' %
                         base_item_type['Name']
@@ -4129,8 +4139,7 @@ class ItemsParser(SkillParserShared):
                     continue
 
                 self._write_dds(
-                    data=self.file_system.get_file(
-                        base_item_type['ItemVisualIdentityKey']['DDSFile']),
+                    data=self.file_system.get_file(ddsfile),
                     out_path=os.path.join(self._img_path, (
                         infobox.get('inventory_icon') or page) +
                         ' inventory icon.dds',
