@@ -230,6 +230,18 @@ class WikiHandler:
             if ('[DNT]' in text or '[UNUSED]' in text) and new:
                 console('Found text marked as Do Not Translate. Skipping.')
                 return
+            revisions = page.exists and [r['*'].splitlines() for r in page.revisions(limit=2, prop="content")]
+            if revisions and new_lines in revisions:
+                console(
+                    f"Update to {pdata['page']} would be a manual revert, skipping this row.",
+                    msg=Msg.warning,
+                )
+                if self.cmdargs.wiki_diff and self.cmdargs.write:
+                    os.makedirs(os.path.join(self.out_dir, 'diff'), exist_ok=True)
+                    out_path = os.path.join(self.out_dir, 'diff', fix_path(row['out_file']))
+                    with open(out_path + ".norevert", 'w') as f:
+                        f.write(pdata['page'])
+                return
 
             if self.cmdargs.dry_run:
                 if self.cmdargs.wiki_diff:
