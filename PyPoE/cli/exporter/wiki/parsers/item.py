@@ -3147,6 +3147,7 @@ class ItemsParser(SkillParserShared):
             }),
             ('RangeMax', {
                 'template': 'weapon_range',
+                'format': lambda v: '{0:n}'.format(v/10),
             }),
         ),
         row_index=True,
