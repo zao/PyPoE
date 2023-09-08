@@ -1045,7 +1045,7 @@ class RelationalReader(AbstractFileCache):
                 obj = other.index[key][obj]
             except KeyError:
                 msg = 'Did not find proper value for foreign key "%s" with ' \
-                      'value "%s"' % (key, obj)
+                      'value "%s" in %s' % (key, obj, other.file_name)
                 if self.raise_error_on_missing_relation:
                     raise SpecificationError(
                         SpecificationError.ERRORS.RUNTIME_MISSING_FOREIGN_KEY,

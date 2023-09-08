@@ -1091,6 +1091,470 @@ specification = Specification({
             ),
         ),
     ),
+    'AncestralEmbraceVariations.dat': File(
+        fields=(
+            Field(
+                name='Id',
+                type='ref|string',
+            ),
+            Field(
+                name='Minion',
+                type='ref|out',
+                key='MonsterVarieties.dat',
+            ),
+            Field(
+                name='Key0',
+                type='ref|out',
+            ),
+        ),
+    ),
+    'AncestralLifeScalingPerLevel.dat': File(
+        fields=(
+            Field(
+                name='Level',
+                type='int',
+            ),
+            Field(
+                name='Unknown0',
+                type='int',
+            ),
+        ),
+    ),
+    'AncestralTrialChieftains.dat': File(
+        fields=(
+            Field(
+                name='Key0',
+                type='ref|out',
+            ),
+            Field(
+                name='Key1',
+                type='ref|out',
+            ),
+        ),
+    ),
+    'AncestralTrialDialogue.dat': File(
+        fields=(
+            Field(
+                name='Key0',
+                type='ref|out',
+            ),
+            Field(
+                name='Key1',
+                type='ref|out',
+            ),
+            Field(
+                name='Unknown0',
+                type='int',
+            ),
+            Field(
+                name='TextAudio',
+                type='ref|list|ref|out',
+                key='NPCTextAudio.dat',
+            ),
+            Field(
+                name='Key2',
+                type='ref|out',
+            ),
+            Field(
+                name='Unknown1',
+                type='int',
+            ),
+            Field(
+                name='Unknown2',
+                type='int',
+            ),
+            Field(
+                name='Unknown3',
+                type='int',
+            ),
+            Field(
+                name='Unknown4',
+                type='int',
+            ),
+            Field(
+                name='Unknown5',
+                type='int',
+            ),
+            Field(
+                name='Unknown6',
+                type='int',
+            ),
+            Field(
+                name='Unknown7',
+                type='int',
+            ),
+            Field(
+                name='Unknown8',
+                type='int',
+            ),
+            Field(
+                name='Flag0',
+                type='bool',
+            ),
+            Field(
+                name='Flag1',
+                type='bool',
+            ),
+            Field(
+                name='Flag2',
+                type='bool',
+            ),
+        ),
+    ),
+    'AncestralTrialDialogueEvents.dat': File(
+        fields=(
+            Field(
+                name='Id',
+                type='ref|string',
+            ),
+            Field(
+                name='Unknown0',
+                type='int',
+            ),
+        ),
+    ),
+    'AncestralTrialFieldItems.dat': File(
+        fields=(
+            Field(
+                name='Key0',
+                type='ref|out',
+            ),
+            Field(
+                name='Key1',
+                type='ref|out',
+            ),
+            Field(
+                name='HASH32',
+                type='int',
+            ),
+            Field(
+                name='Description',
+                type='ref|string',
+            ),
+            Field(
+                name='Achievement',
+                type='ref|list|ref|out',
+                key='AchievementItems.dat',
+            ),
+            Field(
+                name='Key2',
+                type='ref|out',
+            ),
+            Field(
+                name='Key3',
+                type='ref|out',
+            ),
+        ),
+    ),
+    'AncestralTrialItems.dat': File(
+        fields=(
+            Field(
+                name='Id',
+                type='ref|string',
+            ),
+            Field(
+                name='HASH16',
+                type='int',
+            ),
+            Field(
+                name='Name',
+                type='ref|string',
+            ),
+            Field(
+                name='Image',
+                type='ref|string',
+            ),
+            Field(
+                name='Key0',
+                type='ref|out',
+            ),
+            Field(
+                name='Unknown0',
+                type='int',
+            ),
+            Field(
+                name='Mods',
+                type='ref|list|ref|out',
+                key='Mods.dat',
+            ),
+            Field(
+                name='FlavorText',
+                type='ref|string',
+            ),
+            Field(
+                name='Unknown1',
+                type='int',
+            ),
+            Field(
+                name='Data0',
+                type='ref|list|byte',
+            ),
+            Field(
+                name='Key1',
+                type='ref|out',
+            ),
+            Field(
+                name='Key2',
+                type='ref|out',
+            ),
+        ),
+    ),
+    'AncestralTrialMonsters.dat': File(
+        fields=(
+            Field(
+                name='Key0',
+                type='ref|out',
+            ),
+            Field(
+                name='Monster',
+                type='ref|out',
+                key='MonsterVarieties.dat',
+            ),
+            Field(
+                name='Key1',
+                type='ref|out',
+            ),
+            Field(
+                name='Unknown0',
+                type='int',
+            ),
+            Field(
+                name='Achievement',
+                type='ref|list|ref|out',
+                key='AchievementItems.dat',
+            ),
+        ),
+    ),
+    'AncestralTrialPositionType.dat': File(
+        fields=(
+            Field(
+                name='Id',
+                type='ref|string',
+            ),
+            Field(
+                name='PlayerTotemIcon',
+                type='ref|string',
+            ),
+            Field(
+                name='Name',
+                type='ref|string',
+            ),
+            Field(
+                name='EnemyTotemIcon',
+                type='ref|string',
+            ),
+            Field(
+                name='PlayerTotemSmallIcon',
+                type='ref|string',
+            ),
+            Field(
+                name='EnemyTotemSmallIcon',
+                type='ref|string',
+            ),
+        ),
+    ),
+    'AncestralTrialShopSlotEntries.dat': File(
+        fields=(
+            Field(
+                name='Unknown0',
+                type='int',
+            ),
+            Field(
+                name='Unknown1',
+                type='int',
+            ),
+            Field(
+                name='Unknown2',
+                type='int',
+            ),
+            Field(
+                name='Flag0',
+                type='bool',
+            ),
+            Field(
+                name='Flag1',
+                type='bool',
+            ),
+            Field(
+                name='Unknown3',
+                type='int',
+            ),
+        ),
+    ),
+    'AncestralTrialTribeOpinions.dat': File(
+        fields=(
+            Field(
+                name='Key0',
+                type='ref|out',
+            ),
+            Field(
+                name='Key1',
+                type='ref|out',
+            ),
+            Field(
+                name='Unknown0',
+                type='int',
+            ),
+        ),
+    ),
+    'AncestralTrialTribes.dat': File(
+        fields=(
+            Field(
+                name='Id',
+                type='ref|string',
+            ),
+            Field(
+                name='Key0',
+                type='ref|out',
+            ),
+            Field(
+                name='Portrait',
+                type='ref|string',
+            ),
+            Field(
+                name='TribeIcon',
+                type='ref|string',
+            ),
+            Field(
+                name='TribeName',
+                type='ref|string',
+            ),
+            Field(
+                name='FavourTracker',
+                type='ref|string',
+            ),
+            Field(
+                name='Keys0',
+                type='ref|list|ref|out',
+            ),
+            Field(
+                name='Name',
+                type='ref|string',
+            ),
+            Field(
+                name='Key1',
+                type='ref|out',
+            ),
+            Field(
+                name='Key2',
+                type='ref|out',
+            ),
+            Field(
+                name='Key3',
+                type='ref|out',
+            ),
+            Field(
+                name='Key4',
+                type='ref|out',
+            ),
+            Field(
+                name='Keys1',
+                type='ref|list|ref|out',
+            ),
+            Field(
+                name='Key5',
+                type='ref|out',
+            ),
+            Field(
+                name='Keys2',
+                type='ref|list|ref|out',
+            ),
+            Field(
+                name='Unknown0',
+                type='int',
+            ),
+            Field(
+                name='Unknown1',
+                type='int',
+            ),
+            Field(
+                name='Unknown2',
+                type='int',
+            ),
+            Field(
+                name='Unknown3',
+                type='int',
+            ),
+            Field(
+                name='Key6',
+                type='ref|out',
+            ),
+        ),
+    ),
+    'AncestralTrialUnitPositions.dat': File(
+        fields=(
+            Field(
+                name='Id',
+                type='ref|string',
+            ),
+            Field(
+                name='Unknown0',
+                type='int',
+            ),
+            Field(
+                name='Unknown1',
+                type='int',
+            ),
+            Field(
+                name='Unknown2',
+                type='int',
+            ),
+            Field(
+                name='Unknown3',
+                type='int',
+            ),
+        ),
+    ),
+    'AncestralTrialUnits.dat': File(
+        fields=(
+            Field(
+                name='Id',
+                type='ref|string',
+            ),
+            Field(
+                name='Name',
+                type='ref|string',
+            ),
+            Field(
+                name='Tribe',
+                type='ref|out',
+                key='AncestralTrialTribes.dat',
+            ),
+            Field(
+                name='Image',
+                type='ref|string',
+            ),
+            Field(
+                name='TotemImage',
+                type='ref|string',
+            ),
+            Field(
+                name='HASH16',
+                type='int',
+            ),
+            Field(
+                name='Unknown0',
+                type='int',
+            ),
+            Field(
+                name='Description',
+                type='ref|string',
+            ),
+            Field(
+                name='Unknown1',
+                type='int',
+            ),
+            Field(
+                name='Unknown2',
+                type='int',
+            ),
+            Field(
+                name='Position',
+                type='ref|out',
+                key='AncestralTrialUnitPositions.dat',
+            ),
+        ),
+    ),
     'Animation.dat': File(
         fields=(
             Field(
@@ -4098,6 +4562,10 @@ specification = Specification({
                 name='Unknown3',
                 type='ref|string',
             ),
+            Field(
+                name='Unknown4',
+                type='int',
+            ),
         ),
     ),
     'BuffVisualOrbTypes.dat': File(
@@ -4144,12 +4612,8 @@ specification = Specification({
                 type='int',
             ),
             Field(
-                name='Flag1',
-                type='bool',
-            ),
-            Field(
                 name='Unknown6',
-                type='float',
+                type='int',
             ),
             Field(
                 name='Unknown7',
@@ -4157,15 +4621,19 @@ specification = Specification({
             ),
             Field(
                 name='Unknown8',
-                type='float',
+                type='int',
             ),
             Field(
-                name='Flag2',
+                name='Flag1',
                 type='bool',
             ),
             Field(
                 name='Unknown9',
-                type='float',
+                type='int',
+            ),
+            Field(
+                name='Unknown10',
+                type='int',
             ),
         ),
     ),
@@ -5397,6 +5865,14 @@ specification = Specification({
             Field(
                 name='Key4',
                 type='ref|out',
+            ),
+            Field(
+                name='Flag1',
+                type='bool',
+            ),
+            Field(
+                name='Keys2',
+                type='ref|list|ref|out',
             ),
         ),
         virtual_fields=(
@@ -12352,6 +12828,38 @@ specification = Specification({
             ),
         ),
     ),
+    'IndexableSkillGems.dat': File(
+        fields=(
+            Field(
+                name='Index',
+                type='int',
+                unique=True,
+            ),
+            Field(
+                name='SkillGems',
+                type='ref|list|ref|out',
+                key='SkillGems.dat',
+            ),
+            Field(
+                name='Name',
+                type='ref|string',
+            ),
+            Field(
+                name='SkillGemsHardmode',
+                type='ref|list|ref|out',
+                key='SkillGems.dat',
+            ),
+            Field(
+                name='NameHardmode',
+                type='ref|string',
+            ),
+            Field(
+                name='HardmodeIndexToCanonicalIndex',
+                type='ref|self',
+                key='IndexableSkillGems.dat',
+            ),
+        ),
+    ),
     'IndexableSupportGems.dat': File(
         fields=(
             Field(
@@ -12701,6 +13209,14 @@ specification = Specification({
             ),
             Field(  # added in 3.21
                 name='Flag4',
+                type='bool',
+            ),
+            Field(  # added in 3.22
+                name='Flag5',
+                type='bool',
+            ),
+            Field(  # added in 3.22
+                name='Flag6',
                 type='bool',
             ),
         ),
@@ -14772,6 +15288,10 @@ specification = Specification({
             ),
             Field(
                 name='CrucibleTier',
+                type='int',
+            ),
+            Field(
+                name='AncestralTier',  # AKA Ancestor
                 type='int',
             ),
         ),
@@ -18754,6 +19274,10 @@ specification = Specification({
                 name='Gender',
                 type='ref|string',
             ),
+            Field(
+                name='Flag1',
+                type='bool',
+            ),
         ),
     ),
     'NearbyMonsterConditions.dat': File(
@@ -19077,6 +19601,18 @@ specification = Specification({
             ),
         ),
     ),
+    'PassiveOverrideLimits.dat': File(
+        fields=(
+            Field(
+                name='Id',
+                type='ref|string',
+            ),
+            Field(
+                name='Description',
+                type='ref|string',
+            ),
+        ),
+    ),
     'PassiveSkillFilterOptions.dat': File(
         fields=(
             Field(
@@ -19182,6 +19718,84 @@ specification = Specification({
             ),
         ),
     ),
+    'PassiveSkillOverrideTypes.dat': File(
+        fields=(
+            Field(
+                name='Id',
+                type='ref|string',
+            ),
+            Field(
+                name='CounterStat',
+                type='ref|out',
+                key='Stats.dat',
+            ),
+            Field(
+                name='Flag0',
+                type='bool',
+            ),
+        ),
+    ),
+    'PassiveSkillOverrides.dat': File(
+        fields=(
+            Field(
+                name='Id',
+                type='ref|string',
+            ),
+            Field(
+                name='Name',
+                type='ref|string',
+            ),
+            Field(
+                name='NodeIcon',
+                type='ref|string',
+            ),
+            Field(
+                name='Stats',
+                type='ref|list|ref|out',
+                key='Stats.dat',
+            ),
+            Field(
+                name='StatValues',
+                type='ref|list|int',
+            ),
+            Field(
+                name='HASH16',
+                type='int',
+            ),
+            Field(
+                name='PassiveBG',
+                type='ref|string',
+            ),
+            Field(
+                name='Effect',
+                type='ref|out',
+                key='GrantedEffectsPerLevel.dat',
+            ),
+            Field(
+                name='Type',
+                type='ref|out',
+                key='PassiveSkillOverrideTypes.dat',
+            ),
+            Field(
+                name='Limit',
+                type='ref|out',
+                key='PassiveOverrideLimits.dat',
+            ),
+            Field(
+                name='RequiresAdjacent',
+                type='int',
+            ),
+            Field(
+                name='MaxAdjacent',
+                type='int',
+            ),
+            Field(
+                name='AllocatedPassiveSkillKey',
+                type='ref|out',
+                key='PassiveSkills.dat',
+            ),
+        ),
+    ),
     'PassiveSkillStatCategories.dat': File(
         fields=(
             Field(
@@ -19192,6 +19806,54 @@ specification = Specification({
             Field(
                 name='Name',
                 type='ref|string',
+            ),
+        ),
+    ),
+    'PassiveSkillTattooTargetSets.dat': File(
+        fields=(
+            Field(
+                name='Id',
+                type='ref|string',
+            ),
+            Field(
+                name='Set',
+                type='ref|list|int',
+            ),
+            Field(
+                name='Name',
+                type='ref|string',
+            ),
+            Field(
+                name='Qualifier',
+                type='ref|string',
+            ),
+        ),
+    ),
+    'PassiveSkillTattoos.dat': File(
+        fields=(
+            Field(
+                name='BaseItemTypesKey',
+                type='ref|out',
+                key='BaseItemTypes.dat',
+            ),
+            Field(
+                name='Override',
+                type='ref|out',
+                key='PassiveSkillOverrides.dat',
+            ),
+            Field(
+                name='Set',
+                type='ref|out',
+                key='PassiveSkillTattooTargetSets.dat',
+            ),
+            Field(
+                name='Tribe',
+                type='int',
+            ),
+            Field(
+                name='PassiveSkillOverrideTypesKey',
+                type='ref|out',
+                key='PassiveSkillOverrideTypes.dat',
             ),
         ),
     ),
@@ -24321,6 +24983,10 @@ specification = Specification({
             Field(
                 name='Unknown56',
                 type='ref|out',
+            ),
+            Field(
+                name='Unknown57',
+                type='int',
             ),
         ),
     ),

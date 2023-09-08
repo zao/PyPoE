@@ -142,6 +142,7 @@ class WikiCondition(parser.WikiCondition):
         'alternate_art_inventory_icons',
         'frame_type',
         'influences',
+        'card_background',
 
         # Drop restrictions
         'drop_enabled',
@@ -150,6 +151,7 @@ class WikiCondition(parser.WikiCondition):
         'drop_text',
         'drop_monsters',
         'is_drop_restricted',
+        'drop_level_maximum',
 
         # Item flags
         'is_corrupted',
@@ -219,7 +221,7 @@ class WikiCondition(parser.WikiCondition):
         'sentinel_charge',
     )
     COPY_MATCH = re.compile(
-        r'^(recipe|implicit[0-9]+_(?:text|random_list)).*', re.UNICODE)
+        r'^(recipe|sell_price|implicit[0-9]+_(?:text|random_list)).*', re.UNICODE)
 
     NAME = 'Base item'
     INDENT = 40
@@ -430,6 +432,7 @@ class ItemsParser(SkillParserShared):
         'Lake': '3.19.0',  # AKA Lake of Kalandra
         'Sanctum': '3.20.0',  # AKA The Forbidden Sanctum
         'Crucible': '3.21.0',
+        'Ancestral': '3.22.0',  # AKA Trial of the Ancestors
     }
 
     _IGNORE_DROP_LEVEL_CLASSES = (
@@ -467,7 +470,34 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Rings/RingDemigods1',
     }
 
+    _EXCLUDE_CLASSES = {'Maps'}
+
     _NAME_OVERRIDE_BY_ID = {
+        'English': {
+            "Metadata/Items/PantheonSouls/PantheonSoulBrineKingUpgrade1": "Captured Soul (The Brine King upgrade 1 of 3)",
+            "Metadata/Items/PantheonSouls/PantheonSoulBrineKingUpgrade2": "Captured Soul (The Brine King upgrade 2 of 3)",
+            "Metadata/Items/PantheonSouls/PantheonSoulBrineKingUpgrade3": "Captured Soul (The Brine King upgrade 3 of 3)",
+            "Metadata/Items/PantheonSouls/PantheonSoulArakaaliUpgrade1": "Captured Soul (Arakaali upgrade 1 of 3)",
+            "Metadata/Items/PantheonSouls/PantheonSoulArakaaliUpgrade2": "Captured Soul (Arakaali upgrade 2 of 3)",
+            "Metadata/Items/PantheonSouls/PantheonSoulArakaaliUpgrade3": "Captured Soul (Arakaali upgrade 3 of 3)",
+            "Metadata/Items/PantheonSouls/PantheonSoulSolarisUpgrade1": "Captured Soul (Solaris upgrade 1 of 3)",
+            "Metadata/Items/PantheonSouls/PantheonSoulSolarisUpgrade2": "Captured Soul (Solaris upgrade 2 of 3)",
+            "Metadata/Items/PantheonSouls/PantheonSoulSolarisUpgrade3": "Captured Soul (Solaris upgrade 3 of 3)",
+            "Metadata/Items/PantheonSouls/PantheonSoulLunarisUpgrade1": "Captured Soul (Lunaris upgrade 1 of 3)",
+            "Metadata/Items/PantheonSouls/PantheonSoulLunarisUpgrade2": "Captured Soul (Lunaris upgrade 2 of 3)",
+            "Metadata/Items/PantheonSouls/PantheonSoulLunarisUpgrade3": "Captured Soul (Lunaris upgrade 3 of 3)",
+            "Metadata/Items/PantheonSouls/PantheonSoulAbberathUpgrade1": "Captured Soul (Abberath upgrade)",
+            "Metadata/Items/PantheonSouls/PantheonSoulGruthkulUpgrade1": "Captured Soul (Gruthkul upgrade)",
+            "Metadata/Items/PantheonSouls/PantheonSoulYugulUpgrade1": "Captured Soul (Yugul upgrade)",
+            "Metadata/Items/PantheonSouls/PantheonSoulShakariUpgrade1": "Captured Soul (Shakari upgrade)",
+            "Metadata/Items/PantheonSouls/PantheonSoulTukohamaUpgrade1": "Captured Soul (Tukohama upgrade)",
+            "Metadata/Items/PantheonSouls/PantheonSoulRalakeshUpgrade1": "Captured Soul (Ralakesh upgrade)",
+            "Metadata/Items/PantheonSouls/PantheonSoulGarukhanUpgrade1": "Captured Soul (Garukhan upgrade)",
+            "Metadata/Items/PantheonSouls/PantheonSoulRyslathaUpgrade1": "Captured Soul (Ryslatha upgrade)",
+        }
+    }
+
+    _NAME_APPENDIX_BY_ID = {
         'English': {
 
             # =================================================================
@@ -780,18 +810,10 @@ class ItemsParser(SkillParserShared):
             # =================================================================
             # Invitations
             # =================================================================
-            'Metadata/Items/MapFragments/Maven/MavenMapOutsideBottomRight5': " (10 bosses)",
-            'Metadata/Items/MapFragments/Maven/MavenMapOutsideBottomLeft5': " (10 bosses)",
-            'Metadata/Items/MapFragments/Maven/MavenMapOutsideTopLeft5': " (10 bosses)",
-            'Metadata/Items/MapFragments/Maven/MavenMapOutsideTopRight5': " (10 bosses)",
-            'Metadata/Items/MapFragments/Maven/MavenMapInsideBottomRight5': " (10 bosses)",
-            'Metadata/Items/MapFragments/Maven/MavenMapInsideBottomLeft5': " (10 bosses)",
-            'Metadata/Items/MapFragments/Maven/MavenMapInsideTopLeft5': " (10 bosses)",
-            'Metadata/Items/MapFragments/Maven/MavenMapInsideTopRight5': " (10 bosses)",
-            'Metadata/Items/MapFragments/Primordial/QuestTangleKey': ' (quest)',
-            'Metadata/Items/MapFragments/Primordial/QuestTangleBossKey': ' (quest)',
-            'Metadata/Items/MapFragments/Primordial/QuestCleansingFireKey': ' (quest)',
-            'Metadata/Items/MapFragments/Primordial/QuestCleansingFireBossKey': ' (quest)',
+            'Metadata/Items/MapFragments/Primordial/QuestTangleKey': ' (quest item)',
+            'Metadata/Items/MapFragments/Primordial/QuestTangleBossKey': ' (quest item)',
+            'Metadata/Items/MapFragments/Primordial/QuestCleansingFireKey': ' (quest item)',
+            'Metadata/Items/MapFragments/Primordial/QuestCleansingFireBossKey': ' (quest item)',
 
             # =================================================================
             # Item pieces
@@ -2581,6 +2603,63 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/AtlasUpgrades/AtlasUpgradeCraftable3_8',
 
         # =================================================================
+        # Mavenvitations (removed from the game in 3.17.0)
+        # =================================================================
+        'Metadata/Items/MapFragments/Maven/MavenMapOutsideBottomRight5',
+        'Metadata/Items/MapFragments/Maven/MavenMapOutsideBottomLeft5',
+        'Metadata/Items/MapFragments/Maven/MavenMapOutsideTopLeft5',
+        'Metadata/Items/MapFragments/Maven/MavenMapOutsideTopRight5',
+        'Metadata/Items/MapFragments/Maven/MavenMapInsideBottomRight5',
+        'Metadata/Items/MapFragments/Maven/MavenMapInsideBottomLeft5',
+        'Metadata/Items/MapFragments/Maven/MavenMapInsideTopLeft5',
+        'Metadata/Items/MapFragments/Maven/MavenMapInsideTopRight5',
+
+        # =================================================================
+        # Invocations (only present for sanctum league)
+        # =================================================================
+        'Metadata/Items/Currency/SanctumCurrencyAcrobatics',
+        'Metadata/Items/Currency/SanctumCurrencyAncestralBond',
+        'Metadata/Items/Currency/SanctumCurrencyArrowDancing',
+        'Metadata/Items/Currency/SanctumCurrencyAvatarOfFire',
+        'Metadata/Items/Currency/SanctumCurrencyBloodMagic',
+        'Metadata/Items/Currency/SanctumCurrencyCallToArms',
+        'Metadata/Items/Currency/SanctumCurrencyConduit',
+        'Metadata/Items/Currency/SanctumCurrencyCrimsonDance',
+        'Metadata/Items/Currency/SanctumCurrencyDivineShield',
+        'Metadata/Items/Currency/SanctumCurrencyEldritchBattery',
+        'Metadata/Items/Currency/SanctumCurrencyElementalEquilibrium',
+        'Metadata/Items/Currency/SanctumCurrencyElementalOverload',
+        'Metadata/Items/Currency/SanctumCurrencyEternalYouth',
+        'Metadata/Items/Currency/SanctumCurrencyGhostDance',
+        'Metadata/Items/Currency/SanctumCurrencyGhostReaver',
+        'Metadata/Items/Currency/SanctumCurrencyGlancingBlows',
+        'Metadata/Items/Currency/SanctumCurrencyDoomsday',
+        'Metadata/Items/Currency/SanctumCurrencyImbalancedGuard',
+        'Metadata/Items/Currency/SanctumCurrencyIronGrip',
+        'Metadata/Items/Currency/SanctumCurrencyIronReflexes',
+        'Metadata/Items/Currency/SanctumCurrencyIronWill',
+        'Metadata/Items/Currency/SanctumCurrencyLetheShade',
+        'Metadata/Items/Currency/SanctumCurrencyMagebane',
+        'Metadata/Items/Currency/SanctumCurrencyMindoverMatter',
+        'Metadata/Items/Currency/SanctumCurrencyMinionInstability',
+        'Metadata/Items/Currency/SanctumCurrencyPainAttunement',
+        'Metadata/Items/Currency/SanctumCurrencyPerfectAgony',
+        'Metadata/Items/Currency/SanctumCurrencyPointBlank',
+        'Metadata/Items/Currency/SanctumCurrencyPreciseTechnique',
+        'Metadata/Items/Currency/SanctumCurrencyResoluteTechnique',
+        'Metadata/Items/Currency/SanctumCurrencyRunebinder',
+        'Metadata/Items/Currency/SanctumCurrencySolipsism',
+        'Metadata/Items/Currency/SanctumCurrencySupremeEgo',
+        'Metadata/Items/Currency/SanctumCurrencyTheAgnostic',
+        'Metadata/Items/Currency/SanctumCurrencyTheImpaler',
+        'Metadata/Items/Currency/SanctumCurrencyUnwaveringStance',
+        'Metadata/Items/Currency/SanctumCurrencyVaalPact',
+        'Metadata/Items/Currency/SanctumCurrencyVersatileCombatant',
+        'Metadata/Items/Currency/SanctumCurrencyWickedWard',
+        'Metadata/Items/Currency/SanctumCurrencyWindDancer',
+        'Metadata/Items/Currency/SanctumCurrencyZealotsOath',
+
+        # =================================================================
         # Quest items
         # =================================================================
         'Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment1_1',
@@ -2612,6 +2691,8 @@ class ItemsParser(SkillParserShared):
         'Metadata/Items/Classic/MysteryLeaguestone',
     }
 
+    _PLACEHOLDER_IMAGES = {'Art/2DItems/Hideout/HideoutPlaceholder.dds'}
+
     _attribute_map = OrderedDict((
         ('Str', 'strength'),
         ('Dex', 'dexterity'),
@@ -2635,6 +2716,66 @@ class ItemsParser(SkillParserShared):
             )
         else:
             self.rr2 = None
+    
+    def _skip_quest_contracts(self, infobox: OrderedDict, base_item_type):
+        return base_item_type.rowid not in self.rr['HeistContracts.dat64'].index['BaseItemTypesKey']
+        
+
+    
+    def _tattoo(self, infobox: OrderedDict, base_item_type):
+        if 'BaseItemTypesKey' not in self.rr['PassiveSkillTattoos.dat64'].index:
+            self.rr['PassiveSkillTattoos.dat64'].build_index('BaseItemTypesKey')
+        data = next(iter(self.rr['PassiveSkillTattoos.dat64'].index['BaseItemTypesKey'][base_item_type]), None)
+        if not data:
+            return True
+        try:
+            set = data['Set']
+            override = data['Override']
+            def format(*vals):
+                return ' '.join("{{c|" + fmt + '|' + str(val) + "}}" for fmt, val in vals)
+
+            target = f"{set['Qualifier']} {set['Name']}" if set['Qualifier'] else set['Name']
+            infobox['tattoo_target'] = target
+            infobox['tattoo_tribe'] = data['Tribe']
+            infobox['implicit1_text'] = format(('default', 'Replaces a'), ('value', target), ('default', 'Passive Skill'))
+
+            if override['Limit']:
+                infobox['tattoo_limit'] = override['Limit']['Description']
+                infobox['implicit2_text'] = format(('default', 'Limit'),
+                                                   ('value', override['Limit']['Description']))
+            elif override['RequiresAdjacent']:
+                infobox['tattoo_min_adjacent'] = override['RequiresAdjacent']
+                infobox['implicit2_text'] = format(('default', 'Requires'),
+                                                   ('value', override['RequiresAdjacent']),
+                                                   ('default', 'adjacent Passive Skills Allocated'))
+            elif override['MaxAdjacent']:
+                infobox['tattoo_max_adjacent'] = override['MaxAdjacent']
+                infobox['implicit2_text'] = format(('default', 'Requires'),
+                                                   ('value', f"Maximum {override['MaxAdjacent']}"),
+                                                   ('default', 'adjacent Passive Skill Allocated'))
+
+            stats = [s['Id'] for s in override['Stats']]
+            tr = self.tc['stat_descriptions.txt'].get_translation(
+                stats, override['StatValues'], full_result=True,
+                lang=self._language,
+            )
+            lines = tr.lines
+            infobox['tattoo_stat_text'] = '\n'.join(lines)
+            if override['Effect']:
+                skill = override['Effect']['GrantedEffect']
+                infobox['tattoo_skill_id'] = skill['Id']
+                skill_name = skill['ActiveSkill']['DisplayedName']
+                link = f"[[Skill:{skill['Id']}|{skill_name}]]"
+                lines = [line.replace(skill_name, link) for line in lines]
+            stat_text = '<br>'.join(parser.make_inter_wiki_links(line) for line in lines)
+            if data['PassiveSkillOverrideTypesKey']:
+                # grants a random keystone
+                infobox['description'] = stat_text
+            else:
+                infobox['description'] = f'Grants "{stat_text}"'
+        except KeyError:
+            return False
+        return True
 
     def _skill_gem(self, infobox: OrderedDict, base_item_type):
         try:
@@ -2736,30 +2877,44 @@ class ItemsParser(SkillParserShared):
                     set_stat(j + i - 1, prefix, sid, sv)
                     j += 1
 
-            def cp_stats_primary(prefix):
+            def get_quality_stats(prefix, source, result):
                 i = 1
                 while True:
                     try:
-                        # print(f'{prefix}_stat{i}')
-                        sid, sv = get_stat(i, prefix, primary)
-                        # print(sid, sv)
-                        stext = primary[f'{prefix}_stat_text']
-                        # print(stext)
+                        id, value = get_stat(i, prefix, source)
+                        if id != 'dummy_stat_display_nothing':
+                            result[id] = value
                     except KeyError:
-                        break
-                    set_stat(i, prefix, sid, sv)
-                    infobox[f'{prefix}_stat_text'] = stext
+                        return
                     i += 1
+
+            def cp_quality(prefix):
+                stats: OrderedDict[str, int] = OrderedDict()
+                stextkey = f'{prefix}_stat_text'
+                text1 = primary.get(stextkey)
+                text2 = secondary.get(stextkey)
+                stext = text1 if text1 == text2 else '<br>'.join(filter(bool, [text1, text2]))
+                if not stext:
+                    return
+                # Both primary and secondary can have stats eg CoC has
+                # quality_type1_stat1_id = attack_critical_strike_chance_+% on primary and
+                # quality_type1_stat1_id = spell_critical_strike_chance_+% on secondary
+                get_quality_stats(prefix, primary, stats)
+                get_quality_stats(prefix, secondary, stats)
+                for i, (sid, sv) in enumerate(stats.items()):
+                    set_stat(i+1, prefix, sid, sv)
+                infobox[stextkey] = stext
 
             for k, v in list(primary.items()) + list(secondary.items()):
                 # Just override the stuff if needs be.
-                if 'stat' not in k and k not in infobox.keys():
+                if 'stat' not in k[k.startswith('static_') and 6:] and k not in infobox.keys():
                     infobox[k] = v
 
-            cp_stats_primary('quality_type1')
-            cp_stats_primary('quality_type2')
-            cp_stats_primary('quality_type3')
-            cp_stats_primary('quality_type4')
+
+            cp_quality('quality_type1')
+            cp_quality('quality_type2')
+            cp_quality('quality_type3')
+            cp_quality('quality_type4')
 
             infobox['stat_text'] = '<br>'.join(
                 [x for x in (primary['stat_text'],
@@ -2995,6 +3150,7 @@ class ItemsParser(SkillParserShared):
             }),
             ('RangeMax', {
                 'template': 'weapon_range',
+                'format': lambda v: '{0:n}'.format(v/10),
             }),
         ),
         row_index=True,
@@ -3498,7 +3654,7 @@ class ItemsParser(SkillParserShared):
         'Support Skill Gem': (_skill_gem, ),
         # Currency-like items
         'Currency': (_type_currency, ),
-        'StackableCurrency': (_type_currency, _type_essence, _type_blight_item),
+        'StackableCurrency': (_type_currency, _type_essence, _type_blight_item, _tattoo),
         'DelveSocketableCurrency': (_type_currency, ),
         'DelveStackableSocketableCurrency': (_type_currency,),
         'HideoutDoodad': (_type_currency, _type_hideout_doodad),
@@ -3514,7 +3670,7 @@ class ItemsParser(SkillParserShared):
         # Misc
         'Map': (_type_map,),
         'MapFragment': (_type_map_fragment_mods,),
-        'QuestItem': (),
+        'QuestItem': (_skip_quest_contracts, ),
         'AtlasRegionUpgradeItem': (),
         'MetamorphosisDNA': (),
         # heist league
@@ -3804,8 +3960,11 @@ class ItemsParser(SkillParserShared):
 
         help_text = ot['Base'].get('description_text')
         if help_text:
-            infobox['help_text'] = self.rr['ClientStrings.dat64'].index['Id'][
-                help_text]['Text']
+            infobox['help_text'] = infobox["help_text"] = "<br>".join(
+                self.rr["ClientStrings.dat64"]
+                .index["Id"][help_text]["Text"]
+                .splitlines()
+            )
 
         for i, mod in enumerate(base_item_type['Implicit_ModsKeys']):
             infobox['implicit%s' % (i+1)] = mod['Id']
@@ -3818,8 +3977,12 @@ class ItemsParser(SkillParserShared):
         name = base_item_type['Name']
         cls_id = base_item_type['ItemClassesKey']['Id']
         m_id = base_item_type['Id']
-        appendix = self._NAME_OVERRIDE_BY_ID[language].get(m_id)
+        override = self._NAME_OVERRIDE_BY_ID[language].get(m_id)
+        appendix = self._NAME_APPENDIX_BY_ID[language].get(m_id)
 
+        if override is not None:
+            name = override
+            infobox['inventory_icon'] = name
         if appendix is not None:
             name += appendix
             infobox['inventory_icon'] = name
@@ -3855,6 +4018,9 @@ class ItemsParser(SkillParserShared):
         if classes:
             items = [item for item in items if item['ItemClassesKey']['Name']
                      in classes]
+        else:
+            items = [item for item in items if item['ItemClassesKey']['Name']
+                     not in self._EXCLUDE_CLASSES]
 
         self._parsed_args = parsed_args
         console('Found %s items. Removing disabled items...' % len(items))
@@ -3939,20 +4105,36 @@ class ItemsParser(SkillParserShared):
                 cmdargs=parsed_args,
             )
 
+            wiki_page = [
+                {
+                    'page': page,
+                    'condition': cond,
+                }
+            ]
+
+            if infobox.get('cosmetic_type', None) == 'Armour Skin' and 'Armour' not in page:
+                wiki_page.append({
+                    'page': page + " Armour",
+                    'condition': cond,
+                })
+
+            ddsfile = base_item_type['ItemVisualIdentityKey']['DDSFile']
+            if ddsfile and ddsfile in self._PLACEHOLDER_IMAGES:
+                warnings.warn(
+                    'Item "%s" has placeholder icon art. Skipping.' %
+                    base_item_type['Name']
+                )
+                continue
+
             r.add_result(
                 text=cond,
                 out_file='item_%s.txt' % page,
-                wiki_page=[
-                    {
-                        'page': page,
-                        'condition': cond,
-                    }
-                ],
+                wiki_page=wiki_page,
                 wiki_message='Item exporter',
             )
 
             if parsed_args.store_images:
-                if not base_item_type['ItemVisualIdentityKey']['DDSFile']:
+                if not ddsfile:
                     warnings.warn(
                         'Missing 2d art inventory icon for item "%s"' %
                         base_item_type['Name']
@@ -3960,8 +4142,7 @@ class ItemsParser(SkillParserShared):
                     continue
 
                 self._write_dds(
-                    data=self.file_system.get_file(
-                        base_item_type['ItemVisualIdentityKey']['DDSFile']),
+                    data=self.file_system.get_file(ddsfile),
                     out_path=os.path.join(self._img_path, (
                         infobox.get('inventory_icon') or page) +
                         ' inventory icon.dds',
