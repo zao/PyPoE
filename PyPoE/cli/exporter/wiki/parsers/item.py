@@ -2446,12 +2446,6 @@ class ItemsParser(SkillParserShared):
         # =================================================================
         'Metadata/Items/Currency/CurrencySilverCoin',
 
-        'Metadata/Items/Currency/AncestralTattooSpecialUnique1',
-        'Metadata/Items/Currency/AncestralTattooSpecialUnique2',
-        'Metadata/Items/Currency/AncestralTattooSpecialUnique3',
-        'Metadata/Items/Currency/AncestralTattooSpecialUnique4',
-        'Metadata/Items/Currency/AncestralTattooSpecialUnique5',
-
         # =================================================================
         # Non-stackable resonators from before 3.8.0
         # =================================================================
