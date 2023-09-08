@@ -144,7 +144,7 @@ class IncursionRoomParser(parser.BaseParser):
         ('ModsKey', {
             'template': 'modifier_ids',
             'format': lambda value: ', '.join([v['Id'] for v in value]),
-            'condition': lambda value: value is not None,
+            'condition': lambda value: value,
         }),
         #('IncursionArchitectKey', {
         #    'template': 'architect_metadata_id',

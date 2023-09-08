@@ -32,11 +32,12 @@ See PyPoE/LICENSE
 # Python
 from difflib import unified_diff
 import os
+from queue import Empty, SimpleQueue
 import sys
+from threading import Lock
 import time
-import re
 from collections.abc import Iterable
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, wait
 from requests.exceptions import HTTPError
 
 # 3rd Party
@@ -109,6 +110,7 @@ class WikiHandler:
                     'APIError occurred. Retrying - total attempts: %s' % fail,
                     msg=Msg.error
                 )
+                time.sleep(.01 * 1.5 ** fail)
                 fail += 1
             except HTTPError as e:
                 if '429' in e.args[0]:
@@ -124,7 +126,24 @@ class WikiHandler:
                     )
                     fail += 1
 
-    def handle_page(self, *a, row):
+    def recache_pages(self):
+        try:
+            while True:
+                recache_page = self.pages_to_recache.get_nowait()
+                console(f'Clearing page cache for {recache_page.name}')
+                for retry in range(5):
+                    try:
+                        recache_page.touch()
+                        recache_page.purge()
+                        break
+                    except:
+                        console(f'Failed to clear page cache for {recache_page.name} ({retry} retries)', Msg.warning)
+                        time.sleep(.01 * 2 ** retry)
+                time.sleep(self.cmdargs.wiki_sleep)
+        except Empty:
+            pass
+
+    def handle_page(self, *a, row=None, rownum=None):
         if isinstance(row['wiki_page'], str):
             pages = [
                 {'page': row['wiki_page'], 'condition': None},
@@ -133,10 +152,21 @@ class WikiHandler:
             pages = row['wiki_page']
         console('Scanning for wiki page candidates "%s"' %
                 ', '.join([p['page'] for p in pages]))
+        if self.cmdargs.quiet:
+            if self.cmdargs.wiki_threads == 1 or self.print_lock.acquire(False):
+                print(f"processed: {rownum:>5}", end='\r')
+                self.cmdargs.wiki_threads == 1 or self.print_lock.release()
         page_found = False
         new = False
         for pdata in pages:
             page = self.site.pages[pdata['page']]
+            if not page.can('edit'):
+                console(
+                    f"Cannot edit {pdata['page']}. Skipping",
+                    msg=Msg.warning,
+                )
+                continue
+
             if page.exists:
                 condition = pdata.get('condition')
                 success = True
@@ -189,38 +219,57 @@ class WikiHandler:
                     kwargs['page'] = page
                 text = text(**kwargs)
 
-            if text == page.text():
+            if self.cmdargs.purge_cache == 'all' and not new:
+                self.pages_to_recache.put(page)
+
+            wiki_lines = page.text().splitlines()
+            new_lines = text.splitlines()
+            if wiki_lines == new_lines:
                 console('No update required. Skipping.')
+                return
+            if ('[DNT]' in text or '[UNUSED]' in text) and new:
+                console('Found text marked as Do Not Translate. Skipping.')
+                return
+            revisions = page.exists and [r['*'].splitlines() for r in page.revisions(limit=2, prop="content")]
+            if revisions and new_lines in revisions:
+                console(
+                    f"Update to {pdata['page']} would be a manual revert, skipping this row.",
+                    msg=Msg.warning,
+                )
+                if self.cmdargs.wiki_diff and self.cmdargs.write:
+                    os.makedirs(os.path.join(self.out_dir, 'diff'), exist_ok=True)
+                    out_path = os.path.join(self.out_dir, 'diff', fix_path(row['out_file']))
+                    with open(out_path + ".norevert", 'w') as f:
+                        f.write(pdata['page'])
                 return
 
             if self.cmdargs.dry_run:
                 if self.cmdargs.wiki_diff:
-                    wiki_lines = page.text().splitlines(keepends=True)
-                    new_lines = text.splitlines(keepends=True)
                     u_diff = unified_diff(
-                        wiki_lines, new_lines, page.name, "Export")
+                        wiki_lines, new_lines, page.name, "Export", lineterm='')
                     if self.cmdargs.write:
                         os.makedirs(os.path.join(self.out_dir, 'diff'), exist_ok=True)
                         out_path = os.path.join(self.out_dir, 'diff', fix_path(row['out_file']))
                         with open(out_path + ".patch", 'w') as f:
-                            f.writelines(u_diff)
+                            f.write('\n'.join(u_diff))
                     else:
-                        sys.stdout.writelines(u_diff)
+                        sys.stdout.write('\n'.join(u_diff))
                 else:
                     console(text)
             else:
-                response = page.save(
-                    text=text,
-                    summary='PyPoE/ExporterBot/%s: %s' % (
-                        __version__,
-                        self.cmdargs.wiki_message or row['wiki_message']
+                with self.write_lock:
+                    response = page.save(
+                        text=text,
+                        summary='PyPoE/ExporterBot/%s: %s' % (
+                            __version__,
+                            self.cmdargs.wiki_message or row['wiki_message']
+                        )
                     )
-                )
                 if response['result'] == 'Success':
                     console('Page was edited successfully (time: %s)' %
                             response.get('newtimestamp'))
-                    page.touch()
-                    page.purge()
+                    if self.cmdargs.purge_cache == 'edited':
+                        self.pages_to_recache.put(page)
                 else:
                     # TODO: what happens if it fails?
                     console('Something went wrong, status code:', msg=Msg.error)
@@ -230,11 +279,17 @@ class WikiHandler:
                 f'No wiki page candidates found from {[page["page"] for page in pages]}, skipping this row.',
                 msg=Msg.warning,
             )
+            if self.cmdargs.wiki_diff and self.cmdargs.write:
+                os.makedirs(os.path.join(self.out_dir, 'diff'), exist_ok=True)
+                out_path = os.path.join(self.out_dir, 'diff', fix_path(row['out_file']))
+                with open(out_path + ".skip", 'w') as f:
+                    f.write('\n'.join(p['page'] for p in pages))
+
 
     def handle(self, *a, mwclient, result, cmdargs, parser, out_dir):
         # First row is handled separately to prompt the user for his password
 
-        url = WIKIS.get(config.get_option('language'))
+        url = cmdargs.wiki_url or WIKIS.get(config.get_option('language'))
         if url is None:
             console(
                 'There is no wiki defined for language "%s"' % cmdargs.language,
@@ -258,23 +313,30 @@ class WikiHandler:
         self.cmdargs = cmdargs
         self.parser = parser
         self.out_dir = out_dir
+        self.pages_to_recache = SimpleQueue()
+        self.print_lock = Lock()
+        self.write_lock = Lock()
 
         if cmdargs.wiki_threads > 1:
             console('Starting thread pool...')
             tp = ThreadPoolExecutor(max_workers=cmdargs.wiki_threads)
 
-            for row in result:
-                tp.submit(
-                    self._error_catcher,
-                    row=row,
-                )
+            if cmdargs.quiet:
+                print(f"processing {len(result):>5} pages")
+            wait(tp.submit(self._error_catcher, row=row, rownum=rownum) for (rownum, row) in enumerate(result))
+            if cmdargs.quiet:
+                print(f"processed: {len(result):>5}")
+
+            for i in range(cmdargs.wiki_threads):
+                tp.submit(self.recache_pages)
 
             tp.shutdown(wait=True)
         else:
-            console('Editing pages...')
-            for row in result:
-                self._error_catcher(row=row)
+            console(f'Editing {len(result)} pages...')
+            for (rownum, row) in enumerate(result):
+                self._error_catcher(row=row, rownum=rownum)
                 time.sleep(cmdargs.wiki_sleep)
+            self.recache_pages()
 
 
 class ExporterHandler(BaseHandler):
@@ -524,7 +586,7 @@ class ExporterHandler(BaseHandler):
             help='Convert extracted images. Can be any file type supported by PIL (default .png), or md5sum to just save a hash',
             action='store',
             nargs='?',
-            default='.png',
+            const='.png',
             dest='convert_images',
         )
 
@@ -588,10 +650,28 @@ def add_parser_arguments(parser):
     )
 
     parser.add_argument(
+        '-w-url', '--wiki-url',
+        dest='wiki_url',
+        help='Url of the wiki to update',
+        action='store',
+        type=str,
+        default='',
+    )
+
+    parser.add_argument(
         '-w-d', '--wiki-diff',
         dest='wiki_diff',
         help='For use with --wiki-dry-run. Instead of printing the new page, print a diff against the existing page.',
         action='store_true',
+    )
+
+    parser.add_argument(
+        '-w-pc', '--wiki-purge-cache',
+        dest='purge_cache',
+        help='Perform a null edit and cache purge on each page seen.',
+        choices=['all', 'edit'],
+        nargs='?',
+        const='edit',
     )
 
     parser.add_argument(

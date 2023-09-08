@@ -65,6 +65,7 @@ __all__ = []
 class WikiCondition(parser.WikiCondition):
     COPY_KEYS = (
         'main_page',
+        'icon',
     )
 
     NAME = 'Passive skill'
@@ -128,7 +129,7 @@ class PassiveSkillParser(parser.BaseParser):
 
     _MAX_STAT_ID = 5
 
-    _COPY_KEYS = OrderedDict((
+    _COPY_KEYS = (
         ('Id', {
             'template': 'id',
         }),
@@ -161,6 +162,12 @@ class PassiveSkillParser(parser.BaseParser):
         ('AscendancyKey', {
             'template': 'ascendancy_class',
             'format': lambda value: value['Name'],
+            'condition': lambda passive: 'SpecialEldritch' not in passive['Id']
+        }),
+        ('AscendancyKey', {
+            'template': 'ascendancy_class',
+            'format': lambda value: value['CharactersKey'][0]['Name'],
+            'condition': lambda passive: 'SpecialEldritch' in passive['Id']
         }),
         ('IsKeystone', {
             'template': 'is_keystone',
@@ -190,7 +197,7 @@ class PassiveSkillParser(parser.BaseParser):
             'template': 'is_ascendancy_starting_node',
             'default': False,
         }),
-    ))
+    )
 
     def _apply_filter(self, parsed_args, passives):
         if parsed_args.re_id:
@@ -276,7 +283,7 @@ class PassiveSkillParser(parser.BaseParser):
                 console(f"Processing passive {passive['Id']} at {passive.rowid}")
 
             # Copy over simple fields from the .dat64
-            for row_key, copy_data in self._COPY_KEYS.items():
+            for row_key, copy_data in self._COPY_KEYS:
                 value = passive[row_key]
 
                 condition = copy_data.get('condition')
@@ -338,21 +345,13 @@ class PassiveSkillParser(parser.BaseParser):
             # For now this is being added to the stat text
             for ps_buff in passive['PassiveSkillBuffsKeys']:
                 buff_defs = ps_buff['BuffDefinitionsKey']
-                stat_ids = [stat['Id'] for stat in buff_defs['StatsKeys']]
-                values = ps_buff['Buff_StatValues']
+                if buff_defs['Binary_StatsKeys']:
+                    stat_ids = [stat['Id'] for stat in buff_defs['Binary_StatsKeys']]
+                    values = [1 for _ in stat_ids]
+                else:
+                    stat_ids = [stat['Id'] for stat in buff_defs['StatsKeys']]
+                    values = ps_buff['Buff_StatValues']
 
-                # There's an additional set of stats for buffs and auras that do not have
-                # an explicit value associated with them but should be treated as if they
-                # had a value of 1.
-                binary_stat_ids = [stat['Id'] for stat in buff_defs['Binary_StatsKeys']]
-                for id in binary_stat_ids:
-                    stat_ids.append(id)
-                    values.append(1)
-
-                #if passive['Id'] == 'AscendancyChampion7':
-                #    index = stat_ids.index('damage_taken_+%_from_hits')
-                #    del stat_ids[index]
-                #    del values[index]
                 for i, (sid, val) in enumerate(zip(stat_ids, values)):
                     j += 1
                     data['stat%s_id' % j] = sid

@@ -33,7 +33,7 @@ See PyPoE/LICENSE
 
 # Python
 import os
-from typing import List, Tuple, Union
+from typing import Dict, List, Tuple, Union
 import warnings
 import traceback
 from collections import OrderedDict, defaultdict
@@ -44,7 +44,7 @@ from PyPoE.cli.exporter import config
 from PyPoE.cli.exporter.wiki.handler import ExporterHandler, ExporterResult
 from PyPoE.cli.exporter.wiki import parser
 from PyPoE.poe.file.stat_filters import StatFilterFile
-from PyPoE.poe.file.translations import TranslationFile
+from PyPoE.poe.file.translations import TranslationFile, StatValue
 
 # =============================================================================
 # Globals
@@ -107,6 +107,25 @@ class SkillHandler(ExporterHandler):
             help='Ending index',
             type=int,
         )
+        
+        # by row ID
+        s_name = skill_sub.add_parser(
+            'by_name',
+            help='Extract skills by active skill name.'
+        )
+        self.add_default_parsers(
+            parser=s_name,
+            cls=SkillParser,
+            func=SkillParser.by_name,
+        )
+        s_name.add_argument(
+            'name',
+            help='Visible name (i.e. the name you see in game). Can be '
+                 'specified multiple times. If not specified all named '
+                 'skills will be exported',
+            nargs='*',
+            type=str,
+        )
 
     def add_default_parsers(self, *args, **kwargs):
         super().add_default_parsers(*args, **kwargs)
@@ -157,7 +176,7 @@ class SkillParserShared(parser.BaseParser):
         'Level', 'PlayerLevelReq', 'CostMultiplier',
         'CostAmounts', 'CostTypes', 'VaalSouls', 'VaalStoredUses',
         'SoulGainPreventionDuration', 'Cooldown', 'StoredUses', 'AttackSpeedMultiplier',
-        'ManaReservationFlat', 'ManaReservationPercent', 'LifeReservationFlat', 'LifeReservationPercent',
+        'ManaReservationFlat', 'ManaReservationPercent', 'LifeReservationFlat', 'LifeReservationPercent', 'AttackTime'
     )
 
     # Fields to copy from GrantedEffectStatSetsPerLevel.dat64
@@ -180,14 +199,14 @@ class SkillParserShared(parser.BaseParser):
         ('CostAmounts', {
             'template': 'cost_amounts',
             'default': [],
-            'condition': lambda v: v[0] is not None,
+            'condition': lambda v: v and v[0] is not None,
             'format': lambda v: v[0],
         }),
         ('CostTypes', {
             'template': 'cost_types',
             'default': [],
             # 'format': CostTypeHelper,
-            'condition': lambda v: v[0] is not None,
+            'condition': lambda v: v and v[0] is not None,
             'format': lambda v: v[0]['Id'],
             #  lambda v: ','.join([r['Id'] for r in v])
         }),
@@ -199,36 +218,43 @@ class SkillParserShared(parser.BaseParser):
         ('StoredUses', {
             'template': 'stored_uses',
             'default': 0,
+            'condition': lambda v: v,
             'format': lambda v: '{0:n}'.format(v),
         }),
         ('Cooldown', {
             'template': 'cooldown',
             'default': 0,
+            'condition': lambda v: v,
             'format': lambda v: '{0:n}'.format(v/1000),
         }),
         ('VaalSouls', {
             'template': 'vaal_souls_requirement',
             'default': 0,
+            'condition': lambda v: v,
             'format': lambda v: '{0:n}'.format(v),
         }),
         ('VaalStoredUses', {
             'template': 'vaal_stored_uses',
             'default': 0,
+            'condition': lambda v: v,
             'format': lambda v: '{0:n}'.format(v),
         }),
         ('SoulGainPreventionDuration', {
             'template': 'vaal_soul_gain_prevention_time',
             'default': 0,
+            'condition': lambda v: v,
             'format': lambda v: '{0:n}'.format(v/1000),
         }),
         ('SpellCritChance', {
             'template': 'critical_strike_chance',
             'default': 0,
+            'condition': lambda v: v,
             'format': lambda v: '{0:n}'.format(v/100),
         }),
         ('AttackCritChance', {
             'template': 'critical_strike_chance',
             'default': 0,
+            'condition': lambda v: v,
             'format': lambda v: '{0:n}'.format(v/100),
         }),
         ('DamageEffectiveness', {
@@ -251,22 +277,32 @@ class SkillParserShared(parser.BaseParser):
         ('ManaReservationFlat', {
             'template': 'mana_reservation_flat',
             'default': 0,
+            'condition': lambda v: v,
             'format': lambda v: '{0:n}'.format(v),
         }),
         ('ManaReservationPercent', {
             'template': 'mana_reservation_percent',
             'default': 0,
+            'condition': lambda v: v,
             'format': lambda v: '{0:n}'.format(v/100),
         }),
         ('LifeReservationFlat', {
             'template': 'life_reservation_flat',
             'default': 0,
+            'condition': lambda v: v,
             'format': lambda v: '{0:n}'.format(v),
         }),
         ('LifeReservationPercent', {
             'template': 'life_reservation_percent',
             'default': 0,
+            'condition': lambda v: v,
             'format': lambda v: '{0:n}'.format(v/100),
+        }),
+        ('AttackTime', {
+            'template': 'attack_time',
+            'default': 0,
+            'condition': lambda v: v,
+            'format': lambda v: '{0:n}'.format(v/1000),
         }),
     )
 
@@ -331,8 +367,8 @@ class SkillParserShared(parser.BaseParser):
             infobox[prefix + 'id'] = val[0]
             infobox[prefix + 'value'] = val[1]
 
-    def _translate_stats(self, stats, values: Union[List[int], List[Tuple[int, int]]], trans_file: TranslationFile, data: defaultdict, stat_order: defaultdict) -> OrderedDict:
-        stats_output = OrderedDict()
+    def _translate_stats(self, stats, values: Union[List[StatValue], Dict[str, StatValue]], trans_file: TranslationFile, data: defaultdict, stat_order: defaultdict) -> OrderedDict:
+        stats_output: OrderedDict[str, None] = OrderedDict()
 
         trans_rslt = trans_file.get_translation(
             tags=stats,
@@ -412,7 +448,7 @@ class SkillParserShared(parser.BaseParser):
         if (not gra_eff_per_lvl) and (not gra_eff_stats_pl):
             console('No level progression found for "%s". Skipping.' %
                     msg_name, msg=Msg.error)
-            return False
+            return
 
         gra_eff_per_lvl.sort(key=lambda x: x['Level'])
         gra_eff_stats_pl.sort(key=lambda x: x['GemLevel'])
@@ -448,6 +484,15 @@ class SkillParserShared(parser.BaseParser):
         }
 
         stat_order = defaultdict()
+
+        # GrantedEffectStatSets.dat64
+        const_stats = [untr_stat['Id']
+                       for untr_stat in stat_set['ConstantStats']]
+        impl_stats = [untr_stat['Id']
+                      for untr_stat in stat_set['ImplicitStats']]
+        const_stat_vals = stat_set['ConstantStatsValues']
+        impl_stat_vals = [1 for i in range(len(impl_stats))]
+
         # Copy per-level stats into level_data
         for i, lvl_stats in enumerate(gra_eff_stats_pl):
             data = defaultdict(lambda: None)
@@ -480,7 +525,7 @@ class SkillParserShared(parser.BaseParser):
                     del values[index]
 
             translated_stats = self._translate_stats(
-                stats, values, tf, data, stat_order)
+                stats, dict(zip(stats + const_stats + impl_stats, values + const_stat_vals + impl_stat_vals)), tf, data, stat_order)
             for tr_stat in translated_stats.keys():
                 stat_key_order['stats'][tr_stat] = translated_stats[tr_stat]
 
@@ -500,10 +545,12 @@ class SkillParserShared(parser.BaseParser):
             'columns': set(self._GEPL_COPY + self._GESSPL_COPY),
             # stats are specific to this skill
             'stats': OrderedDict(stat_key_order['stats']),
+            'stat_keys': set(),
         }
         dynamic = {
             'columns': set(),
             'stats': OrderedDict(),
+            'stat_keys': set(),
         }
 
         # Grab the data from the first row of per-level gem data.
@@ -530,6 +577,7 @@ class SkillParserShared(parser.BaseParser):
                                           data['stats'][key]['values']):
                     del static['stats'][key]
                     dynamic['stats'][key] = None
+                    dynamic['stat_keys'].update(last['stats'].get(key, data['stats'].get(key))['stats'])
             last = data
 
         # GrantedEffectStatSets.dat64
@@ -550,11 +598,13 @@ class SkillParserShared(parser.BaseParser):
         # It also expects them to be in the master list in stat_key_order
         for tr_stat in const_tr_stats.keys():
             static['stats'][tr_stat] = const_tr_stats[tr_stat]
+            static['stat_keys'].update(const_data['stats'][tr_stat]['stats'])
             level_data[0]['stats'][tr_stat] = const_data['stats'][tr_stat]
             stat_key_order['stats'][tr_stat] = const_tr_stats[tr_stat]
 
         for tr_stat in impl_tr_stats.keys():
             static['stats'][tr_stat] = impl_tr_stats[tr_stat]
+            static['stat_keys'].update(impl_data['stats'][tr_stat]['stats'])
             level_data[0]['stats'][tr_stat] = impl_data['stats'][tr_stat]
             stat_key_order['stats'][tr_stat] = impl_tr_stats[tr_stat]
 
@@ -700,7 +750,7 @@ class SkillParserShared(parser.BaseParser):
                     sdict = level_data[0]['stats'][key]
                 except:
                     sdict = level_data[-1]['stats'][key]
-                line = sdict['line']
+                line = None if any(stat_key in dynamic['stat_keys'] for stat_key in sdict['stats']) else sdict['line']
                 stats.extend(sdict['stats'])
                 values.extend(sdict['values'])
             elif key in dynamic['stats']:
@@ -730,7 +780,7 @@ class SkillParserShared(parser.BaseParser):
                 elif maxerr and minerr:
                     console(f'{msg_name} - Neither min or max level value available for "{key}". Investigate.',
                             msg=Msg.warning)
-                    return
+                    continue
 
                 tr_values = []
                 for j, value in enumerate(stat_dict['values']):
@@ -805,7 +855,9 @@ class SkillParserShared(parser.BaseParser):
 
             # Column handling
             for column, column_data in self._SKILL_COLUMN_MAP:
-                if column not in dynamic['columns'] or not row[column]:
+                if column not in dynamic['columns'] or row[column] is None:
+                    continue
+                if 'condition' in column_data and not column_data['condition'](row[column]):
                     continue
                 # Removed the check of defaults on purpose, makes sense
                 # to add the info since it is dynamically changed
@@ -834,10 +886,8 @@ class SkillParserShared(parser.BaseParser):
                 infobox[prefix + 'stat_text'] = \
                     self._format_lines(lines)
             self._write_stats(
-                infobox, zip(stats, values), prefix
+                infobox, [(s,v) for s, v in zip(stats, values) if s not in static['stat_keys']], prefix
             )
-
-        return True
 
 
 class SkillParser(SkillParserShared):
@@ -856,6 +906,27 @@ class SkillParser(SkillParserShared):
             parsed_args,
             self.rr['GrantedEffects.dat64'][parsed_args.start:parsed_args.end],
         )
+    
+    def by_name(self, parsed_args):
+        return self.export(
+            parsed_args,
+            self._effects_from_named_skills(
+                self._column_index_filter(
+                    dat_file_name='ActiveSkills.dat64',
+                    column_id='DisplayedName',
+                    arg_list=parsed_args.name,
+                ) if parsed_args.name else self.rr['ActiveSkills.dat64']
+            ),
+        )
+    
+    def _effects_from_named_skills(self, active_skills):
+        gra_eff = OrderedDict()
+        self.rr['GrantedEffects.dat64'].build_index('ActiveSkill')
+        for skill in active_skills:
+            if skill['DisplayedName']:
+                for effect in self.rr['GrantedEffects.dat64'].index['ActiveSkill'][skill]:
+                    gra_eff[effect['Id']] = effect
+        return gra_eff.values()
 
     def export(self, parsed_args, skills):
         self._image_init(parsed_args=parsed_args)

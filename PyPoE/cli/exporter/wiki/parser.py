@@ -1723,6 +1723,14 @@ class TagHandler:
     _IL_FORMAT = '{{il|html=|%s}}'
     _C_FORMAT = '{{c|%s|%s}}'
 
+    # Language should not be necessary as we are checking Words.dat['Text'],
+    # while the translated name is in Text2
+    UNIQ_FORMATS = {
+        "Lightpoacher": '[[%s]]',
+        "Precursor's Emblem": '[[%s]]',
+        "Thread of Hope": '{{il|page=%s}}',
+    }
+
     def __init__(self, rr):
         """
         Parameters
@@ -1740,6 +1748,8 @@ class TagHandler:
             self.tag_handlers[key] = partial(func, self)
 
     def _check_link(self, string):
+        if any(category['Text'] == string for category in self.rr['ItemClassCategories.dat64']):
+            return '[[%s]]' % string
         items = self.rr['BaseItemTypes.dat64'].index['Name'][string]
         if items:
             if items[0]['ItemClassesKey']['Name'] == 'Maps':
@@ -1766,6 +1776,8 @@ class TagHandler:
             items = self.rr['BaseItemTypes.dat64'].index['Name'][hstr]
             if len(items) > 0:
                 hstr = '[[%s]]' % hstr
+            elif hstr in self.UNIQ_FORMATS:
+                hstr = self.UNIQ_FORMATS[hstr] % hstr
             else:
                 hstr = self._IL_FORMAT % hstr
         else:
@@ -1813,6 +1825,7 @@ class WikiCondition:
     COPY_KEYS = (
     )
     COPY_MATCH = None
+    COPY_CONDITIONS = {}
 
     NAME = NotImplemented
     MATCH = None
@@ -1851,6 +1864,11 @@ class WikiCondition:
                     if self.COPY_MATCH.match(k):
                         self.data[k] = v
 
+            for k, condition in self.COPY_CONDITIONS:
+                if k in self.template_arguments['kwargs'] and \
+                        condition(self.template_arguments['kwargs'][k], self.data.get(k, None)):
+                    self.data[k] = self.template_arguments['kwargs'][k]
+
             prefix = ''
             if self.ADD_INCLUDE and '<onlyinclude></onlyinclude>' not in \
                     page.text():
@@ -1872,6 +1890,9 @@ class WikiCondition:
             indent=self.INDENT,
             ordered_dict=self.data,
         )
+
+    def tagsets_equal(page_value, new_value):
+        return new_value and set(page_value.split(', ')) == set(new_value.split(', '))
 
 # =============================================================================
 # Functions
