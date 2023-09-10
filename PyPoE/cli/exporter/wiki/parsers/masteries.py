@@ -36,20 +36,22 @@ Internal API
 # Imports
 # =============================================================================
 
+import os.path
+
 # Python
 import re
-import os.path
 import warnings
-from functools import partialmethod
 from collections import OrderedDict
-
-# 3rd-party
+from functools import partialmethod
 
 # self
-from PyPoE.cli.core import console, Msg
+from PyPoE.cli.core import Msg, console
 from PyPoE.cli.exporter.wiki import parser
 from PyPoE.cli.exporter.wiki.handler import ExporterHandler, ExporterResult
 from PyPoE.poe.file.psg import PSGFile
+
+# 3rd-party
+
 
 # =============================================================================
 # Globals
@@ -63,20 +65,17 @@ __all__ = []
 
 
 class EffectWikiCondition(parser.WikiCondition):
-    COPY_KEYS = (
-        'main_page',
-    )
+    COPY_KEYS = ("main_page",)
 
-    NAME = 'Mastery effect' # Seems to be the wiki template that will get called
+    NAME = "Mastery effect"  # Seems to be the wiki template that will get called
     ADD_INCLUDE = False
     INDENT = 36
 
-class GroupWikiCondition(parser.WikiCondition):
-    COPY_KEYS = (
-        'main_page',
-    )
 
-    NAME = 'Mastery group' # Seems to be the wiki template that will get called
+class GroupWikiCondition(parser.WikiCondition):
+    COPY_KEYS = ("main_page",)
+
+    NAME = "Mastery group"  # Seems to be the wiki template that will get called
     ADD_INCLUDE = False
     INDENT = 36
 
@@ -85,16 +84,16 @@ class MasteryCommandHandler(ExporterHandler):
     def __init__(self, sub_parser, *args, **kwargs):
         super().__init__(self, sub_parser, *args, **kwargs)
         self.parser = sub_parser.add_parser(
-            'mastery',
-            help='Passive Skill Tree Mastery exporter',
+            "mastery",
+            help="Passive Skill Tree Mastery exporter",
         )
         self.parser.set_defaults(func=lambda args: self.parser.print_help())
         core_sub = self.parser.add_subparsers()
 
         # Export for each mastery option:
         mastery_eff_parser = core_sub.add_parser(
-            'effects',
-            help='Mastery exporter for mastery effects (i.e. the bonus you can actually pick)',
+            "effects",
+            help="Mastery exporter for mastery effects (i.e. the bonus you can actually pick)",
         )
         mastery_eff_parser.set_defaults(func=lambda args: mastery_eff_parser.print_help())
         mastery_eff_sub = mastery_eff_parser.add_subparsers()
@@ -106,8 +105,8 @@ class MasteryCommandHandler(ExporterHandler):
 
         # Export for each mastery group:
         mastery_grp_parser = core_sub.add_parser(
-            'groups',
-            help='Mastery exporter for mastery groups',
+            "groups",
+            help="Mastery exporter for mastery groups",
         )
         mastery_grp_parser.set_defaults(func=lambda args: mastery_grp_parser.print_help())
         mastery_grp_sub = mastery_grp_parser.add_subparsers()
@@ -120,15 +119,17 @@ class MasteryCommandHandler(ExporterHandler):
 
     def add_default_parsers(self, *args, **kwargs):
         super().add_default_parsers(*args, **kwargs)
-        self.add_format_argument(kwargs['parser'])
-        self.add_image_arguments(kwargs['parser'])
-        kwargs['parser'].add_argument(
-            '-ft-id', '--filter-id', '--filter-metadata-id',
-            help='Regular expression on the id',
+        self.add_format_argument(kwargs["parser"])
+        self.add_image_arguments(kwargs["parser"])
+        kwargs["parser"].add_argument(
+            "-ft-id",
+            "--filter-id",
+            "--filter-metadata-id",
+            help="Regular expression on the id",
             type=str,
-            dest='re_id',
+            dest="re_id",
         )
-    
+
     def add_default_subparser_filters(self, sub_parser, cls, *args, **kwargs):
         # By Id
         super().add_id_subparser_filters(sub_parser, cls, *args, **kwargs)
@@ -140,7 +141,7 @@ class MasteryCommandHandler(ExporterHandler):
 
 
 class MasteryEffectParser(parser.BaseParser):
-    _MASTERY_FILE_NAME = 'PassiveSkillMasteryEffects.dat64'
+    _MASTERY_FILE_NAME = "PassiveSkillMasteryEffects.dat64"
     _files = [
         _MASTERY_FILE_NAME,
     ]
@@ -148,18 +149,23 @@ class MasteryEffectParser(parser.BaseParser):
     _passive_column_index_filter = partialmethod(
         parser.BaseParser._column_index_filter,
         dat_file_name=_MASTERY_FILE_NAME,
-        error_msg='Several mastery effects have not been found:\n%s',
+        error_msg="Several mastery effects have not been found:\n%s",
     )
 
-    _MAX_STAT_ID = 3 # How many stats each mastery effect can have.
+    _MAX_STAT_ID = 3  # How many stats each mastery effect can have.
 
     # Here we list out fields from the .dat64 file, and translate them to template parameters.
     # More complicated handling can be done in the body of export.
-    _COPY_KEYS = OrderedDict((
-        ('Id', {
-            'template': 'id',
-        }),
-    ))
+    _COPY_KEYS = OrderedDict(
+        (
+            (
+                "Id",
+                {
+                    "template": "id",
+                },
+            ),
+        )
+    )
 
     def _apply_filter(self, parsed_args, mastery_effs):
         if parsed_args.re_id:
@@ -170,8 +176,7 @@ class MasteryEffectParser(parser.BaseParser):
         new = []
 
         for mastery_eff in mastery_effs:
-            if parsed_args.re_id and not \
-                    parsed_args.re_id.match(mastery_eff['Id']):
+            if parsed_args.re_id and not parsed_args.re_id.match(mastery_eff["Id"]):
                 continue
 
             new.append(mastery_eff)
@@ -181,13 +186,13 @@ class MasteryEffectParser(parser.BaseParser):
     def by_rowid(self, parsed_args):
         return self.export(
             parsed_args,
-            self.rr[self._MASTERY_FILE_NAME][parsed_args.start:parsed_args.end],
+            self.rr[self._MASTERY_FILE_NAME][parsed_args.start : parsed_args.end],
         )
 
     def by_id(self, parsed_args):
-        return self.export(parsed_args, self._passive_column_index_filter(
-            column_id='Id', arg_list=parsed_args.id
-        ))
+        return self.export(
+            parsed_args, self._passive_column_index_filter(column_id="Id", arg_list=parsed_args.id)
+        )
 
     def export(self, parsed_args, masteries):
         r = ExporterResult()
@@ -196,17 +201,17 @@ class MasteryEffectParser(parser.BaseParser):
 
         if not masteries:
             console(
-                'No masteries found for the specified parameters. Quitting.',
+                "No masteries found for the specified parameters. Quitting.",
                 msg=Msg.warning,
             )
             return r
 
-        console('Accessing additional data...')
+        console("Accessing additional data...")
 
         # Read from the .dat64 file
         self.rr[self._MASTERY_FILE_NAME]
 
-        console(f'Found {len(masteries)}, parsing...')
+        console(f"Found {len(masteries)}, parsing...")
 
         for mastery in masteries:
             data = dict()
@@ -214,18 +219,18 @@ class MasteryEffectParser(parser.BaseParser):
             for row_key, copy_data in self._COPY_KEYS.items():
                 value = mastery[row_key]
 
-                condition = copy_data.get('condition')
+                condition = copy_data.get("condition")
                 if condition is not None and not condition(mastery):
                     continue
 
                 # Skip default values to reduce size of template
-                if value == copy_data.get('default'):
+                if value == copy_data.get("default"):
                     continue
 
-                fmt = copy_data.get('format')
+                fmt = copy_data.get("format")
                 if fmt:
                     value = fmt(value)
-                data[copy_data['template']] = value
+                data[copy_data["template"]] = value
 
             stat_ids = []
             values = []
@@ -233,19 +238,22 @@ class MasteryEffectParser(parser.BaseParser):
             one_based_stat_index = 0
             for stat_index in range(0, self._MAX_STAT_ID):
                 try:
-                    stat = mastery['StatsKeys'][stat_index]
+                    stat = mastery["StatsKeys"][stat_index]
                 except IndexError:
                     break
                 one_based_stat_index = stat_index + 1
-                stat_ids.append(stat['Id'])
-                data[f'stat{one_based_stat_index}_id'] = stat['Id']
-                values.append(mastery[f'Stat{one_based_stat_index}Value'])
-                data[f'stat{one_based_stat_index}_value'] = mastery[f'Stat{one_based_stat_index}Value']
+                stat_ids.append(stat["Id"])
+                data[f"stat{one_based_stat_index}_id"] = stat["Id"]
+                values.append(mastery[f"Stat{one_based_stat_index}Value"])
+                data[f"stat{one_based_stat_index}_value"] = mastery[
+                    f"Stat{one_based_stat_index}Value"
+                ]
 
-            data['stat_text'] = '<br>'.join(self._get_stats(
-                stat_ids, values,
-                translation_file='passive_skill_stat_descriptions.txt'
-            ))
+            data["stat_text"] = "<br>".join(
+                self._get_stats(
+                    stat_ids, values, translation_file="passive_skill_stat_descriptions.txt"
+                )
+            )
 
             cond = EffectWikiCondition(
                 data=data,
@@ -254,23 +262,22 @@ class MasteryEffectParser(parser.BaseParser):
 
             r.add_result(
                 text=cond,
-                out_file='mastery_%s.txt' % data['id'],
+                out_file="mastery_%s.txt" % data["id"],
                 wiki_page=[
                     {
-                        'page': 'Mastery Effect:' + self._format_wiki_title(data['id']),
-                        'condition': cond,
+                        "page": "Mastery Effect:" + self._format_wiki_title(data["id"]),
+                        "condition": cond,
                     },
                 ],
-                wiki_message='Mastery updater',
+                wiki_message="Mastery updater",
             )
 
         return r
 
 
-
 class MasteryGroupParser(parser.BaseParser):
-    _MASTERY_FILE_NAME = 'PassiveSkillMasteryGroups.dat64'
-    _PASSIVES_FILE_NAME = 'PassiveSkills.dat64'
+    _MASTERY_FILE_NAME = "PassiveSkillMasteryGroups.dat64"
+    _PASSIVES_FILE_NAME = "PassiveSkills.dat64"
     _files = [
         _MASTERY_FILE_NAME,
         _PASSIVES_FILE_NAME,
@@ -279,18 +286,26 @@ class MasteryGroupParser(parser.BaseParser):
     _mastery_column_index_filter = partialmethod(
         parser.BaseParser._column_index_filter,
         dat_file_name=_MASTERY_FILE_NAME,
-        error_msg='Several masteries have not been found:\n%s',
+        error_msg="Several masteries have not been found:\n%s",
     )
 
-    _COPY_KEYS = OrderedDict((
-        ('Id', {
-            'template': 'id',
-        }),
-        ('MasteryEffects', {
-            'template': 'mastery_effects',
-            'format': lambda value: ','.join([x['Id'] for x in value]),
-        }),
-    ))
+    _COPY_KEYS = OrderedDict(
+        (
+            (
+                "Id",
+                {
+                    "template": "id",
+                },
+            ),
+            (
+                "MasteryEffects",
+                {
+                    "template": "mastery_effects",
+                    "format": lambda value: ",".join([x["Id"] for x in value]),
+                },
+            ),
+        )
+    )
 
     def _apply_filter(self, parsed_args, masteries):
         if parsed_args.re_id:
@@ -301,8 +316,7 @@ class MasteryGroupParser(parser.BaseParser):
         new = []
 
         for mastery in masteries:
-            if parsed_args.re_id and not \
-                    parsed_args.re_id.match(mastery['Id']):
+            if parsed_args.re_id and not parsed_args.re_id.match(mastery["Id"]):
                 continue
 
             new.append(mastery)
@@ -312,13 +326,13 @@ class MasteryGroupParser(parser.BaseParser):
     def by_rowid(self, parsed_args):
         return self.export(
             parsed_args,
-            self.rr[self._MASTERY_FILE_NAME][parsed_args.start:parsed_args.end],
+            self.rr[self._MASTERY_FILE_NAME][parsed_args.start : parsed_args.end],
         )
 
     def by_id(self, parsed_args):
-        return self.export(parsed_args, self._mastery_column_index_filter(
-            column_id='Id', arg_list=parsed_args.id
-        ))
+        return self.export(
+            parsed_args, self._mastery_column_index_filter(column_id="Id", arg_list=parsed_args.id)
+        )
 
     def export(self, parsed_args, mastery_grps):
         r = ExporterResult()
@@ -327,21 +341,21 @@ class MasteryGroupParser(parser.BaseParser):
 
         if not mastery_grps:
             console(
-                'No mastery groups found for the specified parameters. Quitting.',
+                "No mastery groups found for the specified parameters. Quitting.",
                 msg=Msg.warning,
             )
             return r
 
-        console('Determining Mastery Group Names')
+        console("Determining Mastery Group Names")
         name_map = self.get_mastery_name_map()
 
-        console('Accessing additional data...')
+        console("Accessing additional data...")
         # Read the .dat64 file
         self.rr[self._MASTERY_FILE_NAME]
-        
+
         self._image_init(parsed_args)
 
-        console(f'Found {len(mastery_grps)}, parsing...')
+        console(f"Found {len(mastery_grps)}, parsing...")
 
         for mastery_grp in mastery_grps:
             data = dict()
@@ -349,47 +363,46 @@ class MasteryGroupParser(parser.BaseParser):
             for row_key, copy_data in self._COPY_KEYS.items():
                 value = mastery_grp[row_key]
 
-                condition = copy_data.get('condition')
+                condition = copy_data.get("condition")
                 if condition is not None and not condition(mastery_grp):
                     continue
 
                 # Skip default values to reduce size of template
-                if value == copy_data.get('default'):
+                if value == copy_data.get("default"):
                     continue
 
-                fmt = copy_data.get('format')
+                fmt = copy_data.get("format")
                 if fmt:
                     value = fmt(value)
-                data[copy_data['template']] = value
+                data[copy_data["template"]] = value
 
-            data['name'] = name_map[data['id']]
+            data["name"] = name_map[data["id"]]
 
             # Parse and clean up icon path
-            icon_field = 'InactiveIcon'
+            icon_field = "InactiveIcon"
             if mastery_grp[icon_field]:
-                icon = mastery_grp[icon_field].split('/')
-                if mastery_grp[icon_field].startswith(
-                        'Art/2DArt/SkillIcons/passives/'):
-                    if icon[-2] == 'MasteryPassiveIcons':
-                        data['icon'] = icon[-1]
+                icon = mastery_grp[icon_field].split("/")
+                if mastery_grp[icon_field].startswith("Art/2DArt/SkillIcons/passives/"):
+                    if icon[-2] == "MasteryPassiveIcons":
+                        data["icon"] = icon[-1]
                         pass
                     else:
                         warnings.warn(f"Icon path is not as expected for {mastery_grp['Id']}")
                 else:
-                    data['icon'] = icon[-1]
+                    data["icon"] = icon[-1]
                     pass
             else:
-                data['icon'] = ''
+                data["icon"] = ""
                 warnings.warn(f"Icon path file not found for {mastery_grp['Id']}: {data['name']}")
 
-            data['icon'] = data['icon'].replace('.dds', '')
+            data["icon"] = data["icon"].replace(".dds", "")
 
             # extract icons if specified
             if parsed_args.store_images:
-                file_name = data['icon'] + ' mastery icon'
+                file_name = data["icon"] + " mastery icon"
                 print(self._img_path)
-                dds = os.path.join(self._img_path, file_name + '.dds')
-                png = os.path.join(self._img_path, file_name + '.png')
+                dds = os.path.join(self._img_path, file_name + ".dds")
+                png = os.path.join(self._img_path, file_name + ".png")
                 if not (os.path.exists(dds) or os.path.exists(png)):
                     self._write_dds(
                         data=self.file_system.get_file(mastery_grp[icon_field]),
@@ -407,11 +420,11 @@ class MasteryGroupParser(parser.BaseParser):
                 out_file=f"mastery_group_{data['name']}.txt",
                 wiki_page=[
                     {
-                        'page': self._format_wiki_title(data['name']),
-                        'condition': cond,
+                        "page": self._format_wiki_title(data["name"]),
+                        "condition": cond,
                     },
                 ],
-                wiki_message='Mastery Group updater',
+                wiki_message="Mastery Group updater",
             )
 
         return r
@@ -422,9 +435,10 @@ class MasteryGroupParser(parser.BaseParser):
         # Find the passive skills that let you allocate masteries, and match the mastery groups
         # they're linked to to the name of the passive skills
         for passive in passives:
-            if passive['MasteryGroup'] is not None:
-                name_map[passive['MasteryGroup']['Id']] = passive['Name']
+            if passive["MasteryGroup"] is not None:
+                name_map[passive["MasteryGroup"]["Id"]] = passive["Name"]
         return name_map
+
 
 # =============================================================================
 # Functions
