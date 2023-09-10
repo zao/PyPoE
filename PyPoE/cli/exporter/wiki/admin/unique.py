@@ -35,8 +35,6 @@ Documentation
 # Imports
 # =============================================================================
 
-import random
-import time
 
 # Python
 import traceback
@@ -47,7 +45,7 @@ import mwclient
 import mwparserfromhell
 from rapidfuzz import fuzz
 
-from PyPoE.cli.core import Msg, console
+from PyPoE.cli.core import console
 from PyPoE.cli.exporter.wiki.handler import WIKIS, ExporterHandler, add_parser_arguments
 from PyPoE.cli.exporter.wiki.parser import BaseParser
 
@@ -84,7 +82,10 @@ class UniqueCommandHandler(ExporterHandler):
             "-en-w-u",
             "--english-wiki-user",
             dest="en_user",
-            help="Poewiki user name to use to login into the English wiki (source). Bot access speeds things up.",
+            help=(
+                "Poewiki user name to use to login into the English wiki (source). Bot access"
+                " speeds things up."
+            ),
             action="store",
             type=str,
             default="",
@@ -95,7 +96,10 @@ class UniqueCommandHandler(ExporterHandler):
             "-en-w-pw",
             "--english-wiki-password",
             dest="en_password",
-            help="Poewiki password to use to login into the English wiki (source). Bot access speeds things up.",
+            help=(
+                "Poewiki password to use to login into the English wiki (source). Bot access speeds"
+                " things up."
+            ),
             action="store",
             type=str,
             default="",
@@ -215,7 +219,7 @@ class UniqueCopy(BaseParser):
 
             try:
                 correct = results[int(input("Enter index of correct translation:\n"))]
-            except Exception as e:
+            except Exception:
                 traceback.print_exc()
 
             return self.rr[file_name][correct["id"]][key]
@@ -299,7 +303,7 @@ class UniqueCopy(BaseParser):
             # TODO
             pass
         else:
-            # Need to copy the list or it won't be deleted properly as it deletes from itself during iteration
+            # Need to copy the list or it won't be deleted properly as it deletes from itself
             for mwparam in list(mwtemplate.params):
                 pname = mwparam.name.strip()
                 if pname.startswith("upgraded_from") and pname != "upgraded_from_disabled":
@@ -344,24 +348,3 @@ class BaseItemCacheInstance(list):
 # =============================================================================
 # Functions
 # =============================================================================
-
-
-def run():
-    cache = defaultdict(BaseItemCacheInstance)
-    for row in self.rr_english["BaseItemTypes.dat"]:
-        cache[row["ItemClassesKey"]["Id"]].append(row)
-        cache[row["ItemClassesKey"]["Id"]].index["Name"][row["Name"]].append(row)
-
-    for pn in ["Bubonic Trail (1 Abyssal Socket)"]:
-        copy(pn, cache)
-
-    """from line_profiler import LineProfiler
-    profiler = LineProfiler(
-        fuzzy_find_text,
-        find,
-    )
-    profiler.runcall(copy, "Brightbeak", cache)
-    profiler.print_stats()"""
-
-
-# run()

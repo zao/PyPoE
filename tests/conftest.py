@@ -30,7 +30,6 @@ See PyPoE/LICENSE
 # =============================================================================
 
 # Python
-import os.path
 from typing import List
 
 # 3rd-party
@@ -42,9 +41,7 @@ from PyPoE.cli.exporter.core import setup_config
 # self
 from PyPoE.poe.constants import DISTRIBUTOR, VERSION
 from PyPoE.poe.file import dat
-from PyPoE.poe.file.bundle import Index
 from PyPoE.poe.file.file_system import FileSystem
-from PyPoE.poe.file.ggpk import GGPKFile
 from PyPoE.poe.file.specification import load
 from PyPoE.poe.path import PoEPath
 
@@ -85,8 +82,10 @@ def pytest_addoption(parser):
         action="store",
         choices=list(_argparse_versions.keys()),
         default="stable",
-        help="Target version of path of exile; different version will test "
-        "against different specifications.",
+        help=(
+            "Target version of path of exile; different version will test "
+            "against different specifications."
+        ),
     )
 
 

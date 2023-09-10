@@ -210,15 +210,13 @@ class IncursionRoomParser(parser.BaseParser):
 
         if not incursion_rooms:
             console(
-                "No incursion rooms  found for the specified parameters. " "Quitting.",
+                "No incursion rooms  found for the specified parameters. Quitting.",
                 msg=Msg.warning,
             )
             return r
         console("Found %s rooms..." % len(incursion_rooms))
 
-        console(
-            "Additional files may be loaded. Processing information - this " "may take a while..."
-        )
+        console("Additional files may be loaded. Processing information - this may take a while...")
         self._image_init(parsed_args)
         idl_sources = set()
         if parsed_args.store_images:

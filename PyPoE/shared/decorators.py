@@ -58,7 +58,7 @@ class DeprecationDecorator:
 
     """
 
-    _default_message = "Use of {func} is deprecated and will be removed in" " PyPoE {version}"
+    _default_message = "Use of {func} is deprecated and will be removed in PyPoE {version}"
     _default_doc_message = "DEPRECATED. Will be removed in PyPoE {version}"
 
     def __init__(self, message=None, doc_message=None, version=None):

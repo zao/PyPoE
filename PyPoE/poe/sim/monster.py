@@ -80,7 +80,7 @@ class Monster:
     def level(self):
         if self._level is None:
             raise ValueError(
-                "Set monster level first before performing actions" " that require monster level"
+                "Set monster level first before performing actions that require monster level"
             )
         return self._level
 
@@ -91,7 +91,7 @@ class Monster:
         self._level = value
 
     def damage(self, map_tier=None):
-        base = self.parent.rr["DefaultMonsterStats.dat"][self.level]
+        self.parent.rr["DefaultMonsterStats.dat"][self.level]
 
 
 class MonsterFactory:
@@ -121,9 +121,9 @@ class MonsterFactory:
         if isinstance(relational_reader, RelationalReader):
             self.rr = relational_reader
         else:
-            raise ValueError("relational_reader must be a RelationalReader " "instance")
+            raise ValueError("relational_reader must be a RelationalReader instance")
         if isinstance(otfile_cache, OTFileCache):
-            self.ot = otcache
+            self.ot = otfile_cache
         else:
             raise ValueError("otfile_cache must be a OTFileCache instance.")
 
@@ -183,7 +183,7 @@ class MonsterFactory:
             mv = [m for m in self.rr["MonsterVarieties.dat"] if m["Name"] in name]
         else:
             raise ValueError(
-                "One of rowid, metaid or name must be specified " "and be of the correct type"
+                "One of rowid, metaid or name must be specified and be of the correct type"
             )
 
         return [Monster(*args, parent=self, mv=m, **kwargs) for m in mv]

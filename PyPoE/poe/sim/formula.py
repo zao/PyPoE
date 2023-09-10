@@ -48,7 +48,6 @@ Documentation
 from enum import Enum
 
 # self
-from PyPoE.shared.mixins import ReprMixin
 
 # =============================================================================
 # Globals
@@ -217,7 +216,7 @@ def gem_stat_requirement(level, gtype=GemTypes.support, multi=100):
     else:
         raise ValueError("Invalid gtype '%s'. Valid types are:\n%s" % (gtype, GemTypes))
 
-    if level == None:
+    if level is None:
         return 0
     result = round(level * a + b)
     # Gems seem to have no requirements lower then 14

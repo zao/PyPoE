@@ -36,7 +36,7 @@ import os
 import traceback
 import warnings
 from collections import OrderedDict, defaultdict
-from typing import Dict, List, Tuple, Union
+from typing import Dict, List, Union
 
 # Self
 from PyPoE.cli.core import Msg, console
@@ -113,9 +113,11 @@ class SkillHandler(ExporterHandler):
         )
         s_name.add_argument(
             "name",
-            help="Visible name (i.e. the name you see in game). Can be "
-            "specified multiple times. If not specified all named "
-            "skills will be exported",
+            help=(
+                "Visible name (i.e. the name you see in game). Can be "
+                "specified multiple times. If not specified all named "
+                "skills will be exported"
+            ),
             nargs="*",
             type=str,
         )
@@ -127,7 +129,7 @@ class SkillHandler(ExporterHandler):
         kwargs["parser"].add_argument(
             "--allow-skill-gems",
             action="store_true",
-            help="Disable the check that prevents skill gems skill from being " "exported.",
+            help="Disable the check that prevents skill gems skill from being exported.",
             dest="allow_skill_gems",
         )
 
@@ -418,8 +420,6 @@ class SkillParserShared(parser.BaseParser):
             self._skill_stat_filters.read(
                 self.file_system.get_file("Metadata/StatDescriptions/skillpopup_stat_filters.txt")
             )
-            # TODO: remove once fixed
-            # self._skill_stat_filters.skills['spirit_offering'] = SkillEntry(skill_id='spirit_offering', translation_file_path='Metadata/StatDescriptions/offering_skill_stat_descriptions.txt', stats=[])
 
         return self._skill_stat_filters
 
@@ -568,13 +568,15 @@ class SkillParserShared(parser.BaseParser):
             else:
                 lvl_effects = None
                 warnings.warn(
-                    f'GrantedEffectsPerLevel is missing level {lvl_stats["GemLevel"]} which GrantedEffectStatSetsPerLevel has.'
+                    f'GrantedEffectsPerLevel is missing level {lvl_stats["GemLevel"]} which'
+                    " GrantedEffectStatSetsPerLevel has."
                 )
 
             if lvl_effects is not None and lvl_effects["Level"] != lvl_stats["GemLevel"]:
                 lvl_effects = None
                 warnings.warn(
-                    f'GrantedEffectsPerLevel is missing level {lvl_stats["GemLevel"]} which GrantedEffectStatSetsPerLevel has.'
+                    f'GrantedEffectsPerLevel is missing level {lvl_stats["GemLevel"]} which'
+                    " GrantedEffectStatSetsPerLevel has."
                 )
 
             stats = [
@@ -673,7 +675,8 @@ class SkillParserShared(parser.BaseParser):
             impl_stats, [1 for i in range(len(impl_stats))], tf, impl_data, stat_order
         )
 
-        # Later code that generates the infobox expects static stats to be in static, and to have values in level 0 of the gem.
+        # Later code that generates the infobox expects static stats to be in static,
+        # and to have values in level 0 of the gem.
         # It also expects them to be in the master list in stat_key_order
         for tr_stat in const_tr_stats.keys():
             static["stats"][tr_stat] = const_tr_stats[tr_stat]
@@ -694,7 +697,7 @@ class SkillParserShared(parser.BaseParser):
             )
         )
 
-        # Copy BaseDuration Data to skill_level's 'BaseDuration' node where the infobox is expecting it
+        # Copy BaseDuration Data to skill_level's 'BaseDuration' node where the infobox expects it
         # Add 'BaseDuration' to the list of dynamic columns.
         if "base_skill_effect_duration" in dynamic["stats"].keys():
             dynamic["columns"].add("BaseDuration")
@@ -837,7 +840,7 @@ class SkillParserShared(parser.BaseParser):
             if key in static["stats"]:
                 try:
                     sdict = level_data[0]["stats"][key]
-                except:
+                except KeyError:
                     sdict = level_data[-1]["stats"][key]
                 line = None if key in dynamic["stat_keys"] else sdict["line"]
                 stats.extend(sdict["stats"])
@@ -868,7 +871,8 @@ class SkillParserShared(parser.BaseParser):
                     stat_dict = {"values": [0] * len(stat_ids)}
                 elif maxerr and minerr:
                     console(
-                        f'{msg_name} - Neither min or max level value available for "{key}". Investigate.',
+                        f'{msg_name} - Neither min or max level value available for "{key}".'
+                        " Investigate.",
                         msg=Msg.warning,
                     )
                     continue
@@ -1041,7 +1045,7 @@ class SkillParser(SkillParserShared):
 
             try:
                 self._skill(gra_eff=skill, infobox=data, parsed_args=parsed_args)
-            except Exception as e:
+            except Exception:
                 console(
                     f"Error when parsing skill \"{skill['Id']}\" at {skill.rowid}:", msg=Msg.error
                 )

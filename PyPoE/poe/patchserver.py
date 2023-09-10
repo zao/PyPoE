@@ -587,13 +587,13 @@ class Patch:
             sock.send(Patch._PROTO)
             data = io.BytesIO(sock.recv(1024))
 
-            unknown = struct.unpack("B", data.read(1))[0]
-            blank = struct.unpack("33s", data.read(33))[0]
+            struct.unpack("B", data.read(1))[0]
+            struct.unpack("33s", data.read(33))[0]
 
             url_length = struct.unpack("B", data.read(1))[0]
             self.patch_url = data.read(url_length * 2).decode("utf-16")
 
-            blank = struct.unpack("B", data.read(1))[0]
+            struct.unpack("B", data.read(1))[0]
 
             url2_length = struct.unpack("B", data.read(1))[0]
             self.patch_cdn_url = data.read(url2_length * 2).decode("utf-16")

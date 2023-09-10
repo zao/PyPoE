@@ -1,5 +1,5 @@
 """
-Additional validators 
+Additional validators
 
 Overview
 ===============================================================================
@@ -151,8 +151,8 @@ class IntEnumValidator:
                     value = getattr(self._enum, value)
                 except AttributeError:
                     raise ValidateError(
-                        "The value is neither an integer or a valid %s "
-                        "attribute" % self._enum.__name__
+                        "The value is neither an integer or a valid %s attribute"
+                        % self._enum.__name__
                     )
             else:
                 value = self._get_enum_from_val(value)

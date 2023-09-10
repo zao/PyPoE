@@ -95,7 +95,7 @@ class MonsterCommandHandler(ExporterHandler):
         )
         a_name.add_argument(
             "monster_name",
-            help="Visible name of the area (localized), can be specified " "multiple times.",
+            help="Visible name of the area (localized), can be specified multiple times.",
             nargs="+",
         )
 

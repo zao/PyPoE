@@ -29,9 +29,6 @@ See PyPoE/LICENSE
 # Imports
 # =============================================================================
 
-# 3rd-party
-import pytest
-
 # Python
 from PyPoE.poe.file import stat_filters
 

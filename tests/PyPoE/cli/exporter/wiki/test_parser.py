@@ -1,3 +1,4 @@
+# flake8: noqa E501
 """
 Tests for parser.py
 
@@ -97,18 +98,20 @@ iwdata = (
     # Skill vs Kill
     (
         "10% reduced Mana Cost of Skills if you've been Hit Recently",
-        "10% reduced [[Mana]] Cost of [[Skill|Skills]] if you've been [[Hit]] " "[[Recently]]",
+        "10% reduced [[Mana]] Cost of [[Skill|Skills]] if you've been [[Hit]] [[Recently]]",
     ),
     # Support gem in string match
     (
         "Socketed Gems are supported by level 6 Stun",
-        "[[Item socket|Socketed]] Gems are supported by " "[[Stun Support|level 6 Stun]]",
+        "[[Item socket|Socketed]] Gems are supported by [[Stun Support|level 6 Stun]]",
     ),
     #
     (
         "Socketed Gems are Supported by level 10 Faster Casting",
-        "[[Item socket|Socketed]] Gems are Supported by "
-        "[[Faster Casting Support|level 10 Faster Casting]]",
+        (
+            "[[Item socket|Socketed]] Gems are Supported by "
+            "[[Faster Casting Support|level 10 Faster Casting]]"
+        ),
     ),
 )
 
@@ -205,7 +208,10 @@ class TestBaseParser:
         (
             "MonsterCriticals1",
             [
-                '<abbr title="Powerful Crits">300% increased Global [[Critical Strike Chance]]</abbr>',
+                (
+                    '<abbr title="Powerful Crits">300% increased Global [[Critical Strike'
+                    " Chance]]</abbr>"
+                ),
                 "+65% to Global [[Critical Strike Multiplier]] (Hidden)",
             ],
         ),
@@ -238,7 +244,7 @@ class TestTagHandler:
         missing_handlers = set()
         for tag in divination_card_texts:
             try:
-                text = tag.handle_tags(tag_handler_obj.tag_handlers)
+                tag.handle_tags(tag_handler_obj.tag_handlers)
             except KeyError as e:
                 missing_handlers.add(e.args[0])
 

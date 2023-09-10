@@ -305,7 +305,7 @@ class SetupHandler(BaseHandler):
             try:
                 for func in section.functions:
                     func(args)
-            except Exception as e:
+            except Exception:
                 console("Unexpected error occured during setup:\n")
                 console(traceback.format_exc(), msg=Msg.error)
                 continue

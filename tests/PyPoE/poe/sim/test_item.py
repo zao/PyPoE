@@ -1,3 +1,5 @@
+# flake8: noqa E501
+
 """
 Tests for PyPoE.poe.sim.item
 
@@ -262,7 +264,10 @@ Travel to this Map by using it in the Eternal Laboratory or a personal Map Devic
                 "base_item_name": "Tropical Island Map",
                 "map_tier": 1,
                 "item_level": 71,
-                "help_text": "Travel to this Map by using it in the Eternal Laboratory or a personal Map Device. Maps can only be used once.",
+                "help_text": (
+                    "Travel to this Map by using it in the Eternal Laboratory or a personal Map"
+                    " Device. Maps can only be used once."
+                ),
             },
         ),
         (
@@ -291,7 +296,10 @@ Travel to this Map by using it in the Eternal Laboratory or a personal Map Devic
                     "43% more Rare Monsters",
                     "Monsters cannot be Stunned",
                 ],
-                "help_text": "Travel to this Map by using it in the Eternal Laboratory or a personal Map Device. Maps can only be used once.",
+                "help_text": (
+                    "Travel to this Map by using it in the Eternal Laboratory or a personal Map"
+                    " Device. Maps can only be used once."
+                ),
             },
         ),
         (
@@ -325,7 +333,10 @@ Travel to this Map by using it in the Eternal Laboratory or a personal Map Devic
                     "Unique Boss deals 30% increased Damage",
                     "Unique Boss has 25% increased Attack and Cast Speed",
                 ],
-                "help_text": "Travel to this Map by using it in the Eternal Laboratory or a personal Map Device. Maps can only be used once.",
+                "help_text": (
+                    "Travel to this Map by using it in the Eternal Laboratory or a personal Map"
+                    " Device. Maps can only be used once."
+                ),
             },
         ),
         (
@@ -348,7 +359,10 @@ Travel to this Map by using it in the Eternal Laboratory or a personal Map Devic
                 "stats": [
                     "Unidentified",
                 ],
-                "help_text": "Travel to this Map by using it in the Eternal Laboratory or a personal Map Device. Maps can only be used once.",
+                "help_text": (
+                    "Travel to this Map by using it in the Eternal Laboratory or a personal Map"
+                    " Device. Maps can only be used once."
+                ),
             },
         ),
         (
@@ -384,7 +398,10 @@ Travel to this Map by using it in the Eternal Laboratory or a personal Map Devic
                     "Rare Monsters each have a Nemesis Mod",
                 ],
                 "flavour_text": "We all began life in darkness, we shall all end it there.",
-                "help_text": "Travel to this Map by using it in the Eternal Laboratory or a personal Map Device. Maps can only be used once.",
+                "help_text": (
+                    "Travel to this Map by using it in the Eternal Laboratory or a personal Map"
+                    " Device. Maps can only be used once."
+                ),
             },
         ),
         #
@@ -401,7 +418,10 @@ Place into an allocated Jewel Socket on the Passive Skill Tree. Right click to r
                 "rarity": RARITY.NORMAL,
                 "name": "Crimson Jewel",
                 "item_level": 71,
-                "help_text": "Place into an allocated Jewel Socket on the Passive Skill Tree. Right click to remove from the Socket.",
+                "help_text": (
+                    "Place into an allocated Jewel Socket on the Passive Skill Tree. Right click to"
+                    " remove from the Socket."
+                ),
             },
         ),
         (
@@ -423,7 +443,10 @@ Place into an allocated Jewel Socket on the Passive Skill Tree. Right click to r
                 "stats": [
                     "+8% to Chaos Resistance",
                 ],
-                "help_text": "Place into an allocated Jewel Socket on the Passive Skill Tree. Right click to remove from the Socket.",
+                "help_text": (
+                    "Place into an allocated Jewel Socket on the Passive Skill Tree. Right click to"
+                    " remove from the Socket."
+                ),
             },
         ),
         (
@@ -445,7 +468,10 @@ Place into an allocated Jewel Socket on the Passive Skill Tree. Right click to r
                 "stats": [
                     "4% increased Cast Speed while Dual Wielding",
                 ],
-                "help_text": "Place into an allocated Jewel Socket on the Passive Skill Tree. Right click to remove from the Socket.",
+                "help_text": (
+                    "Place into an allocated Jewel Socket on the Passive Skill Tree. Right click to"
+                    " remove from the Socket."
+                ),
             },
         ),
         (
@@ -477,7 +503,10 @@ Corrupted""",
                     "3% increased effect of Auras you Cast",
                 ],
                 "flavour_text": "What you earn is almost as important as what you take.",
-                "help_text": "Place into an allocated Jewel Socket on the Passive Skill Tree. Right click to remove from the Socket.",
+                "help_text": (
+                    "Place into an allocated Jewel Socket on the Passive Skill Tree. Right click to"
+                    " remove from the Socket."
+                ),
                 "is_corrupted": True,
             },
         ),
@@ -525,7 +554,10 @@ Place into an item socket of the right colour to gain this skill. Right click to
                     "Adds 2-7 Lightning Damage to Spells",
                     "Adds 2-7 Lightning Damage to Attacks",
                 ],
-                "help_text": "Place into an item socket of the right colour to gain this skill. Right click to remove from a socket.",
+                "help_text": (
+                    "Place into an item socket of the right colour to gain this skill. Right click"
+                    " to remove from a socket."
+                ),
             },
         ),
         (
@@ -571,7 +603,10 @@ Corrupted""",
                     "Base duration is 10.00 seconds",
                     "17 additional Armour",
                 ],
-                "help_text": "Place into an item socket of the right colour to gain this skill. Right click to remove from a socket.",
+                "help_text": (
+                    "Place into an item socket of the right colour to gain this skill. Right click"
+                    " to remove from a socket."
+                ),
                 "is_corrupted": True,
             },
         ),
@@ -612,7 +647,10 @@ Right click this item then left click a location on the ground to create the obj
                 "name": "Book Shelf",
                 "stack_size": [1, 20],
                 "description": "Creates an object in your hideout",
-                "help_text": "Right click this item then left click a location on the ground to create the object.",
+                "help_text": (
+                    "Right click this item then left click a location on the ground to create the"
+                    " object."
+                ),
             },
         ),
         #

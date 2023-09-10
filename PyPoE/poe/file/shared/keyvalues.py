@@ -81,7 +81,6 @@ Exceptions & Warnings
 # Imports
 # =============================================================================
 
-import os
 
 # Python
 import re
@@ -115,15 +114,11 @@ class DuplicateKeyWarning(ParserWarning):
     Warning for keys that are not explicitly specified to be overridden.
     """
 
-    pass
-
 
 class OverriddenKeyWarning(ParserWarning):
     """
     Warning for keys that are overridden during a merge.
     """
-
-    pass
 
 
 class AbstractKeyValueSection(dict):
@@ -164,8 +159,8 @@ class AbstractKeyValueSection(dict):
     def merge(self, other: "AbstractKeyValueSection"):
         if not isinstance(other, AbstractKeyValueSection):
             raise TypeError(
-                'Other must be a AbstractKeyValuesSection instance, got "%s" '
-                "instead." % other.__class__.__name__
+                'Other must be a AbstractKeyValuesSection instance, got "%s" instead.'
+                % other.__class__.__name__
             )
 
         for k, v in other.items():
@@ -293,7 +288,7 @@ class AbstractKeyValueFile(AbstractFile, defaultdict):
         raise NotImplementedError()
 
     def __repr__(self) -> str:
-        return '%(name)s(extends="%(extends)s", version="%(version)s", ' "keys=%(keys)s" % {
+        return '%(name)s(extends="%(extends)s", version="%(version)s", keys=%(keys)s' % {
             "name": self.__class__.__name__,
             "extends": self.extends,
             "version": self.version,
@@ -346,8 +341,8 @@ class AbstractKeyValueFile(AbstractFile, defaultdict):
                 self.merge(self._parent_file)
                 if self._parent_file.name != extend:
                     warnings.warn(
-                        'Parent file name "%s" doesn\'t match extended file '
-                        'name "%s"' % (self._parent_file.name, extend),
+                        'Parent file name "%s" doesn\'t match extended file name "%s"'
+                        % (self._parent_file.name, extend),
                         ParserWarning,
                     )
             elif self._parent_file_system:
@@ -414,8 +409,8 @@ class AbstractKeyValueFile(AbstractFile, defaultdict):
         """
         if not isinstance(other, self.__class__):
             raise ValueError(
-                "Can't merge only with classes with the same base class, got "
-                '"%s" instead' % other.__class__.__name__
+                'Can\'t merge only with classes with the same base class, got "%s" instead'
+                % other.__class__.__name__
             )
 
         for k, v in other.items():

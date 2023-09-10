@@ -45,7 +45,7 @@ Documentation
 
 .. autoclass:: OTFileCache
 
-"""
+"""  # noqa
 
 # =============================================================================
 # Imports
@@ -55,7 +55,11 @@ Documentation
 
 # 3rd-party
 
-from PyPoE.poe.file.shared.keyvalues import *
+from PyPoE.poe.file.shared.keyvalues import (
+    AbstractKeyValueFile,
+    AbstractKeyValueFileCache,
+    AbstractKeyValueSection,
+)
 
 # self
 from PyPoE.shared.decorators import doc

@@ -229,7 +229,7 @@ class AreaParser(parser.BaseParser):
                 {
                     "template": "loading_screen",
                     "format": lambda value: value.replace(
-                        "Art/Textures/Interface/Loadi" "ngImages/", ""
+                        "Art/Textures/Interface/LoadingImages/", ""
                     ).replace(".dds", ""),
                     "default": [],
                 },
@@ -500,7 +500,7 @@ class AreaParser(parser.BaseParser):
                 if map:
                     map = map[0]
                     # Just set the  main page to the landing page for the overall map.
-                    # Don't try to parse out map series when the column may not even match map series.
+                    # Don't try to parse out map series when the column may not even match.
                     data["main_page"] = map["BaseItemTypesKey"]["Name"]
                 elif data.get("tags") and "map" in data["tags"]:
                     map_version = None

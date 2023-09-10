@@ -32,12 +32,9 @@ See PyPoE/LICENSE
 # =============================================================================
 
 # Python
-import warnings
 from collections import OrderedDict, defaultdict
 from functools import partial
 
-from PyPoE.cli.core import Msg, console
-from PyPoE.cli.exporter import config
 from PyPoE.cli.exporter.wiki.handler import ExporterHandler, ExporterResult
 from PyPoE.cli.exporter.wiki.parser import BaseParser, TagHandler
 
@@ -49,7 +46,7 @@ from PyPoE.poe.text import parse_description_tags
 # Globals
 # =============================================================================
 
-__all__ = ["QuestRewardReader", "LuaHandler"]
+__all__ = ["LuaHandler"]
 
 # =============================================================================
 # Functions

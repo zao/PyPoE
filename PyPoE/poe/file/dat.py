@@ -723,9 +723,9 @@ class DatReader(ReprMixin):
                 cast = "I"
             if caststr.startswith("ref|out"):
                 cast_type = self.CastTypes.POINTER_OUT
-                # Double the extracted size and duplicate the cast letter to extract two bit-dependent
-                # values for size and pointer. The pointer is always zero and will be discarded when
-                # reading.
+                # Double the extracted size and duplicate the cast letter to extract two
+                # bit-dependent values for size and pointer. The pointer is always zero
+                # and will be discarded when reading.
                 size *= 2
                 cast *= 2
             elif caststr.startswith("ref|generic") or caststr.startswith("ref|self"):
@@ -804,10 +804,6 @@ class DatReader(ReprMixin):
                 if casts[0][0] == self.CastTypes.POINTER_LIST:
                     value.children = []
                     for i in range(0, data[0]):
-                        """if offset < self._data_offset_current:
-                        print(self._data_offset_current, offset)
-                        raise SpecificationError("Overlapping offset for cast %s:%s" % (parent.is_list, casts[0]))
-                        """
                         value.children.append(
                             self._cast_from_spec(
                                 specification, casts[1:], value, data_offset + i * casts[1:][0][1]
@@ -1089,7 +1085,7 @@ class RelationalReader(AbstractFileCache):
             try:
                 obj = other.index[key][obj]
             except KeyError:
-                msg = 'Did not find proper value for foreign key "%s" with ' 'value "%s" in %s' % (
+                msg = 'Did not find proper value for foreign key "%s" with value "%s" in %s' % (
                     key,
                     obj,
                     other.file_name,

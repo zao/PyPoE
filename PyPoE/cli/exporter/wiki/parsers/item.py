@@ -294,8 +294,7 @@ class ItemsHandler(ExporterHandler):
 
         parser.add_argument(
             "name",
-            help="Visible name (i.e. the name you see in game). Can be "
-            "specified multiple times.",
+            help="Visible name (i.e. the name you see in game). Can be specified multiple times.",
             nargs="*",
         )
 
@@ -338,8 +337,7 @@ class ItemsHandler(ExporterHandler):
         self.add_format_argument(parser)
         parser.add_argument(
             "--disable-english-file-links",
-            help="Disables putting english file links in inventory icon for non"
-            " English languages",
+            help="Disables putting english file links in inventory icon for non English languages",
             action="store_false",
             dest="english_file_link",
             default=True,
@@ -656,11 +654,15 @@ class ItemsParser(SkillParserShared):
             # =================================================================
             # One Hand Swords
             # =================================================================
-            "Metadata/Items/Weapons/OneHandWeapons/OneHandSwords/StormBladeOneHand": " (One Handed Sword)",
+            "Metadata/Items/Weapons/OneHandWeapons/OneHandSwords/StormBladeOneHand": (
+                " (One Handed Sword)"
+            ),
             # =================================================================
             # Two Hand Swords
             # =================================================================
-            "Metadata/Items/Weapons/TwoHandWeapons/TwoHandSwords/StormBladeTwoHand": " (Two Handed Sword)",
+            "Metadata/Items/Weapons/TwoHandWeapons/TwoHandSwords/StormBladeTwoHand": (
+                " (Two Handed Sword)"
+            ),
             # =================================================================
             # Boots
             # =================================================================
@@ -722,11 +724,19 @@ class ItemsParser(SkillParserShared):
             # Amulets
             # =================================================================
             "Metadata/Items/Amulets/Talismans/Talisman2_6_1": " (Fire Damage taken as Cold Damage)",
-            "Metadata/Items/Amulets/Talismans/Talisman2_6_2": " (Fire Damage taken as Lightning Damage)",
+            "Metadata/Items/Amulets/Talismans/Talisman2_6_2": (
+                " (Fire Damage taken as Lightning Damage)"
+            ),
             "Metadata/Items/Amulets/Talismans/Talisman2_6_3": " (Cold Damage taken as Fire Damage)",
-            "Metadata/Items/Amulets/Talismans/Talisman2_6_4": " (Cold Damage taken as Lightning Damage)",
-            "Metadata/Items/Amulets/Talismans/Talisman2_6_5": " (Lightning Damage taken as Cold Damage)",
-            "Metadata/Items/Amulets/Talismans/Talisman2_6_6": " (Lightning Damage taken as Fire Damage)",
+            "Metadata/Items/Amulets/Talismans/Talisman2_6_4": (
+                " (Cold Damage taken as Lightning Damage)"
+            ),
+            "Metadata/Items/Amulets/Talismans/Talisman2_6_5": (
+                " (Lightning Damage taken as Cold Damage)"
+            ),
+            "Metadata/Items/Amulets/Talismans/Talisman2_6_6": (
+                " (Lightning Damage taken as Fire Damage)"
+            ),
             "Metadata/Items/Amulets/Talismans/Talisman3_6_1": "  (Power Charge on Kill)",
             "Metadata/Items/Amulets/Talismans/Talisman3_6_2": "  (Frenzy Charge on Kill)",
             "Metadata/Items/Amulets/Talismans/Talisman3_6_3": "  (Endurance Charge on Kill)",
@@ -813,24 +823,38 @@ class ItemsParser(SkillParserShared):
             "Metadata/Items/MicrotransactionCurrency/MysteryBox2x4": " (2x4)",
             "Metadata/Items/MicrotransactionCurrency/MysteryBox3x2": " (3x2)",
             "Metadata/Items/MicrotransactionCurrency/MysteryBox3x3": " (3x3)",
-            "Metadata/Items/MicrotransactionItemEffects/Microtransaction"
-            "IronMaiden": " (helmet skin)",
-            "Metadata/Items/MicrotransactionItemEffects/Microtransaction"
-            "InfernalAxe": " (weapon skin)",
-            "Metadata/Items/MicrotransactionItemEffects/Microtransaction" "ColossusSword": "",
-            "Metadata/Items/MicrotransactionItemEffects/Microtransaction"
-            "LegionBoots": " (boots skin)",
-            "Metadata/Items/MicrotransactionItemEffects/Microtransaction"
-            "LegionGloves": " (gloves skin)",
-            "Metadata/Items/MicrotransactionItemEffects/Microtransaction"
-            "ScholarBoots": " (boots skin)",
+            "Metadata/Items/MicrotransactionItemEffects/MicrotransactionIronMaiden": (
+                " (helmet skin)"
+            ),
+            "Metadata/Items/MicrotransactionItemEffects/MicrotransactionInfernalAxe": (
+                " (weapon skin)"
+            ),
+            "Metadata/Items/MicrotransactionItemEffects/MicrotransactionColossusSword": "",
+            "Metadata/Items/MicrotransactionItemEffects/MicrotransactionLegionBoots": (
+                " (boots skin)"
+            ),
+            "Metadata/Items/MicrotransactionItemEffects/MicrotransactionLegionGloves": (
+                " (gloves skin)"
+            ),
+            "Metadata/Items/MicrotransactionItemEffects/MicrotransactionScholarBoots": (
+                " (boots skin)"
+            ),
             "Metadata/Items/Pets/DemonLion": " (pet)",
-            "Metadata/Items/MicrotransactionItemEffects/MicrotransactionHooded"
-            "Cloak": " (armour attachment)",
-            "Metadata/Items/MicrotransactionItemEffects/MicrotransactionArcaneCloak": " (armour attachment)",
-            "Metadata/Items/MicrotransactionItemEffects/MicrotransactionCrusaderHelmet": " (helmet skin)",
-            "Metadata/Items/MicrotransactionItemEffects/MicrotransactionCrusaderBoots": " (boots skin)",
-            "Metadata/Items/MicrotransactionItemEffects/MicrotransactionCrusaderGloves": " (gloves skin)",
+            "Metadata/Items/MicrotransactionItemEffects/MicrotransactionHoodedCloak": (
+                " (armour attachment)"
+            ),
+            "Metadata/Items/MicrotransactionItemEffects/MicrotransactionArcaneCloak": (
+                " (armour attachment)"
+            ),
+            "Metadata/Items/MicrotransactionItemEffects/MicrotransactionCrusaderHelmet": (
+                " (helmet skin)"
+            ),
+            "Metadata/Items/MicrotransactionItemEffects/MicrotransactionCrusaderBoots": (
+                " (boots skin)"
+            ),
+            "Metadata/Items/MicrotransactionItemEffects/MicrotransactionCrusaderGloves": (
+                " (gloves skin)"
+            ),
             "Metadata/Items/MicrotransactionCurrency/StashTab": " (consumable item)",
             # =================================================================
             # Quest items
@@ -880,12 +904,24 @@ class ItemsParser(SkillParserShared):
             # =================================================================
             # Amulets
             # =================================================================
-            "Metadata/Items/Amulets/Talismans/Talisman2_6_1": " (получаемый урон от огня становится уроном от холода)",
-            "Metadata/Items/Amulets/Talismans/Talisman2_6_2": " (получаемый урон от огня становится уроном от молнии)",
-            "Metadata/Items/Amulets/Talismans/Talisman2_6_3": " (получаемый урон от холода становится уроном от огня)",
-            "Metadata/Items/Amulets/Talismans/Talisman2_6_4": " (получаемый урон от холода становится уроном от молнии)",
-            "Metadata/Items/Amulets/Talismans/Talisman2_6_5": " (получаемый урон от молнии становится уроном от холода)",
-            "Metadata/Items/Amulets/Talismans/Talisman2_6_6": " (получаемый урон от молнии становится уроном от огня)",
+            "Metadata/Items/Amulets/Talismans/Talisman2_6_1": (
+                " (получаемый урон от огня становится уроном от холода)"
+            ),
+            "Metadata/Items/Amulets/Talismans/Talisman2_6_2": (
+                " (получаемый урон от огня становится уроном от молнии)"
+            ),
+            "Metadata/Items/Amulets/Talismans/Talisman2_6_3": (
+                " (получаемый урон от холода становится уроном от огня)"
+            ),
+            "Metadata/Items/Amulets/Talismans/Talisman2_6_4": (
+                " (получаемый урон от холода становится уроном от молнии)"
+            ),
+            "Metadata/Items/Amulets/Talismans/Talisman2_6_5": (
+                " (получаемый урон от молнии становится уроном от холода)"
+            ),
+            "Metadata/Items/Amulets/Talismans/Talisman2_6_6": (
+                " (получаемый урон от молнии становится уроном от огня)"
+            ),
             "Metadata/Items/Amulets/Talismans/Talisman3_6_1": " (заряд энергии при убийстве)",
             "Metadata/Items/Amulets/Talismans/Talisman3_6_2": " (заряд ярости при убийстве)",
             "Metadata/Items/Amulets/Talismans/Talisman3_6_3": " (заряд выносливости при убийстве)",
@@ -936,20 +972,23 @@ class ItemsParser(SkillParserShared):
             "Metadata/Items/MicrotransactionCurrency/MysteryBox2x4": " (2x4)",
             "Metadata/Items/MicrotransactionCurrency/MysteryBox3x2": " (3x2)",
             "Metadata/Items/MicrotransactionCurrency/MysteryBox3x3": " (3x3)",
-            "Metadata/Items/MicrotransactionItemEffects/Microtransaction" "IronMaiden": "",
-            "Metadata/Items/MicrotransactionItemEffects/Microtransaction"
-            "InfernalAxe": " (внешний вид оружия)",
-            "Metadata/Items/MicrotransactionItemEffects/Microtransaction" "ColossusSword": "",
-            "Metadata/Items/MicrotransactionItemEffects/Microtransaction"
-            "LegionBoots": " (микротранзакция)",
-            "Metadata/Items/MicrotransactionItemEffects/Microtransaction"
-            "LegionGloves": " (микротранзакция)",
+            "Metadata/Items/MicrotransactionItemEffects/MicrotransactionIronMaiden": "",
+            "Metadata/Items/MicrotransactionItemEffects/MicrotransactionInfernalAxe": (
+                " (внешний вид оружия)"
+            ),
+            "Metadata/Items/MicrotransactionItemEffects/MicrotransactionColossusSword": "",
+            "Metadata/Items/MicrotransactionItemEffects/MicrotransactionLegionBoots": (
+                " (микротранзакция)"
+            ),
+            "Metadata/Items/MicrotransactionItemEffects/MicrotransactionLegionGloves": (
+                " (микротранзакция)"
+            ),
             "Metadata/Items/MicrotransactionItemEffects/MasterArmour1Boots": " (микротранзакция)",
-            "Metadata/Items/MicrotransactionItemEffects/Microtransaction"
-            "SinFootprintsEffect": " (микротранзакция)",
+            "Metadata/Items/MicrotransactionItemEffects/MicrotransactionSinFootprintsEffect": (
+                " (микротранзакция)"
+            ),
             "Metadata/Items/Pets/DemonLion": " (питомец)",
-            "Metadata/Items/MicrotransactionItemEffects/Microtransaction"
-            "HeartWeapon2014": " (2014)",
+            "Metadata/Items/MicrotransactionItemEffects/MicrotransactionHeartWeapon2014": " (2014)",
             # =================================================================
             # Quest items
             # =================================================================
@@ -1035,12 +1074,24 @@ class ItemsParser(SkillParserShared):
             # =================================================================
             # Amulets
             # =================================================================
-            "Metadata/Items/Amulets/Talismans/Talisman2_6_1": " (Feuerschaden erlitten als Kälteschaden)",
-            "Metadata/Items/Amulets/Talismans/Talisman2_6_2": " (Feuerschaden erlitten als Blitzschaden)",
-            "Metadata/Items/Amulets/Talismans/Talisman2_6_3": " (Kälteschaden erlitten als Feuerschaden)",
-            "Metadata/Items/Amulets/Talismans/Talisman2_6_4": " (Kälteschaden erlitten als Blitzschaden)",
-            "Metadata/Items/Amulets/Talismans/Talisman2_6_5": " (Blitzschaden erlitten als Kälteschaden)",
-            "Metadata/Items/Amulets/Talismans/Talisman2_6_6": " (Blitzschaden erlitten als Feuerschaden)",
+            "Metadata/Items/Amulets/Talismans/Talisman2_6_1": (
+                " (Feuerschaden erlitten als Kälteschaden)"
+            ),
+            "Metadata/Items/Amulets/Talismans/Talisman2_6_2": (
+                " (Feuerschaden erlitten als Blitzschaden)"
+            ),
+            "Metadata/Items/Amulets/Talismans/Talisman2_6_3": (
+                " (Kälteschaden erlitten als Feuerschaden)"
+            ),
+            "Metadata/Items/Amulets/Talismans/Talisman2_6_4": (
+                " (Kälteschaden erlitten als Blitzschaden)"
+            ),
+            "Metadata/Items/Amulets/Talismans/Talisman2_6_5": (
+                " (Blitzschaden erlitten als Kälteschaden)"
+            ),
+            "Metadata/Items/Amulets/Talismans/Talisman2_6_6": (
+                " (Blitzschaden erlitten als Feuerschaden)"
+            ),
             "Metadata/Items/Amulets/Talismans/Talisman3_6_1": " (Energie-Ladung bei Tötung)",
             "Metadata/Items/Amulets/Talismans/Talisman3_6_2": " (Raserei-Ladung bei Tötung)",
             "Metadata/Items/Amulets/Talismans/Talisman3_6_3": " (Widerstands-Ladung bei Tötung)",
@@ -1082,16 +1133,20 @@ class ItemsParser(SkillParserShared):
             "Metadata/Items/MicrotransactionCurrency/MysteryBox2x4": " (2x4)",
             "Metadata/Items/MicrotransactionCurrency/MysteryBox3x2": " (3x2)",
             "Metadata/Items/MicrotransactionCurrency/MysteryBox3x3": " (3x3)",
-            "Metadata/Items/MicrotransactionItemEffects/Microtransaction" "IronMaiden": "",
-            "Metadata/Items/MicrotransactionItemEffects/Microtransaction"
-            "InfernalAxe": " (Weapon Skin)",
-            "Metadata/Items/MicrotransactionItemEffects/Microtransaction" "ColossusSword": "",
-            "Metadata/Items/MicrotransactionItemEffects/Microtransaction"
-            "LegionBoots": " (Mikrotransaktion)",
-            "Metadata/Items/MicrotransactionItemEffects/Microtransaction"
-            "LegionGloves": " (Mikrotransaktion)",
-            "Metadata/Items/MicrotransactionItemEffects/Microtransaction"
-            "ScholarBoots": " (Mikrotransaktion)",
+            "Metadata/Items/MicrotransactionItemEffects/MicrotransactionIronMaiden": "",
+            "Metadata/Items/MicrotransactionItemEffects/MicrotransactionInfernalAxe": (
+                " (Weapon Skin)"
+            ),
+            "Metadata/Items/MicrotransactionItemEffects/MicrotransactionColossusSword": "",
+            "Metadata/Items/MicrotransactionItemEffects/MicrotransactionLegionBoots": (
+                " (Mikrotransaktion)"
+            ),
+            "Metadata/Items/MicrotransactionItemEffects/MicrotransactionLegionGloves": (
+                " (Mikrotransaktion)"
+            ),
+            "Metadata/Items/MicrotransactionItemEffects/MicrotransactionScholarBoots": (
+                " (Mikrotransaktion)"
+            ),
             "Metadata/Items/Pets/DemonLion": " (Haustier)",
             # =================================================================
             # Quest items
@@ -1462,15 +1517,21 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionOrionWings1",
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionOrionWings2",
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionOrionWings3",
-        "Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionImaginationCharacterEffect1",
-        "Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionImaginationCharacterEffect2",
-        "Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionImaginationCharacterEffect3",
+        "Metadata/Items/MicrotransactionCharacterEffects/"
+        "MicrotransactionImaginationCharacterEffect1",
+        "Metadata/Items/MicrotransactionCharacterEffects/"
+        "MicrotransactionImaginationCharacterEffect2",
+        "Metadata/Items/MicrotransactionCharacterEffects/"
+        "MicrotransactionImaginationCharacterEffect3",
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionGlimmerwoodWings1",
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionGlimmerwoodWings2",
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionGlimmerwoodWings3",
-        "Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionCelestialTentaclesCharacterEffect1",
-        "Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionCelestialTentaclesCharacterEffect2",
-        "Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionCelestialTentaclesCharacterEffect3",
+        "Metadata/Items/MicrotransactionCharacterEffects/"
+        "MicrotransactionCelestialTentaclesCharacterEffect1",
+        "Metadata/Items/MicrotransactionCharacterEffects/"
+        "MicrotransactionCelestialTentaclesCharacterEffect2",
+        "Metadata/Items/MicrotransactionCharacterEffects/"
+        "MicrotransactionCelestialTentaclesCharacterEffect3",
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionMarkOfTheWarriorWings",
         "Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionFireBallFrame",
         "Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionLightningBallFrame",
@@ -1499,7 +1560,8 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionAltDunShield",
         "Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionDarkDeicidePortraitFrame",
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionKitavaWings",
-        "Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionBenevolenceCharacterEffect",
+        "Metadata/Items/MicrotransactionCharacterEffects/"
+        "MicrotransactionBenevolenceCharacterEffect",
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionEternalSyndicatePortalEffect",
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionHighPriestWeapon",
         "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionSurvivorsGoggles",
@@ -1509,8 +1571,10 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionChieftainBodyArmour",
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionReaperPortalEffect",
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionDoomGauntletShield",
-        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionChieftainApparitionPortalEffect",
-        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionInfernalSteamPoweredPortalEffect",
+        "Metadata/Items/MicrotransactionItemEffects/"
+        "MicrotransactionChieftainApparitionPortalEffect",
+        "Metadata/Items/MicrotransactionItemEffects/"
+        "MicrotransactionInfernalSteamPoweredPortalEffect",
         "Metadata/Items/Pets/Eyeball1",
         "Metadata/Items/Pets/Eyeball2",
         "Metadata/Items/Pets/Eyeball3",
@@ -1559,8 +1623,10 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionJingweiCharacterEffect",
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionJingweiFootprintsEffect",
         "Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionJingweiPortraitFrame",
-        "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionHasinaWhirlingBladesEffect"
-        "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionHasinaBladeVortexEffect",
+        (
+            "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionHasinaWhirlingBladesEffect"
+            "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionHasinaBladeVortexEffect"
+        ),
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionAuspiciousDragonWeaponEffect1",
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionAuspiciousDragonWeaponEffect2",
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionAuspiciousDragonWeaponEffect3",
@@ -1608,7 +1674,8 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionGoddessBodyArmourBlue",
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionGoddessBlueWeaponSkin",
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionGoddessBlueWeaponEffect",
-        "Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionGoddessBlueCharacterEffect",
+        "Metadata/Items/MicrotransactionCharacterEffects/"
+        "MicrotransactionGoddessBlueCharacterEffect",
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionGoddessBlueFootprintsEffect",
         "Metadata/Items/Pets/GoddessPet",
         "Metadata/Items/Pets/GoddessPremiumPet",
@@ -1648,7 +1715,8 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/Pets/HasinaPremiumExpiredPet",
         "Metadata/Items/Pets/AuspiciousDragonPremiumPet",
         "Metadata/Items/Pets/AuspiciousDragonPremiumExpiredPet",
-        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionAuspiciousBlueDragonWeaponEffect",
+        "Metadata/Items/MicrotransactionItemEffects/"
+        "MicrotransactionAuspiciousBlueDragonWeaponEffect",
         "Metadata/Items/Pets/Hundun",
         "Metadata/Items/Pets/Taowu",
         "Metadata/Items/Pets/Taotie",
@@ -1840,8 +1908,10 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/MicrotransactionCurrency/MicrotransactionTencentExpandInventory5to6",
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionTencentInfernalWeapon",
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionTencentMetamorphBrimmedHat",
-        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionTencentAnniversary3BackAttachment",
-        "Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentAnniversary3PortraitFrame",
+        "Metadata/Items/MicrotransactionItemEffects/"
+        "MicrotransactionTencentAnniversary3BackAttachment",
+        "Metadata/Items/MicrotransactionCharacterEffects/"
+        "MicrotransactionTencentAnniversary3PortraitFrame",
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionTencentCoreAtlasWings",
         "Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentGradingFrame1_1",
         "Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionTencentGradingFrame1_2",
@@ -2281,8 +2351,8 @@ class ItemsParser(SkillParserShared):
                 exp = exp_new
         if not exp_level:
             console(
-                'No experience progression found for "%s" - assuming max '
-                "level 1" % base_item_type["Name"],
+                'No experience progression found for "%s" - assuming max level 1'
+                % base_item_type["Name"],
                 msg=Msg.warning,
             )
             exp_total = [0]
@@ -3490,7 +3560,7 @@ class ItemsParser(SkillParserShared):
 
         # This is not perfect, but works currently.
         if ho["HideoutNPCsKey"]:
-            if base_item_type["Id"].startswith("Metadata/Items/Hideout/Hideout" "Wounded"):
+            if base_item_type["Id"].startswith("Metadata/Items/Hideout/HideoutWounded"):
                 name_fmt = self._LANG[self._language]["decoration_wounded"]
             else:
                 name_fmt = self._LANG[self._language]["decoration"]
@@ -3707,19 +3777,19 @@ class ItemsParser(SkillParserShared):
                 name = resolver(self, infobox, base_item_type, rr, language)
                 if name is None:
                     console(
-                        'Unresolved ambiguous item "%s" with name "%s". '
-                        "Skipping" % (m_id, infobox["name"]),
+                        'Unresolved ambiguous item "%s" with name "%s". Skipping'
+                        % (m_id, infobox["name"]),
                         msg=Msg.warning,
                     )
                     return
             else:
                 console(
-                    'Unresolved ambiguous item "%s" with name "%s". '
-                    "Skipping" % (m_id, infobox["name"]),
+                    'Unresolved ambiguous item "%s" with name "%s". Skipping'
+                    % (m_id, infobox["name"]),
                     msg=Msg.warning,
                 )
                 console(
-                    "No name conflict handler defined for item class id" ' "%s"' % cls_id,
+                    'No name conflict handler defined for item class id "%s"' % cls_id,
                     msg=Msg.warning,
                 )
                 return
@@ -3859,7 +3929,8 @@ class ItemsParser(SkillParserShared):
             language = self._language
         if map_series is None:
             if "Harbinger" in base_item_type["Id"]:
-                return f"{base_item_type['Name']} ({self._LANG[language][re.sub(r'^.*Harbinger', '', base_item_type['Id'])]})"
+                key = re.sub(r"^.*Harbinger", "", base_item_type["Id"])
+                return f"{base_item_type['Name']} ({self._LANG[language][key]})"
             else:
                 return f"{base_item_type['Name']}"
         elif "Harbinger" in base_item_type["Id"]:
@@ -3971,7 +4042,7 @@ class ItemsParser(SkillParserShared):
 
         if map_series.rowid <= 3:
             console(
-                "Only Betrayal and newer map series are supported by this " "function",
+                "Only Betrayal and newer map series are supported by this function",
                 msg=Msg.error,
             )
             return r
@@ -4007,8 +4078,7 @@ class ItemsParser(SkillParserShared):
         if parsed_args.store_images:
             if not parsed_args.convert_images or parsed_args.convert_images != ".png":
                 console(
-                    "Map images need to be processed and require conversion "
-                    "option to be '.png'.",
+                    "Map images need to be processed and require conversion option to be '.png'.",
                     msg=Msg.error,
                 )
                 return r
@@ -4080,8 +4150,10 @@ class ItemsParser(SkillParserShared):
                             if minimum == 0:
                                 minimum = i
 
-                    # The indexing isn't working well. It is using the entire mapped out object as keys.
-                    # We can hold off on all connections for now. It's fairly obvious that unique maps are connected to their normal counterpart.
+                    # The indexing isn't working well.
+                    # It is using the entire mapped out object as keys.
+                    # We can hold off on all connections for now. It's fairly obvious that unique
+                    # maps are connected to their normal counterpart.
                     # See if there's a unique map for this base map.
                     # unique_maps_area_index = self.rr['UniqueMaps.dat64'].index['WorldAreasKey']
                     # area = atlas_node['MapsKey']['Unique_WorldAreasKey']
@@ -4148,7 +4220,8 @@ class ItemsParser(SkillParserShared):
                     and base_item_type["Id"] not in MAPS_IN_SERIES_BUT_NOT_ON_ATLAS
                 ):
                     warnings.warn(
-                        f"{base_item_type['Name']} ({base_item_type['Id']}) is not currently on the Atlas"
+                        f"{base_item_type['Name']} ({base_item_type['Id']}) is not currently on the"
+                        " Atlas"
                     )
                     continue
 
@@ -4185,7 +4258,8 @@ class ItemsParser(SkillParserShared):
                     if 10 < starting_tier:
                         color = self._MAP_COLORS["high tier"]
 
-                    # This isn't quite how the game actually makes these map icons, so it isn't ideal, but it works.
+                    # This isn't quite how the game actually makes these map icons,
+                    # so it isn't ideal, but it works.
                     if color:
                         img = _colorize_rgba(img, "black", f"rgb({color})")
                         img.save(ico)

@@ -51,15 +51,15 @@ import struct
 import warnings
 from collections import OrderedDict
 
-# Python
-from logging import root
-
 from PyPoE.cli.core import console
 from PyPoE.poe.file.dat import DatFile, RelationalReader
 from PyPoE.poe.file.shared import AbstractFileReadOnly
 
 # self
 from PyPoE.shared.mixins import ReprMixin
+
+# Python
+
 
 # 3rd-party
 
@@ -266,22 +266,24 @@ class PSGFile(AbstractFileReadOnly):
         offset = 0
 
         # version?
-        version = struct.unpack_from("<B", data, offset=offset)[0]
+        struct.unpack_from("<B", data, offset=offset)[0]
         offset += 1
 
         unknown_length = 8
-        # We used to be able to fetch the count of throwaway unknown data from the start of the .psg, but it doesn't work
-        # as of 3.16. Manually, I looked for where there's a 32 bit unsigned int equal to 7, and ignored everything before it.
+        # We used to be able to fetch the count of throwaway unknown data from the start of the
+        # .psg, but it doesn't work as of 3.16. Manually, I looked for where there's a 32 bit
+        # unsigned int equal to 7, and ignored everything before it.
         # unknown_length = struct.unpack_from('<B', data, offset=offset)[0]
         offset += 1
 
-        unknown = struct.unpack_from("<" + "B" * unknown_length, data, offset=offset)
+        struct.unpack_from("<" + "B" * unknown_length, data, offset=offset)
         offset += 1 * unknown_length
 
         root_length = struct.unpack_from("<I", data, offset=offset)[0]
         if root_length > 1000:
             raise ValueError(
-                f"root_length is unrealistically large at {root_length}.\nStopping to prevent allocating too much memory"
+                f"root_length is unrealistically large at {root_length}.\nStopping to prevent"
+                " allocating too much memory"
             )
         offset += 4
         console(f"root_length is {root_length}")
@@ -294,8 +296,9 @@ class PSGFile(AbstractFileReadOnly):
 
         self.groups = []
         for i in range(0, group_length):
-            # This passive header format was divined by skipping root_length*4 bytes after the root_length integer,
-            #   and then figuring out which integer gave us a reasonable (aka small) passive_length value
+            # This passive header format was divined by skipping root_length*4 bytes after the
+            # root_length integer, and then figuring out which integer gave us a reasonable
+            # (aka small) passive_length value
             x, y, flag, unknown1, unknown2, passive_length = struct.unpack_from(
                 "<ffIIbI", data, offset=offset
             )
@@ -310,7 +313,8 @@ class PSGFile(AbstractFileReadOnly):
                 offset += 4 * 4
                 if connections_length > 1000:
                     warnings.warn(
-                        f"There are unrealistically many connections ({connections_length}) at {rowid}.\nSkipping to prevent allocating too much memory"
+                        f"There are unrealistically many connections ({connections_length}) at"
+                        f" {rowid}.\nSkipping to prevent allocating too much memory"
                     )
                 else:
                     connections = struct.unpack_from(

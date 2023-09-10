@@ -181,7 +181,8 @@ _custom_translation_file = None
 _hardcoded_translation_file = None
 
 StatValue = Union[int, Tuple[int, int]]
-"""Numeric value to interpolate into a stat string. If a tuple is supplied, a range will be displayed instead"""
+"""Numeric value to interpolate into a stat string. If a tuple is supplied,
+ a range will be displayed instead"""
 
 # =============================================================================
 # Warnings
@@ -816,8 +817,8 @@ class TranslationString(TranslationReprMixin):
 
                 if warn:
                     warnings.warn(
-                        'Can not safely find a value at index "%s", using '
-                        'range value "%s" instead' % (i, val),
+                        'Can not safely find a value at index "%s", using range value "%s" instead'
+                        % (i, val),
                         TranslationWarning,
                     )
 
@@ -973,7 +974,6 @@ class TranslationQuantifierHandler(TranslationReprMixin):
         return True
 
     def __hash__(self) -> int:
-        # return hash((tuple(self.registered_handlers.keys()), tuple(self.registered_handlers.values())))
         return hash(tuple(self.index_handlers.keys()))
 
     def _warn_uncaptured(self, name: str):
@@ -1526,7 +1526,8 @@ class TranslationFile(AbstractFileReadOnly):
                             else:
                                 TranslationRange(None, None, parent=ts, negated=negated)
                                 warnings.warn(
-                                    'Malformed quantifier string "%s" near index %s (parent %s). Assuming # instead.'
+                                    'Malformed quantifier string "%s" near index %s (parent %s).'
+                                    " Assuming # instead."
                                     % (matchstr, ts_match.start("minmax"), translation.ids),
                                     TranslationWarning,
                                 )
@@ -1593,7 +1594,7 @@ class TranslationFile(AbstractFileReadOnly):
                     # Attempt to remove the old one if it exists
                     try:
                         self.translations.remove(old_translation)
-                    except ValueError as e:
+                    except ValueError:
                         pass
 
                     return
@@ -1737,7 +1738,7 @@ class TranslationFile(AbstractFileReadOnly):
 
             # tr = self.translations_hash[tag][-1]
             for tr in self.translations_hash[tag]:
-                index = tr.ids.index(tag)
+                tr.ids.index(tag)
                 if tr not in trans_found:
                     trans_found.append(tr)
                     v = [values.get(id) for id in tr.ids]
@@ -2162,7 +2163,8 @@ def install_data_dependant_quantifiers(relational_reader):
         ),
     )
 
-    # I believe this is currently not right, as the handler actually uses a value located in additionalProperties of the item, and
+    # I believe this is currently not right, as the handler actually uses a value located in
+    # additionalProperties of the item, and
     # not in the mod itself. THe mod itself has min = max = 0.
     # TranslationQuantifier(
     #     id='passive_hash',

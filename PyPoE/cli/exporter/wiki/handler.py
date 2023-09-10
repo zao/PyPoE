@@ -30,7 +30,6 @@ See PyPoE/LICENSE
 # =============================================================================
 
 import os
-import re
 import sys
 import time
 from collections.abc import Iterable
@@ -45,7 +44,7 @@ from requests.exceptions import HTTPError
 # 3rd Party
 try:
     import mwclient
-except Exception as e:
+except Exception:
     mwclient = None
 
 # self
@@ -110,7 +109,7 @@ class WikiHandler:
             try:
                 self.handle_page(*args, **kwargs)
                 fail = 0
-            except mwclient.APIError as e:
+            except mwclient.APIError:
                 console("APIError occurred. Retrying - total attempts: %s" % fail, msg=Msg.error)
                 time.sleep(0.01 * 1.5**fail)
                 fail += 1
@@ -134,7 +133,7 @@ class WikiHandler:
                 try:
                     recache_page.touch()
                     recache_page.purge()
-                except:
+                except Exception:
                     console(f"Failed to clear page cache for {recache_page.name}", Msg.warning)
                 time.sleep(self.cmdargs.wiki_sleep)
         except Empty:
@@ -157,8 +156,8 @@ class WikiHandler:
                 success = True
                 if condition is None:
                     console(
-                        'No conditions given - page content on "%s" will be '
-                        "overriden" % pdata["page"],
+                        'No conditions given - page content on "%s" will be overriden'
+                        % pdata["page"],
                         msg=Msg.warning,
                     )
                     success = True
@@ -243,7 +242,8 @@ class WikiHandler:
                     console(response, msg=Msg.error)
         else:
             console(
-                f'No wiki page candidates found from {[page["page"] for page in pages]}, skipping this row.',
+                f'No wiki page candidates found from {[page["page"] for page in pages]}, skipping'
+                " this row.",
                 msg=Msg.warning,
             )
 
@@ -407,8 +407,7 @@ class ExporterHandler(BaseHandler):
         self.add_default_parsers(parser=a_name, cls=cls, func=cls.by_name, *args, **kwargs)
         a_name.add_argument(
             "name",
-            help="Visible name (i.e. the name you see in game). Can be "
-            "specified multiple times.",
+            help="Visible name (i.e. the name you see in game). Can be specified multiple times.",
             nargs="+",
         )
 
@@ -477,7 +476,7 @@ class ExporterHandler(BaseHandler):
         if wiki:
             if wiki_handler is not None:
                 if not isinstance(wiki_handler, WikiHandler):
-                    raise TypeError("wiki_handler must be a WikiHandler " "instance.")
+                    raise TypeError("wiki_handler must be a WikiHandler instance.")
             else:
                 wiki_handler = WikiHandler()
             wiki_handler.add_arguments(parser)
@@ -503,8 +502,10 @@ class ExporterHandler(BaseHandler):
         parser.add_argument(
             "-im",
             "--store-images",
-            help="If specified item 2d art images will be extracted. "
-            "Requires brotli to be installed.",
+            help=(
+                "If specified item 2d art images will be extracted. "
+                "Requires brotli to be installed."
+            ),
             action="store_true",
             dest="store_images",
         )
@@ -512,7 +513,10 @@ class ExporterHandler(BaseHandler):
         parser.add_argument(
             "-im-c",
             "--convert-images",
-            help="Convert extracted images. Can be any file type supported by PIL (default .png), or md5sum to just save a hash",
+            help=(
+                "Convert extracted images. Can be any file type supported by PIL (default .png), "
+                "or md5sum to just save a hash"
+            ),
             action="store",
             nargs="?",
             const=".png",
@@ -587,7 +591,10 @@ def add_parser_arguments(parser):
         "-w-d",
         "--wiki-diff",
         dest="wiki_diff",
-        help="For use with --wiki-dry-run. Instead of printing the new page, print a diff against the existing page.",
+        help=(
+            "For use with --wiki-dry-run. Instead of printing the new page, print a diff against"
+            " the existing page."
+        ),
         action="store_true",
     )
 

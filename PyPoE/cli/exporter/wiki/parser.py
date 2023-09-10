@@ -1282,7 +1282,7 @@ _inter_wiki_map = {
         #
         ("шок(?:|а|у|ом)", {"link": "Шок"}),
         (
-            "поджог(?:|а|е|и|у)|подожж(?:|ен|ён|ены|енного|ённого|енные|ённые|енным|ённым|енных|ённых)",
+            "поджог(?:|а|е|и|у)|подожж(?:|ен|ён|ены|енного|ённого|енные|ённые|енным|ённым|енных|ённых)",  # noqa
             {"link": "Поджог"},
         ),
         (
@@ -1490,7 +1490,7 @@ class BaseParser:
         if translation_file is None:
             if mod is None:
                 raise ValueError(
-                    "Can not automatically determine translation file if mod " "is not set"
+                    "Can not automatically determine translation file if mod is not set"
                 )
             else:
                 translation_file = get_translation_file_from_domain(mod["Domain"])
@@ -1598,7 +1598,8 @@ class BaseParser:
 
             if custom_result.missing_ids:
                 warnings.warn(
-                    f'Mod {mod["Id"] if mod is not None else "??" }: Missing translations for ids {custom_result.missing_ids} and values {custom_result.missing_values}',
+                    f'Mod {mod["Id"] if mod is not None else "??" }: Missing translations for ids'
+                    f" {custom_result.missing_ids} and values {custom_result.missing_values}",
                     MissingIdentifierWarning,
                 )
 

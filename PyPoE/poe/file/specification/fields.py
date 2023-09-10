@@ -252,8 +252,7 @@ class Specification(dict):
                     if field.key not in self:
                         raise SpecificationError(
                             SpecificationError.ERRORS.INVALID_FOREIGN_KEY_FILE,
-                            "%(dat_file)s->%(field)s->key: %(other)s is not in "
-                            "specification"
+                            "%(dat_file)s->%(field)s->key: %(other)s is not in specification"
                             % {
                                 "dat_file": file_name,
                                 "field": field_name,

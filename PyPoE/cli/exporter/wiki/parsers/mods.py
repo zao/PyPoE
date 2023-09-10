@@ -35,8 +35,6 @@ FIX the jewel generator (corrupted)
 # =============================================================================
 
 # Python
-import re
-import warnings
 from collections import OrderedDict, defaultdict
 from functools import partialmethod
 

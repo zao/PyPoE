@@ -126,27 +126,27 @@ def murmur2_64a(data, seed=0x1337B33F):
         h = h ^ k
         h = (h * m) & MASK
 
-    l = len(data_as_bytes) & 7
+    length = len(data_as_bytes) & 7
 
-    if l >= 7:
+    if length >= 7:
         h = h ^ (data_as_bytes[off + 6] << 48)
 
-    if l >= 6:
+    if length >= 6:
         h = h ^ (data_as_bytes[off + 5] << 40)
 
-    if l >= 5:
+    if length >= 5:
         h = h ^ (data_as_bytes[off + 4] << 32)
 
-    if l >= 4:
+    if length >= 4:
         h = h ^ (data_as_bytes[off + 3] << 24)
 
-    if l >= 3:
+    if length >= 3:
         h = h ^ (data_as_bytes[off + 2] << 16)
 
-    if l >= 2:
+    if length >= 2:
         h = h ^ (data_as_bytes[off + 1] << 8)
 
-    if l >= 1:
+    if length >= 1:
         h = h ^ data_as_bytes[off]
         h = (h * m) & MASK
 

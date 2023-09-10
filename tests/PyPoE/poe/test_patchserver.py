@@ -9,7 +9,7 @@ Overview
 +----------+------------------------------------------------------------------+
 | Version  | 1.0.0a0                                                          |
 +----------+------------------------------------------------------------------+
-| Revision | $Id$                                                             |
+| Revision | $Id$                  |
 +----------+------------------------------------------------------------------+
 | Author   | Omega_K2                                                         |
 +----------+------------------------------------------------------------------+
@@ -138,9 +138,9 @@ class TestPatch:
             )
 
     def test_version(self, patch):
-        assert _re_version.match(patch.version) is not None, (
-            "patch.version " "result is expected to match the x.x.x.x format"
-        )
+        assert (
+            _re_version.match(patch.version) is not None
+        ), "patch.version result is expected to match the x.x.x.x format"
 
 
 @pytest.mark.dependency(depends=["test_socket"])
