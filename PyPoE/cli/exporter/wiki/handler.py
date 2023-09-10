@@ -136,7 +136,7 @@ class WikiHandler:
                         recache_page.touch()
                         recache_page.purge()
                         break
-                    except:
+                    except Exception:
                         console(
                             f"Failed to clear page cache for {recache_page.name} ({retry} retries)",
                             Msg.warning,
