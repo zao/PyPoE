@@ -34,11 +34,8 @@ See PyPoE/LICENSE
 # =============================================================================
 
 # Python
-import os
-from tempfile import TemporaryDirectory
 
 # 3rd Party
-import pytest
 
 # self
 
@@ -46,7 +43,7 @@ import pytest
 # Setup
 # =============================================================================
 
-DDS_UNCOMPRESSED = "Art/Textures/Characters/Adventurer/" "adventurerPalid_colour.dds"
+DDS_UNCOMPRESSED = "Art/Textures/Characters/Adventurer/adventurerPalid_colour.dds"
 DDS_COMPRESSED = "Art/2DArt/BuffIcons/AssassinsMark.dds"
 
 # =============================================================================

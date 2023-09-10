@@ -31,7 +31,7 @@ See PyPoE/LICENSE
 # 3rd-party
 
 # self
-from PyPoE.poe.file.specification.fields import *
+from PyPoE.poe.file.specification.fields import Field, File, Specification, VirtualField
 
 # =============================================================================
 # Globals
@@ -61,7 +61,7 @@ specification = Specification(
             virtual_fields=(
                 VirtualField(
                     name="Empty",
-                    fields=(""),
+                    fields="",
                 ),
             ),
         ),

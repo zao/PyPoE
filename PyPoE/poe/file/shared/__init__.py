@@ -69,12 +69,13 @@ Exceptions & Warnings
 # =============================================================================
 
 # Python
-import abc
 import os
 import re
 from enum import IntEnum
 from io import BytesIO
 from typing import Any, Callable, Dict, List, Union
+
+from PyPoE.poe.file.file_system import FileSystemNode
 
 # self
 from PyPoE.shared.mixins import ReprMixin
@@ -85,7 +86,7 @@ from PyPoE.shared.mixins import ReprMixin
 
 __all__ = [
     "ParserError",
-    "ParserWarning" "AbstractFileReadOnly",
+    "ParserWarningAbstractFileReadOnly",
     "AbstractFile",
     "FILE_SYSTEM_TYPES",
     "AbstractFileSystemNode",
@@ -102,8 +103,6 @@ class ParserError(Exception):
     errors related to the parsing of files occur, such as malformed files.
     """
 
-    pass
-
 
 class ParserWarning(UserWarning):
     """
@@ -111,8 +110,6 @@ class ParserWarning(UserWarning):
     parsing process there are cases where issues are not severe enough to
     entirely fail the passing, but could pose serious problems.
     """
-
-    pass
 
 
 # =============================================================================

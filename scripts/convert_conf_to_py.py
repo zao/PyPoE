@@ -152,7 +152,7 @@ from collections import OrderedDict
 # 3rd-party
 
 # self
-from PyPoE.poe.file.specification.fields import *
+from PyPoE.poe.file.specification.fields import Field, File, Specification, VirtualField
 
 # =============================================================================
 # Globals

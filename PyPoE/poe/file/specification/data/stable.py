@@ -25,7 +25,7 @@ See PyPoE/LICENSE
 # =============================================================================
 
 # 3rd-party
-from PyPoE.poe.file.specification.fields import *
+from PyPoE.poe.file.specification.fields import Field, File, Specification, VirtualField
 
 # self
 
@@ -9896,7 +9896,10 @@ specification = Specification(
                     name="AllowedActiveSkillTypes",
                     type="ref|list|ref|out",
                     key="ActiveSkillType.dat",
-                    description="This support gem only supports active skills with at least one of these types",
+                    description=(
+                        "This support gem only supports active skills with at least one of these"
+                        " types"
+                    ),
                 ),
                 Field(
                     name="SupportGemLetter",
@@ -9916,12 +9919,16 @@ specification = Specification(
                     name="ExcludedActiveSkillTypes",
                     type="ref|list|ref|out",
                     key="ActiveSkillType.dat",
-                    description="This support gem does not support active skills with one of these types",
+                    description=(
+                        "This support gem does not support active skills with one of these types"
+                    ),
                 ),
                 Field(
                     name="SupportsGemsOnly",
                     type="bool",
-                    description="This support gem only supports active skills that come from gem items",
+                    description=(
+                        "This support gem only supports active skills that come from gem items"
+                    ),
                 ),
                 Field(
                     name="Unknown0",
@@ -12486,7 +12493,10 @@ specification = Specification(
                 Field(
                     name="Sound",
                     type="ref|string",
-                    description="Located in Audio/SoundEffects. Format has SG removed and $(#) replaced with the number",
+                    description=(
+                        "Located in Audio/SoundEffects. Format has SG removed and $(#) replaced"
+                        " with the number"
+                    ),
                 ),
                 Field(
                     name="Unknown0",
@@ -16882,15 +16892,6 @@ specification = Specification(
                     name="GenerationWeight",
                     fields=("GenerationWeight_TagsKeys", "GenerationWeight_Values"),
                     zip=True,
-                ),
-            ),
-        ),
-        "ModFamily.dat": File(
-            fields=(
-                Field(
-                    name="Id",
-                    type="ref|string",
-                    unique=True,
                 ),
             ),
         ),
@@ -21546,7 +21547,9 @@ specification = Specification(
                 Field(
                     name="PhysicalItemPoints",
                     type="int",
-                    description="Number of points the user gets back if they opt-out of physical items",
+                    description=(
+                        "Number of points the user gets back if they opt-out of physical items"
+                    ),
                 ),
                 Field(
                     name="Unknown3",
@@ -22416,7 +22419,9 @@ specification = Specification(
                 Field(
                     name="IsScalable",
                     type="bool",
-                    description='If not, displayed in advanced mod description as " — Unscalable Value"',
+                    description=(
+                        'If not, displayed in advanced mod description as " — Unscalable Value"'
+                    ),
                 ),
                 Field(
                     name="ContextFlags",

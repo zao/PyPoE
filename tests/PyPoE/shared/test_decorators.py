@@ -29,9 +29,6 @@ See PyPoE/LICENSE
 # Imports
 # =============================================================================
 
-# Python
-import sys
-
 # 3rd-party
 import pytest
 
@@ -69,16 +66,13 @@ def make_objects(uncallables=False):
 
         def __call__(self, *args, **kwargs):
             """__call__"""
-            pass
 
         def method(self, *args, **kwargs):
             """method"""
-            pass
 
         @classmethod
         def classmethod(cls, *args, **kwargs):
             """classmethod"""
-            pass
 
     data = [
         # callable object, instance object
@@ -127,7 +121,7 @@ class TestDeprecated:
             assert warn.message.args[0] == "Test"
 
     @pytest.mark.parametrize("callobj,obj", make_objects())
-    def test_message_arg(self, callobj, obj):
+    def test_message_arg_2(self, callobj, obj):
         deco = decorators.deprecated(doc_message="Test")
 
         self.run_test(deco, callobj, obj)
@@ -139,11 +133,11 @@ class TestDoc:
 
     @pytest.mark.parametrize("callobj,obj", make_objects(True))
     def test_simple(self, callobj, obj):
-        o = decorators.doc(callobj)
+        decorators.doc(callobj)
 
     @pytest.mark.parametrize("callobj,obj", make_objects(True))
     def test_empty_args(self, callobj, obj):
-        o = decorators.doc()(callobj)
+        decorators.doc()(callobj)
 
     @pytest.mark.parametrize("callobj,obj", make_objects(True))
     def test_arg_prepend(self, callobj, obj):

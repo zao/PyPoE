@@ -99,14 +99,14 @@ def _convert_column(table_name: str, column, name_generator: UnknownColumnNameGe
         if hasattr(column.references, "column"):
             spec += f"                key_id='{column.references.column}',\n"
     if column.unique:
-        spec += f"                unique=True,\n"
+        spec += "                unique=True,\n"
     if custom_attribute.enum:
         spec += f"                enum='{custom_attribute.enum}',\n"
     if column.file:
-        spec += f"                file_path=True,\n"
+        spec += "                file_path=True,\n"
         spec += f"                file_ext='{column.file}',\n"
     elif column.files:
-        spec += f"                file_path=True,\n"
+        spec += "                file_path=True,\n"
         spec += f"                file_ext='{', '.join(column.files)}',\n"
     if column.description:
         description = column.description.replace("'", '"')

@@ -34,10 +34,9 @@ See PyPoE/LICENSE
 # =============================================================================
 
 # Python
-from collections import OrderedDict
 
 # 3rd-party
-from PyPoE.poe.file.specification.fields import *
+from PyPoE.poe.file.specification.fields import Field, File, Specification, VirtualField
 
 # self
 
@@ -392,7 +391,10 @@ specification = Specification(
                 Field(
                     name="SkillTotemId",
                     type="int",
-                    description="This links to SkillTotems.dat, but the number mayexceed the number of entries; in that case it is player skill.",
+                    description=(
+                        "This links to SkillTotems.dat, but the number mayexceed the number of"
+                        " entries; in that case it is player skill."
+                    ),
                 ),
                 # key = SkillTotems.dat
                 # key_offset = 1
@@ -8552,7 +8554,10 @@ specification = Specification(
                 Field(
                     name="AllowedActiveSkillTypes",
                     type="ref|list|uint",
-                    description="This support gem only supports active skills with at least one of these types",
+                    description=(
+                        "This support gem only supports active skills with at least one of these"
+                        " types"
+                    ),
                 ),
                 # 3.0.0
                 Field(
@@ -8581,12 +8586,16 @@ specification = Specification(
                 Field(
                     name="ExcludedActiveSkillTypes",
                     type="ref|list|uint",
-                    description="This support gem does not support active skills with one of these types",
+                    description=(
+                        "This support gem does not support active skills with one of these types"
+                    ),
                 ),
                 Field(
                     name="SupportsGemsOnly",
                     type="bool",
-                    description="This support gem only supports active skills that come from gem items",
+                    description=(
+                        "This support gem only supports active skills that come from gem items"
+                    ),
                 ),
                 Field(
                     name="Unknown1",
@@ -8792,7 +8801,9 @@ specification = Specification(
                 Field(
                     name="CooldownBypassType",
                     type="int",
-                    description="Charge type to expend to bypass cooldown (Endurance, Frenzy, Power, none)",
+                    description=(
+                        "Charge type to expend to bypass cooldown (Endurance, Frenzy, Power, none)"
+                    ),
                 ),
                 # TODO: 3.0.0 rename to static stats or something like that
                 Field(
@@ -9632,7 +9643,10 @@ specification = Specification(
                 Field(
                     name="Sound",
                     type="ref|string",
-                    description="Located in Audio/SoundEffects. Format has SG removed and $(#) replaced with the number",
+                    description=(
+                        "Located in Audio/SoundEffects. Format has SG removed and $(#) replaced"
+                        " with the number"
+                    ),
                 ),
                 Field(
                     name="Unknown2",
@@ -17812,7 +17826,9 @@ specification = Specification(
                 Field(
                     name="PhysicalItemPoints",
                     type="int",
-                    description="Number of points the user gets back if they opt-out of physical items",
+                    description=(
+                        "Number of points the user gets back if they opt-out of physical items"
+                    ),
                 ),
                 Field(
                     name="Unknown6",

@@ -152,7 +152,6 @@ class BaseRecord(ReprMixin):
         ggpkfile : GGPKFile
             GGPKFile instance
         """
-        pass
 
     def write(self, ggpkfile):
         """
@@ -224,8 +223,8 @@ class GGPKRecord(BaseRecord):
         super().write(ggpkfile)
         # Should always be 2
         ggpkfile.write(struct.pack("<i", 2))
-        for i in range(0, len(offsets)):
-            ggpkfile.write(struct.unpack("<q", offsets[i]))
+        for i in range(0, len(self.offsets)):
+            ggpkfile.write(struct.unpack("<q", self.offsets[i]))
 
 
 class DirectoryRecordEntry(ReprMixin):
@@ -648,7 +647,7 @@ class GGPKFile(AbstractFileReadOnly, metaclass=InheritedDocStringsMeta):
             raise TypeError("other_ggpk must a parsed GGPK file instance")
 
         if not self.is_parsed or not other_ggpk.is_parsed:
-            raise ValueError("Both ggpk files must be parsed and have their " "directory build.")
+            raise ValueError("Both ggpk files must be parsed and have their directory build.")
 
         data = [{"ggpk": self}, {"ggpk": other_ggpk}]
 
@@ -732,8 +731,7 @@ class GGPKFile(AbstractFileReadOnly, metaclass=InheritedDocStringsMeta):
                     break
             if not isinstance(record, DirectoryRecord):
                 raise ParserError(
-                    "GGPKRecord does not contain a DirectoryRecord,\
-                    got %s"
+                    "GGPKRecord does not contain a DirectoryRecord,                    got %s"
                     % type(record)
                 )
 
@@ -748,13 +746,13 @@ class GGPKFile(AbstractFileReadOnly, metaclass=InheritedDocStringsMeta):
         else:
             root = parent
 
-        l = []
+        entries = []
         for entry in root.record.entries:
-            l.append((entry.offset, entry.hash, root))
+            entries.append((entry.offset, entry.hash, root))
 
         try:
             while True:
-                offset, hash, parent = l.pop()
+                offset, hash, parent = entries.pop()
                 try:
                     record = self.records[offset]
                 except KeyError:
@@ -770,7 +768,7 @@ class GGPKFile(AbstractFileReadOnly, metaclass=InheritedDocStringsMeta):
 
                     if node.is_directory:
                         for entry in record.entries:
-                            l.append((entry.offset, entry.hash, node))
+                            entries.append((entry.offset, entry.hash, node))
         except IndexError:
             pass
 
@@ -830,27 +828,3 @@ class GGPKFile(AbstractFileReadOnly, metaclass=InheritedDocStringsMeta):
     def read(self, file_path_or_raw, *args, **kwargs):
         super().read(file_path_or_raw, *args, **kwargs)
         self._file_path_or_raw = file_path_or_raw
-
-
-if __name__ == "__main__":
-    import cProfile
-
-    from line_profiler import LineProfiler
-
-    profiler = LineProfiler()
-    """profiler.add_function(GGPKFile.read)
-    profiler.add_function(GGPKFile._read_record)
-    for record in recordsc:
-        profiler.add_function(record.read)"""
-
-    ggpk = GGPKFile()
-    ggpk.read(r"M:\Path of Exile\Content.ggpk")
-    ggpk.directory_build()
-    print(ggpk[r"Bundles2\_.index.bin"].get_path())
-    # profiler.run("ggpk.read()")
-
-    # profiler.add_function(GGPKFile.directory_build)
-    # profiler.add_function(DirectoryNode.__init__)
-    # profiler.run("ggpk.directory_build()")
-    # ggpk.directory.directories[2].extract_to('N:/')
-    profiler.print_stats()

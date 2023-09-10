@@ -9,7 +9,7 @@ Overview
 +----------+------------------------------------------------------------------+
 | Version  | 1.0.0a0                                                          |
 +----------+------------------------------------------------------------------+
-| Revision | $Id$                                                             |
+| Revision | $Id$                  |
 +----------+------------------------------------------------------------------+
 | Author   | Omega_K2                                                         |
 +----------+------------------------------------------------------------------+
@@ -248,11 +248,11 @@ class TestDatValue:
             self.dv_basic.data_size
             self.dv_basic.data_start_offset
             self.dv_basic.data_end_offset
-        assert self.dv_basic.is_data == False, "Should not be data"
-        assert self.dv_basic.has_data == False, "Should not have any data"
-        assert self.dv_basic.is_pointer == False, "Should not be a pointer"
-        assert self.dv_basic.is_list == False, "Should not be a list"
-        assert self.dv_basic.is_parsed == True, "Should count as parsed value"
+        assert self.dv_basic.is_data is False, "Should not be data"
+        assert self.dv_basic.has_data is False, "Should not have any data"
+        assert self.dv_basic.is_pointer is False, "Should not be a pointer"
+        assert self.dv_basic.is_list is False, "Should not be a list"
+        assert self.dv_basic.is_parsed is True, "Should count as parsed value"
 
     def test_instance_raw(self):
         """
@@ -266,11 +266,11 @@ class TestDatValue:
             self.dv_raw.data_size
             self.dv_raw.data_start_offset
             self.dv_raw.data_end_offset
-        assert self.dv_raw.is_data == False, "Should not be data"
-        assert self.dv_raw.has_data == False, "Should not have any data"
-        assert self.dv_raw.is_pointer == False, "Should not be a pointer"
-        assert self.dv_raw.is_list == False, "Should not be a list"
-        assert self.dv_raw.is_parsed == False, "Should count as unparsed/binary value"
+        assert self.dv_raw.is_data is False, "Should not be data"
+        assert self.dv_raw.has_data is False, "Should not have any data"
+        assert self.dv_raw.is_pointer is False, "Should not be a pointer"
+        assert self.dv_raw.is_list is False, "Should not be a list"
+        assert self.dv_raw.is_parsed is False, "Should count as unparsed/binary value"
 
     def test_instance_pointer(self):
         """
@@ -289,22 +289,22 @@ class TestDatValue:
         assert (
             self.dv_pointer.data_end_offset == self.dv_pointer.value + self.dv_pointer.data_size
         ), "Should be the pointer + sizeof(child)"
-        assert self.dv_pointer.is_data == False, "Should not be data"
-        assert self.dv_pointer.has_data == True, "Should have data"
-        assert self.dv_pointer.is_pointer == True, "Should be a pointer"
-        assert self.dv_pointer.is_list == False, "Should not be a list"
-        assert self.dv_pointer.is_parsed == True, "Should count as parsed value"
+        assert self.dv_pointer.is_data is False, "Should not be data"
+        assert self.dv_pointer.has_data is True, "Should have data"
+        assert self.dv_pointer.is_pointer is True, "Should be a pointer"
+        assert self.dv_pointer.is_list is False, "Should not be a list"
+        assert self.dv_pointer.is_parsed is True, "Should count as parsed value"
 
         # Child Property tests
         with pytest.raises(TypeError):
             self.dv_pointer.child.data_size
             self.dv_pointer.child.data_start_offset
             self.dv_pointer.child.data_end_offset
-        assert self.dv_pointer.child.is_data == True, "Should be data"
-        assert self.dv_pointer.child.has_data == False, "Should not have any data"
-        assert self.dv_pointer.child.is_pointer == False, "Should not be a pointer"
-        assert self.dv_pointer.child.is_list == False, "Should not be a list"
-        assert self.dv_pointer.child.is_parsed == True, "Should count as parsed value"
+        assert self.dv_pointer.child.is_data is True, "Should be data"
+        assert self.dv_pointer.child.has_data is False, "Should not have any data"
+        assert self.dv_pointer.child.is_pointer is False, "Should not be a pointer"
+        assert self.dv_pointer.child.is_list is False, "Should not be a list"
+        assert self.dv_pointer.child.is_parsed is True, "Should count as parsed value"
 
     def test_instance_list(self):
         """
@@ -323,11 +323,11 @@ class TestDatValue:
         assert (
             self.dv_list.data_end_offset == self.dv_list.value[1] + self.dv_list.data_size
         ), "Should be the pointer + sizeof(child)"
-        assert self.dv_list.is_data == False, "Should not be data"
-        assert self.dv_list.has_data == True, "Should have data"
-        assert self.dv_list.is_pointer == False, "Should not be a pointer"
-        assert self.dv_list.is_list == True, "Should be a list"
-        assert self.dv_list.is_parsed == True, "Should count as parsed value"
+        assert self.dv_list.is_data is False, "Should not be data"
+        assert self.dv_list.has_data is True, "Should have data"
+        assert self.dv_list.is_pointer is False, "Should not be a pointer"
+        assert self.dv_list.is_list is True, "Should be a list"
+        assert self.dv_list.is_parsed is True, "Should count as parsed value"
 
         # Child property tests
         for i in range(0, len(self.dv_list.children)):
@@ -336,11 +336,11 @@ class TestDatValue:
                 child.data_size
                 child.data_start_offset
                 child.data_end_offset
-            assert child.is_data == True, "Should be data"
-            assert child.has_data == False, "Should not have any data"
-            assert child.is_pointer == False, "Should not be a pointer"
-            assert child.is_list == False, "Should not be a list"
-            assert child.is_parsed == True, "Should count as parsed value"
+            assert child.is_data is True, "Should be data"
+            assert child.has_data is False, "Should not have any data"
+            assert child.is_pointer is False, "Should not be a pointer"
+            assert child.is_list is False, "Should not be a list"
+            assert child.is_parsed is True, "Should count as parsed value"
 
     # comprehensions are performed on the values, not the datvalues themselves
 
@@ -389,11 +389,11 @@ def test_dat_file(testspec_dat_file):
         for test in test_data:
             assert row[test[0]] == test[2], "Value mismatch - int"
         assert row["ref|string"] == test_str, "Value mismatch - string"
-        l = row["ref|list|int"]
-        assert l[0] == test_list[0], "Value mismatch - list"
-        assert l[1] == test_list[1], "Value mismatch - list"
+        listref = row["ref|list|int"]
+        assert listref[0] == test_list[0], "Value mismatch - list"
+        assert listref[1] == test_list[1], "Value mismatch - list"
         # 0xFEFEFEFE is a magic key, so return -1
-        assert l[2] is None, "Value mismatch - list, special value"
+        assert listref[2] is None, "Value mismatch - list, special value"
         assert row["ref|ref|ref|int"] == 0x1337, "Value mismatch - nested pointers"
 
 
@@ -442,13 +442,13 @@ class TestSpecificationErrors:
     def test_runtime_missing_specification(self, testspec_dat_file):
         df = dat.DatFile("TestSpec.dat")
         with pytest.raises(dat.SpecificationError) as e:
-            dr = df.read(testspec_dat_file)
+            df.read(testspec_dat_file)
         assert e.value.code == dat.SpecificationError.ERRORS.RUNTIME_MISSING_SPECIFICATION
 
     def test_runtime_rowsize_mismatch(self, rr_temp_dir):
         df = dat.DatFile("Main.dat")
         with pytest.raises(dat.SpecificationError) as e:
-            dr = df.read(
+            df.read(
                 os.path.join(rr_temp_dir, "Data", "Main.dat"),
                 specification=load(os.path.join(spec_dir, "runtime_rowsize_mismatch.py")),
             )

@@ -29,12 +29,8 @@ See PyPoE/LICENSE
 # Imports
 # =============================================================================
 
-# 3rd-party
-import pytest
-
 # Python
 from PyPoE.poe.file import psg
-from PyPoE.poe.file.dat import DatFile
 
 # self
 

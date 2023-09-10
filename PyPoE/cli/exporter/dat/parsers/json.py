@@ -34,7 +34,7 @@ import argparse
 from json import dump
 
 # self
-from PyPoE.cli.core import Msg, console
+from PyPoE.cli.core import console
 from PyPoE.cli.exporter.dat.handler import DatExportHandler
 
 # =============================================================================
@@ -66,8 +66,10 @@ class JSONExportHandler(DatExportHandler):
 
         self.json.add_argument(
             "--use-object-format",
-            help="Export files as objects as row and header instead of lists. "
-            "Will significantly increase the the size of the export",
+            help=(
+                "Export files as objects as row and header instead of lists. "
+                "Will significantly increase the the size of the export"
+            ),
             dest="use_object_format",
             action="store_true",
         )
@@ -81,8 +83,10 @@ class JSONExportHandler(DatExportHandler):
 
         self.json.add_argument(
             "--force-ascii-format",
-            help="Will enforce the json file to be written as ascii, escaping "
-            "unicode characters using python escapes accordingly",
+            help=(
+                "Will enforce the json file to be written as ascii, escaping "
+                "unicode characters using python escapes accordingly"
+            ),
             dest="ascii",
             action="store_true",
         )

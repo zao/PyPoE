@@ -89,7 +89,7 @@ class TestGetModFromId:
 
     def test(self):
         assert self.mod_list[0] == mods.get_mod_from_id("0", self.mod_list)
-        assert None == mods.get_mod_from_id("does_not_exist", self.mod_list)
+        assert mods.get_mod_from_id("does_not_exist", self.mod_list) is None
 
 
 class TestGetSpawnChanceCalculator:

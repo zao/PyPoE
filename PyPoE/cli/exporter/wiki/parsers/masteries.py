@@ -48,7 +48,6 @@ from functools import partialmethod
 from PyPoE.cli.core import Msg, console
 from PyPoE.cli.exporter.wiki import parser
 from PyPoE.cli.exporter.wiki.handler import ExporterHandler, ExporterResult
-from PyPoE.poe.file.psg import PSGFile
 
 # 3rd-party
 
@@ -385,12 +384,10 @@ class MasteryGroupParser(parser.BaseParser):
                 if mastery_grp[icon_field].startswith("Art/2DArt/SkillIcons/passives/"):
                     if icon[-2] == "MasteryPassiveIcons":
                         data["icon"] = icon[-1]
-                        pass
                     else:
                         warnings.warn(f"Icon path is not as expected for {mastery_grp['Id']}")
                 else:
                     data["icon"] = icon[-1]
-                    pass
             else:
                 data["icon"] = ""
                 warnings.warn(f"Icon path file not found for {mastery_grp['Id']}: {data['name']}")

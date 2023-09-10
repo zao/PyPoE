@@ -48,7 +48,6 @@ from enum import Enum
 
 # self
 from PyPoE.poe.constants import RARITY, SOCKET_COLOUR
-from PyPoE.poe.file.dat import RelationalReader
 
 # 3rd-party
 
@@ -452,22 +451,22 @@ class ItemParser:
 
     _re_help_text_item_name = re.compile("(Jewel|Map)", re.UNICODE)
 
-    _re_is_map = re.compile("(" "Map" ")", re.UNICODE)
+    _re_is_map = re.compile("(Map)", re.UNICODE)
 
     _re_is_vaal_fragment = re.compile(
-        "(" "Sacrifice at (Dawn|Midnight|Noon|Dusk)|" "Mortal (Rage|Hope|Ignorance|Grief)" ")",
+        "(Sacrifice at (Dawn|Midnight|Noon|Dusk)|Mortal (Rage|Hope|Ignorance|Grief))",
         re.UNICODE,
     )
 
-    _re_is_jewel = re.compile("(" "(Viridian|Cobalt|Crimson) Jewel" ")", re.UNICODE)
+    _re_is_jewel = re.compile("((Viridian|Cobalt|Crimson) Jewel)", re.UNICODE)
 
     _re_prefix = re.compile(
-        "^(?P<prefix>[\S]+) .+$",
+        r"^(?P<prefix>[\S]+) .+$",
         re.UNICODE,
     )
 
     _re_suffix = re.compile(
-        "^.+ (?P<suffix>of [\S]+)$",
+        r"^.+ (?P<suffix>of [\S]+)$",
         re.UNICODE,
     )
 
