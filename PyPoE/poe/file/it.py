@@ -49,15 +49,16 @@ Documentation
 
 # 3rd-party
 
+from PyPoE.poe.file.shared.keyvalues import *
+
 # self
 from PyPoE.shared.decorators import doc
-from PyPoE.poe.file.shared.keyvalues import *
 
 # =============================================================================
 # Globals
 # =============================================================================
 
-__all__ = ['ITFile', 'ITFileCache']
+__all__ = ["ITFile", "ITFileCache"]
 
 # =============================================================================
 # Classes
@@ -65,25 +66,25 @@ __all__ = ['ITFile', 'ITFileCache']
 
 
 class BaseKeyValueSection(AbstractKeyValueSection):
-    NAME = 'Base'
-    ORDERED_HASH_KEYS = {'tag'}
+    NAME = "Base"
+    ORDERED_HASH_KEYS = {"tag"}
 
 
 class ModsKeyValueSection(AbstractKeyValueSection):
-    NAME = 'Mods'
-    ORDERED_HASH_KEYS = {'enable_rarity'}
+    NAME = "Mods"
+    ORDERED_HASH_KEYS = {"enable_rarity"}
 
 
 class SocketsKeyValueSection(AbstractKeyValueSection):
-    NAME = 'Sockets'
+    NAME = "Sockets"
 
 
 class StatsKeyValueSection(AbstractKeyValueSection):
-    NAME = 'Stats'
+    NAME = "Stats"
 
 
 class ImprintKeyValueSection(AbstractKeyValueSection):
-    NAME = 'Imprint'
+    NAME = "Imprint"
 
 
 @doc(append=AbstractKeyValueFile)
@@ -92,15 +93,18 @@ class ITFile(AbstractKeyValueFile):
     Representation of a .it file.
     """
 
-    SECTIONS = dict((s.NAME, s) for s in [
-        BaseKeyValueSection,
-        ModsKeyValueSection,
-        SocketsKeyValueSection,
-        StatsKeyValueSection,
-        ImprintKeyValueSection,
-    ])
+    SECTIONS = dict(
+        (s.NAME, s)
+        for s in [
+            BaseKeyValueSection,
+            ModsKeyValueSection,
+            SocketsKeyValueSection,
+            StatsKeyValueSection,
+            ImprintKeyValueSection,
+        ]
+    )
 
-    EXTENSION = '.it'
+    EXTENSION = ".it"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -111,4 +115,5 @@ class ITFileCache(AbstractKeyValueFileCache):
     """
     Cache for ITFile instances.
     """
+
     FILE_TYPE = ITFile
