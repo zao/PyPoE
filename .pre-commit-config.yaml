@@ -26,5 +26,6 @@ repos:
     rev: 6.1.0
     hooks:
       - id: flake8
+        exclude: ^PyPoE/ui/
         entry: flake8
         name: "Linting using Flake8"
