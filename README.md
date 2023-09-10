@@ -36,10 +36,30 @@ More detailed docs: [http://omegak2.net/poe/PyPoE/](http://omegak2.net/poe/PyPoE
     - In the cloned folder run - `poetry install` to set up all dependencies and install project.
     - To run under the virtual environment that Poetry will make for you simply call `poetry shell` once for the lifetime of your terminal session. For the remainder of this documentation just assume you should always be in the active venv which Poetry will active for you using that command.
     - To exit the virtual environment Poetry activated simply type `deactivate` in the terminal window where you ran `poetry shell`.
+    - to activate pre-commit hooks for your local repository, run `pre-commit install` while in the poetry shell.
 
 4. Testing:
 
     `pytest -s -v .`
+
+5. Running:
+
+    - Configure output directory:\
+    `pypoe_exporter config set out_dir ../out/`
+
+    - Configure temp directory (images will be output here):\
+    `pypoe_exporter config set temp_dir ../tmp/`
+
+    - Configure ggpk path:\
+    `pypoe_exporter config set ggpk_path '.../Path of Exile/'`
+
+    - Perform dry run:\
+    `./export.bash --threads 30 -u <wiki-username> -p <wiki-password> --dry-run`
+
+    - Check exported data in the output directory, especially the `./diff/` subdirectory which will show all changes that would made to the wiki
+
+    - Update the wiki (Caution! Updates the live site!):\
+    `./export.bash --threads 30 -u <wiki-username> -p <wiki-password> --export`
 
 ## Setting up on VSCode
 
@@ -55,7 +75,6 @@ VSCode has some great integrations with all this tooling. In order for you to be
 ..Activated by `CTRL(CMD) + SHIFT + P` and by typing `> Open user settings (JSON)`. Ensure you have the below in your settings JSON.
 ```json
     ...
-    "python.formatting.provider": "black",
     "[python]": {
         "editor.defaultFormatter": "ms-python.black-formatter",
         "editor.formatOnSave": true,
@@ -63,16 +82,40 @@ VSCode has some great integrations with all this tooling. In order for you to be
             "source.organizeImports": true,
         },
     },
+    "flake8.args": [
+        "--config",
+        ".flake8"
+    ],
     "editor.formatOnSave": true,
-    "python.linting.flake8Enabled": true,
-    "python.linting.enabled": true,
     ...
 ```
 
 ## Common problems & advisory
 --------
-* **UI will be reworked for bundle support and is not functional at the moment**
-* On Windows 10 machines there seems to a be bug in the Python installation that prevents arguments being passed to the command line interface; you can identify this issue if you get a "help" listing if you supplied more then 1 argument. See [this on stack overflow](https://stackoverflow.com/questions/2640971/windows-is-not-passing-command-line-arguments-to-python-programs-executed-from-t) for possible solutions
+* **GUI code**: UI will be reworked for bundle support and is not functional at the moment
+
+* **Running on Windows**: On Windows 10 machines there seems to a be bug in the Python installation that prevents arguments being passed to the command line interface; you can identify this issue if you get a "help" listing if you supplied more then 1 argument. See [this on stack overflow](https://stackoverflow.com/questions/2640971/windows-is-not-passing-command-line-arguments-to-python-programs-executed-from-t) for possible solutions
+
+* **Merging older branches**: merging branches created before the repository was formatted will result in a lot of merge conflicts. The following process can help to reduce conflicts:
+```
+# merge the last commit before the repository was formatted
+git merge 0f61251e463b3a43780a0e019e008c9ab0cdd35a
+
+# follow the steps above to setup to setup poetry,
+# or if poetry has already been set up in this directory
+# just run:
+poetry shell
+
+# run the formatter on the merged code and create a new commit:
+pre-commit run --all-files
+git commit -am 'format all'
+
+# merge with the formatted commit
+git merge 1319a525c2f165c6b0f9f389717e8bce35e00083
+
+# merge with the target branch
+git merge dev
+```
 
 
 ## Further Reading
