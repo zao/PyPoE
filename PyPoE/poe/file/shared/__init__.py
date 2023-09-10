@@ -73,9 +73,10 @@ import os
 import re
 from enum import IntEnum
 from io import BytesIO
-from typing import Any, Callable, Dict, List, Union
+from typing import TYPE_CHECKING, Any, Callable, Dict, List, Union
 
-from PyPoE.poe.file.file_system import FileSystemNode
+if TYPE_CHECKING:
+    from PyPoE.poe.file.file_system import FileSystemNode
 
 # self
 from PyPoE.shared.mixins import ReprMixin
