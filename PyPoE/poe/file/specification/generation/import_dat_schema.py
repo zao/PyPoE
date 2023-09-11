@@ -51,7 +51,7 @@ def _load_dat_schema_tables(schema_json: str):
 def _convert_tables(tables: list) -> str:
     spec = ""
     converted_tables = [_convert_table(table) for table in tables]
-    with open("template.py", "r") as f:
+    with open("template.txt", "r") as f:
         f.readline()
         for line in f:
             if line == "    # <specification>\n":
@@ -94,7 +94,7 @@ def _convert_column(table_name: str, column, name_generator: UnknownColumnNameGe
     spec = "            Field(\n"
     spec += f"                name='{column_name}',\n"
     spec += f"                type='{column_type}',\n"
-    if column.references:
+    if column.references and not column.type == "enumrow":
         spec += f"                key='{column.references.table}.dat',\n"
         if hasattr(column.references, "column"):
             spec += f"                key_id='{column.references.column}',\n"
@@ -129,8 +129,9 @@ _TYPE_MAP = {
     "string": "ref|string",
     "i32": "int",
     "f32": "float",
-    "foreignrow": "ulong",
+    "foreignrow": "ref|out",
     "row": "ref|generic",
+    "enumrow": "int",
 }
 
 
