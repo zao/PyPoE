@@ -60,6 +60,7 @@ from functools import partial
 
 # Python
 from hashlib import md5
+from typing import Callable
 
 # 3rd-party
 from dds import decode_dds
@@ -1733,7 +1734,7 @@ class TagHandler:
 class WikiCondition:
     COPY_KEYS = ()
     COPY_MATCH = None
-    COPY_CONDITIONS = {}
+    COPY_CONDITIONS: dict[str, Callable[[str, str], bool]] = {}
 
     NAME = NotImplemented
     MATCH = None
@@ -1771,7 +1772,7 @@ class WikiCondition:
                     if self.COPY_MATCH.match(k):
                         self.data[k] = v
 
-            for k, condition in self.COPY_CONDITIONS:
+            for k, condition in self.COPY_CONDITIONS.items():
                 if k in self.template_arguments["kwargs"] and condition(
                     self.template_arguments["kwargs"][k], self.data.get(k, None)
                 ):
@@ -1801,7 +1802,7 @@ class WikiCondition:
             ordered_dict=self.data,
         )
 
-    def tagsets_equal(page_value, new_value):
+    def tagsets_equal(page_value: str, new_value: str):
         return new_value and set(page_value.split(", ")) == set(new_value.split(", "))
 
 
