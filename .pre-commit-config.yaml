@@ -1,0 +1,31 @@
+default_language_version:
+  python: python3
+default_stages:
+  - commit
+  - push
+repos:
+  # Pre-commit and plugins
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: no-commit-to-branch
+        name: Don't commit to master
+  # Formatters
+  - repo: https://github.com/psf/black
+    rev: 23.9.1
+    hooks:
+      - id: black
+  - repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        args: ["--profile", "black", "--filter-files"]
+        name: Sort imports with isort
+  # Linter
+  - repo: https://github.com/pycqa/flake8
+    rev: 6.1.0
+    hooks:
+      - id: flake8
+        exclude: ^PyPoE/ui/
+        entry: flake8
+        name: "Linting using Flake8"
