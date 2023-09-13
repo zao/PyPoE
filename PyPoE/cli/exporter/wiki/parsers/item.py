@@ -2627,7 +2627,7 @@ class ItemsParser(SkillParserShared):
                 full_result=True,
                 lang=self._language,
             )
-            lines = tr.lines
+            lines = [" ".join(line.splitlines()) for line in tr.lines]
             infobox["tattoo_stat_text"] = "\n".join(lines)
             if override["Effect"]:
                 skill = override["Effect"]["GrantedEffect"]
