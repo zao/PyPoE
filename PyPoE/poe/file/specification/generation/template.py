@@ -26,7 +26,7 @@ See PyPoE/LICENSE
 # =============================================================================
 
 # 3rd-party
-from PyPoE.poe.file.specification.fields import *
+from PyPoE.poe.file.specification.fields import File, Specification
 
 # self
 
@@ -34,10 +34,13 @@ from PyPoE.poe.file.specification.fields import *
 # Globals
 # =============================================================================
 
-__all__ = ['specification', ]
+__all__ = [
+    "specification",
+]
 
-specification = Specification({
-    'SkillTotems.dat': File(
-    ),
-    # <specification>
-})
+specification = Specification(
+    {
+        "SkillTotems.dat": File(),
+        # <specification>
+    }
+)
