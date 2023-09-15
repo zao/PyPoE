@@ -29,9 +29,6 @@ The data is a continuous amount of binary data; reading values form there is
 generally done by pointers (int) or list pointers (size, int) from the
 table-data.
 
-A list of default specification is included with PyPoE; to set the correct
-version :func:`set_default_spec` may be used.
-
 Agreement
 ===============================================================================
 
@@ -53,8 +50,6 @@ Public API
 .. autoclass:: DatFile
 
 .. autoclass:: RelationalReader
-
-.. autofunction:: set_default_spec
 
 Internal API
 -------------------------------------------------------------------------------
@@ -79,8 +74,9 @@ from io import BytesIO
 from PyPoE.poe import constants
 from PyPoE.poe.file.shared import AbstractFileReadOnly
 from PyPoE.poe.file.shared.cache import AbstractFileCache
-from PyPoE.poe.file.specification import load
+from PyPoE.poe.file.specification.data import stable
 from PyPoE.poe.file.specification.errors import SpecificationError, SpecificationWarning
+from PyPoE.poe.file.specification.fields import Specification
 
 # self
 from PyPoE.shared.decorators import deprecated, doc
@@ -93,13 +89,10 @@ from PyPoE.shared.mixins import ReprMixin
 # Globals
 # =============================================================================
 
-_default_spec = None
-
 __all__ = [
     "DAT_FILE_MAGIC_NUMBER",
     "DatFile",
     "RelationalReader",
-    "set_default_spec",
 ]
 
 DAT_FILE_MAGIC_NUMBER = b"\xBB\xbb\xBB\xbb\xBB\xbb\xBB\xbb"
@@ -525,7 +518,7 @@ class DatReader(ReprMixin):
         file_name,
         *args,
         use_dat_value=True,
-        specification=None,
+        specification: Specification,
         auto_build_index=False,
         x64=False,
     ):
@@ -570,27 +563,21 @@ class DatReader(ReprMixin):
             _file_name = file_name
 
         self.use_dat_value = use_dat_value
-
         # Process specification
         if specification is None:
-            if _file_name in _default_spec:
-                specification = _default_spec[_file_name]
-            else:
-                raise SpecificationError(
-                    SpecificationError.ERRORS.RUNTIME_MISSING_SPECIFICATION,
-                    'No specification for "%s"' % file_name,
-                )
-        else:
-            specification = specification[_file_name]
-        self.specification = specification
+            raise SpecificationError(
+                SpecificationError.ERRORS.RUNTIME_MISSING_SPECIFICATION,
+                'No specification for "%s"' % file_name,
+            )
+        self.specification = specification[_file_name]
 
         # Prepare the casts
         self.table_columns = OrderedDict()
         self.cast_size = 0
         self.cast_spec = []
         self.cast_row = []
-        for i, key in enumerate(specification.columns_data):
-            k = specification.fields[key]
+        for i, key in enumerate(self.specification.columns_data):
+            k = self.specification.fields[key]
             self.table_columns[key] = {"index": i, "section": k}
             casts = []
             remainder = k.type
@@ -609,7 +596,7 @@ class DatReader(ReprMixin):
         self.cast_row = "<" + "".join(self.cast_row)
 
         for var in ("columns", "columns_all", "columns_zip", "columns_data", "columns_unique"):
-            setattr(self, var, getattr(specification, var))
+            setattr(self, var, getattr(self.specification, var))
 
     def __iter__(self):
         return iter(self.table_data)
@@ -995,7 +982,7 @@ class DatFile(AbstractFileReadOnly):
         reference to the DatReader instance once :meth:`read` has been called
     """
 
-    def __init__(self, file_name):
+    def __init__(self, file_name, specification):
         """
         Parameters
         ----------
@@ -1004,12 +991,13 @@ class DatFile(AbstractFileReadOnly):
         """
         self._file_name = file_name
         self.reader = None
+        self.specification = specification
 
     def __repr__(self):
         return 'DatFile<%s>(file_name="%s")' % (hex(id(self)), self._file_name)
 
     def _read(self, buffer, *args, **kwargs):
-        self.reader = DatReader(self._file_name, **kwargs)
+        self.reader = DatReader(self._file_name, specification=self.specification, **kwargs)
         self.reader.read(buffer.read())
 
         return self.reader
@@ -1054,13 +1042,20 @@ class RelationalReader(AbstractFileCache):
         language subdirectory in data directory
     """,
     )
-    def __init__(self, raise_error_on_missing_relation=False, language=None, *args, **kwargs):
+    def __init__(
+        self,
+        raise_error_on_missing_relation=False,
+        specification: Specification = stable.specification,
+        language=None,
+        *args,
+        **kwargs,
+    ):
         self.raise_error_on_missing_relation = raise_error_on_missing_relation
         if language == "English" or language is None:
             self._language = ""
         else:
             self._language = language + "/"
-        super().__init__(*args, **kwargs)
+        super().__init__(instance_options={"specification": specification}, *args, **kwargs)
 
     def __getitem__(self, item):
         """
@@ -1218,33 +1213,3 @@ class RelationalReader(AbstractFileCache):
                     )
 
         return df
-
-
-# =============================================================================
-# Functions
-# =============================================================================
-
-
-def set_default_spec(version=constants.VERSION.DEFAULT, reload=False):
-    """
-    Sets the default specification to use for the dat reader.
-
-    See :py:mod:`PyPoE.poe.file.specification.__init__` for more info
-
-    Parameters
-    ----------
-    version : constants.VERSION
-        Version of the game to load the default specification for.
-    reload : bool
-        Whether to reload the version.
-    """
-    global _default_spec
-    _default_spec = load(version=version, reload=reload)
-
-
-# =============================================================================
-# Init
-# =============================================================================
-
-
-set_default_spec()
