@@ -87,7 +87,7 @@ def load(path=None, version=VERSION.DEFAULT, reload=False, validate=None):
         if validate is None:
             validate = False
 
-        if version in (VERSION.STABLE, VERSION.BETA, VERSION.ALPHA):
+        if version in (VERSION.STABLE, VERSION.BETA, VERSION.ALPHA, VERSION.GENERATED):
             module = importlib.import_module(
                 "PyPoE.poe.file.specification.data.%s" % version.name.lower()
             )
