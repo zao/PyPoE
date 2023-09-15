@@ -549,7 +549,7 @@ class DatReader(ReprMixin):
         self.data_offset = 0
         self.file_length = 0
         self._file_raw = b""
-        self.table_data = []
+        self.table_data: list[DatRecord] = []
 
         self.table_length = 0
         self.table_record_length = 0
@@ -1028,7 +1028,7 @@ class DatFile(AbstractFileReadOnly):
     specific value.
 """,
 )
-class RelationalReader(AbstractFileCache):
+class RelationalReader(AbstractFileCache[DatFile]):
     FILE_TYPE = DatFile
 
     @doc(
@@ -1057,7 +1057,7 @@ class RelationalReader(AbstractFileCache):
             self._language = language + "/"
         super().__init__(instance_options={"specification": specification}, *args, **kwargs)
 
-    def __getitem__(self, item):
+    def __getitem__(self, item) -> DatReader:
         """
         Shortcut that prepends Data/{language} if missing and transforms plain
         Data/ prefixes into language-specific prefixes.
