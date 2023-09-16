@@ -1,3 +1,6 @@
+from PyPoE.poe.constants import VERSION
+
+
 class UnknownColumnNameGenerator:
     _flag_count = 0
     _key_count = 0
@@ -25,10 +28,10 @@ class UnknownColumnNameGenerator:
         return name
 
 
-class StableToGeneratedNameMapping:
-    suffixes = ["Key", "Keys", "sKey", "sKeys"]
+def StableToGeneratedNameMapping(name: str):
+    for suffix in ["Key", "Keys", "sKey", "sKeys"]:
+        if name.endswith(suffix):
+            yield name.removesuffix(suffix)
 
-    def map(self, name: str):
-        for suffix in self.suffixes:
-            if name.endswith(suffix):
-                yield name.removesuffix(suffix)
+
+name_mappings = {VERSION.STABLE: StableToGeneratedNameMapping}

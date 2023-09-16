@@ -218,7 +218,7 @@ class IntEnumMetaOverride(EnumMeta):
         if isinstance(item, int):
             return self(item)
         else:
-            return IntEnum.__getitem__(self, item)
+            return super().__getitem__(item)
 
 
 class IntEnumOverride(IntEnum, metaclass=IntEnumMetaOverride):

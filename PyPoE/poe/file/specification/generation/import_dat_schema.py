@@ -5,46 +5,76 @@ https://github.com/poe-tool-dev/dat-schema.
 
 import json
 import os
-import sys
 import urllib.request
+from argparse import ArgumentParser
+from collections import defaultdict
 from types import SimpleNamespace
 
-from PyPoE import DIR
-from PyPoE.poe.file.specification.data import stable
-from PyPoE.poe.file.specification.fields import Specification, VirtualField
+from PyPoE.poe.constants import VERSION
+from PyPoE.poe.file import specification
+from PyPoE.poe.file.specification.fields import VirtualField
 from PyPoE.poe.file.specification.generation.column_naming import (
-    StableToGeneratedNameMapping,
     UnknownColumnNameGenerator,
+    name_mappings,
 )
 from PyPoE.poe.file.specification.generation.custom_attributes import (
     CustomizedField,
     custom_attributes,
 )
-from PyPoE.poe.file.specification.generation.virtual_fields import virtual_fields
+from PyPoE.poe.file.specification.generation.virtual_fields import (
+    virtual_fields_mappings,
+)
+
+SCHEMA_URL = "https://github.com/poe-tool-dev/dat-schema/releases/download/latest/schema.min.json"
+DESTINATION = os.path.join(os.path.dirname(__file__), "..", "data", "generated.py")
 
 
 def main():
-    if len(sys.argv) > 1 and sys.argv[1] == "local":
-        schema_json = _read_dat_schema_local()
-    else:
-        schema_json = _read_latest_dat_schema_release()
-    input_spec = _load_dat_schema_tables(schema_json)
-    _adapt_to_spec(
-        stable.specification,
-        input_spec,
+    parser = ArgumentParser()
+    parser.add_argument("--schema-file", "-f")
+    parser.add_argument(
+        "--schema-url",
+        "-u",
+        default=SCHEMA_URL,
+        help="Defaults to the latest schema from poe-tool-dev/dat-schema",
     )
-    output_spec = _convert_tables(input_spec)
-    _write_spec(output_spec)
+    parser.add_argument(
+        "--output",
+        "-o",
+        default=DESTINATION,
+        help="Default: ../data/generated.py",
+    )
+    parser.add_argument(
+        "--adapt-version",
+        "-a",
+        nargs="*",
+        choices=["stable"],
+        default=[],
+        help="Adapt the input schema to be compatible with another spec",
+    )
+    args = parser.parse_args()
+
+    if args.schema_file:
+        schema_json = _read_dat_schema_local(args.schema_file)
+    else:
+        schema_json = _read_latest_dat_schema_release(args.schema_url)
+    input_spec = _load_dat_schema_tables(schema_json)
+
+    virtual_fields = defaultdict(dict)
+
+    for version in args.adapt_version:
+        _adapt_to_spec(VERSION[version.upper()], input_spec, virtual_fields)
+
+    output_spec = _convert_tables(input_spec, virtual_fields)
+    _write_spec(output_spec, args.output)
 
 
-def _read_latest_dat_schema_release() -> str:
-    url = "https://github.com/poe-tool-dev/dat-schema/releases/download/latest/schema.min.json"
+def _read_latest_dat_schema_release(url) -> str:
     response = urllib.request.urlopen(url)
     return response.read().decode()
 
 
-def _read_dat_schema_local() -> str:
-    path = os.path.join(DIR, "..", "..", "dat-schema", "schema.min.json")
+def _read_dat_schema_local(path) -> str:
     with open(path, "r", encoding="utf-8") as f:
         return f.read()
 
@@ -54,10 +84,10 @@ def _load_dat_schema_tables(schema_json: str):
     return sorted(data.tables, key=lambda table: table.name)
 
 
-def _convert_tables(tables: list) -> str:
+def _convert_tables(tables: list, virtual_fields: dict[str, dict[str, VirtualField]]) -> str:
     spec = ""
-    converted_tables = [_convert_table(table) for table in tables]
-    with open("template.py", "r") as f:
+    converted_tables = [_convert_table(table, virtual_fields.get(table.name)) for table in tables]
+    with open(os.path.join(os.path.dirname(__file__), "template.py"), "r") as f:
         f.readline()
         for line in f:
             if line == "        # <specification>\n":
@@ -67,14 +97,14 @@ def _convert_tables(tables: list) -> str:
     return spec
 
 
-def _convert_table(table) -> str:
+def _convert_table(table, virtual_fields: dict[str, VirtualField]) -> str:
     table_name = f"{table.name}.dat"
     spec = f'        "{table_name}": File(\n'
 
     spec += _convert_columns(table_name, table.columns)
 
-    if virtual_fields.get(table_name):
-        spec += _convert_virtual_fields(virtual_fields[table_name])
+    if virtual_fields:
+        spec += _convert_virtual_fields(virtual_fields.values())
 
     spec += "        ),\n"
     return spec
@@ -141,27 +171,33 @@ _TYPE_MAP = {
 }
 
 
-def _adapt_to_spec(spec: Specification, schema: list):
+def _adapt_to_spec(
+    version: VERSION,
+    schema: list,
+    virtual_fields: dict[str, dict[str, VirtualField]],
+):
+    spec = specification.load(version=version)
     # Naively map names for now, could validate that column types are compatible
-    source = {
-        f"{table.name}.dat": [col.name for col in table.columns if col.name] for table in schema
-    }
+    source = {table.name: [col.name for col in table.columns if col.name] for table in schema}
 
-    mapping = StableToGeneratedNameMapping()
+    for table, fields in virtual_fields_mappings[version].items():
+        for field in fields:
+            virtual_fields[table][field.name] = field
+
+    mapping = name_mappings[version]
     for table, file in spec.items():
+        table = table.removesuffix(".dat")
         if table not in source:
             continue
-        v_names = [f.name for f in virtual_fields[table]]
         for name, field in file.fields.items():
-            if name not in v_names and name not in source[table]:
-                for mapped in mapping.map(name):
-                    if mapped not in v_names and mapped in source[table]:
-                        virtual_fields[table].append(VirtualField(name, (mapped,), alias=True))
-                        v_names.append(name)
+            if name not in virtual_fields[table] and name not in source[table]:
+                for mapped in mapping(name):
+                    if mapped not in virtual_fields[table] and mapped in source[table]:
+                        virtual_fields[table][name] = VirtualField(name, (mapped,), alias=True)
 
         for name, field in file.virtual_fields.items():
-            if name not in v_names and name not in source[table]:
-                virtual_fields[table].append(field)
+            if name not in virtual_fields[table] and name not in source[table]:
+                virtual_fields[table][name] = field
 
 
 def _convert_virtual_fields(fields: list[VirtualField]) -> str:
@@ -188,8 +224,7 @@ def _convert_virtual_fields(fields: list[VirtualField]) -> str:
     return spec
 
 
-def _write_spec(spec: str):
-    path = os.path.join(os.path.dirname(__file__), "..", "data", "generated.py")
+def _write_spec(spec: str, path: str):
     with open(path, "w", encoding="utf-8") as f:
         f.write(spec)
 
