@@ -12,6 +12,13 @@ virtual_fields = defaultdict(
                 alias=True,
             ),
         ],
+        "BuffDefinitions.dat": [
+            VirtualField(
+                name="Binary_StatsKeys",
+                fields=("BinaryStats",),
+                alias=True,
+            ),
+        ],
         "CraftingBenchOptions.dat": [
             VirtualField(
                 name="Cost",
@@ -115,6 +122,13 @@ virtual_fields = defaultdict(
                 zip=True,
             ),
         ],
+        "MapSeriesTiers.dat": [
+            VirtualField(
+                name="AncestralTier",
+                fields=("AncestorTier",),
+                alias=True,
+            ),
+        ],
         "Mods.dat": [
             VirtualField(
                 name="SpawnWeight",
@@ -214,6 +228,28 @@ virtual_fields = defaultdict(
                 fields=("Stat1", "Stat2", "Stat3", "Stat4"),
             ),
         ],
+        "PantheonSouls.dat": [
+            VirtualField(
+                name="BaseItemTypesKey",
+                fields=("CapturedVessel",),
+                alias=True,
+            ),
+            VirtualField(
+                name="MonsterVarietiesKey",
+                fields=("CapturedMonster",),
+                alias=True,
+            ),
+            VirtualField(
+                name="PantheonPanelLayoutKey",
+                fields=("PanelLayout",),
+                alias=True,
+            ),
+            VirtualField(
+                name="BossDescription",
+                fields=("CapturedMonsterDescription",),
+                alias=True,
+            ),
+        ],
         "PassiveSkills.dat": [
             VirtualField(
                 name="StatValues",
@@ -236,9 +272,28 @@ virtual_fields = defaultdict(
                 fields=("Stat1Value", "Stat2Value", "Stat3Value"),
             ),
             VirtualField(
-                name="Stats",
-                fields=("StatsKeys", "StatValues"),
+                name="StatsZip",
+                fields=("Stats", "StatValues"),
                 zip=True,
+            ),
+        ],
+        "PassiveSkillOverrides.dat": [
+            VirtualField(
+                name="PassiveSkillOverrideTypesKey",
+                fields=("Type",),
+                alias=True,
+            ),
+        ],
+        "PassiveSkillTattoos.dat": [
+            VirtualField(
+                name="BaseItemTypesKey",
+                fields=("Tattoo",),
+                alias=True,
+            ),
+            VirtualField(
+                name="PassiveSkillOverrideTypesKey",
+                fields=("OverrideType",),
+                alias=True,
             ),
         ],
         "WorldAreas.dat": [
@@ -250,13 +305,6 @@ virtual_fields = defaultdict(
             VirtualField(
                 name="VaalArea_WorldAreasKeys",
                 fields=("VaalArea",),
-                alias=True,
-            ),
-        ],
-        "PassiveSkillTattoos.dat": [
-            VirtualField(
-                name="BaseItemTypesKey",
-                fields=("Tattoo",),
                 alias=True,
             ),
         ],

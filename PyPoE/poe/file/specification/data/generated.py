@@ -2194,6 +2194,7 @@ specification = Specification(
                     name="BaseItemTypesKey",
                     type="ref|out",
                     key="BaseItemTypes.dat",
+                    unique=True,
                 ),
                 Field(
                     name="ArmourMin",
@@ -4262,6 +4263,7 @@ specification = Specification(
                     name="Oil",
                     type="ref|out",
                     key="BaseItemTypes.dat",
+                    unique=True,
                 ),
                 Field(
                     name="Tier",
@@ -5045,17 +5047,17 @@ specification = Specification(
                     key="Stats.dat",
                 ),
                 Field(
+                    name="BinaryStats",
+                    type="ref|list|ref|out",
+                    key="Stats.dat",
+                ),
+                Field(
                     name="Keys2",
                     type="ref|list|ref|out",
                     key="Stats.dat",
                 ),
                 Field(
                     name="Keys3",
-                    type="ref|list|ref|out",
-                    key="Stats.dat",
-                ),
-                Field(
-                    name="Keys4",
                     type="ref|list|ref|out",
                     key="Stats.dat",
                 ),
@@ -5093,9 +5095,16 @@ specification = Specification(
                     type="ref|string",
                 ),
                 Field(
-                    name="Keys5",
+                    name="Keys4",
                     type="ref|list|ref|out",
                     key="Stats.dat",
+                ),
+            ),
+            virtual_fields=(
+                VirtualField(
+                    name="Binary_StatsKeys",
+                    fields=("BinaryStats",),
+                    alias=True,
                 ),
             ),
         ),
@@ -5112,7 +5121,7 @@ specification = Specification(
                     key="BuffDefinitions.dat",
                 ),
                 Field(
-                    name="Data0",
+                    name="Buff_StatValues",
                     type="ref|list|int",
                 ),
                 Field(
@@ -5120,11 +5129,11 @@ specification = Specification(
                     type="int",
                 ),
                 Field(
-                    name="Data1",
+                    name="Data0",
                     type="ref|list|int",
                 ),
                 Field(
-                    name="Data2",
+                    name="Data1",
                     type="ref|list|int",
                 ),
                 Field(
@@ -12271,8 +12280,9 @@ specification = Specification(
                     type="ref|string",
                 ),
                 Field(
-                    name="Key0",
+                    name="Tier",
                     type="ref|out",
+                    key="HarvestCraftTiers.dat",
                 ),
                 Field(
                     name="Command",
@@ -12287,7 +12297,7 @@ specification = Specification(
                     type="ref|list|byte",
                 ),
                 Field(
-                    name="Unknown0",
+                    name="HASH16",
                     type="int",
                 ),
                 Field(
@@ -12295,7 +12305,7 @@ specification = Specification(
                     type="ref|string",
                 ),
                 Field(
-                    name="Flag0",
+                    name="IsEnchant",
                     type="bool",
                 ),
                 Field(
@@ -12311,7 +12321,7 @@ specification = Specification(
                     type="int",
                 ),
                 Field(
-                    name="Flag1",
+                    name="Flag0",
                     type="bool",
                 ),
                 Field(
@@ -12320,7 +12330,7 @@ specification = Specification(
                     key="AchievementItems.dat",
                 ),
                 Field(
-                    name="Unknown1",
+                    name="Unknown0",
                     type="int",
                 ),
             ),
@@ -17990,6 +18000,13 @@ specification = Specification(
                     type="int",
                 ),
             ),
+            virtual_fields=(
+                VirtualField(
+                    name="AncestralTier",
+                    fields=("AncestorTier",),
+                    alias=True,
+                ),
+            ),
         ),
         "MapStashSpecialTypeEntries.dat": File(
             fields=(
@@ -23404,6 +23421,26 @@ specification = Specification(
             ),
             virtual_fields=(
                 VirtualField(
+                    name="BaseItemTypesKey",
+                    fields=("CapturedVessel",),
+                    alias=True,
+                ),
+                VirtualField(
+                    name="MonsterVarietiesKey",
+                    fields=("CapturedMonster",),
+                    alias=True,
+                ),
+                VirtualField(
+                    name="PantheonPanelLayoutKey",
+                    fields=("PanelLayout",),
+                    alias=True,
+                ),
+                VirtualField(
+                    name="BossDescription",
+                    fields=("CapturedMonsterDescription",),
+                    alias=True,
+                ),
+                VirtualField(
                     name="WorldAreasKey",
                     fields=("WorldArea",),
                     alias=True,
@@ -23577,12 +23614,17 @@ specification = Specification(
                     ),
                 ),
                 VirtualField(
-                    name="Stats",
+                    name="StatsZip",
                     fields=(
-                        "StatsKeys",
+                        "Stats",
                         "StatValues",
                     ),
                     zip=True,
+                ),
+                VirtualField(
+                    name="StatsKeys",
+                    fields=("Stats",),
+                    alias=True,
                 ),
             ),
         ),
@@ -23693,11 +23735,11 @@ specification = Specification(
                     key="PassiveOverrideLimits.dat",
                 ),
                 Field(
-                    name="Unknown0",
+                    name="RequiresAdjacent",
                     type="int",
                 ),
                 Field(
-                    name="Unknown1",
+                    name="MaxAdjacent",
                     type="int",
                 ),
                 Field(
@@ -23707,6 +23749,11 @@ specification = Specification(
                 ),
             ),
             virtual_fields=(
+                VirtualField(
+                    name="PassiveSkillOverrideTypesKey",
+                    fields=("Type",),
+                    alias=True,
+                ),
                 VirtualField(
                     name="AllocatedPassiveSkillKey",
                     fields=("AllocatedPassiveSkill",),
@@ -23738,11 +23785,11 @@ specification = Specification(
                     type="ref|list|int",
                 ),
                 Field(
-                    name="Unknown0",
+                    name="Name",
                     type="ref|string",
                 ),
                 Field(
-                    name="Unknown1",
+                    name="Qualifier",
                     type="ref|string",
                 ),
             ),
@@ -23778,6 +23825,11 @@ specification = Specification(
                 VirtualField(
                     name="BaseItemTypesKey",
                     fields=("Tattoo",),
+                    alias=True,
+                ),
+                VirtualField(
+                    name="PassiveSkillOverrideTypesKey",
+                    fields=("OverrideType",),
                     alias=True,
                 ),
             ),
@@ -24125,8 +24177,9 @@ specification = Specification(
                     key="PassiveSkillMasteryGroups.dat",
                 ),
                 Field(
-                    name="Key0",
+                    name="Group",
                     type="ref|out",
+                    key="AtlasPassiveSkillTreeGroupType.dat",
                 ),
                 Field(
                     name="SoundEffect",
@@ -25422,6 +25475,7 @@ specification = Specification(
                 Field(
                     name="Id",
                     type="ref|string",
+                    unique=True,
                 ),
                 Field(
                     name="Text",

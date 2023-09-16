@@ -31,10 +31,7 @@ def main():
     input_spec = _load_dat_schema_tables(schema_json)
     _adapt_to_spec(
         stable.specification,
-        {
-            f"{table.name}.dat": [col.name for col in table.columns if col.name]
-            for table in input_spec
-        },
+        input_spec,
     )
     output_spec = _convert_tables(input_spec)
     _write_spec(output_spec)
@@ -144,7 +141,12 @@ _TYPE_MAP = {
 }
 
 
-def _adapt_to_spec(spec: Specification, source: dict[str, list[str]]):
+def _adapt_to_spec(spec: Specification, schema: list):
+    # Naively map names for now, could validate that column types are compatible
+    source = {
+        f"{table.name}.dat": [col.name for col in table.columns if col.name] for table in schema
+    }
+
     mapping = StableToGeneratedNameMapping()
     for table, file in spec.items():
         if table not in source:

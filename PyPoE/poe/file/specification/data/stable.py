@@ -2989,6 +2989,18 @@ specification = Specification(
                 ),
             ),
         ),
+        "BestiaryRecipeCategories.dat": File(
+            fields=(
+                Field(
+                    name="Id",
+                    type="ref|string",
+                ),
+                Field(
+                    name="Text",
+                    type="ref|string",
+                ),
+            ),
+        ),
         "BestiaryRecipeComponent.dat": File(
             fields=(
                 Field(
@@ -19642,7 +19654,7 @@ specification = Specification(
                     fields=("Stat1Value", "Stat2Value", "Stat3Value"),
                 ),
                 VirtualField(
-                    name="Stats",
+                    name="StatsZip",
                     fields=("StatsKeys", "StatValues"),
                     zip=True,
                 ),
