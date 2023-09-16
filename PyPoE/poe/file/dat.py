@@ -402,6 +402,8 @@ class DatRecord(list):
                 value = [self[fn] for fn in field["fields"]]
                 if field["zip"]:
                     value = zip(*value)
+                if field["alias"]:
+                    value = next(filter(lambda v: v is not None, value), None)
                 return value
             else:
                 raise KeyError(item)
@@ -627,15 +629,24 @@ class DatReader(ReprMixin):
             if not specified, the index will be build for any 'unique' columns
             by default
         """
+        aliases = {
+            virtual.name: virtual.fields[0]
+            for virtual in self.specification.virtual_fields.values()
+            if virtual.alias and len(virtual.fields) == 1
+        }
+        inv_alias = defaultdict(list)
+        for alias, field in aliases.items():
+            inv_alias[field].append(alias)
+
         columns = set()
         if column is None:
             for column in self.columns_unique:
                 columns.add(column)
         elif isinstance(column, str):
-            columns.add(column)
+            columns.add(aliases.get(column, column))
         elif isinstance(column, Iterable):
             for c in column:
-                columns.add(c)
+                columns.add(aliases.get(c, c))
 
         columns_1to1 = set()
         columns_1toN = set()
@@ -650,6 +661,8 @@ class DatReader(ReprMixin):
             else:
                 columns_1toN.add(column)
                 self.index[column] = defaultdict(list)
+            for alias in inv_alias[column]:
+                self.index[alias] = self.index[column]
 
         # Second loop
         for row in self:

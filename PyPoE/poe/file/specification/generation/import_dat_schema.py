@@ -10,8 +10,10 @@ import urllib.request
 from types import SimpleNamespace
 
 from PyPoE import DIR
-from PyPoE.poe.file.specification.fields import VirtualField
+from PyPoE.poe.file.specification.data import stable
+from PyPoE.poe.file.specification.fields import Specification, VirtualField
 from PyPoE.poe.file.specification.generation.column_naming import (
+    StableToGeneratedNameMapping,
     UnknownColumnNameGenerator,
 )
 from PyPoE.poe.file.specification.generation.custom_attributes import (
@@ -27,6 +29,13 @@ def main():
     else:
         schema_json = _read_latest_dat_schema_release()
     input_spec = _load_dat_schema_tables(schema_json)
+    _adapt_to_spec(
+        stable.specification,
+        {
+            f"{table.name}.dat": [col.name for col in table.columns if col.name]
+            for table in input_spec
+        },
+    )
     output_spec = _convert_tables(input_spec)
     _write_spec(output_spec)
 
@@ -67,7 +76,7 @@ def _convert_table(table) -> str:
 
     spec += _convert_columns(table_name, table.columns)
 
-    if table_name in virtual_fields:
+    if virtual_fields.get(table_name):
         spec += _convert_virtual_fields(virtual_fields[table_name])
 
     spec += "        ),\n"
@@ -135,19 +144,43 @@ _TYPE_MAP = {
 }
 
 
+def _adapt_to_spec(spec: Specification, source: dict[str, list[str]]):
+    mapping = StableToGeneratedNameMapping()
+    for table, file in spec.items():
+        if table not in source:
+            continue
+        v_names = [f.name for f in virtual_fields[table]]
+        for name, field in file.fields.items():
+            if name not in v_names and name not in source[table]:
+                for mapped in mapping.map(name):
+                    if mapped not in v_names and mapped in source[table]:
+                        virtual_fields[table].append(VirtualField(name, (mapped,), alias=True))
+                        v_names.append(name)
+
+        for name, field in file.virtual_fields.items():
+            if name not in v_names and name not in source[table]:
+                virtual_fields[table].append(field)
+
+
 def _convert_virtual_fields(fields: list[VirtualField]) -> str:
     spec = "            virtual_fields=(\n"
     for field in fields:
         spec += "                VirtualField(\n"
         spec += f'                    name="{field.name}",\n'
         field_names = (
-            '\n                        "'
-            + '",\n                        "'.join(field.fields)
-            + '",\n                    '
+            f'"{field.fields[0]}",'
+            if len(field.fields) == 1
+            else (
+                '\n                        "'
+                + '",\n                        "'.join(field.fields)
+                + '",\n                    '
+            )
         )
         spec += f"                    fields=({field_names}),\n"
         if field.zip:
             spec += "                    zip=True,\n"
+        if field.alias:
+            spec += "                    alias=True,\n"
         spec += "                ),\n"
     spec += "            ),\n"
     return spec

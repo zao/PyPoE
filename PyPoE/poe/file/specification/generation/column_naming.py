@@ -23,3 +23,12 @@ class UnknownColumnNameGenerator:
             name = f"Unknown{self._unknown_count}"
             self._unknown_count += 1
         return name
+
+
+class StableToGeneratedNameMapping:
+    suffixes = ["Key", "Keys", "sKey", "sKeys"]
+
+    def map(self, name: str):
+        for suffix in self.suffixes:
+            if name.endswith(suffix):
+                yield name.removesuffix(suffix)

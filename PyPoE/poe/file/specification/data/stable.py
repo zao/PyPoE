@@ -39,7 +39,6 @@ __all__ = [
 
 specification = Specification(
     {
-        "SkillTotems.dat": File(),
         "AbyssObjects.dat": File(
             fields=(
                 Field(
@@ -3024,7 +3023,7 @@ specification = Specification(
                 Field(
                     name="BeastRarity",
                     type="ref|out",
-                    enum="RARITY",
+                    key="Rarity.dat",
                 ),
                 Field(
                     name="BestiaryGenusKey",
@@ -3054,8 +3053,9 @@ specification = Specification(
                     type="ref|string",
                 ),
                 Field(
-                    name="HintText",
+                    name="Category",
                     type="ref|out",
+                    key="BestiaryRecipeCategories.dat",
                 ),
                 Field(
                     name="Flag0",
@@ -20922,6 +20922,42 @@ specification = Specification(
                 Field(
                     name="Life",
                     type="int",
+                ),
+            ),
+        ),
+        "Rarity.dat": File(
+            fields=(
+                Field(
+                    name="Id",
+                    type="ref|string",
+                ),
+                Field(
+                    name="MinMods",
+                    type="int",
+                ),
+                Field(
+                    name="MaxMods",
+                    type="int",
+                ),
+                Field(
+                    name="Unknown0",
+                    type="int",
+                ),
+                Field(
+                    name="MaxPrefix",
+                    type="int",
+                ),
+                Field(
+                    name="Unknown1",
+                    type="int",
+                ),
+                Field(
+                    name="MaxSuffix",
+                    type="int",
+                ),
+                Field(
+                    name="Color",
+                    type="ref|string",
                 ),
             ),
         ),
