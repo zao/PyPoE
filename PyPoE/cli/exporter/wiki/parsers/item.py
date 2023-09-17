@@ -2627,8 +2627,8 @@ class ItemsParser(SkillParserShared):
                 full_result=True,
                 lang=self._language,
             )
+            infobox["tattoo_stat_text"] = "\n".join(tr.lines)
             lines = [" ".join(line.splitlines()) for line in tr.lines]
-            infobox["tattoo_stat_text"] = "\n".join(lines)
             if override["Effect"]:
                 skill = override["Effect"]["GrantedEffect"]
                 infobox["tattoo_skill_id"] = skill["Id"]
@@ -2636,11 +2636,7 @@ class ItemsParser(SkillParserShared):
                 link = f"[[Skill:{skill['Id']}|{skill_name}]]"
                 lines = [line.replace(skill_name, link) for line in lines]
             stat_text = "<br>".join(parser.make_inter_wiki_links(line) for line in lines)
-            if data["PassiveSkillOverrideTypesKey"]:
-                # grants a random keystone
-                infobox["description"] = stat_text
-            else:
-                infobox["description"] = f'Grants "{stat_text}"'
+            infobox["description"] = stat_text
         except KeyError:
             return False
         return True
