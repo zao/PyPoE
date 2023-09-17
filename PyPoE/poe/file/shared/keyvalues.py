@@ -86,7 +86,7 @@ Exceptions & Warnings
 import re
 import warnings
 from collections import OrderedDict, defaultdict
-from typing import Union
+from typing import Generic, TypeVar, Union
 
 from PyPoE.poe.file.file_system import FileSystem
 from PyPoE.poe.file.shared import AbstractFile, ParserError, ParserWarning
@@ -420,9 +420,10 @@ class AbstractKeyValueFile(AbstractFile, defaultdict):
                 self[k] = v
 
 
-class AbstractKeyValueFileCache(AbstractFileCache):
-    FILE_TYPE = AbstractKeyValueFile
+FileType = TypeVar("FileType", bound=AbstractKeyValueFile)
 
+
+class AbstractKeyValueFileCache(Generic[FileType], AbstractFileCache[FileType]):
     @doc(doc=AbstractFileCache._get_file_instance_args)
     def _get_file_instance_args(self, file_name):
         options = super()._get_file_instance_args(file_name)

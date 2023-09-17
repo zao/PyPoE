@@ -235,18 +235,12 @@ class MasteryEffectParser(parser.BaseParser):
             values = []
 
             one_based_stat_index = 0
-            for stat_index in range(0, self._MAX_STAT_ID):
-                try:
-                    stat = mastery["StatsKeys"][stat_index]
-                except IndexError:
-                    break
-                one_based_stat_index = stat_index + 1
+            for stat, value in mastery["StatsZip"]:
+                one_based_stat_index = one_based_stat_index + 1
                 stat_ids.append(stat["Id"])
                 data[f"stat{one_based_stat_index}_id"] = stat["Id"]
-                values.append(mastery[f"Stat{one_based_stat_index}Value"])
-                data[f"stat{one_based_stat_index}_value"] = mastery[
-                    f"Stat{one_based_stat_index}Value"
-                ]
+                values.append(value)
+                data[f"stat{one_based_stat_index}_value"] = value
 
             data["stat_text"] = "<br>".join(
                 self._get_stats(

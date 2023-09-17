@@ -18,6 +18,7 @@ packages = [
 
 [tool.poetry.scripts]
 pypoe_exporter = 'PyPoE.cli.exporter.core:main'
+pypoe_schema_import = 'PyPoE.poe.file.specification.generation.import_dat_schema:main'
 
 [tool.poetry.dependencies]
 python = "^3.11"

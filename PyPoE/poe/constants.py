@@ -218,7 +218,7 @@ class IntEnumMetaOverride(EnumMeta):
         if isinstance(item, int):
             return self(item)
         else:
-            return IntEnum.__getitem__(self, item)
+            return super().__getitem__(item)
 
 
 class IntEnumOverride(IntEnum, metaclass=IntEnumMetaOverride):
@@ -423,6 +423,8 @@ class VERSION(IntEnumOverride):
         for the Awakening Beta.
     ALPHA
         Alpha version of Path of Exile.
+    GENERATED
+        Schema generated from https://github.com/poe-tool-dev/dat-schema
     ALL
         All registered version types.
     DEFAULT
@@ -434,8 +436,9 @@ class VERSION(IntEnumOverride):
     STABLE = 1
     BETA = 2
     ALPHA = 4
+    GENERATED = 8
 
-    ALL = STABLE | BETA | ALPHA
+    ALL = STABLE | BETA | ALPHA | GENERATED
 
     DEFAULT = STABLE
 

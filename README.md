@@ -42,7 +42,17 @@ More detailed docs: [http://omegak2.net/poe/PyPoE/](http://omegak2.net/poe/PyPoE
 
     `pytest -s -v .`
 
-5. Running:
+5. Updating the specification from the source-of-truth schema:
+
+    - Update the generated schema:\
+    `pypoe_schema_import -a stable`
+
+    - Use the generated schema by default:\
+    `pypoe_exporter config set version GENERATED`
+
+    - Column aliases can be edited in `PyPoE/poe/file/specification/generation/virtual_fields.py`
+
+6. Running:
 
     - Configure output directory:\
     `pypoe_exporter config set out_dir ../out/`

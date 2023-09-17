@@ -115,7 +115,7 @@ class ITFile(AbstractKeyValueFile):
 
 
 @doc(append=AbstractKeyValueFileCache)
-class ITFileCache(AbstractKeyValueFileCache):
+class ITFileCache(AbstractKeyValueFileCache[ITFile]):
     """
     Cache for ITFile instances.
     """

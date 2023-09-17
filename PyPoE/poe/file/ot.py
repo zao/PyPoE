@@ -136,7 +136,7 @@ class OTFile(AbstractKeyValueFile):
 
 
 @doc(append=AbstractKeyValueFileCache)
-class OTFileCache(AbstractKeyValueFileCache):
+class OTFileCache(AbstractKeyValueFileCache[OTFile]):
     """
     Cache for OTFile instances.
     """
