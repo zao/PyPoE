@@ -2983,12 +2983,21 @@ class ItemsParser(SkillParserShared):
 
         if flasks["BuffDefinitionsKey"]:
             stats = [s["Id"] for s in flasks["BuffDefinitionsKey"]["StatsKeys"]]
-            tr = self.tc["stat_descriptions.txt"].get_translation(
-                stats,
-                flasks["BuffStatValues"],
-                full_result=True,
-                lang=self._language,
-            )
+            if stats.len() > 0:
+                tr = self.tc["stat_descriptions.txt"].get_translation(
+                    stats,
+                    flasks["BuffStatValues"],
+                    full_result=True,
+                    lang=self._language,
+                )
+            else:
+                stats = [s["Id"] for s in flasks["BuffDefinitionsKey"]["Binary_StatsKeys"]]
+                tr = self.tc["stat_descriptions.txt"].get_translation(
+                    stats,
+                    flasks["BuffStatValues"],
+                    full_result=True,
+                    lang=self._language,
+                )
             infobox["buff_stat_text"] = "<br>".join(
                 [parser.make_inter_wiki_links(line) for line in tr.lines]
             )
