@@ -847,7 +847,7 @@ class DatReader(ReprMixin):
 
         # Unpacking the entire row in one go will help breaking down the
         # function calls significantly
-        row_unpacked = struct.unpack(self.cast_row, data_raw[:self.cast_size])
+        row_unpacked = struct.unpack(self.cast_row, data_raw[: self.cast_size])
         i = 0
         for spec, casts in self.cast_spec:
             if casts[0][0] in [3, 6]:
