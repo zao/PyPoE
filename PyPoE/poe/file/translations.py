@@ -618,6 +618,7 @@ class TranslationString(TranslationReprMixin):
         is_range: List[bool],
         use_placeholder: Union[bool, Callable[[int], Any]] = False,
         only_values: bool = False,
+        custom_formatter: Callable = None,
     ) -> Tuple[Union[str, List[int]], List[int], List[int], Dict[str, str]]:
         """
         Formats the string for the given values.
@@ -661,7 +662,7 @@ class TranslationString(TranslationReprMixin):
 
             The forth return value is a dictionary of extra strings
         """
-        values, extra_strings = self.quantifier.handle(values, is_range)
+        values, extra_strings, formats = self.quantifier.handle(values, is_range)
 
         string = []
         used = set()
@@ -676,10 +677,14 @@ class TranslationString(TranslationReprMixin):
                     string.append("+")
 
                 if not use_placeholder:
-                    if "d" in self.tags_types[i]:
-                        fmt = "{0:n}"
+                    if custom_formatter:
+                        fmt = custom_formatter
+                    elif formats[tagid]:
+                        fmt = formats[tagid]
+                    elif "d" in self.tags_types[i]:
+                        fmt = "{0:n}".format
                     else:
-                        fmt = "{0}"
+                        fmt = "{0}".format
 
                     if is_range[tagid]:
                         # Move the minus outside if both values are negative
@@ -692,9 +697,9 @@ class TranslationString(TranslationReprMixin):
                         # TODO: how to show ranges for text stuff?
                         except TypeError:
                             range_fmt = self._RANGE_FORMAT
-                        value = range_fmt.format(fmt, fmt.replace("{0", "{1")).format(*value)
+                        value = range_fmt.format(fmt(value[0]), fmt(value[1]))
                     else:
-                        value = fmt.format(value)
+                        value = fmt(value)
                 elif use_placeholder is True:
                     value = ascii_letters[23 + i]
                 elif callable(use_placeholder):
@@ -952,9 +957,9 @@ class TranslationQuantifierHandler(TranslationReprMixin):
         )
     )
 
-    handlers = {}
+    handlers: Dict[str, "TranslationQuantifier"] = {}
 
-    reverse_handlers = {}
+    reverse_handlers: Dict[str, "TranslationQuantifier"] = {}
 
     regex = None
 
@@ -1012,13 +1017,13 @@ class TranslationQuantifierHandler(TranslationReprMixin):
         # if self.registered_handlers != other.registered_handlers:
         _diff_dict(self.index_handlers, other.index_handlers)
 
-    def _get_handler_func(self, handler_name: str) -> Callable:
+    def _get_handler_func(self, handler_name: str) -> "TranslationQuantifier":
         try:
-            f = self.handlers[handler_name].handler
+            f = self.handlers[handler_name]
         except KeyError:
             self._warn_uncaptured(handler_name)
             return None
-        if f is None:
+        if f.handler is None:
             # TODO: Show a warning here, not an error.
             # self._warn_uncaptured(handler_name)
             return None
@@ -1058,7 +1063,7 @@ class TranslationQuantifierHandler(TranslationReprMixin):
 
     def handle(
         self, values: Union[List[int], List[Tuple[int, int]]], is_range: List[bool]
-    ) -> Tuple[List[Any], Dict[str, str]]:
+    ) -> Tuple[List[Any], Dict[str, str], List[Callable]]:
         """
         Handle the given values based on the registered quantifiers.
 
@@ -1077,18 +1082,22 @@ class TranslationQuantifierHandler(TranslationReprMixin):
 
             The keys of the dictionary refer to the translation quantifier
             string used
+
+            The format strings for each value
         """
         values = list(values)
+        formats = [None for _ in values]
         for handler_name in self.index_handlers:
             f = self._get_handler_func(handler_name)
             if f is None:
                 continue
             for index in self.index_handlers[handler_name]:
                 index -= 1
+                formats[index] = f.format
                 if is_range[index]:
-                    values[index] = (f(values[index][0]), f(values[index][1]))
+                    values[index] = (f.handler(values[index][0]), f.handler(values[index][1]))
                 else:
-                    values[index] = f(values[index])
+                    values[index] = f.handler(values[index])
 
         for i, value in enumerate(values):
             if is_range[i]:
@@ -1099,11 +1108,11 @@ class TranslationQuantifierHandler(TranslationReprMixin):
         strings = OrderedDict()
         for handler_name, args in self.string_handlers.items():
             f = self._get_handler_func(handler_name)
-            if f is None:
+            if f is None or f.handler is None:
                 continue
-            strings[handler_name] = f(*args)
+            strings[handler_name] = f.handler(*args)
 
-        return values, strings
+        return values, strings, formats
 
     def handle_reverse(self, values: List[int]) -> List[int]:
         """
@@ -1172,6 +1181,7 @@ class TranslationQuantifier(TranslationReprMixin):
         type: QuantifierTypes = QuantifierTypes.INT,
         handler: Union[Callable, None] = None,
         reverse_handler: Union[Callable, None] = None,
+        format: Callable = lambda v: v,
     ):
         """
         Parameters
@@ -1185,7 +1195,9 @@ class TranslationQuantifier(TranslationReprMixin):
         handler
             function that handles the values, if any
         reverse_handler
-            function  hat reverses handles the values, if any
+            function that reverses handles the values, if any
+        format
+            str.format() specification for converting the value to a string
         """
         self.id: str = id
         self.arg_size: int = arg_size
@@ -1194,6 +1206,7 @@ class TranslationQuantifier(TranslationReprMixin):
         self.type: TranslationQuantifier.QuantifierTypes = type
         self.handler: Union[Callable, None] = handler
         self.reverse_handler: Union[Callable, None] = reverse_handler
+        self.format = format
         TranslationQuantifierHandler.install_quantifier(self)
 
 
@@ -1209,6 +1222,39 @@ class TQReminderString(TranslationQuantifier):
 
     def handle(self, *args):
         return self.relational_reader["ReminderText.dat64"].index["Id"][args[0].strip()]["Text"]
+
+
+class TQNumberFormat(TranslationQuantifier):
+    def __init__(self, id, multiplier=1, divisor=1, addend=0, dp=None, fixed=False):
+        self.multiplier = multiplier
+        self.divisor = divisor
+        self.addend = addend
+        self.dp = dp
+        self.fixed = fixed
+        super().__init__(
+            id=id,
+            format=self.format,
+            handler=self.handle,
+            reverse_handler=self.reverse,
+        )
+
+    def handle(self, v):
+        return v * self.multiplier / self.divisor + self.addend
+
+    def reverse(self, v):
+        return (float(v) - self.addend) * self.divisor / self.multiplier
+
+    def format(self, v):
+        if self.dp is None:
+            return f"{v:n}"
+        elif self.dp == 0:
+            return f"{int(v):n}"
+        else:
+            formatted = "{0:.{dp}f}".format(v, dp=self.dp)
+            if self.fixed:
+                return formatted
+            else:
+                return re.sub(r"\.?0+$", "", formatted)
 
 
 class TranslationResult(TranslationReprMixin):
@@ -2197,293 +2243,274 @@ TranslationQuantifier(
 )
 """
 
-TranslationQuantifier(
+TQNumberFormat(
     id="30%_of_value",
-    handler=lambda v: v * 0.3,
-    reverse_handler=lambda v: v / 0.3,
+    multiplier=30,
+    divisor=100,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="60%_of_value",
-    handler=lambda v: v * 0.6,
-    reverse_handler=lambda v: v / 0.6,
+    multiplier=60,
+    divisor=100,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="deciseconds_to_seconds",
-    handler=lambda v: v / 10,
-    reverse_handler=lambda v: float(v) * 10,
+    divisor=10,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_three",
-    handler=lambda v: v / 3,
-    reverse_handler=lambda v: float(v) * 3,
+    divisor=3,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_five",
-    handler=lambda v: v / 5,
-    reverse_handler=lambda v: float(v) * 5,
+    divisor=5,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_one_hundred",
-    handler=lambda v: v / 100,
-    reverse_handler=lambda v: float(v) * 100,
+    divisor=100,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_one_hundred_and_negate",
-    handler=lambda v: -v / 100,
-    reverse_handler=lambda v: -float(v) * 100,
+    divisor=-100,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_one_hundred_0dp",
-    handler=lambda v: round(v / 100, 0),
-    reverse_handler=lambda v: float(v) * 100,
+    divisor=100,
+    dp=0,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_one_hundred_1dp",
-    handler=lambda v: round(v / 100, 1),
-    reverse_handler=lambda v: float(v) * 100,
+    divisor=100,
+    dp=1,
+    fixed=True,
 )
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_one_hundred_2dp",
-    handler=lambda v: round(v / 100, 2),
-    reverse_handler=lambda v: float(v) * 100,
+    divisor=100,
+    dp=2,
+    fixed=True,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_one_hundred_2dp_if_required",
-    handler=lambda v: round(v / 100, 2),
-    reverse_handler=lambda v: float(v) * 100,
+    divisor=100,
+    dp=2,
 )
 
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_two_0dp",
-    handler=lambda v: v // 2,
-    reverse_handler=lambda v: int(v) * 2,
+    divisor=2,
+    dp=0,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_six",
-    handler=lambda v: v / 6,
-    reverse_handler=lambda v: int(v) * 6,
+    divisor=6,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_ten_0dp",
-    handler=lambda v: v // 10,
-    reverse_handler=lambda v: int(v) * 10,
+    divisor=10,
+    dp=0,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_ten_1dp",
-    handler=lambda v: round(v / 10, 1),
-    reverse_handler=lambda v: int(v) * 10,
+    divisor=10,
+    dp=1,
+    fixed=True,
 )
 
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_twelve",
-    handler=lambda v: v / 12,
-    reverse_handler=lambda v: int(v) * 12,
+    divisor=12,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_fifteen_0dp",
-    handler=lambda v: v // 15,
-    reverse_handler=lambda v: int(v) * 15,
+    divisor=15,
+    dp=0,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_twenty_then_double_0dp",
-    handler=lambda v: v // 20 * 2,
-    reverse_handler=lambda v: int(v) * 20 // 2,
+    multiplier=2,
+    divisor=20,
+    dp=0,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="milliseconds_to_seconds",
-    handler=lambda v: v / 1000,
-    reverse_handler=lambda v: float(v) * 1000,
+    divisor=1000,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="milliseconds_to_seconds_halved",
-    handler=lambda v: v / 500,
-    reverse_handler=lambda v: float(v) * 500,
+    divisor=500,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="milliseconds_to_seconds_0dp",
-    handler=lambda v: int(round(v / 1000, 0)),
-    reverse_handler=lambda v: float(v) * 1000,
+    divisor=1000,
+    dp=0,
 )
-TranslationQuantifier(
+TQNumberFormat(
     id="milliseconds_to_seconds_1dp",
-    handler=lambda v: round(v / 1000, 1),
-    reverse_handler=lambda v: float(v) * 1000,
+    divisor=1000,
+    dp=1,
+    fixed=True,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="milliseconds_to_seconds_2dp",
-    handler=lambda v: round(v / 1000, 2),
-    reverse_handler=lambda v: float(v) * 1000,
+    divisor=1000,
+    dp=2,
+    fixed=True,
 )
 
-# TODO: Not exactly sure yet how this one works
-TranslationQuantifier(
+TQNumberFormat(
     id="milliseconds_to_seconds_2dp_if_required",
-    handler=lambda v: round(v / 1000, 2),
-    reverse_handler=lambda v: float(v) * 1000,
+    divisor=1000,
+    dp=2,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="multiplicative_damage_modifier",
-    handler=lambda v: v + 100,
-    reverse_handler=lambda v: float(v) - 100,
+    addend=100,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="multiplicative_permyriad_damage_modifier",
-    handler=lambda v: v / 100 + 100,
-    reverse_handler=lambda v: (float(v) - 100) * 100,
+    divisor=100,
+    addend=100,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="multiply_by_four",
-    handler=lambda v: v * 4,
-    reverse_handler=lambda v: int(v) // 4,
+    multiplier=4,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="multiply_by_four_and_",
-    handler=lambda v: v * 4,
-    reverse_handler=lambda v: int(v) // 4,
+    multiplier=4,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="negate",
-    handler=lambda v: -v,
-    reverse_handler=lambda v: -float(v),
+    multiplier=-1,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="old_leech_percent",
-    handler=lambda v: v / 5,
-    reverse_handler=lambda v: float(v) * 5,
+    divisor=5,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="old_leech_permyriad",
-    handler=lambda v: v / 500,
-    reverse_handler=lambda v: float(v) * 500,
+    divisor=500,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="per_minute_to_per_second",
-    handler=lambda v: round(v / 60, 1),
-    reverse_handler=lambda v: float(v) * 60,
+    divisor=60,
+    dp=1,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="per_minute_to_per_second_0dp",
-    handler=lambda v: int(round(v / 60, 0)),
-    reverse_handler=lambda v: float(v) * 60,
+    divisor=60,
+    dp=0,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="per_minute_to_per_second_1dp",
-    handler=lambda v: round(v / 60, 1),
-    reverse_handler=lambda v: float(v) * 60,
+    divisor=60,
+    dp=1,
+    fixed=True,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="per_minute_to_per_second_2dp",
-    handler=lambda v: round(v / 60, 2),
-    reverse_handler=lambda v: float(v) * 60,
+    divisor=60,
+    dp=2,
+    fixed=True,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="per_minute_to_per_second_2dp_if_required",
-    handler=lambda v: round(v / 60, 2) if v % 60 != 0 else v // 60,
-    reverse_handler=lambda v: float(v) * 60,
+    divisor=60,
+    dp=2,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="times_twenty",
-    handler=lambda v: v * 20,
-    reverse_handler=lambda v: int(v) // 20,
+    multiplier=20,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="times_one_point_five",
-    handler=lambda v: v * 1.5,
-    reverse_handler=lambda v: int(v / 1.5),
+    multiplier=1.5,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="double",
-    handler=lambda v: v * 2,
-    reverse_handler=lambda v: int(v) // 2,
+    multiplier=2,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="negate_and_double",
-    handler=lambda v: -v * 2,
-    reverse_handler=lambda v: int(-v) // 2,
+    multiplier=-2,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_four",
-    handler=lambda v: v / 4,
-    reverse_handler=lambda v: v * 4,
+    divisor=4,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_ten_1dp_if_required",
-    handler=lambda v: round(v / 10, 1),
-    reverse_handler=lambda v: v * 10,
+    divisor=10,
+    dp=1,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_fifty",
-    handler=lambda v: v / 50,
-    reverse_handler=lambda v: v * 50,
+    divisor=50,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="multiply_by_ten",
-    handler=lambda v: v * 10,
-    reverse_handler=lambda v: v / 10,
+    multiplier=10,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_one_thousand",
-    handler=lambda v: v / 1000,
-    reverse_handler=lambda v: v * 1000,
+    divisor=1000,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="plus_two_hundred",
-    handler=lambda v: v + 200,
-    reverse_handler=lambda v: v - 200,
+    addend=200,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_twenty",
-    handler=lambda v: v / 20,
-    reverse_handler=lambda v: v * 20,
+    divisor=20,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="locations_to_metres",
-    handler=lambda v: v / 10,
-    reverse_handler=lambda v: v * 10,
+    divisor=10,
 )
 
 TranslationQuantifier(

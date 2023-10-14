@@ -788,14 +788,8 @@ class SkillParserShared(parser.BaseParser):
                         values.append(row["StatsValuesPermille"][index] / 1000)
                 lines.extend(
                     ts.format_string(
-                        values=values,
-                        is_range=[
-                            False,
-                        ]
-                        * len(values),
-                    )[
-                        0
-                    ].split("\n")
+                        values=values, is_range=[False for _ in values], custom_formatter=str
+                    )[0].split("\n")
                 )
 
             infobox[prefix + "stat_text"] = "<br>".join(lines)
