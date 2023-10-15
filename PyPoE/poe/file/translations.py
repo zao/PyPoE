@@ -324,7 +324,7 @@ class TranslationLanguage(TranslationReprMixin):
 
     __slots__ = ["parent", "language", "strings"]
 
-    def __init__(self, language, parent):
+    def __init__(self, language: str, parent: Translation):
         parent.languages.append(self)
         self.parent = parent
         self.language = language
@@ -519,9 +519,10 @@ class TranslationString(TranslationReprMixin):
     def __init__(self, parent: TranslationLanguage):
         parent.strings.append(self)
         self.parent: TranslationLanguage = parent
+        self.translation = parent.parent
         self.quantifier: TranslationQuantifierHandler = TranslationQuantifierHandler()
         self.range: List[TranslationRange] = []
-        self.tags: List[str] = []
+        self.tags: List[int] = []
         self.tags_types: List[str] = []
         self.strings: List[str] = []
 
@@ -667,7 +668,15 @@ class TranslationString(TranslationReprMixin):
         string = []
         used = set()
         for i, tagid in enumerate(self.tags):
-            value = values[tagid]
+            try:
+                value = values[tagid]
+            except IndexError:
+                warnings.warn(
+                    f"error getting {tagid} from {values} for stats {self.translation.ids}",
+                    TranslationWarning,
+                )
+                raise
+
             if not only_values:
                 string.append(self.strings[i])
                 # For adding the plus sign to the $+d and $+d%% formats
@@ -904,11 +913,12 @@ class TranslationRange(TranslationReprMixin):
         if self.min is None and self.max is None:
             return 1
 
+        def f_comp(left, right):
+            return left > right if self.negated else left <= right
+
         if self.negated:
-            f_comp = int.__gt__
             f_and = bool.__or__
         else:
-            f_comp = int.__le__
             f_and = bool.__and__
 
         if self.min is None:

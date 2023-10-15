@@ -767,32 +767,49 @@ class SkillParserShared(parser.BaseParser):
             # Quality stat data
             stat_ids = [r["Id"] for r in row["StatsKeys"]]
 
-            # Quality Translation?
+            lowest = max(50, min(1000, min(abs(v) for v in row["StatsValuesPermille"])))
+            breakpoint = 1000 // lowest
+
+            # Quality Translation
             qtr = tf.get_translation(
                 tags=stat_ids,
-                # Offset Q1000
-                values=[v // 50 for v in row["StatsValuesPermille"]],
+                values=[v / lowest for v in row["StatsValuesPermille"]],
                 full_result=True,
                 lang=config.get_option("language"),
             )
 
             lines = []
-            for i, ts in enumerate(qtr.string_instances):
+            range_lines = []
+            for ts in qtr.string_instances:
                 values = []
-                for stat_id in qtr.found_ids[i]:
+                range_values = []
+                for stat_id in ts.translation.ids:
                     try:
-                        index = stat_ids.index(stat_id)
+                        v = row["StatsValuesPermille"][stat_ids.index(stat_id)]
+                        values.append(v // lowest)
+                        range_values.append((v / 1000, v / 50))
                     except ValueError:
                         values.append(0)
-                    else:
-                        values.append(row["StatsValuesPermille"][index] / 1000)
+                        range_values.append(0)
                 lines.extend(
                     ts.format_string(
-                        values=values, is_range=[False for _ in values], custom_formatter=str
+                        values=values,
+                        is_range=[False for _ in values],
+                    )[
+                        0
+                    ].split("\n")
+                )
+                range_lines.extend(
+                    ts.format_string(
+                        values=range_values,
+                        is_range=[isinstance(v, tuple) for v in range_values],
+                        custom_formatter=str,
                     )[0].split("\n")
                 )
 
             infobox[prefix + "stat_text"] = "<br>".join(lines)
+            infobox[prefix + "stat_range"] = "<br>".join(range_lines)
+            infobox[prefix + "stat_breakpoint"] = breakpoint
 
             self._write_stats(
                 infobox,
