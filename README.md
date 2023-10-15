@@ -86,14 +86,14 @@ More detailed docs: [http://omegak2.net/poe/PyPoE/](http://omegak2.net/poe/PyPoE
     - Run the full export script:\
     `docker run pypoe ./export.bash --threads 30 -u <wiki-username> -p <wiki-password> --dry-run`
 
-    - Mount a volume within the docker (for instance you could mount a local directory to /out to save exporter output,
-      or mount your local code to the /pypoe/PyPoE directory to avoid rebuilding the docker image after making a change):\
-    `docker run -v "$PWD"/out:/out -v "$PWD"/PyPoE:/pypoe/PyPoE pypoe ./export.bash --write`
+    - Mount a volume within the docker (for instance you could mount a local directory to /pypoe/out to save exporter output,
+      or mount your local code to the PyPoE module location to test local changes without rebuilding the docker image):\
+    `docker run -v "$PWD"/out:/pypoe/out -v "$PWD"/PyPoE:$(docker run pypoe python -c "import PyPoE; print(PyPoE.__path__[0])") pypoe ./export.bash --write`
 
-    - Open a shell within the docker container:
+    - The image reads game content from patchcdn.pathofexile.com by default. To mount your local ggpk dir you will need to
+      open a shell and configure pypoe before running your commands:
     ```
-    docker run -v /path/to/ggpk:/ggpk_path -it --entrypoint bash pypoe
-    poetry shell
+    docker run -v /path/to/ggpk:/ggpk_path -it pypoe bash
     pypoe_exporter config set ggpk_path /ggpk_path
     pypoe_exporter setup perform
     # ...
