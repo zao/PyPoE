@@ -128,6 +128,7 @@ from typing import List, Tuple, Union
 # self
 from PyPoE import DATA_DIR
 from PyPoE.poe.constants import MOD_GENERATION_TYPE
+from PyPoE.poe.file.dat import DatRecord, RelationalReader
 from PyPoE.poe.file.shared import AbstractFileReadOnly, ParserError, ParserWarning
 from PyPoE.poe.file.shared.cache import AbstractFileCache
 from PyPoE.shared.decorators import doc
@@ -328,7 +329,7 @@ class TranslationLanguage(TranslationReprMixin):
         parent.languages.append(self)
         self.parent = parent
         self.language = language
-        self.strings = []
+        self.strings: List[TranslationString] = []
 
     def __eq__(self, other):
         if not isinstance(other, TranslationLanguage):
@@ -513,9 +514,6 @@ class TranslationString(TranslationReprMixin):
     # replacement tags used in translations
     _re_split = re.compile(r"(?:\{(?P<id>[0-9]*)(?:[\:]*)(?P<type>[^\}]*)\})", re.UNICODE)
 
-    _RANGE_FORMAT = "({0}-{1})"
-    _NEGATIVE_RANGE_FORMAT = "-({0}-{1})"
-
     def __init__(self, parent: TranslationLanguage):
         parent.strings.append(self)
         self.parent: TranslationLanguage = parent
@@ -687,28 +685,10 @@ class TranslationString(TranslationReprMixin):
 
                 if not use_placeholder:
                     if custom_formatter:
-                        fmt = custom_formatter
-                    elif formats[tagid]:
-                        fmt = formats[tagid]
-                    elif "d" in self.tags_types[i]:
-                        fmt = "{0:n}".format
+                        value = custom_formatter(value)
                     else:
-                        fmt = "{0}".format
+                        value = formats[tagid](value)
 
-                    if is_range[tagid]:
-                        # Move the minus outside if both values are negative
-                        try:
-                            if value[0] < 0 and value[1] < 0:
-                                value = [-v for v in value]
-                                range_fmt = self._NEGATIVE_RANGE_FORMAT
-                            else:
-                                range_fmt = self._RANGE_FORMAT
-                        # TODO: how to show ranges for text stuff?
-                        except TypeError:
-                            range_fmt = self._RANGE_FORMAT
-                        value = range_fmt.format(fmt(value[0]), fmt(value[1]))
-                    else:
-                        value = fmt(value)
                 elif use_placeholder is True:
                     value = ascii_letters[23 + i]
                 elif callable(use_placeholder):
@@ -1096,18 +1076,19 @@ class TranslationQuantifierHandler(TranslationReprMixin):
             The format strings for each value
         """
         values = list(values)
-        formats = [None for _ in values]
+        formats = [range_format if r else str for r in is_range]
         for handler_name in self.index_handlers:
             f = self._get_handler_func(handler_name)
             if f is None:
                 continue
             for index in self.index_handlers[handler_name]:
                 index -= 1
-                formats[index] = f.format
                 if is_range[index]:
                     values[index] = (f.handler(values[index][0]), f.handler(values[index][1]))
+                    formats[index] = f.range_format
                 else:
                     values[index] = f.handler(values[index])
+                    formats[index] = f.format
 
         for i, value in enumerate(values):
             if is_range[i]:
@@ -1156,20 +1137,27 @@ class TranslationQuantifierHandler(TranslationReprMixin):
         return values
 
 
+def range_format(value: tuple):
+    if value[1] < 0:
+        return f"-({-value[0]}-{-value[1]})"
+    else:
+        return f"({value[0]}-{value[1]})"
+
+
 class TranslationQuantifier(TranslationReprMixin):
     """
     Attributes
     ----------
     id
         string identifier of the handler
-    arg_siz
+    arg_size
         number of arguments this handler accepts (excluding self)
     type
         type of the quantifier
     handler
         function that handles the values, if any
     reverse_handler
-        function  hat reverses handles the values, if any
+        function that reverses handles the values, if any
     """
 
     class QuantifierTypes(IntEnum):
@@ -1191,7 +1179,7 @@ class TranslationQuantifier(TranslationReprMixin):
         type: QuantifierTypes = QuantifierTypes.INT,
         handler: Union[Callable, None] = None,
         reverse_handler: Union[Callable, None] = None,
-        format: Callable = lambda v: v,
+        format: Callable = str,
     ):
         """
         Parameters
@@ -1207,7 +1195,9 @@ class TranslationQuantifier(TranslationReprMixin):
         reverse_handler
             function that reverses handles the values, if any
         format
-            str.format() specification for converting the value to a string
+            function that converts the value to a string
+        range_format
+            function that converts two values to a range string
         """
         self.id: str = id
         self.arg_size: int = arg_size
@@ -1218,6 +1208,14 @@ class TranslationQuantifier(TranslationReprMixin):
         self.reverse_handler: Union[Callable, None] = reverse_handler
         self.format = format
         TranslationQuantifierHandler.install_quantifier(self)
+
+    def range_format(self, value: tuple):
+        if value[1] < 0:
+            v0, v1 = [self.format(-v) for v in value]
+            return f"-({v0}-{v1})"
+        else:
+            v0, v1 = [self.format(v) for v in value]
+            return f"({v0}-{v1})"
 
 
 class TQReminderString(TranslationQuantifier):
@@ -1265,6 +1263,74 @@ class TQNumberFormat(TranslationQuantifier):
                 return formatted
             else:
                 return re.sub(r"\.?0+$", "", formatted)
+
+
+class TQRelationalData(TranslationQuantifier):
+    def __init__(
+        self,
+        id: str,
+        relational_reader: RelationalReader,
+        table: str,
+        index_column: str = None,
+        value_column: str = "Name",
+        predicate: (str, Any) = None,
+        placeholder: str = None,
+        convert_type: str = None,
+    ):
+        self.table = relational_reader[table]
+        if index_column and index_column not in self.table.index:
+            self.table.build_index(index_column)
+        self.index_column = index_column
+        self.value_column = value_column
+        self.predicate = predicate
+        self.placeholder = placeholder
+        self.convert_type = convert_type
+        super().__init__(id=id, handler=self.handle, reverse_handler=self.reverse)
+
+    def range_format(self, v: tuple):
+        return v[0] if v[0] == v[1] else self.placeholder
+
+    def handle(self, v):
+        try:
+            if self.convert_type == "short" and v and v < 0:
+                v = v + 0x10000
+
+            if self.index_column:
+                result = self.table.index[self.index_column][v]
+                return self.get_value(result, self.value_column)
+            else:
+                return self.table[v][self.value_column]
+        except KeyError:
+            return self.placeholder
+
+    def reverse(self, v):
+        reader = self.table
+        if self.value_column not in reader.index:
+            reader.build_index(self.value_column)
+        result = reader.index[self.value_column][v]
+        return self.get_value(result, self.index_column, self.convert_type)
+
+    def get_value(
+        self, result: DatRecord | List[DatRecord], column: str = None, convert_type: str = None
+    ):
+        if isinstance(result, DatRecord):
+            result = [result]
+
+        if self.predicate:
+            result = [r for r in result if r[self.predicate[0]] == self.predicate[1]]
+
+        if column:
+            result = [r[column] for r in result]
+        else:
+            result = [r.rowid for r in result]
+
+        if convert_type == "short":
+            result = [v - 0x10000 if v & 0x8000 else v for v in result]
+
+        if len(result) == 1:
+            return result[0]
+        else:
+            return result
 
 
 class TranslationResult(TranslationReprMixin):
@@ -2141,94 +2207,61 @@ def install_data_dependant_quantifiers(relational_reader):
         files from.
     """
 
-    def _get_reverse_lookup_from_reader(relational_reader, key):
-        def _get_from_value(value):
-            for row in relational_reader:
-                if row[key] == value:
-                    return row.rowid
-
-        return _get_from_value
-
-    TranslationQuantifier(
-        id="mod_value_to_item_class",
-        handler=lambda v: relational_reader["ItemClasses.dat64"][v]["Name"],
-        reverse_handler=_get_reverse_lookup_from_reader(
-            relational_reader["ItemClasses.dat64"], "Name"
-        ),
-    )
-
-    def _tempest_mod_text_reverse(value):
-        results = []
-        for row in relational_reader["Mods.dat64"]:
-            if row["GenerationType"] != MOD_GENERATION_TYPE.TEMPEST:
-                continue
-            if row["Name"] == value:
-                results.append(row.rowid)
-
-        if len(results) == 1:
-            return results[0]
-        elif len(results) == 0:
-            return None
-        else:
-            return results
-
-    TranslationQuantifier(
-        id="tempest_mod_text",
-        handler=lambda v: relational_reader["Mods.dat64"][v]["Name"],
-        reverse_handler=_tempest_mod_text_reverse,
-    )
-
-    def _get_reverse_lookup_from_reader(relational_reader, key):
-        def _get_from_value(value):
-            for row in relational_reader:
-                if row[key] == value:
-                    return row.rowid
-
-        return _get_from_value
-
-    TranslationQuantifier(
-        id="display_indexable_support",
-        # TODO: Review this
-        # handler=lambda v: relational_reader['IndexableSupportGems.dat64'][v]['Name'],
-        reverse_handler=_get_reverse_lookup_from_reader(
-            relational_reader["IndexableSupportGems.dat64"], "Name"
-        ),
-    )
-
-    TranslationQuantifier(
-        id="tree_expansion_jewel_passive",
-        handler=lambda v: relational_reader["Data/PassiveTreeExpansionJewelSizes.dat64"][v]["Name"],
-        reverse_handler=_get_reverse_lookup_from_reader(
-            relational_reader["Data/PassiveTreeExpansionJewelSizes.dat64"], "Name"
-        ),
-    )
-
-    TranslationQuantifier(
-        id="affliction_reward_type",
-        handler=lambda v: relational_reader["Data/AfflictionRewardTypeVisuals.dat64"][v]["Name"],
-        reverse_handler=_get_reverse_lookup_from_reader(
-            relational_reader["Data/AfflictionRewardTypeVisuals.dat64"], "Name"
-        ),
-    )
-
-    TranslationQuantifier(
-        id="display_indexable_skill",
-        # handler=lambda v: relational_reader['IndexableSkillGems.dat64'][v]['Name'],
-        reverse_handler=_get_reverse_lookup_from_reader(
-            relational_reader["IndexableSkillGems.dat64"], "Name"
-        ),
-    )
-
-    # I believe this is currently not right, as the handler actually uses a value located in
-    # additionalProperties of the item, and
-    # not in the mod itself. THe mod itself has min = max = 0.
-    # TranslationQuantifier(
-    #     id='passive_hash',
-    #     handler=lambda v: relational_reader['Data/PassiveSkills.dat64'][v]['PassiveSkillGraphId'],
-    #     reverse_handler=_get_reverse_lookup_from_reader(
-    #         relational_reader['Data/PassiveSkills.dat64'], 'PassiveSkillGraphId'),
-    # )
     TQReminderString(relational_reader=relational_reader)
+
+    TQRelationalData(
+        id="mod_value_to_item_class",
+        relational_reader=relational_reader,
+        table="ItemClasses.dat64",
+        placeholder="<random item type>",
+    )
+
+    TQRelationalData(
+        id="tempest_mod_text",
+        relational_reader=relational_reader,
+        table="Mods.dat64",
+        predicate=("GenerationType", MOD_GENERATION_TYPE.TEMPEST),
+        placeholder="<random Tempest modifier>",
+    )
+
+    TQRelationalData(
+        id="display_indexable_support",
+        relational_reader=relational_reader,
+        table="IndexableSupportGems.dat64",
+        index_column="Index",
+        placeholder="<random Support Gem>",
+    )
+
+    TQRelationalData(
+        id="tree_expansion_jewel_passive",
+        relational_reader=relational_reader,
+        table="PassiveTreeExpansionJewelSizes.dat64",
+    )
+
+    TQRelationalData(
+        id="affliction_reward_type",
+        relational_reader=relational_reader,
+        table="AfflictionRewardTypeVisuals.dat64",
+        index_column="AfflictionRewardTypes",
+        placeholder="<Delirium reward>",
+    )
+
+    TQRelationalData(
+        id="display_indexable_skill",
+        relational_reader=relational_reader,
+        table="IndexableSkillGems.dat64",
+        index_column="Index",
+        placeholder="<Random Skill>",
+    )
+
+    TQRelationalData(
+        id="passive_hash",
+        relational_reader=relational_reader,
+        table="PassiveSkills.dat64",
+        index_column="PassiveSkillGraphId",
+        convert_type="short",
+        placeholder="<Passive Skill>",
+    )
 
     TranslationQuantifierHandler.init()
 
