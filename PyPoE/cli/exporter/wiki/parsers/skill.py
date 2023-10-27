@@ -767,49 +767,84 @@ class SkillParserShared(parser.BaseParser):
             # Quality stat data
             stat_ids = [r["Id"] for r in row["StatsKeys"]]
 
-            lowest = max(50, min(1000, min(abs(v) for v in row["StatsValuesPermille"])))
+            abs_stats = [abs(v) for v in row["StatsValuesPermille"]]
+            lowest = max(
+                50,
+                min(
+                    1000,
+                    max(
+                        # for values that don't increase smoothly per point,
+                        # find the greatest factor that does:
+                        # value of 750 (.75 per point) => 250 (breakpoint = 4)
+                        # value of 1500 (1.5 per point) => 500 (breakpoint = 2)
+                        next(
+                            filter(
+                                lambda n: n and 1000 % n == 0, map(lambda n: v // n, range(1, 21))
+                            ),
+                            v,
+                        )
+                        for v in abs_stats
+                    ),
+                ),
+            )
             breakpoint = 1000 // lowest
 
-            # Quality Translation
-            qtr = tf.get_translation(
+            bp_tr = tf.get_translation(
                 tags=stat_ids,
                 values=[v / lowest for v in row["StatsValuesPermille"]],
                 full_result=True,
                 lang=config.get_option("language"),
             )
+            q40_tr = tf.get_translation(
+                tags=stat_ids,
+                values=[v / 25 for v in row["StatsValuesPermille"]],
+                full_result=True,
+                lang=config.get_option("language"),
+            )
+
+            qtr = (
+                q40_tr
+                if sum(len(ids) for ids in q40_tr.found_ids)
+                >= sum(len(ids) for ids in bp_tr.found_ids)
+                else bp_tr
+            )
 
             lines = []
-            range_lines = []
+            bp_lines = []
             for ts in qtr.string_instances:
                 values = []
-                range_values = []
                 for stat_id in ts.translation.ids:
                     try:
                         v = row["StatsValuesPermille"][stat_ids.index(stat_id)]
-                        values.append(v // lowest)
-                        range_values.append((v / 1000, v / 50))
+                        values.append(v / 1000)
                     except ValueError:
                         values.append(0)
-                        range_values.append(0)
                 lines.extend(
                     ts.format_string(
                         values=values,
                         is_range=[False for _ in values],
-                    )[
-                        0
-                    ].split("\n")
+                        custom_formatter=str,
+                    )[0].split("\n")
                 )
-                range_lines.extend(
+            for ts in bp_tr.string_instances:
+                values = []
+                for stat_id in ts.translation.ids:
+                    try:
+                        v = row["StatsValuesPermille"][stat_ids.index(stat_id)]
+                        values.append(v * breakpoint / 1000)
+                    except ValueError:
+                        values.append(0)
+                bp_lines.extend(
                     ts.format_string(
-                        values=range_values,
-                        is_range=[isinstance(v, tuple) for v in range_values],
+                        values=values,
+                        is_range=[False for v in values],
                         custom_formatter=str,
                     )[0].split("\n")
                 )
 
             infobox[prefix + "stat_text"] = "<br>".join(lines)
-            infobox[prefix + "stat_range"] = "<br>".join(range_lines)
             infobox[prefix + "stat_breakpoint"] = breakpoint
+            infobox[prefix + "stat_per_breakpoint"] = "<br>".join(bp_lines)
 
             self._write_stats(
                 infobox,
