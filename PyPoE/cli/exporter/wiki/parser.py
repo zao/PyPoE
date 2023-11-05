@@ -70,10 +70,11 @@ from PyPoE.cli.core import Msg, console
 from PyPoE.cli.exporter import config
 from PyPoE.cli.exporter.util import fix_path, get_content_path
 from PyPoE.poe.constants import MOD_DOMAIN, MOD_STATS_RANGE, WORDLISTS
-from PyPoE.poe.file.dat import RelationalReader, set_default_spec
+from PyPoE.poe.file.dat import RelationalReader
 from PyPoE.poe.file.file_system import FileSystem
 from PyPoE.poe.file.it import ITFileCache
 from PyPoE.poe.file.ot import OTFileCache
+from PyPoE.poe.file.specification import load
 from PyPoE.poe.file.translations import (
     MissingIdentifierWarning,
     TranslationFileCache,
@@ -1389,7 +1390,7 @@ class BaseParser:
     def __init__(self, base_path, parsed_args):
         self.parsed_args = parsed_args
         # Make sure to load the appropriate version of the specification
-        set_default_spec(version=config.get_option("version"))
+        self.specification = load(version=config.get_option("version"))
 
         self.base_path = base_path
         self.file_system = FileSystem(root_path=get_content_path())
@@ -1406,6 +1407,7 @@ class BaseParser:
             path_or_file_system=self.file_system,
             files=self._files,
             read_options=opt,
+            specification=self.specification,
             raise_error_on_missing_relation=False,
             language=config.get_option("language"),
         )

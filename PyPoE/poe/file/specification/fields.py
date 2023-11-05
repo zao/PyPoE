@@ -224,7 +224,7 @@ class _Common:
         return {k: getattr(self, k) for k in self.__slots__}
 
 
-class Specification(dict):
+class Specification(dict[str, "File"]):
     """
     Specification file
     """
@@ -407,20 +407,20 @@ class File:
         """
         starting_fields_length = 0
         if fields is None:
-            fields = OrderedDict()
+            self.fields = OrderedDict[str, Field]()
         else:
             starting_fields_length = len(fields)
-            fields = OrderedDict(((field.name, field) for field in fields))
+            self.fields = OrderedDict(((field.name, field) for field in fields))
         assert starting_fields_length == len(
             fields
         ), "Field names must be unique within each file definition."
+        fields = self.fields
 
-        self.fields = fields
         if virtual_fields is None:
-            virtual_fields = OrderedDict()
+            self.virtual_fields = OrderedDict[str, VirtualField]()
         else:
-            virtual_fields = OrderedDict(((field.name, field) for field in virtual_fields))
-        self.virtual_fields = virtual_fields
+            self.virtual_fields = OrderedDict(((field.name, field) for field in virtual_fields))
+        virtual_fields = self.virtual_fields
 
         # Set utility columns from the given data
         self.columns = OrderedDict()
@@ -456,7 +456,8 @@ class File:
                     pass
 
             for item in delete_zip:
-                del self.columns_zip[item]
+                if item in self.columns_zip:
+                    del self.columns_zip[item]
 
     def __getitem__(self, item):
         return getattr(self, item)
@@ -627,15 +628,15 @@ class Field(_Common, ReprMixin):
         return getattr(self, item)
 
 
-class VirtualField(_Common):
+class VirtualField(_Common, ReprMixin):
     """
     Virtual fields are based off other Field instances and provide additional
     convenience options such as grouping certain fields together.
     """
 
-    __slots__ = ["name", "fields", "zip"]
+    __slots__ = ["name", "fields", "zip", "alias"]
 
-    def __init__(self, name: str, fields: Tuple[str, ...], zip: bool = False):
+    def __init__(self, name: str, fields: Tuple[str, ...], zip: bool = False, alias: bool = False):
         """
 
         Parameters
@@ -649,10 +650,13 @@ class VirtualField(_Common):
         zip
              Whether to zip the fields together.
              This option requires each of the referenced fields to be a list.
+        alias
+             Returns the first non-null field value instead of a list of all values.
         """
         self.name = name
         self.fields = fields
         self.zip = zip
+        self.alias = alias
 
     def __getitem__(self, item):
         return getattr(self, item)

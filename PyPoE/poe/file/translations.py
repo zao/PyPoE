@@ -1849,7 +1849,7 @@ class TranslationFile(AbstractFileReadOnly):
 
 
 @doc(append=AbstractFileCache)
-class TranslationFileCache(AbstractFileCache):
+class TranslationFileCache(AbstractFileCache[TranslationFile]):
     """
     Creates a memory cache of :class:`TranslationFile` objects.
 

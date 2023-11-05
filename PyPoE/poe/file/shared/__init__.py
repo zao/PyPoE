@@ -73,7 +73,9 @@ import os
 import re
 from enum import IntEnum
 from io import BytesIO
+from time import sleep
 from typing import TYPE_CHECKING, Any, Callable, Dict, List, Union
+from urllib import parse, request
 
 if TYPE_CHECKING:
     from PyPoE.poe.file.file_system import FileSystemNode
@@ -170,8 +172,20 @@ class AbstractFileReadOnly(ReprMixin):
         elif isinstance(file_path_or_raw, bytes):
             return function(*args, buffer=BytesIO(file_path_or_raw), **kwargs)
         elif isinstance(file_path_or_raw, str):
-            with open(file_path_or_raw, "rb") as f:
-                return function(*args, buffer=f, **kwargs)
+            if file_path_or_raw.startswith(("http://", "https://")):
+                parsed = parse.urlparse(file_path_or_raw)
+                url = parsed.scheme + "://" + parsed.netloc + parse.quote(parsed.path)
+                for i in range(4):
+                    try:
+                        return function(*args, buffer=request.urlopen(url), **kwargs)
+                    except Exception as e:
+                        err = e
+                        sleep(2**i)
+                raise err
+
+            else:
+                with open(file_path_or_raw, "rb") as f:
+                    return function(*args, buffer=f, **kwargs)
         else:
             raise TypeError("file_path_or_raw must be a file path or bytes object")
 

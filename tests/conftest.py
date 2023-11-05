@@ -56,8 +56,6 @@ _argparse_versions = {
     "alpha": VERSION.ALPHA,
 }
 
-run = True
-
 # =============================================================================
 # Classes
 # =============================================================================
@@ -90,10 +88,6 @@ def pytest_addoption(parser):
 
 
 def pytest_generate_tests(metafunc):
-    global run
-    if run:
-        dat.set_default_spec(version=get_version(metafunc.config))
-        run = False
     if "dat_file_name" in metafunc.fixturenames:
         file_names = [fn for fn in load(version=get_version(metafunc.config))]
 
@@ -123,7 +117,6 @@ def pytest_generate_tests(metafunc):
 @pytest.fixture(scope="session")
 def poe_version(request) -> VERSION:
     v = get_version(request.config)
-    dat.set_default_spec(v)
     return v
 
 

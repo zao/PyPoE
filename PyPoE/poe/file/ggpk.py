@@ -162,7 +162,7 @@ class BaseRecord(ReprMixin):
         ggpkfile : GGPKFile
             GGPKFile instance
         """
-        ggpkfile.write(struct.pack("<i", self.length))
+        ggpkfile.write(struct.pack("<I", self.length))
         ggpkfile.write(self.tag)
 
 
@@ -587,7 +587,7 @@ class GGPKFile(AbstractFileReadOnly, metaclass=InheritedDocStringsMeta):
     #
 
     def _read_record(self, records, ggpkfile, offset: int):
-        length = struct.unpack("<i", ggpkfile.read(4))[0]
+        length = struct.unpack("<I", ggpkfile.read(4))[0]
         tag = ggpkfile.read(4)
 
         """for recordcls in recordsc:

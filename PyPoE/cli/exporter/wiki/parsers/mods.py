@@ -259,9 +259,10 @@ class ModParser(BaseParser):
 
             stats = []
             values = []
+            buffstats = mod["BuffTemplate"]["StatsKey"] if mod["BuffTemplate"] else []
             for i in MOD_STATS_RANGE:
                 k = mod["StatsKey%s" % i]
-                if k is None:
+                if k is None or k in buffstats:
                     continue
 
                 stat = k["Id"]

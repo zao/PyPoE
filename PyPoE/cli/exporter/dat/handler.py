@@ -39,8 +39,7 @@ from PyPoE.cli.exporter import config
 from PyPoE.cli.exporter.util import get_content_path
 
 # self
-from PyPoE.poe.constants import VERSION
-from PyPoE.poe.file import dat
+from PyPoE.poe.file import dat, specification
 from PyPoE.poe.file.file_system import FileSystem
 
 # =============================================================================
@@ -82,11 +81,9 @@ class DatExportHandler:
     def handle(self, args):
         ver = config.get_option("version")
 
-        if ver != VERSION.DEFAULT:
-            console("Loading specification for %s" % ver)
-            dat.set_default_spec(version=ver)
+        console("Loading specification for %s" % ver)
 
-        spec = dat._default_spec
+        spec = specification.load(version=ver)
         if args.files is None:
             args.files = list(spec)
         else:
@@ -136,7 +133,7 @@ class DatExportHandler:
                 remove.append(name)
                 continue
 
-            df = dat.DatFile(name)
+            df = dat.DatFile(name, args.spec)
 
             df.read(file_path_or_raw=data, use_dat_value=False, x64=True)
 

@@ -39,7 +39,6 @@ from PyPoE.cli.exporter.wiki.handler import ExporterHandler, ExporterResult
 from PyPoE.cli.exporter.wiki.parser import BaseParser, TagHandler
 
 # Self
-from PyPoE.poe.constants import RARITY
 from PyPoE.poe.text import parse_description_tags
 
 # =============================================================================
@@ -472,9 +471,10 @@ class BestiaryParser(GenericLuaParser):
             },
         ),
         (
-            "HintText",
+            "Category",
             {
                 "key": "header",
+                "value": lambda v: v["Text"],
             },
         ),
         (
@@ -553,11 +553,10 @@ class BestiaryParser(GenericLuaParser):
 
         for row in self.rr["BestiaryRecipeComponent.dat64"]:
             self._copy_from_keys(row, self._COPY_KEYS_BESTIARY_COMPONENTS, components)
-            if row["BeastRarity"] != RARITY.ANY and row["BeastRarity"] is not None:
-                display_string = "ItemDisplayString" + row["BeastRarity"].name_lower.title()
-                components[-1]["rarity"] = self.rr["ClientStrings.dat64"].index["Id"][
-                    display_string
-                ]["Text"]
+            if row["BeastRarity"]:
+                display_string = "ItemDisplayString" + row["BeastRarity"]["Id"]
+                client_strings = self.rr["ClientStrings.dat64"].index["Id"]
+                components[-1]["rarity"] = client_strings[display_string]["Text"]
 
         recipe_components = []
         for recipe_id, data in recipe_components_temp.items():

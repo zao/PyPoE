@@ -165,12 +165,6 @@ def test_load():
     return load(os.path.join(spec_dir, "dat_testspec.py"))
 
 
-def test_reload_default_spec():
-    old = dat._default_spec
-    dat.set_default_spec(reload=True)
-    assert id(old) != id(dat._default_spec), "Specification wasn't reloaded"
-
-
 #
 # DatValue
 #
@@ -382,8 +376,8 @@ class TestDatValue:
 def test_dat_file(testspec_dat_file):
     spec = test_load()
 
-    df = dat.DatFile("TestSpec.dat")
-    dr = df.read(testspec_dat_file, specification=spec)
+    df = dat.DatFile("TestSpec.dat", specification=spec)
+    dr = df.read(testspec_dat_file)
 
     for row in dr:
         for test in test_data:
@@ -446,12 +440,10 @@ class TestSpecificationErrors:
         assert e.value.code == dat.SpecificationError.ERRORS.RUNTIME_MISSING_SPECIFICATION
 
     def test_runtime_rowsize_mismatch(self, rr_temp_dir):
-        df = dat.DatFile("Main.dat")
+        spec = load(os.path.join(spec_dir, "runtime_rowsize_mismatch.py"))
+        df = dat.DatFile("Main.dat", specification=spec)
         with pytest.raises(dat.SpecificationError) as e:
-            df.read(
-                os.path.join(rr_temp_dir, "Data", "Main.dat"),
-                specification=load(os.path.join(spec_dir, "runtime_rowsize_mismatch.py")),
-            )
+            df.read(os.path.join(rr_temp_dir, "Data", "Main.dat"), specification=spec)
 
         assert e.value.code == dat.SpecificationError.ERRORS.RUNTIME_ROWSIZE_MISMATCH
 

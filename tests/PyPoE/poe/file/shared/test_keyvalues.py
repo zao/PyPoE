@@ -105,7 +105,7 @@ class KeyValuesFile(keyvalues.AbstractKeyValueFile):
     )
 
 
-class KeyValuesFileCache(keyvalues.AbstractKeyValueFileCache):
+class KeyValuesFileCache(keyvalues.AbstractKeyValueFileCache[KeyValuesFile]):
     FILE_TYPE = KeyValuesFile
 
 
