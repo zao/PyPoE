@@ -14989,6 +14989,13 @@ specification = Specification(
                     key="IndexableSkillGems.dat",
                 ),
             ),
+            virtual_fields=(
+                VirtualField(
+                    name="Name",
+                    fields=("Name1",),
+                    alias=True,
+                ),
+            ),
         ),
         "IndexableSupportGems.dat": File(
             fields=(
@@ -16016,22 +16023,17 @@ specification = Specification(
         "ItemisedVisualEffect.dat": File(
             fields=(
                 Field(
-                    name="BaseItemTypesKey",
+                    name="EffectBaseType",
                     type="ref|out",
                     key="BaseItemTypes.dat",
                 ),
                 Field(
-                    name="ItemVisualEffectKey",
+                    name="VisualEffect",
                     type="ref|out",
                     key="ItemVisualEffect.dat",
                 ),
                 Field(
-                    name="ItemVisualIdentityKey1",
-                    type="ref|out",
-                    key="ItemVisualIdentity.dat",
-                ),
-                Field(
-                    name="ItemVisualIdentityKey2",
+                    name="VisualIdentity",
                     type="ref|out",
                     key="ItemVisualIdentity.dat",
                 ),
@@ -16082,10 +16084,6 @@ specification = Specification(
                     type="ref|list|byte",
                 ),
                 Field(
-                    name="Key0",
-                    type="ref|out",
-                ),
-                Field(
                     name="Data5",
                     type="ref|list|byte",
                 ),
@@ -16094,12 +16092,16 @@ specification = Specification(
                     type="ref|list|byte",
                 ),
                 Field(
-                    name="Key1",
+                    name="Key0",
                     type="ref|out",
                 ),
                 Field(
                     name="Flag3",
                     type="bool",
+                ),
+                Field(
+                    name="Key1",
+                    type="ref|out",
                 ),
             ),
         ),
@@ -19542,6 +19544,22 @@ specification = Specification(
                 ),
                 Field(
                     name="Unknown1",
+                    type="int",
+                ),
+            ),
+        ),
+        "MicrotransactionSkillGemEffectSlotTypes.dat": File(
+            fields=(
+                Field(
+                    name="Id",
+                    type="ref|string",
+                ),
+                Field(
+                    name="Type",
+                    type="ref|string",
+                ),
+                Field(
+                    name="Unknown0",
                     type="int",
                 ),
             ),
@@ -25054,21 +25072,23 @@ specification = Specification(
         "QuestStates.dat": File(
             fields=(
                 Field(
-                    name="QuestKey",
+                    name="Quest",
                     type="ref|out",
                     key="Quest.dat",
                 ),
                 Field(
-                    name="Unknown0",
+                    name="Order",
                     type="int",
                 ),
                 Field(
-                    name="QuestStates",
-                    type="ref|list|int",
+                    name="FlagsPresent",
+                    type="ref|list|ref|out",
+                    key="QuestFlags.dat",
                 ),
                 Field(
-                    name="Data0",
-                    type="ref|list|int",
+                    name="FlagsMissing",
+                    type="ref|list|ref|out",
+                    key="QuestFlags.dat",
                 ),
                 Field(
                     name="Text",
@@ -25088,7 +25108,7 @@ specification = Specification(
                     key="MapPins.dat",
                 ),
                 Field(
-                    name="Unknown1",
+                    name="Unknown0",
                     type="int",
                 ),
                 Field(
@@ -25109,15 +25129,15 @@ specification = Specification(
                     type="bool",
                 ),
                 Field(
+                    name="Data0",
+                    type="ref|list|int",
+                ),
+                Field(
                     name="Data1",
                     type="ref|list|int",
                 ),
                 Field(
-                    name="Data2",
-                    type="ref|list|int",
-                ),
-                Field(
-                    name="Unknown2",
+                    name="Unknown1",
                     type="int",
                 ),
                 Field(
@@ -25126,9 +25146,15 @@ specification = Specification(
                     key="SoundEffects.dat",
                 ),
                 Field(
-                    name="Unknown3",
-                    type="ref|generic",
-                    key="QuestStates.dat",
+                    name="Unknown2",
+                    type="ref|string",
+                ),
+            ),
+            virtual_fields=(
+                VirtualField(
+                    name="QuestKey",
+                    fields=("Quest",),
+                    alias=True,
                 ),
             ),
         ),
@@ -27082,6 +27108,11 @@ specification = Specification(
                     name="ItemExperienceType",
                     type="ref|out",
                     key="ItemExperienceTypes.dat",
+                ),
+                Field(
+                    name="MtxSlotTypes",
+                    type="ref|list|ref|out",
+                    key="MicrotransactionSkillGemEffectSlotTypes.dat",
                 ),
             ),
             virtual_fields=(
