@@ -3137,6 +3137,187 @@ class ItemsParser(SkillParserShared):
         function=_currency_extra,
     )
 
+    _COSMETIC_NAME_MAP = {
+        "English": {
+            "Skin Transfer": {"cosmetic_type": "Consumable"},
+            "Vanishing Dye": {"cosmetic_type": "Miscellaneous"},
+            "Invisible Buff Effect": {
+                "cosmetic_type": "Skill Gem Effect",
+                "cosmetic_target": "Buff",
+            },
+        }
+    }
+
+    _COSMETIC_TYPE_MAP = {
+        "English": {
+            "Blink and Mirror Arrow Skin": {
+                "cosmetic_type": "Skill Gem Effect",
+                "cosmetic_target": "Blink Arrow,Mirror Arrow",
+            },
+            "Blink Mirror Arrow Skin": {
+                "cosmetic_type": "Skill Gem Effect",
+                "cosmetic_target": "Blink Arrow,Mirror Arrow",
+            },
+            "Orb Void Sphere Skin": {
+                "cosmetic_type": "Skill Gem Effect",
+                "cosmetic_target": "Void Sphere",
+            },
+            "Oblivion Fireball Skin": {
+                "cosmetic_type": "Skill Gem Effect",
+                "cosmetic_target": "Fireball",
+            },
+            "Arctic Glacial Cascade": {
+                "cosmetic_type": "Skill Gem Effect",
+                "cosmetic_target": "Glacial Cascade",
+            },
+            "Summon Raging Spirits Skin": {
+                "cosmetic_type": "Skill Gem Effect",
+                "cosmetic_target": "Summon Raging Spirit",
+            },
+            "Artillery Ballis Skin": {
+                "cosmetic_type": "Skill Gem Effect",
+                "cosmetic_target": "Artillery Ballista",
+            },
+            "Banner Skin": {"cosmetic_type": "Skill Gem Effect", "cosmetic_target": "Banner"},
+            "Offering Skin": {"cosmetic_type": "Skill Gem Effect", "cosmetic_target": "Offering"},
+            "Quiver Skin": {"cosmetic_type": "Weapon Skin", "cosmetic_target": "Quiver"},
+            "Apparition Effect": {"cosmetic_type": "Apparition"},
+            "Amulet Effect": {"cosmetic_type": "Apparition"},
+            "Consumable Effect": {"cosmetic_type": "Consumable"},
+            "Charge Skin": {"cosmetic_type": "Alternate Charge Skin"},
+            "Cursor Skin": {"cosmetic_type": "Cursor"},
+            "Footprints Effect": {"cosmetic_type": "Footprints"},
+            "Boots Modifier": {"cosmetic_type": "Footprints"},
+            "Flask Effect": {"cosmetic_type": "Flask Skin"},
+            "Life Flask Skin": {"cosmetic_type": "Flask Skin", "cosmetic_target": "Life Flask"},
+            "Mana Flask Skin": {"cosmetic_type": "Flask Skin", "cosmetic_target": "Mana Flask"},
+            "Utility Flask Skin": {
+                "cosmetic_type": "Flask Skin",
+                "cosmetic_target": "Utility Flask",
+            },
+            "Quicksilver Flask Effect": {
+                "cosmetic_type": "Flask Skin",
+                "cosmetic_target": "Quicksilver Flask",
+            },
+            "Weapon Modifier": {"cosmetic_type": "Weapon Added Effect"},
+            "Finisher Effect": {"cosmetic_type": "Weapon Added Effect"},
+            "Body Armour Skin": {"cosmetic_type": "Armour Skin"},
+            "Body Armour Attachment": {"cosmetic_type": "Armour Attachment"},
+            "Helmet Skin and Attachment": {"cosmetic_type": "Helmet Skin / Attachment"},
+            "Portal Modification": {"cosmetic_type": "Portal"},
+            "Portrait Frame Modification": {"cosmetic_type": "Portrait"},
+        }
+    }
+
+    _COSMETIC_ITEM_CLASS_MAP = {
+        "English": {
+            "Body Armour": "Armour Skin",
+            "Jewel": "Passive Jewel Skin",
+            "Active Skill Gem": "Skill Gem Effect",
+            "Support Skill Gem": "Skill Gem Effect",
+            "Claw": "Weapon Skin",
+            "Dagger": "Weapon Skin",
+            "Rune Dagger": "Weapon Skin",
+            "Wand": "Weapon Skin",
+            "Axe": "Weapon Skin",
+            "Mace": "Weapon Skin",
+            "Sword": "Weapon Skin",
+            "One Hand Sword": "Weapon Skin",
+            "Thrusting One Hand Sword": "Weapon Skin",
+            "One Hand Axe": "Weapon Skin",
+            "One Hand Mace": "Weapon Skin",
+            "Sceptre": "Weapon Skin",
+            "Bow": "Weapon Skin",
+            "Staff": "Weapon Skin",
+            "Two Hand Sword": "Weapon Skin",
+            "Two Hand Axe": "Weapon Skin",
+            "Two Hand Mace": "Weapon Skin",
+            "Warstaff": "Weapon Skin",
+            "FishingRod": "Weapon Skin",
+        }
+    }
+
+    def _cosmetics_extra(self, infobox: dict[str, str], *_):
+        if "cosmetic_type" not in infobox:
+            return
+
+        if infobox["name"] in self._COSMETIC_NAME_MAP[self._language]:
+            infobox.update(self._COSMETIC_NAME_MAP[self._language][infobox["name"]])
+            return
+
+        cosmetic_type = infobox["cosmetic_type"].replace(" Of ", " of ").replace("  ", " ")
+
+        if cosmetic_type in self._COSMETIC_TYPE_MAP[self._language]:
+            infobox.update(self._COSMETIC_TYPE_MAP[self._language][cosmetic_type])
+            return
+
+        if "Name" not in self.rr["MicrotransactionCategory.dat64"].index:
+            self.rr["MicrotransactionCategory.dat64"].build_index("Name")
+        categories = self.rr["MicrotransactionCategory.dat64"].index["Name"]
+
+        if cosmetic_type not in categories:
+            for unique in self.rr["UniqueStashLayout.dat64"]:
+                unique_name = unique["WordsKey"]["Text"]
+                if unique_name in cosmetic_type or unique_name.replace("The ", "") in cosmetic_type:
+                    item_class = unique["UniqueStashTypesKey"]["Name"]
+                    unique_type = self._COSMETIC_ITEM_CLASS_MAP[self._language].get(
+                        item_class,
+                        item_class + " Skin",
+                    )
+
+                    if unique_type not in categories:
+                        console(
+                            f'invalid unique type "{unique_type}" for {infobox["name"]}',
+                            msg=Msg.warning,
+                        )
+                    else:
+                        infobox["cosmetic_type"] = unique_type
+                        infobox["cosmetic_target"] = unique_name
+                        return
+
+            target = cosmetic_type.replace(" Skin", "").replace(" Effect", "")
+            suffix = cosmetic_type.replace(target, "")
+            if "Name" not in self.rr["BaseItemTypes.dat64"].index:
+                self.rr["BaseItemTypes.dat64"].build_index("Name")
+            item_index = self.rr["BaseItemTypes.dat64"].index["Name"]
+            item_type = next(
+                (
+                    self._COSMETIC_ITEM_CLASS_MAP[self._language].get(
+                        i["ItemClassesKey"]["Id"],
+                        i["ItemClassesKey"]["ItemClassCategory"]["Text"] + suffix,
+                    )
+                    for i in (
+                        item_index[target]
+                        or item_index[target + " Support"]
+                        or item_index[target + " Trap"]
+                        or item_index["Summon " + target]
+                    )
+                    if i["ItemClassesKey"] and i["ItemClassesKey"]["Id"] != "Microtransaction"
+                ),
+                None,
+            )
+            if item_type:
+                if item_type not in categories:
+                    console(
+                        f'invalid item type "{item_type}" for {infobox["name"]}', msg=Msg.warning
+                    )
+                else:
+                    infobox["cosmetic_type"] = item_type
+                    infobox["cosmetic_target"] = target
+                    return
+
+            for tag in self.rr["GemTags.dat64"]:
+                if tag["Tag"] and tag["Tag"] + " Skin" in cosmetic_type:
+                    infobox["cosmetic_type"] = "Skill Gem Effect"
+                    infobox["cosmetic_target"] = tag["Tag"]
+                    return
+
+            console(
+                f'unknown cosmetic category "{infobox["cosmetic_type"]}" for {infobox["name"]}',
+                msg=Msg.warning,
+            )
+            del infobox["cosmetic_type"]
+
     _type_microtransaction = _type_factory(
         data_file="CurrencyItems.dat64",
         data_mapping=(
@@ -3156,6 +3337,7 @@ class ItemsParser(SkillParserShared):
                 },
             ),
         ),
+        function=_cosmetics_extra,
     )
 
     _type_hideout_doodad = _type_factory(
