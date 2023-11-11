@@ -2983,7 +2983,7 @@ class ItemsParser(SkillParserShared):
 
         if flasks["BuffDefinitionsKey"]:
             stats = [s["Id"] for s in flasks["BuffDefinitionsKey"]["StatsKeys"]]
-            if stats.len() > 0:
+            if stats:
                 tr = self.tc["stat_descriptions.txt"].get_translation(
                     stats,
                     flasks["BuffStatValues"],
@@ -2994,7 +2994,7 @@ class ItemsParser(SkillParserShared):
                 stats = [s["Id"] for s in flasks["BuffDefinitionsKey"]["Binary_StatsKeys"]]
                 tr = self.tc["stat_descriptions.txt"].get_translation(
                     stats,
-                    flasks["BuffStatValues"],
+                    [1 for _ in stats],
                     full_result=True,
                     lang=self._language,
                 )
