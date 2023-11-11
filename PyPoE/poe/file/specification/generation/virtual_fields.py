@@ -102,6 +102,13 @@ virtual_fields_mappings = {
                     alias=True,
                 ),
             ],
+            "IndexableSkillGems": [
+                VirtualField(
+                    name="Name",
+                    fields=("Name1",),
+                    alias=True,
+                ),
+            ],
             "MapPurchaseCosts": [
                 VirtualField(
                     name="NormalPurchase",

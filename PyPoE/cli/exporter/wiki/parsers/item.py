@@ -2596,30 +2596,12 @@ class ItemsParser(SkillParserShared):
             target = f"{set['Qualifier']} {set['Name']}" if set["Qualifier"] else set["Name"]
             infobox["tattoo_target"] = target
             infobox["tattoo_tribe"] = data["Tribe"]
-            infobox["implicit1_text"] = format(
-                ("default", "Replaces a"), ("value", target), ("default", "Passive Skill")
-            )
-
             if override["Limit"]:
                 infobox["tattoo_limit"] = override["Limit"]["Description"]
-                infobox["implicit2_text"] = format(
-                    ("default", "Limit"), ("value", override["Limit"]["Description"])
-                )
-            elif override["RequiresAdjacent"]:
+            if override["RequiresAdjacent"]:
                 infobox["tattoo_min_adjacent"] = override["RequiresAdjacent"]
-                infobox["implicit2_text"] = format(
-                    ("default", "Requires"),
-                    ("value", override["RequiresAdjacent"]),
-                    ("default", "adjacent Passive Skills Allocated"),
-                )
-            elif override["MaxAdjacent"]:
+            if override["MaxAdjacent"]:
                 infobox["tattoo_max_adjacent"] = override["MaxAdjacent"]
-                infobox["implicit2_text"] = format(
-                    ("default", "Requires"),
-                    ("value", f"Maximum {override['MaxAdjacent']}"),
-                    ("default", "adjacent Passive Skill Allocated"),
-                )
-
             stats = [s["Id"] for s in override["Stats"]]
             tr = self.tc["stat_descriptions.txt"].get_translation(
                 stats,
@@ -2627,7 +2609,6 @@ class ItemsParser(SkillParserShared):
                 full_result=True,
                 lang=self._language,
             )
-            infobox["tattoo_stat_text"] = "\n".join(tr.lines)
             lines = [" ".join(line.splitlines()) for line in tr.lines]
             if override["Effect"]:
                 skill = override["Effect"]["GrantedEffect"]

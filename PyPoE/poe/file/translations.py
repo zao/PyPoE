@@ -128,6 +128,7 @@ from typing import List, Tuple, Union
 # self
 from PyPoE import DATA_DIR
 from PyPoE.poe.constants import MOD_GENERATION_TYPE
+from PyPoE.poe.file.dat import DatRecord, RelationalReader
 from PyPoE.poe.file.shared import AbstractFileReadOnly, ParserError, ParserWarning
 from PyPoE.poe.file.shared.cache import AbstractFileCache
 from PyPoE.shared.decorators import doc
@@ -324,11 +325,11 @@ class TranslationLanguage(TranslationReprMixin):
 
     __slots__ = ["parent", "language", "strings"]
 
-    def __init__(self, language, parent):
+    def __init__(self, language: str, parent: Translation):
         parent.languages.append(self)
         self.parent = parent
         self.language = language
-        self.strings = []
+        self.strings: List[TranslationString] = []
 
     def __eq__(self, other):
         if not isinstance(other, TranslationLanguage):
@@ -513,15 +514,13 @@ class TranslationString(TranslationReprMixin):
     # replacement tags used in translations
     _re_split = re.compile(r"(?:\{(?P<id>[0-9]*)(?:[\:]*)(?P<type>[^\}]*)\})", re.UNICODE)
 
-    _RANGE_FORMAT = "({0}-{1})"
-    _NEGATIVE_RANGE_FORMAT = "-({0}-{1})"
-
     def __init__(self, parent: TranslationLanguage):
         parent.strings.append(self)
         self.parent: TranslationLanguage = parent
+        self.translation = parent.parent
         self.quantifier: TranslationQuantifierHandler = TranslationQuantifierHandler()
         self.range: List[TranslationRange] = []
-        self.tags: List[str] = []
+        self.tags: List[int] = []
         self.tags_types: List[str] = []
         self.strings: List[str] = []
 
@@ -618,6 +617,7 @@ class TranslationString(TranslationReprMixin):
         is_range: List[bool],
         use_placeholder: Union[bool, Callable[[int], Any]] = False,
         only_values: bool = False,
+        custom_formatter: Callable = None,
     ) -> Tuple[Union[str, List[int]], List[int], List[int], Dict[str, str]]:
         """
         Formats the string for the given values.
@@ -661,12 +661,20 @@ class TranslationString(TranslationReprMixin):
 
             The forth return value is a dictionary of extra strings
         """
-        values, extra_strings = self.quantifier.handle(values, is_range)
+        values, extra_strings, formats = self.quantifier.handle(values, is_range)
 
         string = []
         used = set()
         for i, tagid in enumerate(self.tags):
-            value = values[tagid]
+            try:
+                value = values[tagid]
+            except IndexError:
+                warnings.warn(
+                    f"error getting {tagid} from {values} for stats {self.translation.ids}",
+                    TranslationWarning,
+                )
+                raise
+
             if not only_values:
                 string.append(self.strings[i])
                 # For adding the plus sign to the $+d and $+d%% formats
@@ -676,25 +684,11 @@ class TranslationString(TranslationReprMixin):
                     string.append("+")
 
                 if not use_placeholder:
-                    if "d" in self.tags_types[i]:
-                        fmt = "{0:n}"
+                    if custom_formatter:
+                        value = custom_formatter(value)
                     else:
-                        fmt = "{0}"
+                        value = formats[tagid](value)
 
-                    if is_range[tagid]:
-                        # Move the minus outside if both values are negative
-                        try:
-                            if value[0] < 0 and value[1] < 0:
-                                value = [-v for v in value]
-                                range_fmt = self._NEGATIVE_RANGE_FORMAT
-                            else:
-                                range_fmt = self._RANGE_FORMAT
-                        # TODO: how to show ranges for text stuff?
-                        except TypeError:
-                            range_fmt = self._RANGE_FORMAT
-                        value = range_fmt.format(fmt, fmt.replace("{0", "{1")).format(*value)
-                    else:
-                        value = fmt.format(value)
                 elif use_placeholder is True:
                     value = ascii_letters[23 + i]
                 elif callable(use_placeholder):
@@ -899,11 +893,12 @@ class TranslationRange(TranslationReprMixin):
         if self.min is None and self.max is None:
             return 1
 
+        def f_comp(left, right):
+            return left > right if self.negated else left <= right
+
         if self.negated:
-            f_comp = int.__gt__
             f_and = bool.__or__
         else:
-            f_comp = int.__le__
             f_and = bool.__and__
 
         if self.min is None:
@@ -952,9 +947,9 @@ class TranslationQuantifierHandler(TranslationReprMixin):
         )
     )
 
-    handlers = {}
+    handlers: Dict[str, "TranslationQuantifier"] = {}
 
-    reverse_handlers = {}
+    reverse_handlers: Dict[str, "TranslationQuantifier"] = {}
 
     regex = None
 
@@ -1012,13 +1007,13 @@ class TranslationQuantifierHandler(TranslationReprMixin):
         # if self.registered_handlers != other.registered_handlers:
         _diff_dict(self.index_handlers, other.index_handlers)
 
-    def _get_handler_func(self, handler_name: str) -> Callable:
+    def _get_handler_func(self, handler_name: str) -> "TranslationQuantifier":
         try:
-            f = self.handlers[handler_name].handler
+            f = self.handlers[handler_name]
         except KeyError:
             self._warn_uncaptured(handler_name)
             return None
-        if f is None:
+        if f.handler is None:
             # TODO: Show a warning here, not an error.
             # self._warn_uncaptured(handler_name)
             return None
@@ -1058,7 +1053,7 @@ class TranslationQuantifierHandler(TranslationReprMixin):
 
     def handle(
         self, values: Union[List[int], List[Tuple[int, int]]], is_range: List[bool]
-    ) -> Tuple[List[Any], Dict[str, str]]:
+    ) -> Tuple[List[Any], Dict[str, str], List[Callable]]:
         """
         Handle the given values based on the registered quantifiers.
 
@@ -1077,8 +1072,11 @@ class TranslationQuantifierHandler(TranslationReprMixin):
 
             The keys of the dictionary refer to the translation quantifier
             string used
+
+            The format strings for each value
         """
         values = list(values)
+        formats = [range_format if r else str for r in is_range]
         for handler_name in self.index_handlers:
             f = self._get_handler_func(handler_name)
             if f is None:
@@ -1086,9 +1084,11 @@ class TranslationQuantifierHandler(TranslationReprMixin):
             for index in self.index_handlers[handler_name]:
                 index -= 1
                 if is_range[index]:
-                    values[index] = (f(values[index][0]), f(values[index][1]))
+                    values[index] = (f.handler(values[index][0]), f.handler(values[index][1]))
+                    formats[index] = f.range_format
                 else:
-                    values[index] = f(values[index])
+                    values[index] = f.handler(values[index])
+                    formats[index] = f.format
 
         for i, value in enumerate(values):
             if is_range[i]:
@@ -1099,11 +1099,11 @@ class TranslationQuantifierHandler(TranslationReprMixin):
         strings = OrderedDict()
         for handler_name, args in self.string_handlers.items():
             f = self._get_handler_func(handler_name)
-            if f is None:
+            if f is None or f.handler is None:
                 continue
-            strings[handler_name] = f(*args)
+            strings[handler_name] = f.handler(*args)
 
-        return values, strings
+        return values, strings, formats
 
     def handle_reverse(self, values: List[int]) -> List[int]:
         """
@@ -1137,20 +1137,27 @@ class TranslationQuantifierHandler(TranslationReprMixin):
         return values
 
 
+def range_format(value: tuple):
+    if value[1] < 0:
+        return f"-({-value[0]}-{-value[1]})"
+    else:
+        return f"({value[0]}-{value[1]})"
+
+
 class TranslationQuantifier(TranslationReprMixin):
     """
     Attributes
     ----------
     id
         string identifier of the handler
-    arg_siz
+    arg_size
         number of arguments this handler accepts (excluding self)
     type
         type of the quantifier
     handler
         function that handles the values, if any
     reverse_handler
-        function  hat reverses handles the values, if any
+        function that reverses handles the values, if any
     """
 
     class QuantifierTypes(IntEnum):
@@ -1172,6 +1179,7 @@ class TranslationQuantifier(TranslationReprMixin):
         type: QuantifierTypes = QuantifierTypes.INT,
         handler: Union[Callable, None] = None,
         reverse_handler: Union[Callable, None] = None,
+        format: Callable = str,
     ):
         """
         Parameters
@@ -1185,7 +1193,11 @@ class TranslationQuantifier(TranslationReprMixin):
         handler
             function that handles the values, if any
         reverse_handler
-            function  hat reverses handles the values, if any
+            function that reverses handles the values, if any
+        format
+            function that converts the value to a string
+        range_format
+            function that converts two values to a range string
         """
         self.id: str = id
         self.arg_size: int = arg_size
@@ -1194,7 +1206,16 @@ class TranslationQuantifier(TranslationReprMixin):
         self.type: TranslationQuantifier.QuantifierTypes = type
         self.handler: Union[Callable, None] = handler
         self.reverse_handler: Union[Callable, None] = reverse_handler
+        self.format = format
         TranslationQuantifierHandler.install_quantifier(self)
+
+    def range_format(self, value: tuple):
+        if value[1] < 0:
+            v0, v1 = [self.format(-v) for v in value]
+            return f"-({v0}-{v1})"
+        else:
+            v0, v1 = [self.format(v) for v in value]
+            return f"({v0}-{v1})"
 
 
 class TQReminderString(TranslationQuantifier):
@@ -1209,6 +1230,107 @@ class TQReminderString(TranslationQuantifier):
 
     def handle(self, *args):
         return self.relational_reader["ReminderText.dat64"].index["Id"][args[0].strip()]["Text"]
+
+
+class TQNumberFormat(TranslationQuantifier):
+    def __init__(self, id, multiplier=1, divisor=1, addend=0, dp=None, fixed=False):
+        self.multiplier = multiplier
+        self.divisor = divisor
+        self.addend = addend
+        self.dp = dp
+        self.fixed = fixed
+        super().__init__(
+            id=id,
+            format=self.format,
+            handler=self.handle,
+            reverse_handler=self.reverse,
+        )
+
+    def handle(self, v):
+        return v * self.multiplier / self.divisor + self.addend
+
+    def reverse(self, v):
+        return (float(v) - self.addend) * self.divisor / self.multiplier
+
+    def format(self, v):
+        if self.dp is None:
+            return f"{v:n}"
+        elif self.dp == 0:
+            return f"{int(v):n}"
+        else:
+            formatted = "{0:.{dp}f}".format(v, dp=self.dp)
+            if self.fixed:
+                return formatted
+            else:
+                return re.sub(r"\.?0+$", "", formatted)
+
+
+class TQRelationalData(TranslationQuantifier):
+    def __init__(
+        self,
+        id: str,
+        relational_reader: RelationalReader,
+        table: str,
+        index_column: str = None,
+        value_column: str = "Name",
+        predicate: (str, Any) = None,
+        placeholder: str = None,
+        convert_type: str = None,
+    ):
+        self.table = relational_reader[table]
+        if index_column and index_column not in self.table.index:
+            self.table.build_index(index_column)
+        self.index_column = index_column
+        self.value_column = value_column
+        self.predicate = predicate
+        self.placeholder = placeholder
+        self.convert_type = convert_type
+        super().__init__(id=id, handler=self.handle, reverse_handler=self.reverse)
+
+    def range_format(self, v: tuple):
+        return v[0] if v[0] == v[1] else self.placeholder
+
+    def handle(self, v):
+        try:
+            if self.convert_type == "short" and v and v < 0:
+                v = v + 0x10000
+
+            if self.index_column:
+                result = self.table.index[self.index_column][v]
+                return self.get_value(result, self.value_column)
+            else:
+                return self.table[v][self.value_column]
+        except KeyError:
+            return self.placeholder
+
+    def reverse(self, v):
+        reader = self.table
+        if self.value_column not in reader.index:
+            reader.build_index(self.value_column)
+        result = reader.index[self.value_column][v]
+        return self.get_value(result, self.index_column, self.convert_type)
+
+    def get_value(
+        self, result: DatRecord | List[DatRecord], column: str = None, convert_type: str = None
+    ):
+        if isinstance(result, DatRecord):
+            result = [result]
+
+        if self.predicate:
+            result = [r for r in result if r[self.predicate[0]] == self.predicate[1]]
+
+        if column:
+            result = [r[column] for r in result]
+        else:
+            result = [r.rowid for r in result]
+
+        if convert_type == "short":
+            result = [v - 0x10000 if v & 0x8000 else v for v in result]
+
+        if len(result) == 1:
+            return result[0]
+        else:
+            return result
 
 
 class TranslationResult(TranslationReprMixin):
@@ -2085,94 +2207,61 @@ def install_data_dependant_quantifiers(relational_reader):
         files from.
     """
 
-    def _get_reverse_lookup_from_reader(relational_reader, key):
-        def _get_from_value(value):
-            for row in relational_reader:
-                if row[key] == value:
-                    return row.rowid
-
-        return _get_from_value
-
-    TranslationQuantifier(
-        id="mod_value_to_item_class",
-        handler=lambda v: relational_reader["ItemClasses.dat64"][v]["Name"],
-        reverse_handler=_get_reverse_lookup_from_reader(
-            relational_reader["ItemClasses.dat64"], "Name"
-        ),
-    )
-
-    def _tempest_mod_text_reverse(value):
-        results = []
-        for row in relational_reader["Mods.dat64"]:
-            if row["GenerationType"] != MOD_GENERATION_TYPE.TEMPEST:
-                continue
-            if row["Name"] == value:
-                results.append(row.rowid)
-
-        if len(results) == 1:
-            return results[0]
-        elif len(results) == 0:
-            return None
-        else:
-            return results
-
-    TranslationQuantifier(
-        id="tempest_mod_text",
-        handler=lambda v: relational_reader["Mods.dat64"][v]["Name"],
-        reverse_handler=_tempest_mod_text_reverse,
-    )
-
-    def _get_reverse_lookup_from_reader(relational_reader, key):
-        def _get_from_value(value):
-            for row in relational_reader:
-                if row[key] == value:
-                    return row.rowid
-
-        return _get_from_value
-
-    TranslationQuantifier(
-        id="display_indexable_support",
-        # TODO: Review this
-        # handler=lambda v: relational_reader['IndexableSupportGems.dat64'][v]['Name'],
-        reverse_handler=_get_reverse_lookup_from_reader(
-            relational_reader["IndexableSupportGems.dat64"], "Name"
-        ),
-    )
-
-    TranslationQuantifier(
-        id="tree_expansion_jewel_passive",
-        handler=lambda v: relational_reader["Data/PassiveTreeExpansionJewelSizes.dat64"][v]["Name"],
-        reverse_handler=_get_reverse_lookup_from_reader(
-            relational_reader["Data/PassiveTreeExpansionJewelSizes.dat64"], "Name"
-        ),
-    )
-
-    TranslationQuantifier(
-        id="affliction_reward_type",
-        handler=lambda v: relational_reader["Data/AfflictionRewardTypeVisuals.dat64"][v]["Name"],
-        reverse_handler=_get_reverse_lookup_from_reader(
-            relational_reader["Data/AfflictionRewardTypeVisuals.dat64"], "Name"
-        ),
-    )
-
-    TranslationQuantifier(
-        id="display_indexable_skill",
-        # handler=lambda v: relational_reader['IndexableSkillGems.dat64'][v]['Name'],
-        reverse_handler=_get_reverse_lookup_from_reader(
-            relational_reader["IndexableSkillGems.dat64"], "Name"
-        ),
-    )
-
-    # I believe this is currently not right, as the handler actually uses a value located in
-    # additionalProperties of the item, and
-    # not in the mod itself. THe mod itself has min = max = 0.
-    # TranslationQuantifier(
-    #     id='passive_hash',
-    #     handler=lambda v: relational_reader['Data/PassiveSkills.dat64'][v]['PassiveSkillGraphId'],
-    #     reverse_handler=_get_reverse_lookup_from_reader(
-    #         relational_reader['Data/PassiveSkills.dat64'], 'PassiveSkillGraphId'),
-    # )
     TQReminderString(relational_reader=relational_reader)
+
+    TQRelationalData(
+        id="mod_value_to_item_class",
+        relational_reader=relational_reader,
+        table="ItemClasses.dat64",
+        placeholder="<random item type>",
+    )
+
+    TQRelationalData(
+        id="tempest_mod_text",
+        relational_reader=relational_reader,
+        table="Mods.dat64",
+        predicate=("GenerationType", MOD_GENERATION_TYPE.TEMPEST),
+        placeholder="<random Tempest modifier>",
+    )
+
+    TQRelationalData(
+        id="display_indexable_support",
+        relational_reader=relational_reader,
+        table="IndexableSupportGems.dat64",
+        index_column="Index",
+        placeholder="<random Support Gem>",
+    )
+
+    TQRelationalData(
+        id="tree_expansion_jewel_passive",
+        relational_reader=relational_reader,
+        table="PassiveTreeExpansionJewelSizes.dat64",
+    )
+
+    TQRelationalData(
+        id="affliction_reward_type",
+        relational_reader=relational_reader,
+        table="AfflictionRewardTypeVisuals.dat64",
+        index_column="AfflictionRewardTypes",
+        placeholder="<Delirium reward>",
+    )
+
+    TQRelationalData(
+        id="display_indexable_skill",
+        relational_reader=relational_reader,
+        table="IndexableSkillGems.dat64",
+        index_column="Index",
+        placeholder="<Random Skill>",
+    )
+
+    TQRelationalData(
+        id="passive_hash",
+        relational_reader=relational_reader,
+        table="PassiveSkills.dat64",
+        index_column="PassiveSkillGraphId",
+        convert_type="short",
+        placeholder="<Passive Skill>",
+    )
 
     TranslationQuantifierHandler.init()
 
@@ -2197,293 +2286,274 @@ TranslationQuantifier(
 )
 """
 
-TranslationQuantifier(
+TQNumberFormat(
     id="30%_of_value",
-    handler=lambda v: v * 0.3,
-    reverse_handler=lambda v: v / 0.3,
+    multiplier=30,
+    divisor=100,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="60%_of_value",
-    handler=lambda v: v * 0.6,
-    reverse_handler=lambda v: v / 0.6,
+    multiplier=60,
+    divisor=100,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="deciseconds_to_seconds",
-    handler=lambda v: v / 10,
-    reverse_handler=lambda v: float(v) * 10,
+    divisor=10,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_three",
-    handler=lambda v: v / 3,
-    reverse_handler=lambda v: float(v) * 3,
+    divisor=3,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_five",
-    handler=lambda v: v / 5,
-    reverse_handler=lambda v: float(v) * 5,
+    divisor=5,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_one_hundred",
-    handler=lambda v: v / 100,
-    reverse_handler=lambda v: float(v) * 100,
+    divisor=100,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_one_hundred_and_negate",
-    handler=lambda v: -v / 100,
-    reverse_handler=lambda v: -float(v) * 100,
+    divisor=-100,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_one_hundred_0dp",
-    handler=lambda v: round(v / 100, 0),
-    reverse_handler=lambda v: float(v) * 100,
+    divisor=100,
+    dp=0,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_one_hundred_1dp",
-    handler=lambda v: round(v / 100, 1),
-    reverse_handler=lambda v: float(v) * 100,
+    divisor=100,
+    dp=1,
+    fixed=True,
 )
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_one_hundred_2dp",
-    handler=lambda v: round(v / 100, 2),
-    reverse_handler=lambda v: float(v) * 100,
+    divisor=100,
+    dp=2,
+    fixed=True,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_one_hundred_2dp_if_required",
-    handler=lambda v: round(v / 100, 2),
-    reverse_handler=lambda v: float(v) * 100,
+    divisor=100,
+    dp=2,
 )
 
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_two_0dp",
-    handler=lambda v: v // 2,
-    reverse_handler=lambda v: int(v) * 2,
+    divisor=2,
+    dp=0,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_six",
-    handler=lambda v: v / 6,
-    reverse_handler=lambda v: int(v) * 6,
+    divisor=6,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_ten_0dp",
-    handler=lambda v: v // 10,
-    reverse_handler=lambda v: int(v) * 10,
+    divisor=10,
+    dp=0,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_ten_1dp",
-    handler=lambda v: round(v / 10, 1),
-    reverse_handler=lambda v: int(v) * 10,
+    divisor=10,
+    dp=1,
+    fixed=True,
 )
 
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_twelve",
-    handler=lambda v: v / 12,
-    reverse_handler=lambda v: int(v) * 12,
+    divisor=12,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_fifteen_0dp",
-    handler=lambda v: v // 15,
-    reverse_handler=lambda v: int(v) * 15,
+    divisor=15,
+    dp=0,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_twenty_then_double_0dp",
-    handler=lambda v: v // 20 * 2,
-    reverse_handler=lambda v: int(v) * 20 // 2,
+    multiplier=2,
+    divisor=20,
+    dp=0,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="milliseconds_to_seconds",
-    handler=lambda v: v / 1000,
-    reverse_handler=lambda v: float(v) * 1000,
+    divisor=1000,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="milliseconds_to_seconds_halved",
-    handler=lambda v: v / 500,
-    reverse_handler=lambda v: float(v) * 500,
+    divisor=500,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="milliseconds_to_seconds_0dp",
-    handler=lambda v: int(round(v / 1000, 0)),
-    reverse_handler=lambda v: float(v) * 1000,
+    divisor=1000,
+    dp=0,
 )
-TranslationQuantifier(
+TQNumberFormat(
     id="milliseconds_to_seconds_1dp",
-    handler=lambda v: round(v / 1000, 1),
-    reverse_handler=lambda v: float(v) * 1000,
+    divisor=1000,
+    dp=1,
+    fixed=True,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="milliseconds_to_seconds_2dp",
-    handler=lambda v: round(v / 1000, 2),
-    reverse_handler=lambda v: float(v) * 1000,
+    divisor=1000,
+    dp=2,
+    fixed=True,
 )
 
-# TODO: Not exactly sure yet how this one works
-TranslationQuantifier(
+TQNumberFormat(
     id="milliseconds_to_seconds_2dp_if_required",
-    handler=lambda v: round(v / 1000, 2),
-    reverse_handler=lambda v: float(v) * 1000,
+    divisor=1000,
+    dp=2,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="multiplicative_damage_modifier",
-    handler=lambda v: v + 100,
-    reverse_handler=lambda v: float(v) - 100,
+    addend=100,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="multiplicative_permyriad_damage_modifier",
-    handler=lambda v: v / 100 + 100,
-    reverse_handler=lambda v: (float(v) - 100) * 100,
+    divisor=100,
+    addend=100,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="multiply_by_four",
-    handler=lambda v: v * 4,
-    reverse_handler=lambda v: int(v) // 4,
+    multiplier=4,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="multiply_by_four_and_",
-    handler=lambda v: v * 4,
-    reverse_handler=lambda v: int(v) // 4,
+    multiplier=4,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="negate",
-    handler=lambda v: -v,
-    reverse_handler=lambda v: -float(v),
+    multiplier=-1,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="old_leech_percent",
-    handler=lambda v: v / 5,
-    reverse_handler=lambda v: float(v) * 5,
+    divisor=5,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="old_leech_permyriad",
-    handler=lambda v: v / 500,
-    reverse_handler=lambda v: float(v) * 500,
+    divisor=500,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="per_minute_to_per_second",
-    handler=lambda v: round(v / 60, 1),
-    reverse_handler=lambda v: float(v) * 60,
+    divisor=60,
+    dp=1,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="per_minute_to_per_second_0dp",
-    handler=lambda v: int(round(v / 60, 0)),
-    reverse_handler=lambda v: float(v) * 60,
+    divisor=60,
+    dp=0,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="per_minute_to_per_second_1dp",
-    handler=lambda v: round(v / 60, 1),
-    reverse_handler=lambda v: float(v) * 60,
+    divisor=60,
+    dp=1,
+    fixed=True,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="per_minute_to_per_second_2dp",
-    handler=lambda v: round(v / 60, 2),
-    reverse_handler=lambda v: float(v) * 60,
+    divisor=60,
+    dp=2,
+    fixed=True,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="per_minute_to_per_second_2dp_if_required",
-    handler=lambda v: round(v / 60, 2) if v % 60 != 0 else v // 60,
-    reverse_handler=lambda v: float(v) * 60,
+    divisor=60,
+    dp=2,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="times_twenty",
-    handler=lambda v: v * 20,
-    reverse_handler=lambda v: int(v) // 20,
+    multiplier=20,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="times_one_point_five",
-    handler=lambda v: v * 1.5,
-    reverse_handler=lambda v: int(v / 1.5),
+    multiplier=1.5,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="double",
-    handler=lambda v: v * 2,
-    reverse_handler=lambda v: int(v) // 2,
+    multiplier=2,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="negate_and_double",
-    handler=lambda v: -v * 2,
-    reverse_handler=lambda v: int(-v) // 2,
+    multiplier=-2,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_four",
-    handler=lambda v: v / 4,
-    reverse_handler=lambda v: v * 4,
+    divisor=4,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_ten_1dp_if_required",
-    handler=lambda v: round(v / 10, 1),
-    reverse_handler=lambda v: v * 10,
+    divisor=10,
+    dp=1,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_fifty",
-    handler=lambda v: v / 50,
-    reverse_handler=lambda v: v * 50,
+    divisor=50,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="multiply_by_ten",
-    handler=lambda v: v * 10,
-    reverse_handler=lambda v: v / 10,
+    multiplier=10,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_one_thousand",
-    handler=lambda v: v / 1000,
-    reverse_handler=lambda v: v * 1000,
+    divisor=1000,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="plus_two_hundred",
-    handler=lambda v: v + 200,
-    reverse_handler=lambda v: v - 200,
+    addend=200,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="divide_by_twenty",
-    handler=lambda v: v / 20,
-    reverse_handler=lambda v: v * 20,
+    divisor=20,
 )
 
-TranslationQuantifier(
+TQNumberFormat(
     id="locations_to_metres",
-    handler=lambda v: v / 10,
-    reverse_handler=lambda v: v * 10,
+    divisor=10,
 )
 
 TranslationQuantifier(
