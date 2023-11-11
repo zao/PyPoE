@@ -3138,20 +3138,23 @@ class ItemsParser(SkillParserShared):
     )
 
     _type_microtransaction = _type_factory(
-        data_file="BaseItemTypes.dat64",
+        data_file="CurrencyItems.dat64",
         data_mapping=(
-            # This field was removed in 3.17.
-            # ('ItemShopType', {
-            #     'template': 'cosmetic_type',
-            #     'format': lambda v: v['Name'],
-            #     'condition': lambda v: v,
-            # }),
-            # This field was also removed in 3.17.
-            # ('ItemThemesKey', {
-            #     'template': 'cosmetic_theme',
-            #     'format': lambda v: v['Name'],
-            #     'condition': lambda v: v,
-            # }),
+            (
+                "CosmeticTypeName",
+                {
+                    "template": "cosmetic_type",
+                    "condition": lambda v: v,
+                },
+            ),
+            (
+                "ShopTagKey",
+                {
+                    "template": "cosmetic_theme",
+                    "format": lambda v: v["Name"],
+                    "condition": lambda v: v,
+                },
+            ),
         ),
     )
 
