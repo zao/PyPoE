@@ -75,6 +75,30 @@ More detailed docs: [http://omegak2.net/poe/PyPoE/](http://omegak2.net/poe/PyPoE
 
     - To install PyPoE as a dependency of a project that doesn't use poetry, run `poetry build`, then `pip install ./dist/pypoe-*.*.*.tar.gz`.
 
+7. Running in docker
+
+    - Build the docker image with:\
+    `docker build . -t pypoe`
+
+    - Run a command within the docker image:\
+    `docker run pypoe pypoe_exporter wiki items item name "Silver Flask" --print`
+
+    - Run the full export script:\
+    `docker run pypoe ./export.bash --threads 30 -u <wiki-username> -p <wiki-password> --dry-run`
+
+    - Mount a volume within the docker (for instance you could mount a local directory to /pypoe/out to save exporter output,
+      or mount your local code to the PyPoE module location to test local changes without rebuilding the docker image):\
+    `docker run -v "$PWD"/out:/pypoe/out -v "$PWD"/PyPoE:$(docker run pypoe python -c "import PyPoE; print(PyPoE.__path__[0])") pypoe ./export.bash --write`
+
+    - The image reads game content from patchcdn.pathofexile.com by default. To mount your local ggpk dir you will need to
+      open a shell and configure pypoe before running your commands:
+    ```
+    docker run -v /path/to/ggpk:/ggpk_path -it pypoe bash
+    pypoe_exporter config set ggpk_path /ggpk_path
+    pypoe_exporter setup perform
+    # ...
+    ```
+
 ## Setting up on VSCode
 
 VSCode has some great integrations with all this tooling. In order for you to benefit from them, please ensure you adjust your settings to the following..

@@ -31,8 +31,8 @@ See PyPoE/LICENSE
 
 # Python
 import re
+from urllib import request
 
-from PyPoE.cli.config import SetupError
 from PyPoE.cli.exporter import config
 
 # self
@@ -68,7 +68,10 @@ def get_content_path():
         paths = PoEPath(*args).get_installation_paths()
 
         if not paths:
-            raise SetupError("No PoE Installation found.")
+            with request.urlopen(
+                "https://raw.githubusercontent.com/poe-tool-dev/latest-patch-version/main/latest.txt"  # noqa
+            ) as latest:
+                return f"http://patchcdn.pathofexile.com/{latest.read().decode('utf-8')}/"
 
         return paths[0]
     else:
