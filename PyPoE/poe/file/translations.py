@@ -2592,6 +2592,12 @@ TQNumberFormat(
     divisor=10,
 )
 
+TQNumberFormat(
+    id="invert_chance",
+    multiplier=-1,
+    addend=100,
+)
+
 TranslationQuantifier(
     id="canonical_line",
     type=TranslationQuantifier.QuantifierTypes.STRING,

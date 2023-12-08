@@ -725,8 +725,12 @@ class MOD_DOMAIN(IntEnumOverride):
     SENTINEL = 30
     MEMORY_LINES = 31
     SANCTUM_RELIC = 32
-    MODS_DISALLOWED = 33  # Used in BaseItemTypes.dat, not Mods.dat.
-    CRUCIBLE = 34
+    CRUCIBLE_REMNANT = 33
+    TINCTURE = 34
+    AFFLICTION_CHARM = 35
+
+    # Items that can't have mods (may need to increase the number when new values are added)
+    MODS_DISALLOWED = 36
 
     # legacy names
     MASTER = CRAFTED

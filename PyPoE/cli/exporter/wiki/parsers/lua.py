@@ -851,12 +851,6 @@ class DelveParser(GenericLuaParser):
             },
         ),
         (
-            "CanRollEnchant",
-            {
-                "key": "can_enchant",
-            },
-        ),
-        (
             "CanImproveQuality",
             {
                 "key": "can_quality",

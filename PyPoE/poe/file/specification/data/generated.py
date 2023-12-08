@@ -340,6 +340,15 @@ specification = Specification(
                 ),
             ),
         ),
+        "ActionTypes.dat": File(
+            fields=(
+                Field(
+                    name="Id",
+                    type="ref|string",
+                    unique=True,
+                ),
+            ),
+        ),
         "ActiveSettings.dat": File(
             fields=(
                 Field(
@@ -407,8 +416,9 @@ specification = Specification(
                     type="ref|string",
                 ),
                 Field(
-                    name="Unknown0",
-                    type="ref|string",
+                    name="ActionType",
+                    type="ref|out",
+                    key="ActionTypes.dat",
                 ),
                 Field(
                     name="Icon_DDSFile",
@@ -443,7 +453,7 @@ specification = Specification(
                     type="bool",
                 ),
                 Field(
-                    name="Unknown1",
+                    name="Unknown0",
                     type="ref|string",
                 ),
                 Field(
@@ -487,7 +497,7 @@ specification = Specification(
                     key="Stats.dat",
                 ),
                 Field(
-                    name="Unknown2",
+                    name="Unknown1",
                     type="int",
                 ),
                 Field(
@@ -7795,10 +7805,6 @@ specification = Specification(
                     type="bool",
                 ),
                 Field(
-                    name="CanRollEnchant",
-                    type="bool",
-                ),
-                Field(
                     name="HasLuckyRolls",
                     type="bool",
                 ),
@@ -10812,6 +10818,60 @@ specification = Specification(
                 ),
             ),
         ),
+        "GemEffects.dat": File(
+            fields=(
+                Field(
+                    name="Id",
+                    type="ref|string",
+                    unique=True,
+                ),
+                Field(
+                    name="Name",
+                    type="ref|string",
+                    unique=True,
+                ),
+                Field(
+                    name="GrantedEffect",
+                    type="ref|out",
+                    key="GrantedEffects.dat",
+                ),
+                Field(
+                    name="GrantedEffectHardMode",
+                    type="ref|out",
+                    key="GrantedEffects.dat",
+                ),
+                Field(
+                    name="GrantedEffect2",
+                    type="ref|out",
+                    key="GrantedEffects.dat",
+                ),
+                Field(
+                    name="GrantedEffect2HardMode",
+                    type="ref|out",
+                    key="GrantedEffects.dat",
+                ),
+                Field(
+                    name="Description",
+                    type="ref|string",
+                    unique=True,
+                ),
+                Field(
+                    name="SupportSkillName",
+                    type="ref|string",
+                    unique=True,
+                ),
+                Field(
+                    name="GemTags",
+                    type="ref|list|ref|out",
+                    key="GemTags.dat",
+                ),
+                Field(
+                    name="Consumed_ModsKey",
+                    type="ref|out",
+                    key="Mods.dat",
+                ),
+            ),
+        ),
         "GemTags.dat": File(
             fields=(
                 Field(
@@ -11607,28 +11667,12 @@ specification = Specification(
                     key="GrantedEffects.dat",
                 ),
                 Field(
-                    name="SetId",
-                    type="int",
-                ),
-                Field(
                     name="StatsKeys",
                     type="ref|list|ref|out",
                     key="Stats.dat",
                 ),
                 Field(
                     name="StatsValuesPermille",
-                    type="ref|list|int",
-                ),
-                Field(
-                    name="Weight",
-                    type="int",
-                ),
-                Field(
-                    name="Data0",
-                    type="ref|list|int",
-                ),
-                Field(
-                    name="Data1",
                     type="ref|list|int",
                 ),
             ),
@@ -11718,6 +11762,19 @@ specification = Specification(
                     type="int",
                 ),
                 Field(
+                    name="BaseResolvedValues",
+                    type="ref|list|int",
+                ),
+                Field(
+                    name="AdditionalStatsValues",
+                    type="ref|list|int",
+                ),
+                Field(
+                    name="GrantedEffects",
+                    type="ref|list|ref|out",
+                    key="GrantedEffects.dat",
+                ),
+                Field(
                     name="AdditionalFlags",
                     type="ref|list|ref|out",
                     key="Stats.dat",
@@ -11744,19 +11801,6 @@ specification = Specification(
                 Field(
                     name="FloatStatsValues",
                     type="ref|list|float",
-                ),
-                Field(
-                    name="BaseResolvedValues",
-                    type="ref|list|int",
-                ),
-                Field(
-                    name="AdditionalStatsValues",
-                    type="ref|list|int",
-                ),
-                Field(
-                    name="GrantedEffects",
-                    type="ref|list|ref|out",
-                    key="GrantedEffects.dat",
                 ),
             ),
         ),
@@ -18016,6 +18060,10 @@ specification = Specification(
                 ),
                 Field(
                     name="AncestorTier",
+                    type="int",
+                ),
+                Field(
+                    name="AzmeriTier",
                     type="int",
                 ),
             ),
@@ -27024,11 +27072,6 @@ specification = Specification(
                     unique=True,
                 ),
                 Field(
-                    name="GrantedEffectsKey",
-                    type="ref|out",
-                    key="GrantedEffects.dat",
-                ),
-                Field(
                     name="StrengthRequirementPercent",
                     type="int",
                 ),
@@ -27041,11 +27084,6 @@ specification = Specification(
                     type="int",
                 ),
                 Field(
-                    name="GemTagsKeys",
-                    type="ref|list|ref|out",
-                    key="GemTags.dat",
-                ),
-                Field(
                     name="VaalVariant_BaseItemTypesKey",
                     type="ref|out",
                     key="BaseItemTypes.dat",
@@ -27055,27 +27093,9 @@ specification = Specification(
                     type="bool",
                 ),
                 Field(
-                    name="Description",
-                    type="ref|string",
-                ),
-                Field(
-                    name="Consumed_ModsKey",
-                    type="ref|out",
-                    key="Mods.dat",
-                ),
-                Field(
-                    name="GrantedEffectsKey2",
-                    type="ref|out",
-                    key="GrantedEffects.dat",
-                ),
-                Field(
                     name="MinionGlobalSkillLevelStat",
                     type="ref|out",
                     key="Stats.dat",
-                ),
-                Field(
-                    name="SupportSkillName",
-                    type="ref|string",
                 ),
                 Field(
                     name="IsSupport",
@@ -27112,15 +27132,6 @@ specification = Specification(
                     key="SkillGems.dat",
                 ),
                 Field(
-                    name="GrantedEffectHardMode",
-                    type="ref|out",
-                    key="GrantedEffects.dat",
-                ),
-                Field(
-                    name="Key0",
-                    type="ref|out",
-                ),
-                Field(
                     name="Unknown0",
                     type="int",
                 ),
@@ -27133,6 +27144,11 @@ specification = Specification(
                     name="MtxSlotTypes",
                     type="ref|list|ref|out",
                     key="MicrotransactionSkillGemEffectSlotTypes.dat",
+                ),
+                Field(
+                    name="GemEffects",
+                    type="ref|list|ref|out",
+                    key="GemEffects.dat",
                 ),
             ),
             virtual_fields=(
