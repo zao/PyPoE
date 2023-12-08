@@ -121,9 +121,7 @@ from collections import OrderedDict, defaultdict
 from collections.abc import Iterable
 from enum import IntEnum
 from string import ascii_letters
-from typing import Any, Callable, Dict
-from typing import Iterable as t_Iterable
-from typing import List, Tuple, Union
+from typing import Any, Callable, Dict, List, Literal, Tuple, TypeVar, Union, overload
 
 # self
 from PyPoE import DATA_DIR
@@ -181,7 +179,7 @@ regex_tokens = re.compile(
 _custom_translation_file = None
 _hardcoded_translation_file = None
 
-StatValue = Union[int, Tuple[int, int]]
+StatValue = TypeVar("StatValue", int, Tuple)
 """Numeric value to interpolate into a stat string. If a tuple is supplied,
  a range will be displayed instead"""
 
@@ -616,9 +614,10 @@ class TranslationString(TranslationReprMixin):
         values: Union[List[int], List[Tuple[int, int]]],
         is_range: List[bool],
         use_placeholder: Union[bool, Callable[[int], Any]] = False,
-        only_values: bool = False,
         custom_formatter: Callable = None,
-    ) -> Tuple[Union[str, List[int]], List[int], List[int], Dict[str, str]]:
+    ) -> Tuple[
+        Union[str, List[int]], List[int], List[int], Dict[str, str], List[str | Tuple[str, str]]
+    ]:
         """
         Formats the string for the given values.
 
@@ -643,13 +642,11 @@ class TranslationString(TranslationReprMixin):
             If a callable is specified, it will call the function with
             the index as first parameter. The callable should return a
             string to use as placeholder.
-        only_values
-            Only return the values and not
 
 
         Returns
         -------
-            Returns 4 values.
+            Returns 5 values.
 
             The first return value is the formatted string. If only placeholder
             is specified, instead of the string a list of parsed values is
@@ -659,11 +656,14 @@ class TranslationString(TranslationReprMixin):
 
             The third return value is a list of used values.
 
-            The forth return value is a dictionary of extra strings
+            The fourth return value is a dictionary of extra strings
+
+            The fifth return value is a list of formatted stat values
         """
         values, extra_strings, formats = self.quantifier.handle(values, is_range)
 
         string = []
+        formatted_values = [None for v in values]
         used = set()
         for i, tagid in enumerate(self.tags):
             try:
@@ -675,24 +675,29 @@ class TranslationString(TranslationReprMixin):
                 )
                 raise
 
-            if not only_values:
-                string.append(self.strings[i])
-                # For adding the plus sign to the $+d and $+d%% formats
-                if "+" in self.tags_types[i] and (
-                    is_range[tagid] and value[1] > 0 or not is_range[tagid] and value > 0
-                ):
-                    string.append("+")
+            string.append(self.strings[i])
+            # For adding the plus sign to the $+d and $+d%% formats
+            if "+" in self.tags_types[i] and (
+                is_range[tagid] and value[1] > 0 or not is_range[tagid] and value > 0
+            ):
+                string.append("+")
 
-                if not use_placeholder:
-                    if custom_formatter:
-                        value = custom_formatter(value)
+            if not use_placeholder:
+                if custom_formatter:
+                    value = custom_formatter(value)
+                    formatted_values[tagid] = (value, value)
+                else:
+                    if is_range[tagid]:
+                        formatted_values[tagid] = tuple(map(formats[tagid].format, value))
+                        value = formats[tagid].range_format(value)
                     else:
-                        value = formats[tagid](value)
+                        value = formats[tagid].format(value)
+                        formatted_values[tagid] = (value, value)
 
-                elif use_placeholder is True:
-                    value = ascii_letters[23 + i]
-                elif callable(use_placeholder):
-                    value = use_placeholder(i)
+            elif use_placeholder is True:
+                value = ascii_letters[23 + i]
+            elif callable(use_placeholder):
+                value = use_placeholder(i)
             string.append(value)
             used.add(tagid)
 
@@ -702,12 +707,9 @@ class TranslationString(TranslationReprMixin):
                 continue
             unused.append(val)
 
-        if only_values:
-            string = values
-        else:
-            string = "".join(string + [self.strings[-1]])
+        string = "".join(string + [self.strings[-1]])
 
-        return string, unused, values, extra_strings
+        return string, unused, values, extra_strings, formatted_values
 
     def match_range(self, values: List[Union[int, float]]) -> int:
         """
@@ -1053,7 +1055,7 @@ class TranslationQuantifierHandler(TranslationReprMixin):
 
     def handle(
         self, values: Union[List[int], List[Tuple[int, int]]], is_range: List[bool]
-    ) -> Tuple[List[Any], Dict[str, str], List[Callable]]:
+    ) -> Tuple[List[Any], Dict[str, str], List["TranslationQuantifier"]]:
         """
         Handle the given values based on the registered quantifiers.
 
@@ -1076,7 +1078,7 @@ class TranslationQuantifierHandler(TranslationReprMixin):
             The format strings for each value
         """
         values = list(values)
-        formats = [range_format if r else str for r in is_range]
+        formats = [noop_quantifier for r in is_range]
         for handler_name in self.index_handlers:
             f = self._get_handler_func(handler_name)
             if f is None:
@@ -1085,10 +1087,10 @@ class TranslationQuantifierHandler(TranslationReprMixin):
                 index -= 1
                 if is_range[index]:
                     values[index] = (f.handler(values[index][0]), f.handler(values[index][1]))
-                    formats[index] = f.range_format
+                    formats[index] = f
                 else:
                     values[index] = f.handler(values[index])
-                    formats[index] = f.format
+                    formats[index] = f
 
         for i, value in enumerate(values):
             if is_range[i]:
@@ -1135,13 +1137,6 @@ class TranslationQuantifierHandler(TranslationReprMixin):
             values[index] = int(values[index])
 
         return values
-
-
-def range_format(value: tuple):
-    if value[1] < 0:
-        return f"-({-value[0]}-{-value[1]})"
-    else:
-        return f"({value[0]}-{value[1]})"
 
 
 class TranslationQuantifier(TranslationReprMixin):
@@ -1216,6 +1211,9 @@ class TranslationQuantifier(TranslationReprMixin):
         else:
             v0, v1 = [self.format(v) for v in value]
             return f"({v0}-{v1})"
+
+
+noop_quantifier = TranslationQuantifier(id="tq_noop")
 
 
 class TQReminderString(TranslationQuantifier):
@@ -1489,7 +1487,7 @@ class TranslationFile(AbstractFileReadOnly):
 
     def __init__(
         self,
-        file_path: Union[t_Iterable[str], str, None] = None,
+        file_path: Union[Iterable[str], str, None] = None,
         base_dir: Union[str, None] = None,
         parent: Union["TranslationFileCache", None] = None,
     ):
@@ -1775,6 +1773,38 @@ class TranslationFile(AbstractFileReadOnly):
 
         # self.translations_hash.update(other.translations_hash)
 
+    @overload
+    def get_translation(
+        self,
+        tags: List,
+        values: Union[Dict, List],
+        full_result: Literal[True],
+        lang: str | None = "English",
+        use_placeholder: Union[bool, Callable, None] = False,
+    ) -> TranslationResult:
+        ...
+
+    @overload
+    def get_translation(
+        self,
+        tags: List[str],
+        values: Union[Dict[str, StatValue], List[StatValue]],
+        only_values: Literal[True],
+        lang: str | None = "English",
+        use_placeholder: Union[bool, Callable, None] = False,
+    ) -> Dict[str, Tuple[str, str]]:
+        ...
+
+    @overload
+    def get_translation(
+        self,
+        tags: List[str],
+        values: Union[Dict, List],
+        lang: str | None = "English",
+        use_placeholder: Union[bool, Callable, None] = False,
+    ) -> List[str]:
+        ...
+
     def get_translation(
         self,
         tags: List[str],
@@ -1783,7 +1813,7 @@ class TranslationFile(AbstractFileReadOnly):
         full_result: bool = False,
         use_placeholder: Union[bool, Callable] = False,
         only_values: bool = False,
-    ) -> Union[List[int], List[str], TranslationResult]:
+    ) -> Union[Dict[str, StatValue], List[str], TranslationResult]:
         """
         Attempts to retrieve a translation from the loaded translation file for
         the specified language with the given tags and values.
@@ -1890,15 +1920,21 @@ class TranslationFile(AbstractFileReadOnly):
         extra_strings = []
         string_instances = []
         tf_indices: List[int] = []
+        formatted_values = {}
         for i, tr in enumerate(trans_found):
             tl = tr.get_language(lang)
             ts, short_values, is_range = tl.get_string(trans_found_values[i])
             if ts:
                 string_instances.append(ts)
-                result = ts.format_string(short_values, is_range, use_placeholder, only_values)
+                result = ts.format_string(short_values, is_range, use_placeholder)
                 trans_lines.append(result[0])
                 trans_found_lines.append(result[0])
                 values_parsed.append(result[2])
+                if only_values:
+                    for stat, val in zip(tr.ids, result[4]):
+                        if val:
+                            formatted_values[stat] = val
+
                 if full_result:
                     unused.append(result[1])
                     extra_strings.append(result[3])
@@ -1926,7 +1962,7 @@ class TranslationFile(AbstractFileReadOnly):
                 tf_indices=tf_indices,
             )
         if only_values:
-            return values_parsed
+            return formatted_values
         else:
             return trans_lines
 

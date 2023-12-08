@@ -1,43 +1,31 @@
 from collections import defaultdict
 
 from PyPoE.poe.constants import VERSION
-from PyPoE.poe.file.specification.fields import VirtualField
+from PyPoE.poe.file.specification.fields import Alias, VirtualField, Zip
 
 virtual_fields_mappings = {
     VERSION.STABLE: defaultdict(
         list[VirtualField],
         {
             "BlightCraftingItems": [
-                VirtualField(
-                    name="BaseItemTypesKey",
-                    fields=("Oil",),
-                    alias=True,
-                ),
+                Alias("BaseItemTypesKey", "Oil"),
             ],
             "BuffDefinitions": [
-                VirtualField(
-                    name="Binary_StatsKeys",
-                    fields=("BinaryStats",),
-                    alias=True,
-                ),
+                Alias("Binary_StatsKeys", "BinaryStats"),
             ],
             "CraftingBenchOptions": [
-                VirtualField(
+                Zip(
                     name="Cost",
                     fields=("Cost_BaseItemTypes", "Cost_Values"),
-                    zip=True,
                 ),
                 VirtualField(
                     name="AddModOrEnchantment",
                     fields=("AddMod", "AddEnchantment"),
                 ),
             ],
+            "CurrencyItems": [Alias("Stacks", "StackSize")],
             "DelveUpgrades": [
-                VirtualField(
-                    name="Stats",
-                    fields=("StatsKeys", "StatValues"),
-                    zip=True,
-                ),
+                Zip("Stats", ("StatsKeys", "StatValues")),
             ],
             "GrantedEffectsPerLevel": [
                 VirtualField(
@@ -67,83 +55,31 @@ virtual_fields_mappings = {
                         "Stat8Float",
                     ),
                 ),
-                VirtualField(
-                    name="Stats",
-                    fields=("StatsKeys", "StatValues"),
-                    zip=True,
-                ),
-                VirtualField(
-                    name="Costs",
-                    fields=("CostTypesKeys", "CostAmounts"),
-                    zip=True,
-                ),
+                Zip("Stats", ("StatsKeys", "StatValues")),
+                Zip("Costs", ("CostTypesKeys", "CostAmounts")),
             ],
             "HarvestCraftOptions": [
-                VirtualField(
-                    name="HarvestCraftTiersKey",
-                    fields=("Tier",),
-                    alias=True,
-                ),
-                VirtualField(
-                    name="LifeforceCostType",
-                    fields=("LifeforceType",),
-                    alias=True,
-                ),
-                VirtualField(
-                    name="SacredBlossomCost",
-                    fields=("SacredCost",),
-                    alias=True,
-                ),
+                Alias("HarvestCraftTiersKey", "Tier"),
+                Alias("LifeforceCostType", "LifeforceType"),
+                Alias("SacredBlossomCost", "SacredCost"),
             ],
             "HeistAreas": [
-                VirtualField(
-                    name="ClientStringsKey",
-                    fields=("Reward",),
-                    alias=True,
-                ),
+                Alias("ClientStringsKey", "Reward"),
             ],
             "IndexableSkillGems": [
-                VirtualField(
-                    name="Name",
-                    fields=("Name1",),
-                    alias=True,
-                ),
+                Alias("Name", "Name1"),
             ],
             "MapPurchaseCosts": [
-                VirtualField(
-                    name="NormalPurchase",
-                    fields=("NormalPurchase_BaseItemTypesKeys", "NormalPurchase_Costs"),
-                    zip=True,
-                ),
-                VirtualField(
-                    name="MagicPurchase",
-                    fields=("MagicPurchase_BaseItemTypesKeys", "MagicPurchase_Costs"),
-                    zip=True,
-                ),
-                VirtualField(
-                    name="RarePurchase",
-                    fields=("RarePurchase_BaseItemTypesKeys", "RarePurchase_Costs"),
-                    zip=True,
-                ),
-                VirtualField(
-                    name="UniquePurchase",
-                    fields=("UniquePurchase_BaseItemTypesKeys", "UniquePurchase_Costs"),
-                    zip=True,
-                ),
+                Zip("NormalPurchase", ("NormalPurchase_BaseItemTypesKeys", "NormalPurchase_Costs")),
+                Zip("MagicPurchase", ("MagicPurchase_BaseItemTypesKeys", "MagicPurchase_Costs")),
+                Zip("RarePurchase", ("RarePurchase_BaseItemTypesKeys", "RarePurchase_Costs")),
+                Zip("UniquePurchase", ("UniquePurchase_BaseItemTypesKeys", "UniquePurchase_Costs")),
             ],
             "MapSeriesTiers": [
-                VirtualField(
-                    name="AncestralTier",
-                    fields=("AncestorTier",),
-                    alias=True,
-                ),
+                Alias("AncestralTier", "AncestorTier"),
             ],
             "Mods": [
-                VirtualField(
-                    name="SpawnWeight",
-                    fields=("SpawnWeight_TagsKeys", "SpawnWeight_Values"),
-                    zip=True,
-                ),
+                Zip("SpawnWeight", ("SpawnWeight_TagsKeys", "SpawnWeight_Values")),
                 VirtualField(
                     name="Stat1",
                     fields=("StatsKey1", "Stat1Min", "Stat1Max"),
@@ -183,11 +119,7 @@ virtual_fields_mappings = {
                     name="Stats",
                     fields=("Stat1", "Stat2", "Stat3", "Stat4", "Stat5", "Stat6"),
                 ),
-                VirtualField(
-                    name="GenerationWeight",
-                    fields=("GenerationWeight_TagsKeys", "GenerationWeight_Values"),
-                    zip=True,
-                ),
+                Zip("GenerationWeight", ("GenerationWeight_TagsKeys", "GenerationWeight_Values")),
             ],
             "MonsterMapBossDifficulty": [
                 VirtualField(
@@ -238,91 +170,42 @@ virtual_fields_mappings = {
                 ),
             ],
             "PantheonSouls": [
-                VirtualField(
-                    name="BaseItemTypesKey",
-                    fields=("CapturedVessel",),
-                    alias=True,
-                ),
-                VirtualField(
-                    name="MonsterVarietiesKey",
-                    fields=("CapturedMonster",),
-                    alias=True,
-                ),
-                VirtualField(
-                    name="PantheonPanelLayoutKey",
-                    fields=("PanelLayout",),
-                    alias=True,
-                ),
-                VirtualField(
-                    name="BossDescription",
-                    fields=("CapturedMonsterDescription",),
-                    alias=True,
-                ),
+                Alias("BaseItemTypesKey", "CapturedVessel"),
+                Alias("MonsterVarietiesKey", "CapturedMonster"),
+                Alias("PantheonPanelLayoutKey", "PanelLayout"),
+                Alias("BossDescription", "CapturedMonsterDescription"),
             ],
             "PassiveSkills": [
                 VirtualField(
                     name="StatValues",
                     fields=("Stat1Value", "Stat2Value", "Stat3Value", "Stat4Value", "Stat5Value"),
                 ),
-                VirtualField(
-                    name="StatsZip",
-                    fields=("Stats", "StatValues"),
-                    zip=True,
-                ),
-                VirtualField(
-                    name="ReminderTextKeys",
-                    fields=("ReminderStrings",),
-                    alias=True,
-                ),
+                Zip("StatsZip", ("Stats", "StatValues")),
+                Alias("ReminderTextKeys", "ReminderStrings"),
             ],
             "PassiveSkillMasteryEffects": [
                 VirtualField(
                     name="StatValues",
                     fields=("Stat1Value", "Stat2Value", "Stat3Value"),
                 ),
-                VirtualField(
-                    name="StatsZip",
-                    fields=("Stats", "StatValues"),
-                    zip=True,
-                ),
+                Zip("StatsZip", ("Stats", "StatValues")),
             ],
             "PassiveSkillOverrides": [
-                VirtualField(
-                    name="PassiveSkillOverrideTypesKey",
-                    fields=("Type",),
-                    alias=True,
-                ),
+                Alias("PassiveSkillOverrideTypesKey", "Type"),
             ],
             "PassiveSkillTattoos": [
-                VirtualField(
-                    name="BaseItemTypesKey",
-                    fields=("Tattoo",),
-                    alias=True,
-                ),
-                VirtualField(
-                    name="PassiveSkillOverrideTypesKey",
-                    fields=("OverrideType",),
-                    alias=True,
-                ),
+                Alias("BaseItemTypesKey", "Tattoo"),
+                Alias("PassiveSkillOverrideTypesKey", "OverrideType"),
             ],
             "WorldAreas": [
-                VirtualField(
-                    name="AreaType_TagsKeys",
-                    fields=("AreaTypeTags",),
-                    alias=True,
-                ),
-                VirtualField(
-                    name="VaalArea_WorldAreasKeys",
-                    fields=("VaalArea",),
-                    alias=True,
-                ),
+                Alias("AreaType_TagsKeys", "AreaTypeTags"),
+                Alias("VaalArea_WorldAreasKeys", "VaalArea"),
             ],
             "SkillGems": [
-                VirtualField(
-                    name="ExperienceProgression",
-                    fields=("ItemExperienceType",),
-                    alias=True,
-                ),
+                Alias("ExperienceProgression", "ItemExperienceType"),
+                Alias("Str", "StrengthRequirementPercent"),
+                Alias("Int", "IntelligenceRequirementPercent"),
+                Alias("Dex", "DexterityRequirementPercent"),
             ],
         },
     )

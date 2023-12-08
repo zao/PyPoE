@@ -377,7 +377,7 @@ class DatRecord(list):
 
     __slots__ = ["parent", "rowid"]
 
-    def __init__(self, parent, rowid):
+    def __init__(self, parent: "DatReader", rowid: int):
         """
         Parameters
         ----------
@@ -406,7 +406,7 @@ class DatRecord(list):
                     value = next(filter(lambda v: v is not None, value), None)
                 return value
             else:
-                raise KeyError(item)
+                raise KeyError(f"No column {item} found in {self.parent.file_name}")
         return list.__getitem__(self, item)
 
     def __repr__(self):
