@@ -1078,11 +1078,16 @@ class SkillParser(SkillParserShared):
         self._image_init(parsed_args=parsed_args)
         console("Found %s skills, parsing..." % len(skills))
         self.rr["GemEffects.dat64"].build_index("GrantedEffect")
+        self.rr["SkillGems.dat64"].build_index("GemEffects")
         r = ExporterResult()
         for skill in skills:
             if (
                 not parsed_args.allow_skill_gems
                 and skill in self.rr["GemEffects.dat64"].index["GrantedEffect"]
+                and any(
+                    effect in self.rr["SkillGems.dat64"].index["GemEffects"]
+                    for effect in self.rr["GemEffects.dat64"].index["GrantedEffect"][skill]
+                )
             ):
                 console(
                     f"Skipping skill gem skill \"{skill['Id']}\" at row {skill.rowid}",
