@@ -428,6 +428,7 @@ class ItemsParser(SkillParserShared):
         "Sanctum": "3.20.0",  # AKA The Forbidden Sanctum
         "Crucible": "3.21.0",
         "Ancestral": "3.22.0",  # AKA Trial of the Ancestors
+        "Azmeri": "3.23.0",  # AKA Affliction
     }
 
     _IGNORE_DROP_LEVEL_CLASSES = (
@@ -2626,7 +2627,23 @@ class ItemsParser(SkillParserShared):
         try:
             skill_gem = self.rr["SkillGems.dat64"].index["BaseItemTypesKey"][base_item_type.rowid]
         except KeyError:
+            console("keryere")
             return False
+
+        result = []
+        for gem_type in skill_gem["GemEffects"]:
+            copy = infobox.copy()
+            if self._skill_gem_type(copy, base_item_type, skill_gem, gem_type):
+                result.append(copy)
+
+        return result
+
+    def _skill_gem_type(self, infobox: OrderedDict, base_item_type, skill_gem, gem_type):
+        name = gem_type["Name"]
+        if "[DNT]" in name:
+            return False
+        if name:
+            infobox["name"] = name
 
         # SkillGems.dat
         for attr_short, attr_long in self._attribute_map.items():
@@ -2634,7 +2651,7 @@ class ItemsParser(SkillParserShared):
                 continue
             infobox[attr_long + "_percent"] = skill_gem[attr_short]
 
-        infobox["gem_tags"] = ", ".join([gt["Tag"] for gt in skill_gem["GemTagsKeys"] if gt["Tag"]])
+        infobox["gem_tags"] = ", ".join([gt["Tag"] for gt in gem_type["GemTags"] if gt["Tag"]])
 
         # No longer used
         #
@@ -2659,14 +2676,14 @@ class ItemsParser(SkillParserShared):
             exp_total = [0]
 
         max_level = len(exp_total) - 1
-        ge = skill_gem["GrantedEffectsKey"]
+        ge = gem_type["GrantedEffect"]
 
         primary = OrderedDict()
         self._skill(
             gra_eff=ge,
             infobox=primary,
             parsed_args=self._parsed_args,
-            msg_name=base_item_type["Name"],
+            msg_name=gem_type["Name"],
             max_level=max_level,
         )
 
@@ -2675,24 +2692,23 @@ class ItemsParser(SkillParserShared):
         # Currently there is no great way of handling this in the wiki, so the
         # secondary effects are just added. Skills that have their own entry
         # are excluded so we don't get vaal skill gems here.
-        second = False
-        if skill_gem["GrantedEffectsKey2"]:
+        second = gem_type["GrantedEffect2"]
+        if second:
             index = None
             try:
-                index = self.rr["SkillGems.dat64"].index["GrantedEffectsKey"]
+                index = self.rr["GemEffects.dat64"].index["GrantedEffect"]
             except KeyError:
-                self.rr["SkillGems.dat64"].build_index("GrantedEffectsKey")
-                index = self.rr["SkillGems.dat64"].index["GrantedEffectsKey"]
+                self.rr["GemEffects.dat64"].build_index("GrantedEffect")
+                index = self.rr["GemEffects.dat64"].index["GrantedEffect"]
 
-            if not index[skill_gem["GrantedEffectsKey2"]]:
-                # If there is no skill granting this it's probably fine to
-                # include.
-                second = True
+            if index[second]:
+                # If there is a skill granting this as its primary effect, skip it
+                second = False
 
         if second:
             secondary = OrderedDict()
             self._skill(
-                gra_eff=skill_gem["GrantedEffectsKey2"],
+                gra_eff=second,
                 infobox=secondary,
                 parsed_args=self._parsed_args,
                 msg_name=base_item_type["Name"],
@@ -2787,10 +2803,9 @@ class ItemsParser(SkillParserShared):
             for k, v in primary.items():
                 infobox[k] = v
 
-        # some descriptions come from active skills which are parsed in above
-        # function
+        # some descriptions come from active skills which are parsed in above function
         if "gem_description" not in infobox:
-            infobox["gem_description"] = skill_gem["Description"].replace("\n", "<br>")
+            infobox["gem_description"] = gem_type["Description"].replace("\n", "<br>")
 
         #
         # Output handling for progression
@@ -4260,7 +4275,7 @@ class ItemsParser(SkillParserShared):
         # Get the base item of other language
         base_item_type = rr["BaseItemTypes.dat64"][base_item_type.rowid]
 
-        name = base_item_type["Name"]
+        name = infobox.get("name", base_item_type["Name"])
         cls_id = base_item_type["ItemClassesKey"]["Id"]
         m_id = base_item_type["Id"]
         override = self._NAME_OVERRIDE_BY_ID[language].get(m_id)
@@ -4343,79 +4358,86 @@ class ItemsParser(SkillParserShared):
             self._process_purchase_costs(base_item_type, infobox)
 
             funcs = self._cls_map.get(cls_id)
+            infoboxes = [infobox]
             if funcs:
-                fail = False
                 for f in funcs:
-                    if not f(self, infobox, base_item_type):
-                        fail = True
-                        console(
-                            f'Required extra info for item "{name}" with class id '
-                            f'"{cls_id}" not found. Skipping.',
-                            msg=Msg.warning,
-                        )
-                        break
-                if fail:
+                    next_infoboxes = []
+                    for item in infoboxes:
+                        result = f(self, item, base_item_type)
+                        if result is False:
+                            console(
+                                f'Required extra info for item "{name}" with class id '
+                                f'"{cls_id}" not found. Skipping.',
+                                msg=Msg.warning,
+                            )
+                            break
+                        elif result is True:
+                            # normal function - modified the infobox dict
+                            next_infoboxes.append(item)
+                        else:
+                            next_infoboxes.extend(result)
+                    infoboxes = next_infoboxes
+
+            for infobox in infoboxes:
+                # handle items with duplicate name entries
+                # Maps must be handled in any case due to unique naming style of
+                # pages
+                page = self._process_name_conflicts(infobox, base_item_type, self._language)
+                if page is None:
                     continue
+                if self._language != "English" and parsed_args.english_file_link:
+                    icon = self._process_name_conflicts(infobox, base_item_type, "English")
+                    if cls_id == "DivinationCard":
+                        key = "card_art"
+                    else:
+                        key = "inventory_icon"
 
-            # handle items with duplicate name entries
-            # Maps must be handled in any case due to unique naming style of
-            # pages
-            page = self._process_name_conflicts(infobox, base_item_type, self._language)
-            if page is None:
-                continue
-            if self._language != "English" and parsed_args.english_file_link:
-                icon = self._process_name_conflicts(infobox, base_item_type, "English")
-                if cls_id == "DivinationCard":
-                    key = "card_art"
-                else:
-                    key = "inventory_icon"
+                    if icon:
+                        infobox[key] = icon
+                    else:
+                        infobox[key] = self.rr2["BaseItemTypes.dat64"][base_item_type.rowid]["Name"]
 
-                if icon:
-                    infobox[key] = icon
-                else:
-                    infobox[key] = self.rr2["BaseItemTypes.dat64"][base_item_type.rowid]["Name"]
+                # putting this last since it's usually manually added
+                if m_id in self._DROP_DISABLED_ITEMS_BY_ID:
+                    infobox["drop_enabled"] = False
 
-            # putting this last since it's usually manually added
-            if m_id in self._DROP_DISABLED_ITEMS_BY_ID:
-                infobox["drop_enabled"] = False
+                inventory_icon = infobox.get("inventory_icon") or page
+                if ":" in inventory_icon:
+                    infobox["inventory_icon"] = inventory_icon.replace(":", "")
 
-            inventory_icon = infobox.get("inventory_icon") or page
-            if ":" in inventory_icon:
-                infobox["inventory_icon"] = inventory_icon.replace(":", "")
+                cond = ItemWikiCondition(
+                    data=infobox,
+                    cmdargs=parsed_args,
+                )
 
-            cond = ItemWikiCondition(
-                data=infobox,
-                cmdargs=parsed_args,
-            )
-
-            wiki_page = [
-                {
-                    "page": page,
-                    "condition": cond,
-                }
-            ]
-
-            if infobox.get("cosmetic_type", None) == "Armour Skin" and "Armour" not in page:
-                wiki_page.append(
+                wiki_page = [
                     {
-                        "page": page + " Armour",
+                        "page": page,
                         "condition": cond,
                     }
-                )
+                ]
 
-            ddsfile = base_item_type["ItemVisualIdentityKey"]["DDSFile"]
-            if ddsfile and ddsfile in self._PLACEHOLDER_IMAGES:
-                warnings.warn(
-                    'Item "%s" has placeholder icon art. Skipping.' % base_item_type["Name"]
-                )
-                continue
+                if infobox.get("cosmetic_type", None) == "Armour Skin" and "Armour" not in page:
+                    wiki_page.append(
+                        {
+                            "page": page + " Armour",
+                            "condition": cond,
+                        }
+                    )
 
-            r.add_result(
-                text=cond,
-                out_file="item_%s.txt" % page,
-                wiki_page=wiki_page,
-                wiki_message="Item exporter",
-            )
+                ddsfile = base_item_type["ItemVisualIdentityKey"]["DDSFile"]
+                if ddsfile and ddsfile in self._PLACEHOLDER_IMAGES:
+                    warnings.warn(
+                        'Item "%s" has placeholder icon art. Skipping.' % base_item_type["Name"]
+                    )
+                    continue
+
+                r.add_result(
+                    text=cond,
+                    out_file="item_%s.txt" % page,
+                    wiki_page=wiki_page,
+                    wiki_message="Item exporter",
+                )
 
             if parsed_args.store_images:
                 if not ddsfile:

@@ -660,3 +660,13 @@ class VirtualField(_Common, ReprMixin):
 
     def __getitem__(self, item):
         return getattr(self, item)
+
+
+class Alias(VirtualField):
+    def __init__(self, name: str, target: str):
+        super().__init__(name, (target,), alias=True)
+
+
+class Zip(VirtualField):
+    def __init__(self, name: str, fields: Tuple[str, str]):
+        super().__init__(name, fields, zip=True)

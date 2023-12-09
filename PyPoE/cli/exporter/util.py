@@ -71,7 +71,7 @@ def get_content_path():
             with request.urlopen(
                 "https://raw.githubusercontent.com/poe-tool-dev/latest-patch-version/main/latest.txt"  # noqa
             ) as latest:
-                return f"http://patchcdn.pathofexile.com/{latest.read().decode('utf-8')}/"
+                return f"https://patch.poecdn.com/{latest.read().decode('utf-8')}/"
 
         return paths[0]
     else:
