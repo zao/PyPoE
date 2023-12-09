@@ -2644,6 +2644,7 @@ class ItemsParser(SkillParserShared):
             return False
         if name:
             infobox["name"] = name
+            infobox["base_metadata_id"] = infobox.pop("metadata_id")
 
         # SkillGems.dat
         for attr_short, attr_long in self._attribute_map.items():
