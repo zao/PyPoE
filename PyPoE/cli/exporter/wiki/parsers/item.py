@@ -2806,7 +2806,7 @@ class ItemsParser(SkillParserShared):
 
         # some descriptions come from active skills which are parsed in above function
         if "gem_description" not in infobox:
-            infobox["gem_description"] = gem_type["Description"].replace("\n", "<br>")
+            infobox["gem_description"] = gem_type["SupportText"].replace("\n", "<br>")
 
         #
         # Output handling for progression
