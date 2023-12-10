@@ -906,6 +906,11 @@ class ItemsParser(SkillParserShared):
             "Metadata/Items/Relics/SanctumSpecialRelic1": " (strength)",
             "Metadata/Items/Relics/SanctumSpecialRelic2": " (dexterity)",
             "Metadata/Items/Relics/SanctumSpecialRelic3": " (intelligence)",
+            # =================================================================
+            # Corpse items
+            # =================================================================
+            "Metadata/Items/ItemisedCorpses/HydraMid": " (corpse item)",
+            "Metadata/Items/ItemisedCorpses/OakMid": " (corpse item)",
         },
         "Russian": {
             # =================================================================
