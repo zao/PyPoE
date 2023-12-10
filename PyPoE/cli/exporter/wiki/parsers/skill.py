@@ -532,9 +532,14 @@ class SkillParserShared(parser.BaseParser):
         act_skill = gra_eff["ActiveSkill"]
         if act_skill:
             try:
-                tf = self.tc[self.skill_stat_filter.skills[act_skill["Id"]].translation_file_path]
+                base_skill_id = (
+                    act_skill["TransfigureBase"]["Id"]
+                    if act_skill["TransfigureBase"]
+                    else act_skill["Id"]
+                )
+                tf = self.tc[self.skill_stat_filter.skills[base_skill_id].translation_file_path]
             except KeyError as e:
-                warnings.warn("Missing active skill in stat filers: %s" % e.args[0])
+                warnings.warn("Missing active skill in stat files: %s" % e.args[0])
                 tf = self.tc["skill_stat_descriptions.txt"]
 
             if parsed_args.store_images and act_skill["Icon_DDSFile"]:

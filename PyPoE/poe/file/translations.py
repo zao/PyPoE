@@ -171,7 +171,7 @@ regex_lang = re.compile(r'^[\s]*lang "(?P<language>[\w ]+)"[\s]*$', re.UNICODE |
 regex_tokens = re.compile(
     r'(?:^"(?P<header>.*)"$)'
     r'|(?:^include "(?P<include>.*)")'
-    r"|(?:^no_description (?P<no_description>[\w+%]*)$)"
+    r"|(?:^no_description[\s]*(?P<no_description>[\w+%]*)[\s]*$)"
     r"|(?P<description>^description[\s]*(?P<identifier>[\S]*)[\s]*$)",
     re.UNICODE | re.MULTILINE,
 )
@@ -1533,7 +1533,7 @@ class TranslationFile(AbstractFileReadOnly):
             if parent is not a :class:`TranslationFileCache`
         """
         self.translations: List[Translation] = []
-        self.translations_hash: Dict[str, Translation] = {}
+        self.translations_hash: Dict[str, list[Translation]] = {}
         self._base_dir: str = base_dir
 
         if parent is not None:
@@ -1670,6 +1670,7 @@ class TranslationFile(AbstractFileReadOnly):
                 translation_index += 1
 
             elif match.group("no_description"):
+                self._remove_translation_hashed(match.group("no_description"))
                 pass
             elif match.group("include"):
                 if self._parent:
@@ -1703,6 +1704,13 @@ class TranslationFile(AbstractFileReadOnly):
 
         return True
 
+    def _remove_translation_hashed(self, translation_id):
+        for old_translation in self.translations_hash.pop(translation_id, []):
+            try:
+                self.translations.remove(old_translation)
+            except ValueError:
+                pass
+
     def _add_translation_hashed(self, translation_id, translation):
         if translation_id in self.translations_hash:
             for old_translation in self.translations_hash[translation_id]:
@@ -1712,9 +1720,7 @@ class TranslationFile(AbstractFileReadOnly):
 
                 # Identical ids, but more recent - update
                 if translation.ids == old_translation.ids:
-                    self.translations_hash[translation_id] = [
-                        translation,
-                    ]
+                    self.translations_hash[translation_id] = [translation]
                     # Attempt to remove the old one if it exists
                     try:
                         self.translations.remove(old_translation)
@@ -1730,9 +1736,7 @@ class TranslationFile(AbstractFileReadOnly):
                 warnings.warn(f'Duplicate id "{translation_id}"', DuplicateIdentifierWarning)
                 self.translations_hash[translation_id].append(translation)
         else:
-            self.translations_hash[translation_id] = [
-                translation,
-            ]
+            self.translations_hash[translation_id] = [translation]
 
     def copy(self):
         """
@@ -1770,8 +1774,10 @@ class TranslationFile(AbstractFileReadOnly):
             TypeError("Wrong type: %s" % type(other))
         translation_count = len(self.translations)
         self.translations += other.translations
-        for trans_id in other.translations_hash:
-            for trans in other.translations_hash[trans_id]:
+        for trans_id, values in other.translations_hash.items():
+            if len(values) == 0:
+                self._remove_translation_hashed(trans_id)
+            for trans in values:
                 trans.tf_index += translation_count
                 self._add_translation_hashed(trans_id, trans)
 

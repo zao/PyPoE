@@ -544,12 +544,9 @@ specification = Specification(
                     type="bool",
                 ),
                 Field(
-                    name="Unknown2",
-                    type="int",
-                ),
-                Field(
-                    name="Unknown3",
-                    type="int",
+                    name="TransfigureBase",
+                    type="ref|generic",
+                    key="ActiveSkills.dat",
                 ),
             ),
         ),
