@@ -11185,7 +11185,7 @@ specification = Specification(
                     key="Mods.dat",
                 ),
                 Field(
-                    name="Unknown0",
+                    name="ItemColor",
                     type="int",
                 ),
             ),

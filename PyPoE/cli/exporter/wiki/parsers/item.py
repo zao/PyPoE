@@ -32,14 +32,20 @@ Kishara's Star (item)
 # Imports
 # =============================================================================
 
+import codecs
 import os
 
 # Python
 import re
+import struct
 import warnings
 from collections import OrderedDict, defaultdict
+from dataclasses import dataclass
 from functools import partialmethod
 from pathlib import Path
+
+import matplotlib.colors
+import numpy as np
 
 # 3rd-party
 from PIL import Image, ImageOps
@@ -64,6 +70,19 @@ from PyPoE.poe.sim.formula import GemTypes, gem_stat_requirement
 # =============================================================================
 # Functions
 # =============================================================================
+
+
+@dataclass
+class GemShadeConstants:
+    hue_factor: float
+    sat_factor: float
+    val_factor: float
+    lum_factor: float
+
+
+def gemshade_constants_from_hex(hex_text: str):
+    buf = codecs.decode(hex_text.replace(" ", ""), "hex")
+    return GemShadeConstants(*struct.unpack("<ffff", buf))
 
 
 def _apply_column_map(infobox, column_map, list_object):
@@ -121,6 +140,21 @@ def _colorize_rgba(img, black, white, mid=None, blackpoint=0, whitepoint=255, mi
     ret = ImageOps.colorize(img_gray, black, white, mid, blackpoint, whitepoint, midpoint)
     ret.putalpha(img_a)
     return ret
+
+
+# =============================================================================
+# Constants
+# =============================================================================
+
+
+SHADE_LUT: dict[(str, int), GemShadeConstants] = {
+    ("str", 1): gemshade_constants_from_hex("60 E5 50 BD 6F 12 83 BD 4E 62 90 3E 08 AC 1C 3F"),
+    ("str", 2): gemshade_constants_from_hex("60 E5 50 BE B6 F3 7D 3E 33 33 B3 BE BA 49 4C 3F"),
+    ("dex", 1): gemshade_constants_from_hex("9A 99 19 BE F4 FD 54 BD D1 22 5B 3E F0 A7 46 3F"),
+    ("dex", 2): gemshade_constants_from_hex("B8 1E 85 3E 0A D7 A3 3D 19 04 16 BF 23 DB 39 3F"),
+    ("int", 1): gemshade_constants_from_hex("AE 47 E1 BD AE 47 61 BE 0A D7 23 BD 00 00 80 3F"),
+    ("int", 2): gemshade_constants_from_hex("8F C2 75 3D 0A D7 23 3D 0A D7 A3 BD 00 00 80 3F"),
+}
 
 
 # =============================================================================
@@ -2642,6 +2676,8 @@ class ItemsParser(SkillParserShared):
         name = gem_type["Name"]
         if "[DNT]" in name:
             return False
+        if skill_gem["IsVaalVariant"] and gem_type["ItemColor"] != 3:
+            return False
         if name:
             infobox["name"] = name
             infobox["base_metadata_id"] = infobox.pop("metadata_id")
@@ -2653,6 +2689,7 @@ class ItemsParser(SkillParserShared):
             infobox[attr_long + "_percent"] = skill_gem[attr_short]
 
         infobox["gem_tags"] = ", ".join([gt["Tag"] for gt in gem_type["GemTags"] if gt["Tag"]])
+        infobox["gem_shader"] = gem_type["ItemColor"]
 
         # No longer used
         #
@@ -4440,23 +4477,98 @@ class ItemsParser(SkillParserShared):
                     wiki_message="Item exporter",
                 )
 
-            if parsed_args.store_images:
-                if not ddsfile:
-                    warnings.warn(
-                        'Missing 2d art inventory icon for item "%s"' % base_item_type["Name"]
-                    )
-                    continue
+                if parsed_args.store_images:
+                    if not ddsfile:
+                        warnings.warn(
+                            'Missing 2d art inventory icon for item "%s"' % base_item_type["Name"]
+                        )
+                        continue
 
-                self._write_dds(
-                    data=self.file_system.get_file(ddsfile),
-                    out_path=os.path.join(
-                        self._img_path,
-                        (infobox.get("inventory_icon") or page) + " inventory icon.dds",
-                    ),
-                    parsed_args=parsed_args,
-                )
+                    self._write_dds(
+                        data=self.file_system.get_file(ddsfile),
+                        out_path=os.path.join(
+                            self._img_path,
+                            (infobox.get("inventory_icon") or page) + " inventory icon.dds",
+                        ),
+                        parsed_args=parsed_args,
+                        shader=self._get_shader(infobox),
+                    )
 
         return r
+
+    def _get_shader(self, infobox: dict[str, str]):
+        if "gem_shader" not in infobox:
+            return None
+
+        attrs = {
+            k.lower(): int(infobox.get(f"{v}_percent", 0)) for k, v in self._attribute_map.items()
+        }
+        attr = max(attrs, key=attrs.get)
+        var = infobox.pop("gem_shader")
+
+        def shader(img: Image):
+            adorn = img.crop((0, 0, 78, 78))
+            base = img.crop((2 * 78, 0, 3 * 78, 78))
+            if var == 3:
+                return Image.alpha_composite(base, adorn)
+            const = SHADE_LUT[(attr, var)]
+
+            base_rgba = np.float64(np.asarray(base)) / 255.0
+
+            # Shade algorithm:
+            # * compute luminance influence
+            #   float Luminance(float3 color)
+            #   {
+            #   	return dot(float3(0.299, 0.587, 0.114), color);
+            #   }
+            # 	const float luminance_influence = pow(Luminance(original_rgb), 0.02);
+            base_rgb = base_rgba[:, :, :3]
+            base_a = base_rgba[:, :, 3]
+            lum_f = (
+                base_rgba[:, :, 0] * 0.2999
+                + base_rgba[:, :, 1] * 0.587
+                + base_rgba[:, :, 2] * 0.114
+            )
+            lum_f = np.expand_dims(lum_f, axis=2)
+            luminance_influence = lum_f**0.02
+
+            # * convert to HSV
+            # Not using the same algorithm, leveraging matplotlib
+            hsv = matplotlib.colors.rgb_to_hsv(base_rgb)
+
+            # * shift HSV by XYZ, clamp H
+            # 	max(modf( hsv_sample.x + effect_params.x, ignore ), 0.024),
+            # 	saturate( hsv_sample.y + effect_params.y ),
+            # 	saturate( hsv_sample.z + effect_params.z )
+            h2 = np.maximum(np.modf(hsv[:, :, 0] + const.hue_factor)[0], 0.024)
+            s2 = np.clip(hsv[:, :, 1] + const.sat_factor, 0.0, 1.0)
+            v2 = np.clip(hsv[:, :, 2] + const.val_factor, 0.0, 1.0)
+
+            # * convert to "modified" RGB
+            # Not using the same HSV algorithm, leveraging matplotlib
+            modified_rgb = matplotlib.colors.hsv_to_rgb(np.stack([h2, s2, v2], axis=2))
+
+            # * mix original RGB and modified RGB by luminance influence weighted by W
+            # 	const float3 final_rgb = lerp(
+            # 		modified_rgb,
+            # 		original_rgb,
+            # 		lerp(luminance_influence, 0.f, effect_params.w)
+            # 	);
+            def lerp(a, b, f):
+                return a * (1.0 - f) + b * f
+
+            final_mix_f = lerp(luminance_influence, 0.0, const.lum_factor)
+            final_rgb = lerp(modified_rgb, base_rgb, final_mix_f)
+
+            shifted_rgba = np.dstack((final_rgb, base_a))
+            shifted_base = Image.fromarray(np.uint8(shifted_rgba * 255.0), "RGBA")
+
+            # * desaturate, but the parameter for that seems to be 1 so won't bother
+            # 	return Desaturate(float4(final_rgb, 1.f) * original_a, saturation) * input.colour;
+
+            return Image.alpha_composite(shifted_base, adorn)
+
+        return shader
 
     def _print_item_rowid(self, export_row_count, base_item_type):
         # If we're printing less than 100 rows, print every rowid
