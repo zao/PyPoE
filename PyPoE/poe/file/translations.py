@@ -1485,6 +1485,10 @@ class TranslationFile(AbstractFileReadOnly):
 
     __slots__ = ["translations", "translations_hash", "_base_dir", "_parent"]
 
+    _VIRTUAL_STAT_LOOKUP = {
+        "corrosive_shroud_maximum_stored_poison_damage": "virtual_plague_bearer_maximum_stored_poison_damage"  # noqa
+    }
+
     def __init__(
         self,
         file_path: Union[Iterable[str], str, None] = None,
@@ -1858,12 +1862,16 @@ class TranslationFile(AbstractFileReadOnly):
         # I.e. the case for always_freeze
 
         if isinstance(tags, str):
-            tags = [
-                tags,
-            ]
+            tags = [tags]
 
         if isinstance(values, list):
             values = dict(zip(tags, values))
+
+        tags = [self._VIRTUAL_STAT_LOOKUP.get(tag, tag) for tag in tags]
+
+        for k, v in self._VIRTUAL_STAT_LOOKUP.items():
+            if k in values:
+                values[v] = values[k]
 
         trans_found: List[Translation] = []
         trans_missing = []
