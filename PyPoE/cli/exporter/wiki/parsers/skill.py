@@ -758,11 +758,9 @@ class SkillParserShared(parser.BaseParser):
             if row["GrantedEffectsKey"] == gra_eff:
                 qual_stats.append(row)
 
-        qual_stats.sort(key=lambda row: row["SetId"])
-
         for row in qual_stats:
-            prefix = "quality_type%s_" % (row["SetId"] + 1)
-            infobox[prefix + "weight"] = row["Weight"]
+            prefix = "quality_type1_"
+            infobox[prefix + "weight"] = 1
 
             # Quality stat data
             stat_ids = [r["Id"] for r in row["StatsKeys"]]
@@ -1079,12 +1077,17 @@ class SkillParser(SkillParserShared):
     def export(self, parsed_args, skills):
         self._image_init(parsed_args=parsed_args)
         console("Found %s skills, parsing..." % len(skills))
-        self.rr["SkillGems.dat64"].build_index("GrantedEffectsKey")
+        self.rr["GemEffects.dat64"].build_index("GrantedEffect")
+        self.rr["SkillGems.dat64"].build_index("GemEffects")
         r = ExporterResult()
         for skill in skills:
             if (
                 not parsed_args.allow_skill_gems
-                and skill in self.rr["SkillGems.dat64"].index["GrantedEffectsKey"]
+                and skill in self.rr["GemEffects.dat64"].index["GrantedEffect"]
+                and any(
+                    effect in self.rr["SkillGems.dat64"].index["GemEffects"]
+                    for effect in self.rr["GemEffects.dat64"].index["GrantedEffect"][skill]
+                )
             ):
                 console(
                     f"Skipping skill gem skill \"{skill['Id']}\" at row {skill.rowid}",
