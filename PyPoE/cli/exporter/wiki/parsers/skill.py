@@ -532,9 +532,14 @@ class SkillParserShared(parser.BaseParser):
         act_skill = gra_eff["ActiveSkill"]
         if act_skill:
             try:
-                tf = self.tc[self.skill_stat_filter.skills[act_skill["Id"]].translation_file_path]
+                base_skill_id = (
+                    act_skill["TransfigureBase"]["Id"]
+                    if act_skill["TransfigureBase"]
+                    else act_skill["Id"]
+                )
+                tf = self.tc[self.skill_stat_filter.skills[base_skill_id].translation_file_path]
             except KeyError as e:
-                warnings.warn("Missing active skill in stat filers: %s" % e.args[0])
+                warnings.warn("Missing active skill in stat files: %s" % e.args[0])
                 tf = self.tc["skill_stat_descriptions.txt"]
 
             if parsed_args.store_images and act_skill["Icon_DDSFile"]:
@@ -667,12 +672,12 @@ class SkillParserShared(parser.BaseParser):
         const_stat_vals = stat_set["ConstantStatsValues"]
 
         const_data = defaultdict()
-        impl_data = defaultdict()
         const_tr_stats = self._translate_stats(
-            const_stats, const_stat_vals, tf, const_data, stat_order
-        )
-        impl_tr_stats = self._translate_stats(
-            impl_stats, [1 for i in range(len(impl_stats))], tf, impl_data, stat_order
+            const_stats + impl_stats,
+            const_stat_vals + [1 for i in range(len(impl_stats))],
+            tf,
+            const_data,
+            stat_order,
         )
 
         # Later code that generates the infobox expects static stats to be in static,
@@ -683,12 +688,6 @@ class SkillParserShared(parser.BaseParser):
             static["stat_keys"].update(const_data["stats"][tr_stat]["stats"])
             level_data[0]["stats"][tr_stat] = const_data["stats"][tr_stat]
             stat_key_order["stats"][tr_stat] = const_tr_stats[tr_stat]
-
-        for tr_stat in impl_tr_stats.keys():
-            static["stats"][tr_stat] = impl_tr_stats[tr_stat]
-            static["stat_keys"].update(impl_data["stats"][tr_stat]["stats"])
-            level_data[0]["stats"][tr_stat] = impl_data["stats"][tr_stat]
-            stat_key_order["stats"][tr_stat] = impl_tr_stats[tr_stat]
 
         stat_key_order["stats"] = OrderedDict(
             sorted(
