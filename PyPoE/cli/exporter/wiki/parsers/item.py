@@ -4547,6 +4547,17 @@ class ItemsParser(SkillParserShared):
         attr = max(attrs, key=attrs.get)
         var = infobox.pop("gem_shader")
 
+        def _srgb_to_linear(img):
+            return np.piecewise(img,
+                                [img < 0.04045, img >= 0.04045],
+                                [lambda v: v / 12.92, lambda v: ((v + 0.055) / 1.055) ** 2.4])
+
+
+        def _linear_to_srgb(img):
+            return np.piecewise(img,
+                               [img < 0.0031308, img >= 0.0031308],
+                               [lambda v: v * 12.92, lambda v: 1.055 * v ** (1.0 / 2.4) - 0.055])
+
         def shader(img: Image):
             adorn = img.crop((0, 0, 78, 78))
             base = img.crop((2 * 78, 0, 3 * 78, 78))
@@ -4554,7 +4565,7 @@ class ItemsParser(SkillParserShared):
                 return Image.alpha_composite(base, adorn)
             const = SHADE_LUT[(attr, var)]
 
-            base_rgba = np.float64(np.asarray(base)) / 255.0
+            base_rgba = _srgb_to_linear(np.float32(np.asarray(base)) / 255.0)
 
             # Shade algorithm:
             # * compute luminance influence
@@ -4602,7 +4613,7 @@ class ItemsParser(SkillParserShared):
             final_rgb = lerp(modified_rgb, base_rgb, final_mix_f)
 
             shifted_rgba = np.dstack((final_rgb, base_a))
-            shifted_base = Image.fromarray(np.uint8(shifted_rgba * 255.0), "RGBA")
+            shifted_base = Image.fromarray(np.uint8(_linear_to_srgb(shifted_rgba) * 255.0), "RGBA")
 
             # * desaturate, but the parameter for that seems to be 1 so won't bother
             # 	return Desaturate(float4(final_rgb, 1.f) * original_a, saturation) * input.colour;
