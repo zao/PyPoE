@@ -6897,23 +6897,25 @@ specification = Specification(
         "CorpseTypeTags.dat": File(
             fields=(
                 Field(
-                    name="Key0",
+                    name="Tag",
                     type="ref|out",
+                    key="Tags.dat",
+                ),
+                Field(
+                    name="Name",
+                    type="ref|string",
+                ),
+                Field(
+                    name="RavenousBuff",
+                    type="ref|out",
+                    key="BuffDefinitions.dat",
+                ),
+                Field(
+                    name="Icon",
+                    type="ref|string",
                 ),
                 Field(
                     name="Unknown0",
-                    type="ref|string",
-                ),
-                Field(
-                    name="Key1",
-                    type="ref|out",
-                ),
-                Field(
-                    name="Unknown1",
-                    type="ref|string",
-                ),
-                Field(
-                    name="Unknown2",
                     type="int",
                 ),
             ),
@@ -11187,6 +11189,7 @@ specification = Specification(
                 Field(
                     name="ItemColor",
                     type="int",
+                    description="Used by gem icon shader https://gist.github.com/zao/08878df57aba605e5fa1e6373f2dce02",
                 ),
             ),
         ),
@@ -16456,20 +16459,24 @@ specification = Specification(
         "ItemisedCorpse.dat": File(
             fields=(
                 Field(
-                    name="Key0",
+                    name="BaseItem",
                     type="ref|out",
+                    key="BaseItemTypes.dat",
+                    unique=True,
                 ),
                 Field(
-                    name="Key1",
+                    name="MonsterVariety",
                     type="ref|out",
+                    key="MonsterVarieties.dat",
                 ),
                 Field(
-                    name="Unknown0",
+                    name="MonsterAbilities",
                     type="ref|string",
                 ),
                 Field(
-                    name="Key2",
+                    name="MonsterCategory",
                     type="ref|out",
+                    key="CorpseTypeTags.dat",
                 ),
             ),
         ),

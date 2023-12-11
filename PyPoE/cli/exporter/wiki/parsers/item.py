@@ -63,7 +63,7 @@ from PyPoE.cli.exporter.wiki.parsers.skill import SkillParserShared
 
 # Self
 from PyPoE.poe.constants import RARITY
-from PyPoE.poe.file.dat import RelationalReader
+from PyPoE.poe.file.dat import DatReader, RelationalReader
 from PyPoE.poe.file.it import ITFile
 from PyPoE.poe.sim.formula import GemTypes, gem_stat_requirement
 
@@ -97,20 +97,30 @@ def _apply_column_map(infobox, column_map, list_object):
 
 
 def _type_factory(
-    data_file, data_mapping, row_index=True, function=None, fail_condition=False, skip_warning=False
+    data_file,
+    data_mapping,
+    row_index=True,
+    function=None,
+    fail_condition=False,
+    skip_warning=False,
+    index_column="BaseItemTypesKey",
 ):
     def func(self, infobox, base_item_type):
-        try:
-            if data_file == "BaseItemTypes.dat64":
-                data = base_item_type
-            else:
-                data = self.rr[data_file].index["BaseItemTypesKey"][
-                    base_item_type.rowid if row_index else base_item_type["Id"]
-                ]
-        except KeyError:
-            if not skip_warning:
-                warnings.warn(f'Missing {data_file} info for "{base_item_type["Name"]}"')
-            return fail_condition
+        if data_file == "BaseItemTypes.dat64":
+            data = base_item_type
+        else:
+            file: DatReader = self.rr[data_file]
+            idx = base_item_type.rowid if row_index else base_item_type["Id"]
+
+            if index_column not in file.index:
+                file.build_index(index_column)
+
+            try:
+                data = file.index[index_column][idx]
+            except KeyError:
+                if not skip_warning:
+                    warnings.warn(f'Missing {data_file} info for "{base_item_type["Name"]}"')
+                return fail_condition
 
         _apply_column_map(infobox, data_mapping, data)
 
@@ -2666,7 +2676,6 @@ class ItemsParser(SkillParserShared):
         try:
             skill_gem = self.rr["SkillGems.dat64"].index["BaseItemTypesKey"][base_item_type.rowid]
         except KeyError:
-            console("keryere")
             return False
 
         result = []
@@ -3893,6 +3902,30 @@ class ItemsParser(SkillParserShared):
         row_index=True,
     )
 
+    _type_corpse = _type_factory(
+        data_file="ItemisedCorpse.dat64",
+        index_column="BaseItem",
+        data_mapping=(
+            (
+                "MonsterAbilities",
+                {
+                    "template": "monster_abilities",
+                    "format": lambda v: "<br>".join(str(v).splitlines()),
+                    "condition": lambda v: v,
+                },
+            ),
+            (
+                "MonsterCategory",
+                {
+                    "template": "monster_category",
+                    "format": lambda v: v["Name"],
+                    "condition": lambda v: v,
+                },
+            ),
+        ),
+        row_index=True,
+    )
+
     _cls_map = dict()
     """
     This defines the expected data elements for an item class.
@@ -4047,6 +4080,7 @@ class ItemsParser(SkillParserShared):
         "HeistBlueprint": (),
         "Trinket": (),
         "HeistObjective": (),
+        "ItemisedCorpse": (_type_corpse,),
     }
 
     _conflict_active_skill_gems_map = {
@@ -4498,6 +4532,8 @@ class ItemsParser(SkillParserShared):
                         parsed_args=parsed_args,
                         shader=self._get_shader(infobox),
                     )
+                else:
+                    infobox.pop("gem_shader", None)
 
         return r
 
