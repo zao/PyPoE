@@ -887,6 +887,10 @@ class ItemsParser(SkillParserShared):
             "Metadata/Items/UniqueFragments/FragmentUniqueHelmet1_1": " (1 of 3)",
             "Metadata/Items/UniqueFragments/FragmentUniqueHelmet1_2": " (2 of 3)",
             "Metadata/Items/UniqueFragments/FragmentUniqueHelmet1_3": " (3 of 3)",
+            "Metadata/Items/UniqueFragments/FragmentUniqueMap26_1": " (1 of 4)",
+            "Metadata/Items/UniqueFragments/FragmentUniqueMap26_2": " (2 of 4)",
+            "Metadata/Items/UniqueFragments/FragmentUniqueMap26_3": " (3 of 4)",
+            "Metadata/Items/UniqueFragments/FragmentUniqueMap26_4": " (4 of 4)",
             # =================================================================
             # Cosmetic items
             # =================================================================
@@ -2071,6 +2075,7 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS21",
         "Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS22",
         "Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS23",
+        "Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS24",
         "Metadata/Items/MicrotransactionCurrency/MicrotransactionSalvageFragmentSmall",
         "Metadata/Items/MicrotransactionCurrency/MicrotransactionSalvageFragment",
         "Metadata/Items/MicrotransactionCurrency/MicrotransactionSalvageFragmentLarge",
@@ -2330,6 +2335,10 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/MicrotransactionCurrency/ProxySkinTransferPack10",
         "Metadata/Items/MicrotransactionCurrency/ProxySkinTransferPack50",
         "Metadata/Items/MicrotransactionCurrency/TradeMarketBuyoutTabTemporary",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionAltLioneyesGlare",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionAlchemistsBelt",
+        "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionAnnihilationSmiteEffect",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionSurvivorsGogglesHelmetAttachment",
         # =================================================================
         # Hideout decorations
         # =================================================================
@@ -2566,6 +2575,21 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/Currency/SanctumCurrencyWindDancer",
         "Metadata/Items/Currency/SanctumCurrencyZealotsOath",
         # =================================================================
+        # Corpse items
+        # =================================================================
+        "Metadata/Items/ItemisedCorpses/FlameblasterLow",
+        "Metadata/Items/ItemisedCorpses/FlameblasterMid",
+        "Metadata/Items/ItemisedCorpses/FlameblasterHigh",
+        "Metadata/Items/ItemisedCorpses/ForgeHoundLow",
+        "Metadata/Items/ItemisedCorpses/ForgeHoundMid",
+        "Metadata/Items/ItemisedCorpses/ForgeHoundHigh",
+        "Metadata/Items/ItemisedCorpses/SlammerDemonLow",
+        "Metadata/Items/ItemisedCorpses/SlammerDemonMid",
+        "Metadata/Items/ItemisedCorpses/SlammerDemonHigh",
+        "Metadata/Items/ItemisedCorpses/DeathKnightLow",
+        "Metadata/Items/ItemisedCorpses/DeathKnightMid",
+        "Metadata/Items/ItemisedCorpses/DeathKnightHigh",
+        # =================================================================
         # Quest items
         # =================================================================
         "Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment1_1",
@@ -2583,6 +2607,7 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment10_1",
         "Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment10_2",
         "Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment10_3",
+        "Metadata/Items/Heist/QuestItems/HeistFinalObjectiveQuestFaustus1B",
         # =================================================================
         # Misc
         # =================================================================
