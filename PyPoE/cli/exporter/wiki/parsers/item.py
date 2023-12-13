@@ -2526,6 +2526,21 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/Currency/SanctumCurrencyWindDancer",
         "Metadata/Items/Currency/SanctumCurrencyZealotsOath",
         # =================================================================
+        # Corpse items
+        # =================================================================
+        "Metadata/Items/ItemisedCorpses/FlameblasterLow",
+        "Metadata/Items/ItemisedCorpses/FlameblasterMid",
+        "Metadata/Items/ItemisedCorpses/FlameblasterHigh",
+        "Metadata/Items/ItemisedCorpses/ForgeHoundLow",
+        "Metadata/Items/ItemisedCorpses/ForgeHoundMid",
+        "Metadata/Items/ItemisedCorpses/ForgeHoundHigh",
+        "Metadata/Items/ItemisedCorpses/SlammerDemonLow",
+        "Metadata/Items/ItemisedCorpses/SlammerDemonMid",
+        "Metadata/Items/ItemisedCorpses/SlammerDemonHigh",
+        "Metadata/Items/ItemisedCorpses/DeathKnightLow",
+        "Metadata/Items/ItemisedCorpses/DeathKnightMid",
+        "Metadata/Items/ItemisedCorpses/DeathKnightHigh",
+        # =================================================================
         # Quest items
         # =================================================================
         "Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment1_1",
