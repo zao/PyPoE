@@ -2558,6 +2558,7 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment10_1",
         "Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment10_2",
         "Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment10_3",
+        "Metadata/Items/Heist/QuestItems/HeistFinalObjectiveQuestFaustus1B",
         # =================================================================
         # Misc
         # =================================================================
