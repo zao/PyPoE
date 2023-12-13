@@ -2031,6 +2031,7 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS21",
         "Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS22",
         "Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS23",
+        "Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS24",
         "Metadata/Items/MicrotransactionCurrency/MicrotransactionSalvageFragmentSmall",
         "Metadata/Items/MicrotransactionCurrency/MicrotransactionSalvageFragment",
         "Metadata/Items/MicrotransactionCurrency/MicrotransactionSalvageFragmentLarge",
@@ -2290,6 +2291,10 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/MicrotransactionCurrency/ProxySkinTransferPack10",
         "Metadata/Items/MicrotransactionCurrency/ProxySkinTransferPack50",
         "Metadata/Items/MicrotransactionCurrency/TradeMarketBuyoutTabTemporary",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionAltLioneyesGlare",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionAlchemistsBelt",
+        "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionAnnihilationSmiteEffect",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionSurvivorsGogglesHelmetAttachment",
         # =================================================================
         # Hideout decorations
         # =================================================================
