@@ -230,7 +230,9 @@ class WikiHandler:
                 console("Found text marked as Do Not Translate. Skipping.")
                 return
             revisions = page.exists and [
-                r["*"].splitlines() for r in page.revisions(limit=2, prop="content")
+                r["content"].splitlines()
+                for r in page.revisions(limit=2, prop="content|comment")
+                if not r["comment"].startswith("PyPoE/ExporterBot/")
             ]
             if revisions and new_lines in revisions:
                 console(
