@@ -2338,7 +2338,7 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionAltLioneyesGlare",
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionAlchemistsBelt",
         "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionAnnihilationSmiteEffect",
-        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionSurvivorsGogglesHelmetAttachment",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionSurvivorsGogglesHelmetAttachment",  # noqa
         # =================================================================
         # Hideout decorations
         # =================================================================
@@ -4573,15 +4573,18 @@ class ItemsParser(SkillParserShared):
         var = infobox.pop("gem_shader")
 
         def _srgb_to_linear(img):
-            return np.piecewise(img,
-                                [img < 0.04045, img >= 0.04045],
-                                [lambda v: v / 12.92, lambda v: ((v + 0.055) / 1.055) ** 2.4])
-
+            return np.piecewise(
+                img,
+                [img < 0.04045, img >= 0.04045],
+                [lambda v: v / 12.92, lambda v: ((v + 0.055) / 1.055) ** 2.4],
+            )
 
         def _linear_to_srgb(img):
-            return np.piecewise(img,
-                               [img < 0.0031308, img >= 0.0031308],
-                               [lambda v: v * 12.92, lambda v: 1.055 * v ** (1.0 / 2.4) - 0.055])
+            return np.piecewise(
+                img,
+                [img < 0.0031308, img >= 0.0031308],
+                [lambda v: v * 12.92, lambda v: 1.055 * v ** (1.0 / 2.4) - 0.055],
+            )
 
         def shader(img: Image):
             adorn = img.crop((0, 0, 78, 78))

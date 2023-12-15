@@ -589,22 +589,23 @@ class SkillParserShared(parser.BaseParser):
                 for stat_index, r in enumerate(lvl_stats["FloatStats"])
                 if stat_index < len(lvl_stats["BaseResolvedValues"])
             ] + [r["Id"] for r in lvl_stats["AdditionalStats"]]
-            values = lvl_stats["BaseResolvedValues"] + lvl_stats["AdditionalStatsValues"]
+            values = defaultdict(lambda: 0)
+            for k, v in zip(
+                stats + const_stats + impl_stats,
+                lvl_stats["BaseResolvedValues"]
+                + lvl_stats["AdditionalStatsValues"]
+                + const_stat_vals
+                + impl_stat_vals,
+            ):
+                values[k] = values[k] + v
 
             # Remove 0 (unused) stats
             # This will remove all +0 gem level entries.
-            remove_ids = [stat for stat, value in zip(stats, values) if value == 0]
-            for stat_id in remove_ids:
-                index = stats.index(stat_id)
-                if values[index] == 0:
-                    del stats[index]
-                    del values[index]
+            stats = [stat for stat in stats if values[stat]]
 
             translated_stats = self._translate_stats(
                 stats,
-                dict(
-                    zip(stats + const_stats + impl_stats, values + const_stat_vals + impl_stat_vals)
-                ),
+                values,
                 tf,
                 data,
                 stat_order,
@@ -667,14 +668,10 @@ class SkillParserShared(parser.BaseParser):
             last = data
 
         # GrantedEffectStatSets.dat64
-        const_stats = [untr_stat["Id"] for untr_stat in stat_set["ConstantStats"]]
-        impl_stats = [untr_stat["Id"] for untr_stat in stat_set["ImplicitStats"]]
-        const_stat_vals = stat_set["ConstantStatsValues"]
-
         const_data = defaultdict()
         const_tr_stats = self._translate_stats(
-            const_stats + impl_stats,
-            const_stat_vals + [1 for i in range(len(impl_stats))],
+            [stat for stat in const_stats + impl_stats if stat not in dynamic["stat_keys"]],
+            dict(zip(const_stats + impl_stats, const_stat_vals + impl_stat_vals)),
             tf,
             const_data,
             stat_order,
