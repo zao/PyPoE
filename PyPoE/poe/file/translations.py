@@ -1282,7 +1282,7 @@ class TQRelationalData(TranslationQuantifier):
         self.convert_type = convert_type
         super().__init__(id=id, handler=self.handle, reverse_handler=self.reverse)
 
-    def range_format(self, v: tuple):
+    def range_format(self, v: tuple, _):
         return v[0] if v[0] == v[1] else self.placeholder
 
     def handle(self, v):
