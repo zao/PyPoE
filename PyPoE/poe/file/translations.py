@@ -683,16 +683,12 @@ class TranslationString(TranslationReprMixin):
                 string.append("+")
 
             if not use_placeholder:
-                if custom_formatter:
-                    value = custom_formatter(value)
-                    formatted_values[tagid] = (value, value)
+                if is_range[tagid]:
+                    formatted_values[tagid] = tuple(map(formats[tagid].format, value))
+                    value = formats[tagid].range_format(value, custom_formatter)
                 else:
-                    if is_range[tagid]:
-                        formatted_values[tagid] = tuple(map(formats[tagid].format, value))
-                        value = formats[tagid].range_format(value)
-                    else:
-                        value = formats[tagid].format(value)
-                        formatted_values[tagid] = (value, value)
+                    value = (custom_formatter or formats[tagid].format)(value)
+                    formatted_values[tagid] = (value, value)
 
             elif use_placeholder is True:
                 value = ascii_letters[23 + i]
@@ -1204,12 +1200,13 @@ class TranslationQuantifier(TranslationReprMixin):
         self.format = format
         TranslationQuantifierHandler.install_quantifier(self)
 
-    def range_format(self, value: tuple):
+    def range_format(self, value: tuple, custom_formatter=None):
+        format = custom_formatter or self.format
         if value[1] < 0:
-            v0, v1 = [self.format(-v) for v in value]
+            v0, v1 = [format(-v) for v in value]
             return f"-({v0}-{v1})"
         else:
-            v0, v1 = [self.format(v) for v in value]
+            v0, v1 = [format(v) for v in value]
             return f"({v0}-{v1})"
 
 
