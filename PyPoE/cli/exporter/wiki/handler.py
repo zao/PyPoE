@@ -37,6 +37,7 @@ from concurrent.futures import ThreadPoolExecutor, wait
 
 # Python
 from difflib import unified_diff
+from itertools import islice
 from queue import Empty, SimpleQueue
 from threading import Lock
 
@@ -229,12 +230,15 @@ class WikiHandler:
             if ("[DNT]" in text or "[UNUSED]" in text) and new:
                 console("Found text marked as Do Not Translate. Skipping.")
                 return
-            revisions = page.exists and [
-                r["content"].splitlines()
-                for r in page.revisions(limit=2, prop="content|comment")
-                if not r["comment"].startswith("PyPoE/ExporterBot/")
-            ]
-            if revisions and new_lines in revisions:
+            rev1, rev2 = (
+                islice(page.revisions(limit=2, prop="content|comment"), 2)
+                if page.exists
+                else [None, None]
+            )
+            previous_revision = (
+                page.exists and not rev1["comment"].startswith("PyPoE/ExporterBot/") and rev2["*"]
+            )
+            if previous_revision == new_lines:
                 console(
                     f"Update to {pdata['page']} would be a manual revert, skipping this row.",
                     msg=Msg.warning,
