@@ -887,6 +887,10 @@ class ItemsParser(SkillParserShared):
             "Metadata/Items/UniqueFragments/FragmentUniqueHelmet1_1": " (1 of 3)",
             "Metadata/Items/UniqueFragments/FragmentUniqueHelmet1_2": " (2 of 3)",
             "Metadata/Items/UniqueFragments/FragmentUniqueHelmet1_3": " (3 of 3)",
+            "Metadata/Items/UniqueFragments/FragmentUniqueMap26_1": " (1 of 4)",
+            "Metadata/Items/UniqueFragments/FragmentUniqueMap26_2": " (2 of 4)",
+            "Metadata/Items/UniqueFragments/FragmentUniqueMap26_3": " (3 of 4)",
+            "Metadata/Items/UniqueFragments/FragmentUniqueMap26_4": " (4 of 4)",
             # =================================================================
             # Cosmetic items
             # =================================================================
@@ -2071,6 +2075,7 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS21",
         "Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS22",
         "Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS23",
+        "Metadata/Items/MicrotransactionCurrency/MicrotransactionUpgradeScrollS24",
         "Metadata/Items/MicrotransactionCurrency/MicrotransactionSalvageFragmentSmall",
         "Metadata/Items/MicrotransactionCurrency/MicrotransactionSalvageFragment",
         "Metadata/Items/MicrotransactionCurrency/MicrotransactionSalvageFragmentLarge",
@@ -2330,6 +2335,10 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/MicrotransactionCurrency/ProxySkinTransferPack10",
         "Metadata/Items/MicrotransactionCurrency/ProxySkinTransferPack50",
         "Metadata/Items/MicrotransactionCurrency/TradeMarketBuyoutTabTemporary",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionAltLioneyesGlare",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionAlchemistsBelt",
+        "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionAnnihilationSmiteEffect",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionSurvivorsGogglesHelmetAttachment",
         # =================================================================
         # Hideout decorations
         # =================================================================
@@ -2566,6 +2575,21 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/Currency/SanctumCurrencyWindDancer",
         "Metadata/Items/Currency/SanctumCurrencyZealotsOath",
         # =================================================================
+        # Corpse items
+        # =================================================================
+        "Metadata/Items/ItemisedCorpses/FlameblasterLow",
+        "Metadata/Items/ItemisedCorpses/FlameblasterMid",
+        "Metadata/Items/ItemisedCorpses/FlameblasterHigh",
+        "Metadata/Items/ItemisedCorpses/ForgeHoundLow",
+        "Metadata/Items/ItemisedCorpses/ForgeHoundMid",
+        "Metadata/Items/ItemisedCorpses/ForgeHoundHigh",
+        "Metadata/Items/ItemisedCorpses/SlammerDemonLow",
+        "Metadata/Items/ItemisedCorpses/SlammerDemonMid",
+        "Metadata/Items/ItemisedCorpses/SlammerDemonHigh",
+        "Metadata/Items/ItemisedCorpses/DeathKnightLow",
+        "Metadata/Items/ItemisedCorpses/DeathKnightMid",
+        "Metadata/Items/ItemisedCorpses/DeathKnightHigh",
+        # =================================================================
         # Quest items
         # =================================================================
         "Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment1_1",
@@ -2583,6 +2607,7 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment10_1",
         "Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment10_2",
         "Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment10_3",
+        "Metadata/Items/Heist/QuestItems/HeistFinalObjectiveQuestFaustus1B",
         # =================================================================
         # Misc
         # =================================================================
@@ -4547,6 +4572,17 @@ class ItemsParser(SkillParserShared):
         attr = max(attrs, key=attrs.get)
         var = infobox.pop("gem_shader")
 
+        def _srgb_to_linear(img):
+            return np.piecewise(img,
+                                [img < 0.04045, img >= 0.04045],
+                                [lambda v: v / 12.92, lambda v: ((v + 0.055) / 1.055) ** 2.4])
+
+
+        def _linear_to_srgb(img):
+            return np.piecewise(img,
+                               [img < 0.0031308, img >= 0.0031308],
+                               [lambda v: v * 12.92, lambda v: 1.055 * v ** (1.0 / 2.4) - 0.055])
+
         def shader(img: Image):
             adorn = img.crop((0, 0, 78, 78))
             base = img.crop((2 * 78, 0, 3 * 78, 78))
@@ -4554,7 +4590,7 @@ class ItemsParser(SkillParserShared):
                 return Image.alpha_composite(base, adorn)
             const = SHADE_LUT[(attr, var)]
 
-            base_rgba = np.float64(np.asarray(base)) / 255.0
+            base_rgba = _srgb_to_linear(np.float32(np.asarray(base)) / 255.0)
 
             # Shade algorithm:
             # * compute luminance influence
@@ -4602,7 +4638,7 @@ class ItemsParser(SkillParserShared):
             final_rgb = lerp(modified_rgb, base_rgb, final_mix_f)
 
             shifted_rgba = np.dstack((final_rgb, base_a))
-            shifted_base = Image.fromarray(np.uint8(shifted_rgba * 255.0), "RGBA")
+            shifted_base = Image.fromarray(np.uint8(_linear_to_srgb(shifted_rgba) * 255.0), "RGBA")
 
             # * desaturate, but the parameter for that seems to be 1 so won't bother
             # 	return Desaturate(float4(final_rgb, 1.f) * original_a, saturation) * input.colour;
