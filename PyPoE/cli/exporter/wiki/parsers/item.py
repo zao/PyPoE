@@ -190,6 +190,7 @@ class WikiCondition(parser.WikiCondition):
         "frame_type",
         "influences",
         "card_background",
+        "skill_icon",
         # Drop restrictions
         "drop_enabled",
         "acquisition_tags",
@@ -198,6 +199,7 @@ class WikiCondition(parser.WikiCondition):
         "drop_monsters",
         "is_drop_restricted",
         "drop_level_maximum",
+        "drop_rarities_ids",
         # Item flags
         "is_corrupted",
         "is_mirrored",
@@ -207,7 +209,6 @@ class WikiCondition(parser.WikiCondition):
         "is_eater_of_worlds_item",
         "is_veiled",
         "is_replica",
-        "is_relic",
         "can_not_be_traded_or_modified",
         "is_sellable",
         "is_in_game",
@@ -215,7 +216,7 @@ class WikiCondition(parser.WikiCondition):
         "is_account_bound",
         "suppress_improper_modifiers_category",
         "disable_automatic_recipes",
-        # MTX Categorization (No longer exposed in BaseItemTypes.dat)
+        # MTX Categorization
         "cosmetic_type",
         # Version information
         "release_version",
@@ -2719,7 +2720,7 @@ class ItemsParser(SkillParserShared):
             return False
         if name:
             infobox["name"] = name
-            infobox["base_metadata_id"] = infobox.pop("metadata_id")
+            infobox["base_item_id"] = infobox.pop("metadata_id")
 
         # SkillGems.dat
         for attr_short, attr_long in self._attribute_map.items():
