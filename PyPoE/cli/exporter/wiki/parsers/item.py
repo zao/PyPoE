@@ -2716,8 +2716,16 @@ class ItemsParser(SkillParserShared):
         name = gem_type["Name"]
         if "[DNT]" in name:
             return False
-        if skill_gem["IsVaalVariant"] and gem_type["ItemColor"] != 3:
-            return False
+        if skill_gem["IsVaalVariant"]:
+            infobox["is_vaal_skill_gem"] = "true"
+            if gem_type["ItemColor"] != 3:
+                return False
+        if skill_gem["VaalVariant_BaseItemTypesKey"]:
+            infobox["vaal_variant_id"] = skill_gem["VaalVariant_BaseItemTypesKey"]["Id"]
+        if skill_gem["RegularVariant"]:
+            infobox["is_awakened_support_gem"] = "true"
+        if skill_gem["AwakenedVariant"]:
+            infobox["awakened_variant_id"] = skill_gem["AwakenedVariant"]["BaseItemTypesKey"]["Id"]
         if name:
             infobox["name"] = name
             infobox["base_item_id"] = infobox.pop("metadata_id")
