@@ -4105,7 +4105,7 @@ class ItemsParser(SkillParserShared):
         # 'LabyrinthMapItem': (),
         # Misc
         "Map": (_type_map,),
-        "MapFragment": (_type_map_fragment_mods,),
+        "MapFragment": (_type_currency, _type_map_fragment_mods,),
         "QuestItem": (_skip_quest_contracts,),
         "AtlasRegionUpgradeItem": (),
         "MetamorphosisDNA": (),
