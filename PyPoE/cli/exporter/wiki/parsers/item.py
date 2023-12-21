@@ -2576,6 +2576,10 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/Currency/SanctumCurrencyWindDancer",
         "Metadata/Items/Currency/SanctumCurrencyZealotsOath",
         # =================================================================
+        # Divination cards
+        # =================================================================
+        "Metadata/Items/DivinationCards/DivinationCardHisJudgement",
+        # =================================================================
         # Corpse items
         # =================================================================
         "Metadata/Items/ItemisedCorpses/FlameblasterLow",
