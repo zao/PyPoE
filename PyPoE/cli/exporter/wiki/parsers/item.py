@@ -3187,17 +3187,6 @@ class ItemsParser(SkillParserShared):
     )
 
     def _currency_extra(self, infobox, base_item_type, currency):
-        # Add the "shift click to unstack" stuff to currency-ish items
-        if currency["Stacks"] > 1 and infobox["class_id"] not in ("Microtransaction",):
-            if "help_text" in infobox:
-                infobox["help_text"] += "<br>"
-            else:
-                infobox["help_text"] = ""
-
-            infobox["help_text"] += self.rr["ClientStrings.dat64"].index["Id"][
-                "ItemDisplayStackDescription"
-            ]["Text"]
-
         if infobox.get("description"):
             infobox["description"] = parser.parse_and_handle_description_tags(
                 rr=self.rr,
