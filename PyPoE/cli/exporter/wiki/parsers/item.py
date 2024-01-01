@@ -2576,6 +2576,10 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/Currency/SanctumCurrencyWindDancer",
         "Metadata/Items/Currency/SanctumCurrencyZealotsOath",
         # =================================================================
+        # Divination cards
+        # =================================================================
+        "Metadata/Items/DivinationCards/DivinationCardHisJudgement",
+        # =================================================================
         # Corpse items
         # =================================================================
         "Metadata/Items/ItemisedCorpses/FlameblasterLow",
@@ -3183,17 +3187,6 @@ class ItemsParser(SkillParserShared):
     )
 
     def _currency_extra(self, infobox, base_item_type, currency):
-        # Add the "shift click to unstack" stuff to currency-ish items
-        if currency["Stacks"] > 1 and infobox["class_id"] not in ("Microtransaction",):
-            if "help_text" in infobox:
-                infobox["help_text"] += "<br>"
-            else:
-                infobox["help_text"] = ""
-
-            infobox["help_text"] += self.rr["ClientStrings.dat64"].index["Id"][
-                "ItemDisplayStackDescription"
-            ]["Text"]
-
         if infobox.get("description"):
             infobox["description"] = parser.parse_and_handle_description_tags(
                 rr=self.rr,
@@ -3557,10 +3550,10 @@ class ItemsParser(SkillParserShared):
     def _map_fragment_extra(self, infobox, base_item_type, map_fragment_mods):
         if map_fragment_mods["ModsKeys"]:
             i = 1
-            while infobox.get("implicit%s" % i) is not None:
+            while infobox.get("map_fragment_bonus%s" % i) is not None:
                 i += 1
             for mod in map_fragment_mods["ModsKeys"]:
-                infobox["implicit%s" % i] = mod["Id"]
+                infobox["map_fragment_bonus%s" % i] = mod["Id"]
                 i += 1
 
     _type_map_fragment_mods = _type_factory(
@@ -4101,7 +4094,7 @@ class ItemsParser(SkillParserShared):
         # 'LabyrinthMapItem': (),
         # Misc
         "Map": (_type_map,),
-        "MapFragment": (_type_map_fragment_mods,),
+        "MapFragment": (_type_currency, _type_map_fragment_mods,),
         "QuestItem": (_skip_quest_contracts,),
         "AtlasRegionUpgradeItem": (),
         "MetamorphosisDNA": (),
