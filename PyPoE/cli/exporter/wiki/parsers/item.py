@@ -3550,10 +3550,10 @@ class ItemsParser(SkillParserShared):
     def _map_fragment_extra(self, infobox, base_item_type, map_fragment_mods):
         if map_fragment_mods["ModsKeys"]:
             i = 1
-            while infobox.get("implicit%s" % i) is not None:
+            while infobox.get("map_fragment_bonus%s" % i) is not None:
                 i += 1
             for mod in map_fragment_mods["ModsKeys"]:
-                infobox["implicit%s" % i] = mod["Id"]
+                infobox["map_fragment_bonus%s" % i] = mod["Id"]
                 i += 1
 
     _type_map_fragment_mods = _type_factory(
