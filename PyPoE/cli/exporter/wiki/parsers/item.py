@@ -3229,6 +3229,7 @@ class ItemsParser(SkillParserShared):
         ),
         row_index=True,
         function=_currency_extra,
+        fail_condition=True,
     )
 
     _COSMETIC_NAME_MAP = {
@@ -4107,6 +4108,7 @@ class ItemsParser(SkillParserShared):
         "HeistBlueprint": (),
         "Trinket": (),
         "HeistObjective": (),
+        "Breachstone": (_type_currency,),
         "ItemisedCorpse": (_type_corpse,),
     }
 
