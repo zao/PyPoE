@@ -4107,6 +4107,7 @@ class ItemsParser(SkillParserShared):
         "HeistBlueprint": (),
         "Trinket": (),
         "HeistObjective": (),
+        "Breachstone": (_type_currency,),
         "ItemisedCorpse": (_type_corpse,),
     }
 
