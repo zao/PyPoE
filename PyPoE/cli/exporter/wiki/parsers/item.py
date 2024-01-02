@@ -1740,10 +1740,8 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionJingweiCharacterEffect",
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionJingweiFootprintsEffect",
         "Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionJingweiPortraitFrame",
-        (
-            "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionHasinaWhirlingBladesEffect"
-            "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionHasinaBladeVortexEffect"
-        ),
+        "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionHasinaWhirlingBladesEffect",
+        "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionHasinaBladeVortexEffect",
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionAuspiciousDragonWeaponEffect1",
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionAuspiciousDragonWeaponEffect2",
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionAuspiciousDragonWeaponEffect3",
@@ -4096,7 +4094,7 @@ class ItemsParser(SkillParserShared):
         # 'LabyrinthMapItem': (),
         # Misc
         "Map": (_type_map,),
-        "MapFragment": (_type_currency, _type_map_fragment_mods,),
+        "MapFragment": (_type_currency, _type_map_fragment_mods),
         "QuestItem": (_skip_quest_contracts,),
         "AtlasRegionUpgradeItem": (),
         "MetamorphosisDNA": (),
