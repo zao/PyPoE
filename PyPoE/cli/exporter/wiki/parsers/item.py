@@ -698,6 +698,7 @@ class ItemsParser(SkillParserShared):
             "Metadata/Items/Gems/SkillGemCobraLash": "",
             "Metadata/Items/Gems/SkillGemIceSpear": "",
             "Metadata/Items/Gems/SkillGemArcaneCloak": "",
+            "Metadata/Items/Gems/SkillGemPortal": " (skill gem)",
             # =================================================================
             # Support Gems
             # =================================================================
