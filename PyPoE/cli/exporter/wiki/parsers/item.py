@@ -4243,6 +4243,9 @@ class ItemsParser(SkillParserShared):
     def _conflict_incubator_stackable(self, infobox, base_item_type, rr, language):
         return base_item_type["Name"]
 
+    def _conflict_breachstone(self, infobox, base_item_type, rr, language):
+        return base_item_type["Name"]
+
     _conflict_resolver_map = {
         "Active Skill Gem": _conflict_active_skill_gems,
         "QuestItem": _conflict_quest_items,
@@ -4258,6 +4261,7 @@ class ItemsParser(SkillParserShared):
         "AtlasRegionUpgradeItem": _conflict_atlas_region_upgrade,
         "Incubator": _conflict_incubator,
         "IncubatorStackable": _conflict_incubator_stackable,
+        "Breachstone": _conflict_breachstone,
     }
 
     def _parse_class_filter(self, parsed_args):
