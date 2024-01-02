@@ -3229,6 +3229,7 @@ class ItemsParser(SkillParserShared):
         ),
         row_index=True,
         function=_currency_extra,
+        fail_condition=True,
     )
 
     _COSMETIC_NAME_MAP = {
