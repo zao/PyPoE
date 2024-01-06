@@ -3730,10 +3730,11 @@ class ItemsParser(SkillParserShared):
         if base_item_type["Id"] in self._SKIP_ITEMS_BY_ID:
             self._skipped_items.add(base_item_type["Id"])
             return True
-        for pattern in self._ITEM_SKIP_PATTERNS[base_item_type["ItemClassesKey"]["Id"]]:
-            if re.search(pattern, base_item_type["Id"]):
-                self._skipped_items.add(base_item_type["Id"])
-                return True
+        if base_item_type["ItemClassesKey"]["Id"] in self._ITEM_SKIP_PATTERNS:
+            for pattern in self._ITEM_SKIP_PATTERNS[base_item_type["ItemClassesKey"]["Id"]]:
+                if re.search(pattern, base_item_type["Id"]):
+                    self._skipped_items.add(base_item_type["Id"])
+                    return True
         return False
 
     def _process_purchase_costs(self, source, infobox):
