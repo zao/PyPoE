@@ -2625,6 +2625,25 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/Classic/MysteryLeaguestone",
     }
 
+    _ITEM_SKIP_PATTERNS = {
+        "Microtransaction": {
+            r"Garena",
+            r"Tencent",
+            r"Jingwei",
+            r"Chiyou",
+            r"AuspiciousDragon",
+            r"Jinli",
+            r"MicrotransactionGoddess",
+            r"GodOfThunder",
+            r"AltDeicide",
+            r"Freya",
+            r"Hasina",
+            r"Upgrade.*Scroll",
+            r"Convert.*Scroll",
+            r"Premium.*Pet",
+        },
+    }
+
     _PLACEHOLDER_IMAGES = {"Art/2DItems/Hideout/HideoutPlaceholder.dds"}
 
     _attribute_map = OrderedDict(
@@ -4278,6 +4297,18 @@ class ItemsParser(SkillParserShared):
         else:
             return []
 
+    _skipped_items = set()
+
+    def _maybe_skip(self, base_item_type):
+        if base_item_type["Id"] in self._SKIP_ITEMS_BY_ID:
+            self._skipped_items.add(base_item_type["Id"])
+            return True
+        for pattern in self._ITEM_SKIP_PATTERNS[base_item_type["ItemClassesKey"]["Id"]]:
+            if re.search(pattern, base_item_type["Id"]):
+                self._skipped_items.add(base_item_type["Id"])
+                return True
+        return False
+
     def _process_purchase_costs(self, source, infobox):
         for rarity in RARITY:
             if rarity.id >= 5:
@@ -4400,7 +4431,7 @@ class ItemsParser(SkillParserShared):
             items = [
                 item
                 for item in rr["BaseItemTypes.dat64"].index["Name"][name]
-                if item["Id"] not in self._SKIP_ITEMS_BY_ID
+                if item["Id"] not in self._skipped_items
             ]
             if cls_id == "Map" or len(items) > 1:
                 resolver = self._conflict_resolver_map.get(cls_id)
@@ -4443,7 +4474,7 @@ class ItemsParser(SkillParserShared):
         items = [
             base_item_type
             for base_item_type in items
-            if base_item_type["Id"] not in self._SKIP_ITEMS_BY_ID
+            if not self._maybe_skip(base_item_type)
         ]
         console("%s items left for processing." % len(items))
 
