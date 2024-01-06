@@ -4396,29 +4396,34 @@ class ItemsParser(SkillParserShared):
         if appendix is not None:
             name += appendix
             infobox["inventory_icon"] = name
-        elif cls_id == "Map" or len(rr["BaseItemTypes.dat64"].index["Name"][name]) > 1:
-            resolver = self._conflict_resolver_map.get(cls_id)
-
-            if resolver:
-                name = resolver(self, infobox, base_item_type, rr, language)
-                if name is None:
+        else:
+            items = [
+                item
+                for item in rr["BaseItemTypes.dat64"].index["Name"][name]
+                if item["Id"] not in self._SKIP_ITEMS_BY_ID
+            ]
+            if cls_id == "Map" or len(items) > 1:
+                resolver = self._conflict_resolver_map.get(cls_id)
+                if resolver:
+                    name = resolver(self, infobox, base_item_type, rr, language)
+                    if name is None:
+                        console(
+                            'Unresolved ambiguous item "%s" with name "%s". Skipping'
+                            % (m_id, infobox["name"]),
+                            msg=Msg.warning,
+                        )
+                        return
+                else:
                     console(
                         'Unresolved ambiguous item "%s" with name "%s". Skipping'
                         % (m_id, infobox["name"]),
                         msg=Msg.warning,
                     )
+                    console(
+                        'No name conflict handler defined for item class id "%s"' % cls_id,
+                        msg=Msg.warning,
+                    )
                     return
-            else:
-                console(
-                    'Unresolved ambiguous item "%s" with name "%s". Skipping'
-                    % (m_id, infobox["name"]),
-                    msg=Msg.warning,
-                )
-                console(
-                    'No name conflict handler defined for item class id "%s"' % cls_id,
-                    msg=Msg.warning,
-                )
-                return
 
         return name
 
