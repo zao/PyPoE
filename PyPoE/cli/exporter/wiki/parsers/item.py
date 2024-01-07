@@ -1420,6 +1420,10 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionAlchemistsBelt",
         "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionAnnihilationSmiteEffect",
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionSurvivorsGogglesHelmetAttachment",  # noqa
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionReLinkQuary",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionCathedralWings1",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionCathedralWings2",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionCathedralWings3",
         # =================================================================
         # Hideout decorations
         # =================================================================
@@ -1692,6 +1696,7 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment10_1",
         "Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment10_2",
         "Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment10_3",
+        "Metadata/Items/QuestItems/MapUpgrades/MapUpgradeTierTo16",
         "Metadata/Items/Heist/QuestItems/HeistFinalObjectiveQuestFaustus1B",
         # =================================================================
         # Misc
@@ -1701,6 +1706,7 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/Heist/HeistEquipmentUtilityTest",
         "Metadata/Items/Heist/HeistEquipmentRewardTest",
         "Metadata/Items/Weapons/OneHandWeapons/Daggers/EtherealBlade1",
+        "Metadata/Items/Weapons/TwoHandWeapons/Bows/EtherealBow1",
         "Metadata/Items/ItemEffects/SekhemasBanner",
         "Metadata/Items/Armours/BodyArmours/BodyStrTemp",
         "Metadata/Items/Classic/MysteryLeaguestone",
