@@ -1167,7 +1167,6 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/Gems/SkillGemNewPhaseRun",
         "Metadata/Items/Gems/SkillGemNewArcticArmour",
         "Metadata/Items/Gems/SkillGemFlammableShot",
-        # Skill gem's name causes errors when exporting to wiki page since it includes [DNT]
         "Metadata/Items/Gems/SkillGemCallOfTheWild",
         "Metadata/Items/Gems/SkillGemPlaytestAttack",
         "Metadata/Items/Gems/SkillGemPlaytestSpell",
@@ -1197,6 +1196,7 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/Gems/SupportGemReturn",
         "Metadata/Items/Gems/SupportGemTemporaryForTutorial",
         "Metadata/Items/Gems/SupportGemVaalSoulHarvesting",
+        "Metadata/Items/Gems/SupportGemConflagration",
         # =================================================================
         # Cosmetic items
         # =================================================================
@@ -1424,6 +1424,9 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionCathedralWings1",
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionCathedralWings2",
         "Metadata/Items/MicrotransactionItemEffects/MicrotransactionCathedralWings3",
+        "Metadata/Items/MicrotransactionCurrency/MicrotransactionPetConvertToBlueGhostrider",
+        "Metadata/Items/MicrotransactionCurrency/HideoutMonsterStatueCreator",
+        "Metadata/Items/Pets/Mimic",
         # =================================================================
         # Hideout decorations
         # =================================================================
@@ -1696,8 +1699,28 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment10_1",
         "Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment10_2",
         "Metadata/Items/QuestItems/ShaperMemoryFragments/ShaperMemoryFragment10_3",
+        "Metadata/Items/QuestItems/MapUpgrades/MapUpgradeTier1_1",
+        "Metadata/Items/QuestItems/MapUpgrades/MapUpgradeTier2_1",
+        "Metadata/Items/QuestItems/MapUpgrades/MapUpgradeTier3_1",
+        "Metadata/Items/QuestItems/MapUpgrades/MapUpgradeTier4_1",
+        "Metadata/Items/QuestItems/MapUpgrades/MapUpgradeTier5_1",
+        "Metadata/Items/QuestItems/MapUpgrades/MapUpgradeTier6_1",
+        "Metadata/Items/QuestItems/MapUpgrades/MapUpgradeTier7_1",
+        "Metadata/Items/QuestItems/MapUpgrades/MapUpgradeTier8_1",
+        "Metadata/Items/QuestItems/MapUpgrades/MapUpgradeTier8_2",
+        "Metadata/Items/QuestItems/MapUpgrades/MapUpgradeTier9_1",
+        "Metadata/Items/QuestItems/MapUpgrades/MapUpgradeTier9_2",
+        "Metadata/Items/QuestItems/MapUpgrades/MapUpgradeTier9_3",
+        "Metadata/Items/QuestItems/MapUpgrades/MapUpgradeTier10_1",
+        "Metadata/Items/QuestItems/MapUpgrades/MapUpgradeTier10_2",
+        "Metadata/Items/QuestItems/MapUpgrades/MapUpgradeTier10_3",
         "Metadata/Items/QuestItems/MapUpgrades/MapUpgradeTierTo16",
         "Metadata/Items/Heist/QuestItems/HeistFinalObjectiveQuestFaustus1B",
+        "Metadata/Items/Heist/QuestItems/HeistFinalObjectiveQuestNenet1",
+        "Metadata/Items/Heist/QuestItems/HeistFinalObjectiveQuestNenet2",
+        "Metadata/Items/Heist/QuestItems/HeistFinalObjectiveQuestAdiyah3",
+        "Metadata/Items/Heist/QuestItems/HeistFinalObjectiveQuestKurai2",
+        "Metadata/Items/Heist/QuestItems/HeistFinalObjectiveQuestKurai3",
         # =================================================================
         # Misc
         # =================================================================
@@ -1710,6 +1733,12 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/ItemEffects/SekhemasBanner",
         "Metadata/Items/Armours/BodyArmours/BodyStrTemp",
         "Metadata/Items/Classic/MysteryLeaguestone",
+        "Metadata/Items/Relics/Relic1x3",
+        "Metadata/Items/Relics/Relic1x4",
+        "Metadata/Items/Relics/Relic2x1",
+        "Metadata/Items/Relics/Relic2x2",
+        "Metadata/Items/Relics/Relic3x1",
+        "Metadata/Items/Relics/Relic4x1",
     }
 
     _ITEM_SKIP_PATTERNS = {
@@ -3398,7 +3427,7 @@ class ItemsParser(SkillParserShared):
             return True
         if base_item_type["ItemClassesKey"]["Id"] in self._ITEM_SKIP_PATTERNS:
             for pattern in self._ITEM_SKIP_PATTERNS[base_item_type["ItemClassesKey"]["Id"]]:
-                if re.search(pattern, base_item_type["Id"]):
+                if re.search(pattern, base_item_type["Id"], flags=re.IGNORECASE):
                     self._skipped_items.add(base_item_type["Id"])
                     return True
         return False
