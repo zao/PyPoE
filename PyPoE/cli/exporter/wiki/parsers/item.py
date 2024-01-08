@@ -1176,7 +1176,7 @@ class ItemsParser(SkillParserShared):
         # Royale Gear
         # =================================================================
         "Metadata/Items/Weapons/OneHandWeapons/Wands/Wand1Royale",
-        "Metadata/Items/Weapons/TwoHandWeapons/Bows/Bow1",
+        "Metadata/Items/Weapons/TwoHandWeapons/Bows/Bow1Royale",
         "Metadata/Items/Rings/RingRoyale1",
         "Metadata/Items/Rings/RingRoyale2",
         "Metadata/Items/Rings/RingRoyale3",
