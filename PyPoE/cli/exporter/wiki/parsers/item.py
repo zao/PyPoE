@@ -1427,6 +1427,26 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/MicrotransactionCurrency/MicrotransactionPetConvertToBlueGhostrider",
         "Metadata/Items/MicrotransactionCurrency/HideoutMonsterStatueCreator",
         "Metadata/Items/Pets/Mimic",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionVoodooAsenathsGentleTouch",
+        "Metadata/Items/Pets/HeritageHummingbirdPet",
+        "Metadata/Items/Pets/AristocratCatPet",
+        "Metadata/Items/Pets/AristocratLargeCatPet",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionAristocratWeaponEffect",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionOceanGreatbow",
+        "Metadata/Items/Pets/AyeAyePet",
+        "Metadata/Items/Pets/BlackWidowSpider",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionJadeMarohiErqi",
+        "Metadata/Items/Pets/FangtoothMorayPet",
+        "Metadata/Items/Pets/FaridunLizardPet",
+        "Metadata/Items/Pets/FennecFoxPet",
+        "Metadata/Items/Pets/FluffyMothPet",
+        "Metadata/Items/Pets/LifeBatteryPet",
+        "Metadata/Items/Pets/ManaBatteryPet",
+        "Metadata/Items/Pets/NecroticCatPet",
+        "Metadata/Items/Pets/PetRockVaal",
+        "Metadata/Items/Pets/PetRockStatues",
+        "Metadata/Items/Pets/WolverinePet",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionPhoenixEggRiseofthePhoenix",
         # =================================================================
         # Hideout decorations
         # =================================================================
@@ -1763,6 +1783,7 @@ class ItemsParser(SkillParserShared):
             r"Upgrade.*Scroll",
             r"Convert.*Scroll",
             r"Premium.*Pet",
+            r"UnifiedAuraEffect",
         },
     }
 
