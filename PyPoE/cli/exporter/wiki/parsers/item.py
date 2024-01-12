@@ -3717,14 +3717,29 @@ class ItemsParser(SkillParserShared):
                             (infobox.get("inventory_icon") or page) + " inventory icon.dds",
                         ),
                         parsed_args=parsed_args,
-                        shader=self._get_shader(infobox),
+                        process=self._get_icon_process(infobox, base_item_type),
                     )
                 else:
                     infobox.pop("gem_shader", None)
 
         return r
 
-    def _get_shader(self, infobox: dict[str, str]):
+    def _get_icon_process(self, infobox: dict[str, str], base_item_type):
+        comp = base_item_type["ItemVisualIdentityKey"]["Composition"]
+        if comp == 1:  # Flask
+
+            def flask_icon_process(img: Image):
+                layer1 = img.crop((78, 0, 156, 156))
+                layer2 = img.crop((156, 0, 234, 156))
+                layer3 = img.crop((0, 0, 78, 156))
+                return Image.alpha_composite(layer1, Image.alpha_composite(layer2, layer3))
+
+            return flask_icon_process
+        if comp == 3:  # Gem
+            return self._get_gem_icon_process(infobox)
+        return None
+
+    def _get_gem_icon_process(self, infobox: dict[str, str]):
         if "gem_shader" not in infobox:
             return None
 
@@ -3748,7 +3763,7 @@ class ItemsParser(SkillParserShared):
                 [lambda v: v * 12.92, lambda v: 1.055 * v ** (1.0 / 2.4) - 0.055],
             )
 
-        def shader(img: Image):
+        def process(img: Image):
             adorn = img.crop((0, 0, 78, 78))
             base = img.crop((2 * 78, 0, 3 * 78, 78))
             if var == 3:
@@ -3810,7 +3825,7 @@ class ItemsParser(SkillParserShared):
 
             return Image.alpha_composite(shifted_base, adorn)
 
-        return shader
+        return process
 
     def _print_item_rowid(self, export_row_count, base_item_type):
         # If we're printing less than 100 rows, print every rowid

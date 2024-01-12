@@ -1470,7 +1470,7 @@ class BaseParser:
         return self._DETAILED_FORMAT % (ingame, make_inter_wiki_links(custom))
 
     def _write_dds(
-        self, data, out_path, parsed_args, shader: Callable[[PIL.Image], PIL.Image] = None
+        self, data, out_path, parsed_args, process: Callable[[PIL.Image], PIL.Image] = None
     ):
         out_path = fix_path(out_path)
         if parsed_args.convert_images == "md5sum":
@@ -1478,8 +1478,8 @@ class BaseParser:
                 f.write(md5(data).hexdigest())
         elif parsed_args.convert_images:
             out_img = decode_dds(data)
-            if shader:
-                out_img = shader(out_img)
+            if process:
+                out_img = process(out_img)
             out_img.save(out_path.replace(".dds", parsed_args.convert_images))
 
             console('Converted "%s" to png' % out_path)
