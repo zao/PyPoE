@@ -1377,8 +1377,6 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/Pets/GoddessPet",
         "Metadata/Items/Pets/GargoyleAmaranthinePremium",
         "Metadata/Items/Pets/GargoyleAmaranthinePremiumExpired",
-        "Metadata/Items/MicrotransactionItemEffects/"
-        "MicrotransactionAuspiciousBlueDragonWeaponEffect",
         "Metadata/Items/Pets/Hundun",
         "Metadata/Items/Pets/Taowu",
         "Metadata/Items/Pets/Taotie",
@@ -1427,6 +1425,87 @@ class ItemsParser(SkillParserShared):
         "Metadata/Items/MicrotransactionCurrency/MicrotransactionPetConvertToBlueGhostrider",
         "Metadata/Items/MicrotransactionCurrency/HideoutMonsterStatueCreator",
         "Metadata/Items/Pets/Mimic",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionVoodooAsenathsGentleTouch",
+        "Metadata/Items/Pets/HeritageHummingbirdPet",
+        "Metadata/Items/Pets/AristocratCatPet",
+        "Metadata/Items/Pets/AristocratLargeCatPet",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionAristocratWeaponEffect",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionOceanGreatbow",
+        "Metadata/Items/Pets/AyeAyePet",
+        "Metadata/Items/Pets/BlackWidowSpider",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionJadeMarohiErqi",
+        "Metadata/Items/Pets/FangtoothMorayPet",
+        "Metadata/Items/Pets/FaridunLizardPet",
+        "Metadata/Items/Pets/FennecFoxPet",
+        "Metadata/Items/Pets/FluffyMothPet",
+        "Metadata/Items/Pets/LifeBatteryPet",
+        "Metadata/Items/Pets/ManaBatteryPet",
+        "Metadata/Items/Pets/NecroticCatPet",
+        "Metadata/Items/Pets/PetRockVaal",
+        "Metadata/Items/Pets/PetRockStatues",
+        "Metadata/Items/Pets/WolverinePet",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionPhoenixEggRiseofthePhoenix",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionArachnamagusPortalEffect",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionPhantomPortalEffect",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionSmokePortalEffect",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionTentacleApparitionPortalEffect",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionBerserkerHelmet",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionCentipedeCorpseCloak",
+        "Metadata/Items/MicrotransactionCharacterEffects/MicrotransactionCorruptedCharacterEffect",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionCrystalGreatbow",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionDarkCollectorsSack",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionDarkRustKingsWeapon",
+        "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionDemonicFireballEffect",
+        "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionDemonicRainofArrowsEffect",
+        "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionDruidicLochtonialCaress",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionElementalStaff",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionElvenKnightBodyArmour",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionElvenKnightBoots",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionElvenKnightGloves",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionElvenKnightHelmet",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionEtherealWeapon",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionReaperWeaponEffect",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionFireflyCursor",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionGiftCollectorsSack",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionGlacialGreatbow",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionGoldRustKingsWeapon",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionGoldenGreatbow",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionGothicWeapon",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionJunkCollectorsSack",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionKnightmasterHood",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionKnightmasterWeaponEffect",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionLunarEssenceFragment",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionMasqueradeCloak",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionMossyGreatbow",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionNullifierHood",
+        "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionOblivionGroundSlamEffect",
+        "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionOblivionRainofArrowsEffect",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionOmniscienceScalingBodyArmour",
+        "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionOnyxOblivionFireballEffect",
+        "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionOnyxOblivionGroundSlamEffect",
+        "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionOnyxOblivionRainofArrowsEffect",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionOphidianCovenant",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionOxidizedRustKingsWeapon",
+        "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionPhantomAuraEffect",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionPhantomWeaponEffect",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionRustKingsWeapon",
+        "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionSawbladeLightningStrikeEffect",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionSharkFinBackAttachment",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionSiegeGreatbow",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionSilverGreatbow",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionTreasureCollectorsSack",
+        "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionVineReapEffect",
+        "Metadata/Items/MicrotransactionItemEffects/MicrotransactionVulcanWeaponEffect",
+        "Metadata/Items/Pets/CursedMonkeyPet",
+        "Metadata/Items/Pets/GiantHornetPet",
+        "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionAlchemistPoisonousConcoctionEffect",
+        "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionAuspiciousCycloneEffect",
+        "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionAuspiciousFlameDashEffect",
+        "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionAuspiciousToxicRainEffect",
+        "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionCelestialNovaAuraEffect1",
+        "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionCelestialNovaAuraEffect2",
+        "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionCelestialNovaAuraEffect3",
+        "Metadata/Items/MicrotransactionSkillEffects/MicrotransactionDarkwoodHeraldEffect",
         # =================================================================
         # Hideout decorations
         # =================================================================
@@ -1753,7 +1832,7 @@ class ItemsParser(SkillParserShared):
             r"Tencent",
             r"Jingwei",
             r"Chiyou",
-            r"AuspiciousDragon",
+            r"Auspicious.*Dragon",
             r"Jinli",
             r"MicrotransactionGoddess",
             r"GodOfThunder",
@@ -1763,6 +1842,7 @@ class ItemsParser(SkillParserShared):
             r"Upgrade.*Scroll",
             r"Convert.*Scroll",
             r"Premium.*Pet",
+            r"UnifiedAuraEffect",
         },
     }
 
@@ -3717,14 +3797,29 @@ class ItemsParser(SkillParserShared):
                             (infobox.get("inventory_icon") or page) + " inventory icon.dds",
                         ),
                         parsed_args=parsed_args,
-                        shader=self._get_shader(infobox),
+                        process=self._get_icon_process(infobox, base_item_type),
                     )
                 else:
                     infobox.pop("gem_shader", None)
 
         return r
 
-    def _get_shader(self, infobox: dict[str, str]):
+    def _get_icon_process(self, infobox: dict[str, str], base_item_type):
+        comp = base_item_type["ItemVisualIdentityKey"]["Composition"]
+        if comp == 1:  # Flask
+
+            def flask_icon_process(img: Image):
+                layer1 = img.crop((78, 0, 156, 156))
+                layer2 = img.crop((156, 0, 234, 156))
+                layer3 = img.crop((0, 0, 78, 156))
+                return Image.alpha_composite(layer1, Image.alpha_composite(layer2, layer3))
+
+            return flask_icon_process
+        if comp == 3:  # Gem
+            return self._get_gem_icon_process(infobox)
+        return None
+
+    def _get_gem_icon_process(self, infobox: dict[str, str]):
         if "gem_shader" not in infobox:
             return None
 
@@ -3748,7 +3843,7 @@ class ItemsParser(SkillParserShared):
                 [lambda v: v * 12.92, lambda v: 1.055 * v ** (1.0 / 2.4) - 0.055],
             )
 
-        def shader(img: Image):
+        def process(img: Image):
             adorn = img.crop((0, 0, 78, 78))
             base = img.crop((2 * 78, 0, 3 * 78, 78))
             if var == 3:
@@ -3810,7 +3905,7 @@ class ItemsParser(SkillParserShared):
 
             return Image.alpha_composite(shifted_base, adorn)
 
-        return shader
+        return process
 
     def _print_item_rowid(self, export_row_count, base_item_type):
         # If we're printing less than 100 rows, print every rowid

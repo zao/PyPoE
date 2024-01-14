@@ -16403,8 +16403,9 @@ specification = Specification(
                     type="ref|string",
                 ),
                 Field(
-                    name="Unknown16",
+                    name="Composition",
                     type="int",
+                    description="0: Standard, 1: Flask, 2: Divination Card, 3: Gem",
                 ),
                 Field(
                     name="Key0",
