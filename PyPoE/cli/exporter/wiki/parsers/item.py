@@ -473,7 +473,7 @@ class ItemsParser(SkillParserShared):
         "Sanctum": "3.20.0",  # AKA The Forbidden Sanctum
         "Crucible": "3.21.0",
         "Ancestral": "3.22.0",  # AKA Trial of the Ancestors
-        "Affliction": "3.23.0",
+        "Azmeri": "3.23.0",  # AKA Affliction
     }
 
     _IGNORE_DROP_LEVEL_CLASSES = (
@@ -2015,7 +2015,11 @@ class ItemsParser(SkillParserShared):
                 # If there is a skill granting this as its primary effect, skip it
                 second = False
 
-        if second:
+        if second and (ge["ActiveSkill"] or second["ActiveSkill"]):
+            for k, v in primary.items():
+                infobox[k] = v
+            infobox["secondary_skill_id"] = second["Id"]
+        elif second:
             secondary = OrderedDict()
             self._skill(
                 gra_eff=second,
