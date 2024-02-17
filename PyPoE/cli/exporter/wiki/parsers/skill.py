@@ -104,7 +104,7 @@ class SkillHandler(ExporterHandler):
             type=int,
         )
 
-        # by row ID
+        # by skill name
         s_name = skill_sub.add_parser("by_name", help="Extract skills by active skill name.")
         self.add_default_parsers(
             parser=s_name,
@@ -112,6 +112,24 @@ class SkillHandler(ExporterHandler):
             func=SkillParser.by_name,
         )
         s_name.add_argument(
+            "name",
+            help=(
+                "Visible name (i.e. the name you see in game). Can be "
+                "specified multiple times. If not specified all named "
+                "skills will be exported"
+            ),
+            nargs="*",
+            type=str,
+        )
+
+        # by gem name
+        s_gem = skill_sub.add_parser("by_gem", help="Extract skills by gem name.")
+        self.add_default_parsers(
+            parser=s_gem,
+            cls=SkillParser,
+            func=SkillParser.by_gem,
+        )
+        s_gem.add_argument(
             "name",
             help=(
                 "Visible name (i.e. the name you see in game). Can be "
@@ -402,6 +420,13 @@ class SkillParserShared(parser.BaseParser):
         "VaalBurningArrow": "VaalBurningArrow",
         "WildStrike": "ElementalStrikeColdProjectile",
     }
+
+    _GEM_EFFECT_COLUMNS = [
+        "GrantedEffect",
+        "GrantedEffect2",
+        "GrantedEffectHardmode",
+        "GrantedEffect2Hardmode",
+    ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -1031,6 +1056,21 @@ class SkillParser(SkillParserShared):
             ),
         )
 
+    def by_gem(self, parsed_args):
+        parsed_args.allow_skill_gems = True
+        return self.export(
+            parsed_args,
+            self._effects_from_gems(
+                self._column_index_filter(
+                    dat_file_name="GemEffects.dat64",
+                    column_id="Id",
+                    arg_list=parsed_args.name,
+                )
+                if parsed_args.name
+                else self.rr["GemEffects.dat64"]
+            ),
+        )
+
     def _effects_from_named_skills(self, active_skills):
         gra_eff = OrderedDict()
         self.rr["GrantedEffects.dat64"].build_index("ActiveSkill")
@@ -1040,30 +1080,58 @@ class SkillParser(SkillParserShared):
                     gra_eff[effect["Id"]] = effect
         return gra_eff.values()
 
+    def _effects_from_gems(self, gem_effects):
+        gra_eff = OrderedDict()
+        self._SKILL_COLUMN_MAP
+        for gem in gem_effects:
+            for key in self._GEM_EFFECT_COLUMNS:
+                effect = gem[key]
+                if effect:
+                    gra_eff[effect["Id"]] = effect
+        return gra_eff.values()
+
     def export(self, parsed_args, skills):
         self._image_init(parsed_args=parsed_args)
         console("Found %s skills, parsing..." % len(skills))
-        self.rr["GemEffects.dat64"].build_index("GrantedEffect")
+        for key in self._GEM_EFFECT_COLUMNS:
+            self.rr["GemEffects.dat64"].build_index(key)
         self.rr["SkillGems.dat64"].build_index("GemEffects")
+        self.rr["ItemExperiencePerLevel.dat64"].build_index("ItemExperienceType")
         r = ExporterResult()
         for skill in skills:
-            if (
-                not parsed_args.allow_skill_gems
-                and skill in self.rr["GemEffects.dat64"].index["GrantedEffect"]
-                and any(
-                    effect in self.rr["SkillGems.dat64"].index["GemEffects"]
-                    for effect in self.rr["GemEffects.dat64"].index["GrantedEffect"][skill]
-                )
-            ):
-                console(
-                    f"Skipping skill gem skill \"{skill['Id']}\" at row {skill.rowid}",
-                    msg=Msg.warning,
-                )
-                continue
             data = OrderedDict()
+            max_level = None
+            gem_effect = next(
+                (
+                    next(iter(self.rr["GemEffects.dat64"].index[key][skill]))
+                    for key in self._GEM_EFFECT_COLUMNS
+                    if skill in self.rr["GemEffects.dat64"].index[key]
+                ),
+                None,
+            )
+            skill_gem = (
+                next(iter(self.rr["SkillGems.dat64"].index["GemEffects"][gem_effect]), None)
+                if gem_effect
+                else None
+            )
+            if gem_effect and gem_effect["SupportText"]:
+                data["gem_description"] = gem_effect["SupportText"]
+            if skill_gem:
+                if not parsed_args.allow_skill_gems:
+                    console(
+                        f"Skipping skill gem skill \"{skill['Id']}\" at row {skill.rowid}",
+                        msg=Msg.warning,
+                    )
+                    continue
+                levels = self.rr["ItemExperiencePerLevel.dat64"].index["ItemExperienceType"][
+                    skill_gem["ExperienceProgression"]
+                ]
+                max_level = len(levels) - 1 if levels else 0
 
             try:
-                self._skill(gra_eff=skill, infobox=data, parsed_args=parsed_args)
+                self._skill(
+                    gra_eff=skill, infobox=data, parsed_args=parsed_args, max_level=max_level
+                )
             except Exception:
                 console(
                     f"Error when parsing skill \"{skill['Id']}\" at {skill.rowid}:", msg=Msg.error
