@@ -489,6 +489,12 @@ class BestiaryParser(GenericLuaParser):
                 "key": "notes",
             },
         ),
+        (
+            "GameMode",
+            {
+                "key": "game_mode",
+            },
+        ),
     )
 
     _COPY_KEYS_BESTIARY_COMPONENTS = (
