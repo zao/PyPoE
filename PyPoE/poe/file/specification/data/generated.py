@@ -3925,8 +3925,9 @@ specification = Specification(
                     type="int",
                 ),
                 Field(
-                    name="Unknown2",
+                    name="GameMode",
                     type="int",
+                    description="1: Normal, 2: Ruthless",
                 ),
                 Field(
                     name="FlaskMod",
