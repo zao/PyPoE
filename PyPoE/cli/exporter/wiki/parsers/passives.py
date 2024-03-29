@@ -416,6 +416,14 @@ class PassiveSkillParser(parser.BaseParser):
                     )
                 )
 
+                if ps_buff["AuraRadius"]:
+                    radius = ps_buff["AuraRadius"] / 10
+                    text = re.sub(
+                        r"\[\[Nearby\|?([^]]*)]]",
+                        lambda match: f"{{{{Radius|{match.group(1)}|{radius}m}}}}",
+                        text,
+                    )
+
                 if data["stat_text"]:
                     data["stat_text"] += "<br>" + text
                 else:
