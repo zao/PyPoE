@@ -3,7 +3,7 @@
 QUIET=
 ARGS=()
 IMG=()
-export ALL_EXPORTERS=(items passives skills mastery-effects mastery-groups mods monsters areas maps incursion-rooms modules atlas-icons)
+export ALL_EXPORTERS=(gem-skills items passives skills mastery-effects mastery-groups mods monsters areas maps incursion-rooms modules atlas-icons)
 EXPORTERS=()
 
 # check if value is in array
@@ -150,6 +150,8 @@ set -e
 
 pypoe_exporter $QUIET setup perform
 
+exporting gem-skills &&
+pypoe_exporter $QUIET wiki skill by_gem "${IMG[@]}" "${ARGS[@]}" "$@"
 exporting items &&
 pypoe_exporter $QUIET wiki items item rowid "${IMG[@]}" "${ARGS[@]}" "$@"
 exporting passives &&

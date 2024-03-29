@@ -230,25 +230,29 @@ class WikiHandler:
             if ("[DNT]" in text or "[UNUSED]" in text) and new:
                 console("Found text marked as Do Not Translate. Skipping.")
                 return
-            rev1, rev2 = (
-                islice(page.revisions(limit=2, prop="content|comment"), 2)
-                if page.exists
-                else [None, None]
-            )
-            previous_revision = (
-                page.exists and not rev1["comment"].startswith("PyPoE/ExporterBot/") and rev2["*"]
-            )
-            if previous_revision == new_lines:
-                console(
-                    f"Update to {pdata['page']} would be a manual revert, skipping this row.",
-                    msg=Msg.warning,
+
+            if not new:
+                rev1, rev2 = (
+                    islice(page.revisions(limit=2, prop="content|comment"), 2)
+                    if page.exists
+                    else [None, None]
                 )
-                if self.cmdargs.wiki_diff and self.cmdargs.write:
-                    os.makedirs(os.path.join(self.out_dir, "diff"), exist_ok=True)
-                    out_path = os.path.join(self.out_dir, "diff", fix_path(row["out_file"]))
-                    with open(out_path + ".norevert", "w") as f:
-                        f.write(pdata["page"])
-                return
+                previous_revision = (
+                    page.exists
+                    and not rev1["comment"].startswith("PyPoE/ExporterBot/")
+                    and rev2["*"]
+                )
+                if previous_revision == new_lines:
+                    console(
+                        f"Update to {pdata['page']} would be a manual revert, skipping this row.",
+                        msg=Msg.warning,
+                    )
+                    if self.cmdargs.wiki_diff and self.cmdargs.write:
+                        os.makedirs(os.path.join(self.out_dir, "diff"), exist_ok=True)
+                        out_path = os.path.join(self.out_dir, "diff", fix_path(row["out_file"]))
+                        with open(out_path + ".norevert", "w") as f:
+                            f.write(pdata["page"])
+                    return
 
             if self.cmdargs.dry_run:
                 if self.cmdargs.wiki_diff:

@@ -392,6 +392,12 @@ class ItemsHandler(ExporterHandler):
             dest="english_file_link",
             default=True,
         )
+        kwargs["parser"].add_argument(
+            "--omit-skill-data",
+            action="store_true",
+            help="Don't export skill data for gem items.",
+            dest="omit_skill_data",
+        )
 
         if type == "item":
             parser.add_argument(
@@ -473,7 +479,7 @@ class ItemsParser(SkillParserShared):
         "Sanctum": "3.20.0",  # AKA The Forbidden Sanctum
         "Crucible": "3.21.0",
         "Ancestral": "3.22.0",  # AKA Trial of the Ancestors
-        "Affliction": "3.23.0",
+        "Azmeri": "3.23.0",  # AKA Affliction
     }
 
     _IGNORE_DROP_LEVEL_CLASSES = (
@@ -2041,7 +2047,9 @@ class ItemsParser(SkillParserShared):
         # secondary effects are just added. Skills that have their own entry
         # are excluded so we don't get vaal skill gems here.
         second = gem_type["GrantedEffect2"]
+        vaal = False
         if second:
+            infobox["secondary_skill_id"] = second["Id"]
             index = None
             try:
                 index = self.rr["GemEffects.dat64"].index["GrantedEffect"]
@@ -2051,9 +2059,20 @@ class ItemsParser(SkillParserShared):
 
             if index[second]:
                 # If there is a skill granting this as its primary effect, skip it
-                second = False
+                vaal = True
 
-        if second:
+        if gem_type["GrantedEffectHardmode"] and not any(
+            tag["Id"] == "movement" for tag in gem_type["GemTags"]
+        ):
+            infobox["ruthless_skill_id"] = gem_type["GrantedEffectHardmode"]["Id"]
+        if gem_type["GrantedEffect2Hardmode"] and not any(
+            tag["Id"] == "movement" for tag in gem_type["GemTags"]
+        ):
+            infobox["ruthless_secondary_skill_id"] = gem_type["GrantedEffect2Hardmode"]["Id"]
+
+        if self._parsed_args.omit_skill_data:
+            infobox["skill_id"] = ge["Id"]
+        elif second and not vaal:
             secondary = OrderedDict()
             self._skill(
                 gra_eff=second,
@@ -2152,7 +2171,7 @@ class ItemsParser(SkillParserShared):
                 infobox[k] = v
 
         # some descriptions come from active skills which are parsed in above function
-        if "gem_description" not in infobox:
+        if ge["IsSupport"] and gem_type["SupportText"]:
             infobox["gem_description"] = gem_type["SupportText"].replace("\n", "<br>")
 
         #
@@ -2180,7 +2199,7 @@ class ItemsParser(SkillParserShared):
                 if skill_gem[attr]:
                     try:
                         infobox[prefix + map2[attr]] = gem_stat_requirement(
-                            level=infobox.get(prefix + "level_requirement"),
+                            level=primary.get(prefix + "level_requirement"),
                             gtype=gtype,
                             multi=skill_gem[attr],
                         )
