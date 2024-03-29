@@ -34,6 +34,8 @@ FIX the jewel generator (corrupted)
 # Imports
 # =============================================================================
 
+import re
+
 # Python
 from collections import OrderedDict, defaultdict
 from functools import partialmethod
@@ -275,6 +277,13 @@ class ModParser(BaseParser):
                 values.append(value)
 
             data["stat_text"] = "<br>".join(self._get_stats(stats, values, mod))
+            if mod["BuffTemplate"] and mod["BuffTemplate"]["AuraRadius"]:
+                radius = mod["BuffTemplate"]["AuraRadius"] / 10
+                data["stat_text"] = re.sub(
+                    r"\[\[Nearby\|?([^]]*)]]",
+                    lambda match: f"{{{{Radius|{match.group(1)}|{radius}m}}}}",
+                    data["stat_text"],
+                )
 
             for i, (sid, (vmin, vmax)) in enumerate(zip(stats, values), start=1):
                 data["stat%s_id" % i] = sid

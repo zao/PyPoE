@@ -227,7 +227,7 @@ class SkillParserShared(parser.BaseParser):
                 "template": "cost_amounts",
                 "default": [],
                 "condition": lambda v: v and v[0] is not None,
-                "format": lambda v: v[0],
+                "format": lambda v: ",".join(map(str, v)),
             },
         ),
         (
@@ -235,10 +235,8 @@ class SkillParserShared(parser.BaseParser):
             {
                 "template": "cost_types",
                 "default": [],
-                # 'format': CostTypeHelper,
                 "condition": lambda v: v and v[0] is not None,
-                "format": lambda v: v[0]["Id"],
-                #  lambda v: ','.join([r['Id'] for r in v])
+                "format": lambda v: ",".join(r["Id"] for r in v),
             },
         ),
         (

@@ -3856,8 +3856,8 @@ class ItemsParser(SkillParserShared):
                         parsed_args=parsed_args,
                         process=self._get_icon_process(infobox, base_item_type),
                     )
-                else:
-                    infobox.pop("gem_shader", None)
+
+                infobox.pop("gem_shader", None)
 
         return r
 
