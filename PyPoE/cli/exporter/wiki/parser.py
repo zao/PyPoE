@@ -1843,6 +1843,9 @@ def format_result_rows(parsed_args, ordered_dict, template_name, indent=DEFAULT_
         out = ["{{%s\n" % template_name]
         for k, v in ordered_dict.items():
             if v is not None:
+                v = str(v)
+                if "{{" not in v and "[[" not in v:
+                    v = v.replace("|", "{{!}}")
                 out.append(("|{0: <%s}= {1}\n" % indent).format(k, v))
         out.append("}}")
     elif parsed_args.format == "module":
