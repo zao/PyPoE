@@ -34,11 +34,6 @@ custom_attributes = {
             enum="HARVEST_OBJECT_TYPES",
         ),
     },
-    "MapFragmentMods.dat": {
-        "MapFragmentFamilies": CustomizedField(
-            enum="MAP_FRAGMENT_FAMILIES",
-        ),
-    },
     "Mods.dat": {
         "Domain": CustomizedField(
             enum="MOD_DOMAIN",

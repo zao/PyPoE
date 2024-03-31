@@ -604,6 +604,9 @@ class RARITY(Enum, metaclass=IntEnumMetaOverride):
 class MAP_FRAGMENT_FAMILIES(IntEnumOverride):
     """
     Representation of map fragment families (MapFragmentFamilies.dat)
+
+    As of the 3.24 scarab reword, it appears that each scarab has its own family,
+    so this enum is probably not worth maintaining.
     """
 
     BESTIARY_AND_SULPHITE = 0  # Maybe just master-related?
@@ -626,7 +629,7 @@ class MAP_FRAGMENT_FAMILIES(IntEnumOverride):
     ETERNAL = 17
     TEMPLAR = 18
     VAAL = 19
-    REGULAR = 20
+    REGULAR = 126
 
     DEFAULT = REGULAR
     STANDARD = REGULAR
@@ -818,6 +821,8 @@ class MOD_GENERATION_TYPE(IntEnumOverride):
     CRUCIBLE_TREE = 31
     CRUCIBLE_UNIQUE_TREE = 32
     AZMERI_EMPOWERED_MONSTER = 33
+    NECROPOLIS_MONSTER = 34
+    NECROPOLIS_DEVOTED_MONSTER = 35
 
 
 class WORDLISTS(IntEnumOverride):

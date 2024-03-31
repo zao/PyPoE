@@ -3008,6 +3008,30 @@ specification = Specification(
                 ),
             ),
         ),
+        "AtlasTrees.dat": File(
+            fields=(
+                Field(
+                    name="Id",
+                    type="ref|string",
+                ),
+                Field(
+                    name="Name",
+                    type="ref|string",
+                ),
+                Field(
+                    name="Unknown0",
+                    type="int",
+                ),
+                Field(
+                    name="Unknown1",
+                    type="int",
+                ),
+                Field(
+                    name="UnlockObjective",
+                    type="ref|string",
+                ),
+            ),
+        ),
         "AtlasUpgradesInventoryLayout.dat": File(
             fields=(
                 Field(
@@ -9644,16 +9668,12 @@ specification = Specification(
                     key="Mods.dat",
                 ),
                 Field(
-                    name="Unknown0",
+                    name="HASH32",
                     type="int",
                 ),
                 Field(
-                    name="DropLevelMinimum",
-                    type="int",
-                ),
-                Field(
-                    name="DropLevelMaximum",
-                    type="int",
+                    name="DropLevel",
+                    type="ref|list|int",
                 ),
                 Field(
                     name="Monster_ModsKeys",
@@ -9670,8 +9690,8 @@ specification = Specification(
                     type="int",
                 ),
                 Field(
-                    name="Unknown1",
-                    type="int",
+                    name="Data0",
+                    type="ref|list|int",
                 ),
                 Field(
                     name="Display_Weapon_ModsKey",
@@ -9837,20 +9857,17 @@ specification = Specification(
                     type="bool",
                 ),
                 Field(
-                    name="Keys0",
+                    name="MemoryLines",
                     type="ref|list|ref|out",
+                    key="Mods.dat",
                 ),
                 Field(
-                    name="Unknown2",
-                    type="int",
+                    name="Data1",
+                    type="ref|list|int",
                 ),
                 Field(
-                    name="Unknown3",
-                    type="int",
-                ),
-                Field(
-                    name="Unknown4",
-                    type="int",
+                    name="Level2",
+                    type="ref|list|int",
                 ),
             ),
         ),
@@ -16482,6 +16499,25 @@ specification = Specification(
                 ),
             ),
         ),
+        "ItemisedNecropolisPacks.dat": File(
+            fields=(
+                Field(
+                    name="Item",
+                    type="ref|out",
+                    unique=True,
+                    key="BaseItemTypes.dat",
+                ),
+                Field(
+                    name="Pack",
+                    type="ref|out",
+                    key="NecropolisPacks.dat",
+                ),
+                Field(
+                    name="Description",
+                    type="ref|string",
+                ),
+            ),
+        ),
         "ItemisedVisualEffect.dat": File(
             fields=(
                 Field(
@@ -18268,7 +18304,6 @@ specification = Specification(
                 Field(
                     name="MapFragmentFamilies",
                     type="int",
-                    enum="MAP_FRAGMENT_FAMILIES",
                 ),
                 Field(
                     name="Flag0",
@@ -18571,6 +18606,10 @@ specification = Specification(
                 ),
                 Field(
                     name="AzmeriTier",
+                    type="int",
+                ),
+                Field(
+                    name="NecropolisTier",
                     type="int",
                 ),
             ),
@@ -21638,16 +21677,20 @@ specification = Specification(
                     unique=True,
                 ),
                 Field(
+                    name="Unknown0",
+                    type="int",
+                ),
+                Field(
                     name="WorldAreasKeys",
                     type="ref|list|ref|out",
                     key="WorldAreas.dat",
                 ),
                 Field(
-                    name="Unknown0",
+                    name="Unknown1",
                     type="int",
                 ),
                 Field(
-                    name="Unknown1",
+                    name="Unknown2",
                     type="int",
                 ),
                 Field(
@@ -21668,11 +21711,11 @@ specification = Specification(
                     type="bool",
                 ),
                 Field(
-                    name="Unknown2",
-                    type="int",
+                    name="Data0",
+                    type="ref|list|int",
                 ),
                 Field(
-                    name="Data0",
+                    name="Data1",
                     type="ref|list|ref|string",
                 ),
                 Field(
@@ -21711,7 +21754,7 @@ specification = Specification(
                     type="bool",
                 ),
                 Field(
-                    name="Data1",
+                    name="Data2",
                     type="ref|list|byte",
                 ),
                 Field(
@@ -21731,7 +21774,7 @@ specification = Specification(
                     type="bool",
                 ),
                 Field(
-                    name="Data2",
+                    name="Data3",
                     type="ref|list|ref|string",
                 ),
             ),
@@ -23600,6 +23643,285 @@ specification = Specification(
                 ),
             ),
         ),
+        "NecropolisCraftItemTypes.dat": File(
+            fields=(
+                Field(
+                    name="Id",
+                    type="ref|string",
+                ),
+                Field(
+                    name="ExorciseIcon",
+                    type="ref|string",
+                ),
+                Field(
+                    name="Name",
+                    type="ref|string",
+                ),
+                Field(
+                    name="Unknown0",
+                    type="int",
+                ),
+                Field(
+                    name="Keys0",
+                    type="ref|list|ref|out",
+                ),
+                Field(
+                    name="IllustratuionIcon",
+                    type="ref|string",
+                ),
+                Field(
+                    name="UniqueCraft",
+                    type="ref|out",
+                    key="NecropolisUniqueCrafts.dat",
+                ),
+                Field(
+                    name="BaseItem",
+                    type="ref|out",
+                    key="BaseItemTypes.dat",
+                ),
+                Field(
+                    name="TextAudioLong",
+                    type="ref|out",
+                    key="NPCTextAudio.dat",
+                ),
+                Field(
+                    name="Flag0",
+                    type="bool",
+                ),
+                Field(
+                    name="Flag1",
+                    type="bool",
+                ),
+                Field(
+                    name="Achievements",
+                    type="ref|out",
+                    key="AchievementItems.dat",
+                ),
+                Field(
+                    name="TextAudioShort",
+                    type="ref|out",
+                    key="NPCTextAudio.dat",
+                ),
+            ),
+        ),
+        "NecropolisCraftingMods.dat": File(
+            fields=(
+                Field(
+                    name="Id",
+                    type="ref|string",
+                ),
+                Field(
+                    name="Unknown0",
+                    type="int",
+                ),
+                Field(
+                    name="Stats",
+                    type="ref|list|ref|out",
+                    key="Stats.dat",
+                ),
+                Field(
+                    name="StatsValues",
+                    type="ref|list|int",
+                ),
+                Field(
+                    name="CraftingItemType",
+                    type="ref|out",
+                    key="NecropolisCraftItemTypes.dat",
+                ),
+                Field(
+                    name="Unknown1",
+                    type="int",
+                ),
+                Field(
+                    name="CorpsesNotConsumed",
+                    type="bool",
+                ),
+                Field(
+                    name="CraftingItemTypes",
+                    type="ref|list|ref|out",
+                    key="NecropolisCraftItemTypes.dat",
+                ),
+                Field(
+                    name="Achievements",
+                    type="ref|list|ref|out",
+                    key="AchievementItems.dat",
+                ),
+                Field(
+                    name="MatchingMonsters",
+                    type="int",
+                ),
+            ),
+        ),
+        "NecropolisCraftingModsFromStats.dat": File(
+            fields=(
+                Field(
+                    name="Stat",
+                    type="ref|out",
+                    key="Stats.dat",
+                ),
+                Field(
+                    name="CraftingMod",
+                    type="ref|out",
+                    key="NecropolisCraftingMods.dat",
+                ),
+            ),
+        ),
+        "NecropolisPackAdditionalPacks.dat": File(
+            fields=(
+                Field(
+                    name="Key0",
+                    type="ref|out",
+                ),
+                Field(
+                    name="Key1",
+                    type="ref|out",
+                ),
+            ),
+        ),
+        "NecropolisPackImplicitClass.dat": File(
+            fields=(
+                Field(
+                    name="Id",
+                    type="ref|string",
+                ),
+                Field(
+                    name="MoreImplicit",
+                    type="ref|out",
+                    key="NecropolisPackImplicits.dat",
+                ),
+                Field(
+                    name="LessImplicit",
+                    type="ref|out",
+                    key="NecropolisPackImplicits.dat",
+                ),
+            ),
+        ),
+        "NecropolisPackImplicits.dat": File(
+            fields=(
+                Field(
+                    name="Id",
+                    type="ref|string",
+                ),
+                Field(
+                    name="Text",
+                    type="ref|string",
+                ),
+                Field(
+                    name="Icon",
+                    type="ref|string",
+                ),
+            ),
+        ),
+        "NecropolisPackModTiers.dat": File(
+            fields=(
+                Field(
+                    name="Id",
+                    type="ref|string",
+                ),
+                Field(
+                    name="Icon",
+                    type="ref|string",
+                ),
+                Field(
+                    name="Name",
+                    type="ref|string",
+                ),
+                Field(
+                    name="TextColours",
+                    type="ref|list|ref|string",
+                ),
+                Field(
+                    name="SpecialTier",
+                    type="bool",
+                ),
+            ),
+        ),
+        "NecropolisPackMods.dat": File(
+            fields=(
+                Field(
+                    name="Mod",
+                    type="ref|out",
+                    key="Mods.dat",
+                ),
+                Field(
+                    name="Tier",
+                    type="ref|out",
+                    key="NecropolisPackModTiers.dat",
+                ),
+                Field(
+                    name="NextTier",
+                    type="ref|generic",
+                    key="NecropolisPackMods.dat",
+                ),
+                Field(
+                    name="PrevTier",
+                    type="ref|generic",
+                    key="NecropolisPackMods.dat",
+                ),
+            ),
+        ),
+        "NecropolisPacks.dat": File(
+            fields=(
+                Field(
+                    name="Id",
+                    type="ref|string",
+                ),
+                Field(
+                    name="Name",
+                    type="ref|string",
+                ),
+                Field(
+                    name="Icon",
+                    type="ref|string",
+                ),
+                Field(
+                    name="Description",
+                    type="ref|string",
+                ),
+                Field(
+                    name="PackLeader1",
+                    type="ref|string",
+                ),
+                Field(
+                    name="PackLeader2",
+                    type="ref|string",
+                ),
+                Field(
+                    name="Mod",
+                    type="ref|out",
+                    key="Mods.dat",
+                ),
+            ),
+        ),
+        "NecropolisPacksPerArea.dat": File(
+            fields=(
+                Field(
+                    name="Key0",
+                    type="ref|out",
+                ),
+                Field(
+                    name="Keys0",
+                    type="ref|list|ref|out",
+                ),
+                Field(
+                    name="Data0",
+                    type="ref|list|int",
+                ),
+            ),
+        ),
+        "NecropolisUniqueCrafts.dat": File(
+            fields=(
+                Field(
+                    name="Id",
+                    type="ref|string",
+                ),
+                Field(
+                    name="Stats",
+                    type="ref|list|ref|out",
+                    key="Stats.dat",
+                ),
+            ),
+        ),
         "NetTiers.dat": File(
             fields=(
                 Field(
@@ -23716,6 +24038,23 @@ specification = Specification(
                 ),
             ),
         ),
+        "PackFrequencyNames.dat": File(
+            fields=(
+                Field(
+                    name="Id",
+                    type="ref|string",
+                ),
+                Field(
+                    name="Frequency",
+                    type="float",
+                ),
+                Field(
+                    name="Text",
+                    type="ref|out",
+                    key="ClientStrings.dat",
+                ),
+            ),
+        ),
         "PantheonPanelLayout.dat": File(
             fields=(
                 Field(
@@ -23797,21 +24136,6 @@ specification = Specification(
                 ),
                 Field(
                     name="QuestState1",
-                    type="ref|out",
-                    key="QuestStates.dat",
-                ),
-                Field(
-                    name="QuestState2",
-                    type="ref|out",
-                    key="QuestStates.dat",
-                ),
-                Field(
-                    name="QuestState3",
-                    type="ref|out",
-                    key="QuestStates.dat",
-                ),
-                Field(
-                    name="QuestState4",
                     type="ref|out",
                     key="QuestStates.dat",
                 ),
@@ -23909,6 +24233,36 @@ specification = Specification(
                 Field(
                     name="Key1",
                     type="ref|out",
+                ),
+            ),
+        ),
+        "PassiveJewelNodeModifyingStats.dat": File(
+            fields=(
+                Field(
+                    name="JwelStat",
+                    type="ref|out",
+                    key="Stats.dat",
+                ),
+                Field(
+                    name="Stat",
+                    type="ref|out",
+                    key="Stats.dat",
+                ),
+                Field(
+                    name="Flag0",
+                    type="bool",
+                ),
+                Field(
+                    name="Flag1",
+                    type="bool",
+                ),
+                Field(
+                    name="Flag2",
+                    type="bool",
+                ),
+                Field(
+                    name="Flag3",
+                    type="bool",
                 ),
             ),
         ),
@@ -26754,20 +27108,44 @@ specification = Specification(
                 ),
             ),
         ),
+        "ScarabTypes.dat": File(
+            fields=(
+                Field(
+                    name="Id",
+                    type="ref|string",
+                ),
+                Field(
+                    name="Tag",
+                    type="ref|out",
+                    key="Tags.dat",
+                ),
+                Field(
+                    name="DisableDrops",
+                    type="ref|out",
+                    key="Stats.dat",
+                ),
+                Field(
+                    name="MoreLikely",
+                    type="ref|out",
+                    key="Stats.dat",
+                ),
+                Field(
+                    name="Count",
+                    type="ref|out",
+                    key="Stats.dat",
+                ),
+            ),
+        ),
         "Scarabs.dat": File(
             fields=(
                 Field(
-                    name="ScarabType",
-                    type="int",
-                    enum="SCARAB_TYPES",
-                ),
-                Field(
-                    name="Tier",
-                    type="int",
-                ),
-                Field(
-                    name="BaseItemTypesKey",
+                    name="Type",
                     type="ref|out",
+                    key="ScarabTypes.dat",
+                ),
+                Field(
+                    name="Items",
+                    type="ref|list|ref|out",
                     key="BaseItemTypes.dat",
                 ),
             ),
@@ -29742,6 +30120,32 @@ specification = Specification(
                 ),
             ),
         ),
+        "TypeTags.dat": File(
+            fields=(
+                Field(
+                    name="Id",
+                    type="ref|string",
+                ),
+                Field(
+                    name="Tag",
+                    type="ref|out",
+                    key="Tags.dat",
+                ),
+                Field(
+                    name="Name",
+                    type="ref|string",
+                ),
+                Field(
+                    name="Icon",
+                    type="ref|string",
+                ),
+                Field(
+                    name="Key0",
+                    type="ref|out",
+                    key="Stats.dat",
+                ),
+            ),
+        ),
         "UITalkText.dat": File(
             fields=(
                 Field(
@@ -31076,10 +31480,6 @@ specification = Specification(
                     key="Tags.dat",
                 ),
                 Field(
-                    name="Unknown5",
-                    type="int",
-                ),
-                Field(
                     name="IsHideout",
                     type="bool",
                 ),
@@ -31088,11 +31488,11 @@ specification = Specification(
                     type="ref|string",
                 ),
                 Field(
-                    name="Unknown6",
+                    name="Unknown5",
                     type="int",
                 ),
                 Field(
-                    name="Unknown7",
+                    name="Unknown6",
                     type="int",
                 ),
                 Field(
@@ -31162,7 +31562,7 @@ specification = Specification(
                     key_id="Id",
                 ),
                 Field(
-                    name="Unknown8",
+                    name="Unknown7",
                     type="int",
                 ),
                 Field(
@@ -31171,32 +31571,12 @@ specification = Specification(
                     key="Environments.dat",
                 ),
                 Field(
-                    name="Unknown9",
+                    name="Unknown8",
                     type="int",
                 ),
                 Field(
                     name="Key5",
                     type="ref|out",
-                ),
-                Field(
-                    name="Unknown10",
-                    type="int",
-                ),
-                Field(
-                    name="Unknown11",
-                    type="int",
-                ),
-                Field(
-                    name="Unknown12",
-                    type="int",
-                ),
-                Field(
-                    name="Unknown13",
-                    type="int",
-                ),
-                Field(
-                    name="Unknown14",
-                    type="int",
                 ),
                 Field(
                     name="Flag1",
@@ -31207,15 +31587,12 @@ specification = Specification(
                     type="bool",
                 ),
                 Field(
-                    name="Unknown15",
-                    type="int",
+                    name="Unknown9",
+                    type="ref|generic",
+                    key="WorldAreas.dat",
                 ),
                 Field(
-                    name="Unknown16",
-                    type="int",
-                ),
-                Field(
-                    name="Unknown17",
+                    name="Unknown10",
                     type="int",
                 ),
                 Field(
@@ -31223,29 +31600,36 @@ specification = Specification(
                     type="ref|list|byte",
                 ),
                 Field(
+                    name="LeagueChance1",
+                    type="ref|out",
+                    key="WorldAreaLeagueChances.dat",
+                ),
+                Field(
+                    name="Unknown11",
+                    type="int",
+                ),
+                Field(
+                    name="LeagueChance2",
+                    type="ref|out",
+                    key="WorldAreaLeagueChances.dat",
+                ),
+                Field(
                     name="Key6",
                     type="ref|out",
                 ),
                 Field(
-                    name="Unknown18",
-                    type="int",
-                ),
-                Field(
-                    name="Key7",
-                    type="ref|out",
-                ),
-                Field(
-                    name="Key8",
-                    type="ref|out",
-                ),
-                Field(
-                    name="Key9",
+                    name="Ruleset",
                     type="ref|out",
                     key="Rulesets.dat",
                 ),
                 Field(
-                    name="Unknown19",
+                    name="Unknown12",
                     type="int",
+                ),
+                Field(
+                    name="QuestFlag",
+                    type="ref|out",
+                    key="QuestFlags.dat",
                 ),
             ),
             virtual_fields=(
