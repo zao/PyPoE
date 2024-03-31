@@ -480,6 +480,7 @@ class ItemsParser(SkillParserShared):
         "Crucible": "3.21.0",
         "Ancestral": "3.22.0",  # AKA Trial of the Ancestors
         "Azmeri": "3.23.0",  # AKA Affliction
+        "Necropolis": "3.24.0",
     }
 
     _IGNORE_DROP_LEVEL_CLASSES = (
@@ -2927,16 +2928,11 @@ class ItemsParser(SkillParserShared):
         data_file="Essences.dat64",
         data_mapping=(
             (
-                "DropLevelMinimum",
+                "DropLevel",
                 {
                     "template": "drop_level",
-                },
-            ),
-            (
-                "DropLevelMaximum",
-                {
-                    "template": "drop_level_maximum",
-                    "condition": lambda v: v > 0,
+                    "condition": lambda v: v,
+                    "format": lambda v: v[0],
                 },
             ),
             (

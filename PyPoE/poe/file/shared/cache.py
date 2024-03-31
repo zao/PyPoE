@@ -127,7 +127,11 @@ class AbstractFileCache(ReprMixin, Generic[FileType]):
 
         if files is not None:
             for file in files:
-                read_func(file)
+                try:
+                    read_func(file)
+                except Exception:
+                    print("Error reading", file)
+                    raise
 
     def __getitem__(self, item: str) -> Any:
         """
