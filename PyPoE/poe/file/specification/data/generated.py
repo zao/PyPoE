@@ -16504,6 +16504,7 @@ specification = Specification(
                 Field(
                     name="Item",
                     type="ref|out",
+                    unique=True,
                     key="BaseItemTypes.dat",
                 ),
                 Field(

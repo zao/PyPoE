@@ -85,7 +85,7 @@ def gemshade_constants_from_hex(hex_text: str):
     return GemShadeConstants(*struct.unpack("<ffff", buf))
 
 
-def _apply_column_map(infobox, column_map, list_object):
+def _apply_column_map(infobox, column_map: tuple[tuple[str, dict], ...], list_object):
     for k, data in column_map:
         value = list_object[k]
         if data.get("condition") and not data["condition"](value):
@@ -97,8 +97,8 @@ def _apply_column_map(infobox, column_map, list_object):
 
 
 def _type_factory(
-    data_file,
-    data_mapping,
+    data_file: str,
+    data_mapping: tuple[tuple[str, dict], ...],
     row_index=True,
     function=None,
     fail_condition=False,
@@ -2837,7 +2837,7 @@ class ItemsParser(SkillParserShared):
 
     _type_map_fragment_mods = _type_factory(
         data_file="MapFragmentMods.dat64",
-        data_mapping={},
+        data_mapping=(),
         row_index=True,
         function=_map_fragment_extra,
         fail_condition=True,
@@ -3227,6 +3227,21 @@ class ItemsParser(SkillParserShared):
         row_index=True,
     )
 
+    _type_allflame_ember = _type_factory(
+        data_file="ItemisedNecropolisPacks.dat64",
+        index_column="Item",
+        data_mapping=(
+            (
+                "Description",
+                {
+                    "template": "description",
+                    "format": lambda v: "<br>".join(str(v).splitlines()),
+                },
+            ),
+        ),
+        row_index=True,
+    )
+
     _cls_map = dict()
     """
     This defines the expected data elements for an item class.
@@ -3383,6 +3398,7 @@ class ItemsParser(SkillParserShared):
         "HeistObjective": (),
         "Breachstone": (_type_currency,),
         "ItemisedCorpse": (_type_corpse,),
+        "NecropolisPack": (_type_allflame_ember,),
     }
 
     _conflict_active_skill_gems_map = {
