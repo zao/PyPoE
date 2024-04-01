@@ -16504,8 +16504,8 @@ specification = Specification(
                 Field(
                     name="Item",
                     type="ref|out",
-                    unique=True,
                     key="BaseItemTypes.dat",
+                    unique=True,
                 ),
                 Field(
                     name="Pack",
@@ -24135,9 +24135,9 @@ specification = Specification(
                     type="ref|list|int",
                 ),
                 Field(
-                    name="QuestState1",
+                    name="QuestFlag",
                     type="ref|out",
-                    key="QuestStates.dat",
+                    key="QuestFlags.dat",
                 ),
                 Field(
                     name="IsDisabled",
@@ -24147,6 +24147,33 @@ specification = Specification(
                     name="AchievementItems",
                     type="ref|list|ref|out",
                     key="AchievementItems.dat",
+                ),
+                Field(
+                    name="LeagueQuestFlag1",
+                    type="int",
+                ),
+                Field(
+                    name="LeagueQuestFlag2",
+                    type="int",
+                ),
+                Field(
+                    name="LeagueQuestFlag3",
+                    type="int",
+                ),
+                Field(
+                    name="DowngradeFlag1",
+                    type="ref|out",
+                    key="QuestFlags.dat",
+                ),
+                Field(
+                    name="DowngradeFlag2",
+                    type="ref|out",
+                    key="QuestFlags.dat",
+                ),
+                Field(
+                    name="DowngradeFlag3",
+                    type="ref|out",
+                    key="QuestFlags.dat",
                 ),
             ),
         ),

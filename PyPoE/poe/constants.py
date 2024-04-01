@@ -731,9 +731,10 @@ class MOD_DOMAIN(IntEnumOverride):
     CRUCIBLE_REMNANT = 33
     TINCTURE = 34
     AFFLICTION_CHARM = 35
+    NECROPOLIS_MONSTER = 36
 
     # Items that can't have mods (may need to increase the number when new values are added)
-    MODS_DISALLOWED = 36
+    MODS_DISALLOWED = 37
 
     # legacy names
     MASTER = CRAFTED
