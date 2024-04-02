@@ -734,6 +734,10 @@ class ItemsParser(SkillParserShared):
             "Metadata/Items/UniqueFragments/FragmentUniqueMap26_2": " (2 of 4)",
             "Metadata/Items/UniqueFragments/FragmentUniqueMap26_3": " (3 of 4)",
             "Metadata/Items/UniqueFragments/FragmentUniqueMap26_4": " (4 of 4)",
+            "Metadata/Items/UniqueFragments/FragmentUniqueAmulet1_1": " (1 of 4)",
+            "Metadata/Items/UniqueFragments/FragmentUniqueAmulet1_2": " (2 of 4)",
+            "Metadata/Items/UniqueFragments/FragmentUniqueAmulet1_3": " (3 of 4)",
+            "Metadata/Items/UniqueFragments/FragmentUniqueAmulet1_4": " (4 of 4)",
             # =================================================================
             # Cosmetic items
             # =================================================================
