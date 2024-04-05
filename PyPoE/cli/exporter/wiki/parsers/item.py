@@ -84,6 +84,7 @@ def gemshade_constants_from_hex(hex_text: str):
     buf = codecs.decode(hex_text.replace(" ", ""), "hex")
     return GemShadeConstants(*struct.unpack("<ffff", buf))
 
+
 def _srgb_to_linear(img):
     return np.piecewise(
         img,
@@ -91,12 +92,14 @@ def _srgb_to_linear(img):
         [lambda v: v / 12.92, lambda v: ((v + 0.055) / 1.055) ** 2.4],
     )
 
+
 def _linear_to_srgb(img):
     return np.piecewise(
         img,
         [img < 0.0031308, img >= 0.0031308],
         [lambda v: v * 12.92, lambda v: 1.055 * v ** (1.0 / 2.4) - 0.055],
     )
+
 
 def _apply_column_map(infobox, column_map: tuple[tuple[str, dict], ...], list_object):
     for k, data in column_map:
@@ -4105,7 +4108,7 @@ class ItemsParser(SkillParserShared):
         tex_colour = np.dstack((_srgb_to_linear(samples[:, :, :3]), samples[:, :, 3]))
         final = color * tex_colour
         final[:, :, :3] = _linear_to_srgb(final[:, :, :3])
-        return Image.fromarray(np.uint8(final * 255.), 'RGBA')
+        return Image.fromarray(np.uint8(final * 255.0), "RGBA")
 
     def export_map(self, parsed_args):
         r = ExporterResult()
